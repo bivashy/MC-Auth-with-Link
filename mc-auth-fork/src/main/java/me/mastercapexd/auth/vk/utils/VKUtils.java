@@ -91,18 +91,6 @@ public class VKUtils {
 		sendMessage(userId, config.getVKMessages().getLegacyMessage("admin-panel"), keyboard);
 	}
 
-	public void sendAccountSettingsKeyboard(Integer userId, Account account) {
-		Keyboard keyboard = new Keyboard();
-		keyboard.setInline(true);
-		List<KeyboardButton> buttons = new ArrayList<>();
-		buttons.add(buildCallbackButton("restore", account, "restore_" + account.getId(), KeyboardButtonColor.PRIMARY));
-		buttons.add(buildCallbackButton("kick", account, "kick_" + account.getId(), KeyboardButtonColor.PRIMARY));
-		buttons.add(buildCallbackButton("unlink", account, "unlink_" + account.getId(), KeyboardButtonColor.PRIMARY));
-		buttons.add(buildCallbackButton("return", account, "return", KeyboardButtonColor.DEFAULT));
-		keyboard.setButtons(plugin.getListUtils().chopList(buttons, 3));
-		sendMessage(userId, config.getVKMessages().getMessage("account-control", account), keyboard);
-	}
-
 	public void sendConfirmationMessage(VKEntryAccount entryAccount) {
 		Keyboard enterKeyboard = new Keyboard();
 		enterKeyboard.setInline(true);
