@@ -39,28 +39,25 @@ public interface Account {
 	SessionResult logout(long sessionDurability);
 
 	boolean isSessionActive(long sessionDurability);
-	
+
 	KickResult kick(String reason);
 
 	default boolean isRegistered() {
 		return getPasswordHash() != null;
 	}
 
-	default RestoreResult restoreAccount(Integer VKuserID) {
+	default RestoreResult restoreAccount(Integer VKuserID, boolean isAdmin) {
 		RestoreResult result = RestoreResult.ACCOUNT_VK_NOT_EQUALS;
 		result.setPasswordHash(getPasswordHash());
-		if (getVKId().intValue() != VKuserID.intValue()) {
-			return result;
-		}
+		if (!isAdmin)
+			if (getVKId().intValue() != VKuserID.intValue()) {
+				return result;
+			}
 		String newPass = RandomCodeFactory.generateCode(7);
 		result = RestoreResult.RESTORED;
 		result.setPasswordHash(newPass);
 		setPasswordHash(getHashType().hash(newPass));
 		return result;
 	}
-
-	
-
-	
 
 }
