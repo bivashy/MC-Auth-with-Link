@@ -61,8 +61,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setString(2, account.getUniqueId().toString());
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
-			statement.setLong(5, account.getLastQuitTime());
-			statement.setInt(6, account.getVKId());
+			statement.setInt(5, account.getVKId());
+			statement.setLong(6, account.getLastQuitTime());
 			statement.setString(7, account.getLastIpAddress());
 			statement.setLong(8, account.getLastSessionStart());
 			statement.setString(9, account.getIdentifierType().name());
