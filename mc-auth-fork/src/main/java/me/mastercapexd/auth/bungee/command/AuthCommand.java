@@ -48,7 +48,7 @@ public class AuthCommand extends Command {
 				String playerName = args[1];
 				ProxiedPlayer p = ProxyServer.getInstance().getPlayer(playerName);
 				if (p == null) {
-					sender.sendMessage("player offline");
+					sender.sendMessage(config.getBungeeMessages().getMessage("player-offline"));
 					return;
 				}
 				String id = config.getActiveIdentifierType().getId(p);
@@ -61,7 +61,7 @@ public class AuthCommand extends Command {
 					Auth.removeAccount(id);
 					Connector.connectOrKick(p, gameServer,
 							config.getBungeeMessages().getMessage("game-servers-connection-refused"));
-					sender.sendMessage("connected");
+					sender.sendMessage(config.getBungeeMessages().getMessage("force-connect-success"));
 				});
 			}
 		}
