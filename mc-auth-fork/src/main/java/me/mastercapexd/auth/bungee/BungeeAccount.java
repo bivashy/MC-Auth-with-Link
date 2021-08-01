@@ -26,7 +26,7 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	private String passwordHash, lastIpAddress;
 	private Integer vkId;
 	private long lastQuitTime, lastSessionStart;
-	
+
 	private boolean online;
 
 	public BungeeAccount(String id, IdentifierType identifierType, UUID uniqueId, String name) {
@@ -57,7 +57,7 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 			setLastIpAddress(proxiedPlayer.getAddress().getHostString());
 			setLastSessionStart(System.currentTimeMillis());
 			if (getVKId() != null && getVKId() != -1) {
-				Auth.addEntryAccount(this,vkId);
+				Auth.addEntryAccount(this, vkId);
 				return SessionResult.NEED_VK_CONFIRM;
 			}
 			return SessionResult.LOGIN_SUCCESS;
@@ -70,7 +70,7 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(getUniqueId());
 		if (p == null)
 			return KickResult.PLAYER_OFFLINE;
-		p.disconnect(TextComponent.fromLegacyText(ChatColor.RED + "Вас кикнули по запросу из ВК"));
+		p.disconnect(TextComponent.fromLegacyText(reason));
 		return KickResult.KICKED;
 	}
 
@@ -87,6 +87,8 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	@Override
 	public boolean isSessionActive(long sessionDurability) {
 		ProxiedPlayer proxiedPlayer = identifierType.getPlayer(getId());
+		if (proxiedPlayer == null)
+			return (getLastSessionStart() + sessionDurability >= System.currentTimeMillis());
 		return proxiedPlayer.getAddress().getHostString().equals(getLastIpAddress())
 				&& (getLastSessionStart() + sessionDurability >= System.currentTimeMillis());
 	}

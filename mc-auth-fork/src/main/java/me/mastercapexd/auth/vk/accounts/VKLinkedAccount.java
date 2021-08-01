@@ -58,7 +58,7 @@ public class VKLinkedAccount {
 	}
 
 	public void restore() {
-		RestoreResult result = account.restoreAccount(userID);
+		RestoreResult result = account.restoreAccount(userID,config.getVKSettings().isAdminUser(userID));
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (result == RestoreResult.ACCOUNT_VK_NOT_EQUALS) {
 				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", account));
