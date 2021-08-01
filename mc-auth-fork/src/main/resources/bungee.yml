@@ -1,0 +1,6 @@
+name: mcAuth
+main: me.mastercapexd.auth.bungee.AuthPlugin
+version: ${project.version}
+authors: 
+  - Ubivashka
+  - MasterCapeXD

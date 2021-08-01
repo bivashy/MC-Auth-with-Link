@@ -1,0 +1,10 @@
+package me.mastercapexd.auth;
+
+public enum SessionResult {
+	REGISTER_SUCCESS,
+	LOGIN_SUCCESS,
+	LOGIN_WRONG_PASSWORD,
+	NEED_VK_CONFIRM,
+	LOGOUT_SUCCESS,
+	LOGOUT_FAILED_NOT_LOGGED_IN
+}
