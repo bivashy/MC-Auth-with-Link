@@ -53,32 +53,6 @@ public class VKEntryAccount {
 		return System.currentTimeMillis() > startTime + (secondsAdd * 1000);
 	}
 
-	public void sendConfirmationMessage(PluginConfig config, ListUtils utils) {
-		Keyboard enterKeyboard = new Keyboard();
-		enterKeyboard.setInline(true);
-		List<KeyboardButton> buttons = new ArrayList<>();
-		buttons.add(new KeyboardButton()
-				.setAction(
-						new KeyboardButtonAction().setLabel(config.getVKButtonLabels().getButtonLabel("enter-confirm"))
-								.setType(TemplateActionTypeNames.CALLBACK)
-								.setPayload(gson.toJson("enterserver_confirm_" + buttonUuid)))
-				.setColor(KeyboardButtonColor.POSITIVE));
-		buttons.add(new KeyboardButton()
-				.setAction(
-						new KeyboardButtonAction().setLabel(config.getVKButtonLabels().getButtonLabel("enter-decline"))
-								.setType(TemplateActionTypeNames.CALLBACK)
-								.setPayload(gson.toJson("enterserver_decline_" + buttonUuid)))
-				.setColor(KeyboardButtonColor.NEGATIVE));
-		enterKeyboard.setButtons(utils.chopList(buttons, 2));
-		try {
-			VKAPI.getInstance().getVK().messages().send(VKAPI.getInstance().getActor()).randomId(random.nextInt())
-					.userId(vkId).message(config.getVKMessages().getMessage("enter-message", account))
-					.keyboard(enterKeyboard).execute();
-		} catch (ApiException | ClientException e1) {
-			e1.printStackTrace();
-		}
-	}
-
 	public void enterConnect(VKEnterAnswer answer, PluginConfig config, AccountStorage accountStorage) {
 		Auth.removeEntryAccount(account.getId());
 		Auth.removeAccount(account.getId());
