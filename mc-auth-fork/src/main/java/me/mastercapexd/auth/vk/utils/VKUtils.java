@@ -25,6 +25,8 @@ import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.BungeeAccount;
+import me.mastercapexd.auth.objects.IPInfoResponse;
+import me.mastercapexd.auth.objects.IPInfoResponse.IPInfoAnswer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.vk.VKAccountsPageType;
 import me.mastercapexd.auth.vk.accounts.VKEntryAccount;
@@ -100,8 +102,10 @@ public class VKUtils {
 		buttons.add(buildCallbackButton("enter-decline", entryAccount.getAccount(),
 				"enterserver_decline_" + entryAccount.getButtonUuid(), KeyboardButtonColor.NEGATIVE));
 		enterKeyboard.setButtons(plugin.getListUtils().chopList(buttons, 2));
+		IPInfoResponse ipInfoAnswer = plugin.getGeoUtils().getIPInfo(entryAccount.getAccount().getLastIpAddress());
 		sendMessage(entryAccount.getVkId(),
-				config.getVKMessages().getMessage("enter-message", entryAccount.getAccount()), enterKeyboard);
+				ipInfoAnswer.setInfo(config.getVKMessages().getMessage("enter-message", entryAccount.getAccount())),
+				enterKeyboard);
 	}
 
 	public boolean isChat(Integer peerId) {
