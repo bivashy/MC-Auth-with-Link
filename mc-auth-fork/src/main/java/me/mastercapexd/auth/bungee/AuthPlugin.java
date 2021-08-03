@@ -13,7 +13,6 @@ import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
-import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.utils.ListUtils;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandHandler;
@@ -38,8 +37,6 @@ public class AuthPlugin extends Plugin {
 
 	private ListUtils listUtils = new ListUtils();
 
-	private GeoUtils geoUtils = new GeoUtils();
-	
 	private VKUtils vkUtils;
 
 	@Override
@@ -104,9 +101,5 @@ public class AuthPlugin extends Plugin {
 
 	public VKReceptioner getVKReceptioner() {
 		return vkReceptioner;
-	}
-
-	public GeoUtils getGeoUtils() {
-		return geoUtils;
 	}
 }
