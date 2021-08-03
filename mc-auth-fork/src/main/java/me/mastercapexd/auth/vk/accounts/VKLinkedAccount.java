@@ -58,13 +58,14 @@ public class VKLinkedAccount {
 	}
 
 	public void restore() {
-		RestoreResult result = account.restoreAccount(userID,config.getVKSettings().isAdminUser(userID));
+		RestoreResult result = account.restoreAccount(userID, config.getVKSettings().isAdminUser(userID),
+				config.getVKSettings().getRestoreSettings().getCodeLength());
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (result == RestoreResult.ACCOUNT_VK_NOT_EQUALS) {
 				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", account));
 				return;
 			}
-		
+
 		account.logout(config.getSessionDurability());
 		account.kick(config.getBungeeMessages().getLegacyMessage("vk-kicked"));
 		sendMessage(userID, config.getVKMessages().getMessage("restored", account).replaceAll("(?i)%password%",

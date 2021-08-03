@@ -60,7 +60,7 @@ public class VKLinkCommand extends Command {
 				sender.sendMessage(config.getBungeeMessages().getMessage("already-linked"));
 				return;
 			}
-			String code = RandomCodeFactory.generateCode(6);
+			String code = RandomCodeFactory.generateCode(config.getVKSettings().getConfirmationSettings().getCodeLength());
 			Auth.addVKConfirmationEntry(id, vkId, code);
 			startRemoveTimer(vkId);
 			sender.sendMessage(

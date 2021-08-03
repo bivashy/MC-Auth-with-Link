@@ -46,14 +46,14 @@ public interface Account {
 		return getPasswordHash() != null;
 	}
 
-	default RestoreResult restoreAccount(Integer VKuserID, boolean isAdmin) {
+	default RestoreResult restoreAccount(Integer VKuserID, boolean isAdmin,Integer codeLength) {
 		RestoreResult result = RestoreResult.ACCOUNT_VK_NOT_EQUALS;
 		result.setPasswordHash(getPasswordHash());
 		if (!isAdmin)
 			if (getVKId().intValue() != VKuserID.intValue()) {
 				return result;
 			}
-		String newPass = RandomCodeFactory.generateCode(7);
+		String newPass = RandomCodeFactory.generateCode(codeLength);
 		result = RestoreResult.RESTORED;
 		result.setPasswordHash(newPass);
 		setPasswordHash(getHashType().hash(newPass));
