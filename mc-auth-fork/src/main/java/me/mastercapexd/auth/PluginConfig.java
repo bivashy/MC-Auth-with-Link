@@ -15,42 +15,46 @@ import net.md_5.bungee.api.config.ServerInfo;
 public interface PluginConfig {
 
 	StorageDataSettings getStorageDataSettings();
-	
+
 	VKSettings getVKSettings();
-	
+
 	IdentifierType getActiveIdentifierType();
-	
+
 	boolean isNameCaseCheckEnabled();
-	
+
 	HashType getActiveHashType();
-	
+
 	StorageType getStorageType();
-	
+
 	Pattern getNamePattern();
-	
+
 	Pattern getPasswordPattern();
-	
+
 	List<Server> getAuthServers();
-	
+
 	List<Server> getGameServers();
-	
+
 	boolean isPasswordConfirmationEnabled();
-	
+
 	int getPasswordMinLength();
-	
+
 	int getPasswordMaxLength();
-	
+
 	int getPasswordAttempts();
-	
+
+	int getMaxLoginPerIP();
+
+	int getMaxVKLink();
+
 	long getSessionDurability();
-	
+
 	long getAuthTime();
-	
+
 	BungeeMessages getBungeeMessages();
-	
+
 	VKMessages getVKMessages();
-	
+
 	VKButtonLabels getVKButtonLabels();
-	
+
 	ServerInfo findServerInfo(List<Server> servers);
 }

@@ -40,13 +40,13 @@ public class BungeePluginConfig implements PluginConfig {
 	private final List<Server> authServers, gameServers;
 
 	private final StorageDataSettings storageDataSettings;
-	private final int maximumCacheSize, accountCacheLimitOnServerStart;
+	private final int maxLoginPerIP, maxVKLink;
 	private final VKSettings vkSettings;
 
-	private final Messages bungeeMessages,vkMessages;
+	private final Messages bungeeMessages, vkMessages;
 
 	private final VKButtonLabels vkButtonLabels;
-	
+
 	private final Configuration config;
 
 	public BungeePluginConfig(Plugin plugin) {
@@ -72,8 +72,8 @@ public class BungeePluginConfig implements PluginConfig {
 		this.storageDataSettings = new StorageDataSettings(data.getString("host"), data.getString("database"),
 				data.getString("username"), data.getString("password"), data.getInt("port"));
 
-		this.maximumCacheSize = config.getInt("maximum-cache-size");
-		this.accountCacheLimitOnServerStart = config.getInt("account-cache-limit-on-server-start");
+		this.maxLoginPerIP = config.getInt("max-login-per-ip");
+		this.maxVKLink = config.getInt("max-vk-link");
 
 		Configuration vk = config.getSection("vk");
 		this.vkSettings = new VKSettings(vk.getBoolean("enabled"), vk);
@@ -106,8 +106,8 @@ public class BungeePluginConfig implements PluginConfig {
 			File config = new File(folder + File.separator + "config.yml");
 			if (!config.exists())
 				Files.copy(resourceAsStream, config.toPath(), new CopyOption[0]);
-
-			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(config);
+			Configuration defaults = ConfigurationProvider.getProvider(YamlConfiguration.class).load(resourceAsStream);
+			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(config, defaults);
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
@@ -174,32 +174,32 @@ public class BungeePluginConfig implements PluginConfig {
 		return storageDataSettings;
 	}
 
-	public int getMaximumCacheSize() {
-		return maximumCacheSize;
-	}
-
-	public int getAccountCacheLimitOnServerStart() {
-		return accountCacheLimitOnServerStart;
-	}
-
 	public BungeeMessages getBungeeMessages() {
-		return (BungeeMessages)bungeeMessages;
+		return (BungeeMessages) bungeeMessages;
 	}
 
 	public VKMessages getVKMessages() {
-		return (VKMessages)vkMessages;
+		return (VKMessages) vkMessages;
 	}
-	
+
 	public VKSettings getVKSettings() {
 		return vkSettings;
 	}
-	
+
 	public VKButtonLabels getVKButtonLabels() {
 		return vkButtonLabels;
 	}
 
 	public Configuration getConfig() {
 		return config;
+	}
+
+	public int getMaxLoginPerIP() {
+		return maxLoginPerIP;
+	}
+
+	public int getMaxVKLink() {
+		return maxVKLink;
 	}
 
 }

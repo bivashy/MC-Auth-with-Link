@@ -60,11 +60,18 @@ public class VKLinkCommand extends Command {
 				sender.sendMessage(config.getBungeeMessages().getMessage("already-linked"));
 				return;
 			}
-			String code = RandomCodeFactory.generateCode(config.getVKSettings().getConfirmationSettings().getCodeLength());
-			Auth.addVKConfirmationEntry(id, vkId, code);
-			startRemoveTimer(vkId);
-			sender.sendMessage(
-					config.getBungeeMessages().getLegacyMessage("confirmation-vk-sent").replaceAll("(?i)%code%", code));
+			accountStorage.getAccountsByVKID(vkId).thenAccept(accounts -> {
+				if(config.getMaxVKLink()!=0 && accounts.size()>=config.getMaxVKLink()) {
+					sender.sendMessage(config.getBungeeMessages().getMessage("vk-link-limit-reached"));
+					return;
+				}
+				String code = RandomCodeFactory
+						.generateCode(config.getVKSettings().getConfirmationSettings().getCodeLength());
+				Auth.addVKConfirmationEntry(id, vkId, code);
+				startRemoveTimer(vkId);
+				sender.sendMessage(config.getBungeeMessages().getLegacyMessage("confirmation-vk-sent")
+						.replaceAll("(?i)%code%", code));
+			});
 		});
 	}
 

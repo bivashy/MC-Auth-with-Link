@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.bungee;
 
+import java.net.InetSocketAddress;
+
 import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.Auth;
@@ -7,7 +9,7 @@ import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
-import me.mastercapexd.auth.vk.utils.VKUtils;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -24,9 +26,9 @@ public class EventListener implements Listener {
 	private final AccountFactory accountFactory;
 	private final AccountStorage accountStorage;
 
-	public EventListener(AuthPlugin plugin,PluginConfig config, AccountFactory accountFactory,
+	public EventListener(AuthPlugin plugin, PluginConfig config, AccountFactory accountFactory,
 			AccountStorage accountStorage) {
-		this.plugin=plugin;
+		this.plugin = plugin;
 		this.config = config;
 		this.accountFactory = accountFactory;
 		this.accountStorage = accountStorage;
@@ -39,10 +41,19 @@ public class EventListener implements Listener {
 		if (!config.getNamePattern().matcher(name).matches()) {
 			event.setCancelReason(config.getBungeeMessages().getMessage("illegal-name-chars"));
 			event.setCancelled(true);
+			return;
 		}
-
+		if (config.getMaxLoginPerIP() != 0
+				&& getOnlineExactIP(event.getConnection().getAddress().getAddress().getHostAddress()) >= config
+						.getMaxLoginPerIP()) {
+			event.setCancelReason(config.getBungeeMessages().getMessage("limit-ip-reached"));
+			event.setCancelled(true);
+			return;
+		}
 		if (!config.isNameCaseCheckEnabled())
 			return;
+
+		
 
 		IdentifierType identifierType = config.getActiveIdentifierType();
 		String id = identifierType == IdentifierType.UUID ? event.getConnection().getUniqueId().toString()
@@ -54,7 +65,7 @@ public class EventListener implements Listener {
 			if (account.getName().equals(name))
 				return;
 			event.getConnection().disconnect(config.getBungeeMessages().getLegacyMessage("check-name-case-failed")
-					.replace("%correct%", account.getName()).replace("%failed%", name));
+					.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", name));
 			event.setCancelled(true);
 		});
 	}
@@ -83,7 +94,7 @@ public class EventListener implements Listener {
 					Connector.connectOrKick(player, authServer,
 							config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
 				}
-				if(Auth.hasEntryAccount(id))
+				if (Auth.hasEntryAccount(id))
 					plugin.getVkUtils().sendConfirmationMessage(Auth.getEntryAccount(id));
 			}
 		});
@@ -121,4 +132,16 @@ public class EventListener implements Listener {
 			accountStorage.saveOrUpdateAccount(account);
 		});
 	}
+
+	@SuppressWarnings("deprecation")
+	private int getOnlineExactIP(String address) {
+		int findedExactIPs = 0;
+		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+			if (p.getPendingConnection().getAddress().getAddress().getHostAddress().equals(address)) {
+				findedExactIPs++;
+			}
+		}
+		return findedExactIPs;
+	}
+
 }

@@ -1,10 +1,6 @@
 package me.mastercapexd.auth.vk.commands;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.events.VKLinkEvent;
