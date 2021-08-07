@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.bungee.command;
 
-import java.util.concurrent.TimeUnit;
-
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;

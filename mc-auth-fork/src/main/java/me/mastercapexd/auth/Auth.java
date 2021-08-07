@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
