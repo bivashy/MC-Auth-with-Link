@@ -74,7 +74,7 @@ public class AuthPlugin extends Plugin {
 	}
 
 	private void registerVK() {
-		this.vkUtils = new VKUtils(this, config, accountStorage);
+		this.vkUtils = new VKUtils(config);
 		this.vkCommandHandler = new VKCommandHandler();
 		this.vkButtonHandler = new VKButtonHandler();
 		this.vkReceptioner = new VKReceptioner(this, config, accountStorage, vkCommandHandler, vkButtonHandler);
