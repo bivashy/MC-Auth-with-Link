@@ -160,7 +160,10 @@ vk:
     unlinked: 'Вы успешно отвязали аккаунт %name%'
     # Админ-панель
     admin-panel: 'Админ панель:'
-    
+    admin-panel-no-accounts: 'Не найдено аккаунтов!'
+    admin-panel-no-linked-accounts: 'Не найдено привязанных аккаунтов!'
+    admin-panel-accounts: 'Все аккаунты сервера:'
+    admin-panel-linked-accounts: 'Все привязанные аккаунты сервера'
 messages:
   # Регистрация
   register-chat: '&fПожалуйста зарегистрируйтесь командой &e/register <пароль>'
