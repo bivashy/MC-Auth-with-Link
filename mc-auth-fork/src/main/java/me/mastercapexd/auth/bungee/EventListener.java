@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.bungee;
 
-import java.net.InetSocketAddress;
-
 import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.Auth;
@@ -94,8 +92,6 @@ public class EventListener implements Listener {
 					Connector.connectOrKick(player, authServer,
 							config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
 				}
-				if (Auth.hasEntryAccount(id))
-					plugin.getVkUtils().sendConfirmationMessage(Auth.getEntryAccount(id));
 			}
 		});
 	}
