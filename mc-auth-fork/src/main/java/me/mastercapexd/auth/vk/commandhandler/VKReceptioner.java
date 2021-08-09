@@ -25,7 +25,7 @@ import me.mastercapexd.auth.vk.buttons.VKAllAccountsButton;
 import me.mastercapexd.auth.vk.buttons.VKAllLinkedAccountsButton;
 import me.mastercapexd.auth.vk.buttons.VKEnterButton;
 import me.mastercapexd.auth.vk.buttons.VKKickButton;
-import me.mastercapexd.auth.vk.buttons.VKNextPageButton;
+import me.mastercapexd.auth.vk.buttons.VKPageButton;
 import me.mastercapexd.auth.vk.buttons.VKRestoreButton;
 import me.mastercapexd.auth.vk.buttons.VKReturnButton;
 import me.mastercapexd.auth.vk.buttons.VKUnlinkButton;
@@ -65,7 +65,7 @@ public class VKReceptioner {
 	}
 
 	private void registerButtons() {
-		addButton(buttonFactory.createButton("nextpage", new VKNextPageButton(this), Arrays.asList("previouspage")));
+		addButton(buttonFactory.createButton("nextpage", new VKPageButton(this), Arrays.asList("previouspage")));
 		addButton(buttonFactory.createButton("account", new VKAccountButton(this)));
 		addButton(buttonFactory.createButton("kick", new VKKickButton(this)));
 		addButton(buttonFactory.createButton("unlink", new VKUnlinkButton(this)));
