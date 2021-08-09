@@ -2,6 +2,8 @@ package me.mastercapexd.auth.vk.commands;
 
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
+import me.mastercapexd.auth.vk.VKAccountsPageType;
+import me.mastercapexd.auth.vk.builders.AccountsMessageBuilder;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
@@ -17,7 +19,9 @@ public class VKAccountsCommand extends VKCommandExecutor {
 	public void execute(VKMessageEvent e, String[] args) {
 		if (isChat(e.getPeer()))
 			return;
-		receptioner.getPlugin().getVkUtils().sendAccountsKeyboard(e.getUserId(), 1);
+		receptioner.getAccountStorage().getAccountsByVKID(e.getUserId()).thenAccept(accounts -> {
+			new AccountsMessageBuilder(e.getUserId(), 1, VKAccountsPageType.OWNPAGE, accounts, receptioner).execute();
+		});
 	}
 
 }
