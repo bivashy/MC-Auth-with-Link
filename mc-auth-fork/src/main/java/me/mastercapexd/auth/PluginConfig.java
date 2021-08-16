@@ -9,6 +9,7 @@ import me.mastercapexd.auth.config.VKMessages;
 import me.mastercapexd.auth.objects.Server;
 import me.mastercapexd.auth.objects.StorageDataSettings;
 import me.mastercapexd.auth.storage.StorageType;
+import me.mastercapexd.auth.utils.bossbar.BossBarSettings;
 import me.mastercapexd.auth.vk.settings.VKSettings;
 import net.md_5.bungee.api.config.ServerInfo;
 
@@ -46,6 +47,8 @@ public interface PluginConfig {
 
 	int getMaxVKLink();
 
+	int getMessagesDelay();
+
 	long getSessionDurability();
 
 	long getAuthTime();
@@ -56,5 +59,8 @@ public interface PluginConfig {
 
 	VKButtonLabels getVKButtonLabels();
 
+	BossBarSettings getBossBarSettings();
+
 	ServerInfo findServerInfo(List<Server> servers);
+
 }

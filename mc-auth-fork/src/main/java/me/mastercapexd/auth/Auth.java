@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 import me.mastercapexd.auth.objects.VKConfirmationEntry;
+import me.mastercapexd.auth.utils.bossbar.BossBar;
 import me.mastercapexd.auth.vk.accounts.VKEntryAccount;
 
 public class Auth {
@@ -16,6 +17,7 @@ public class Auth {
 	private static final Map<String, Account> accounts = Maps.newConcurrentMap();
 	private static final Map<String, Long> accountTimes = Maps.newConcurrentMap();
 	private static final Map<String, Integer> attempts = Maps.newConcurrentMap();
+	private static final Map<String, BossBar> bars = Maps.newConcurrentMap();
 	private static final Map<Integer, VKConfirmationEntry> vkConfirmationCodes = Maps.newConcurrentMap();
 	private static final Map<String, VKEntryAccount> enterAccounts = Maps.newConcurrentMap();
 
@@ -32,6 +34,8 @@ public class Auth {
 		accounts.remove(id);
 		accountTimes.remove(id);
 		attempts.remove(id);
+		if (Auth.getBar(id) != null) 
+			Auth.removeBar(id);
 	}
 
 	public static synchronized boolean hasAccount(String id) {
@@ -81,7 +85,7 @@ public class Auth {
 	public static synchronized VKEntryAccount getEntryAccount(String id) {
 		return enterAccounts.get(id);
 	}
-
+	
 	public static synchronized List<VKEntryAccount> getEntryAccount(Integer vkId, Integer delay) {
 		List<VKEntryAccount> accounts = new ArrayList<>();
 		for (VKEntryAccount account : enterAccounts.values()) {
@@ -107,5 +111,19 @@ public class Auth {
 
 	public static synchronized void removeEntryAccount(String id) {
 		enterAccounts.remove(id);
+	}
+
+	public static synchronized void addBar(String user, BossBar bar) {
+		if (bars.containsKey(user))
+			bars.get(user).removeAll();
+		bars.put(user, bar);
+	}
+
+	public static synchronized BossBar getBar(String user) {
+		return bars.get(user);
+	}
+
+	public static synchronized void removeBar(String user) {
+		bars.remove(user);
 	}
 }

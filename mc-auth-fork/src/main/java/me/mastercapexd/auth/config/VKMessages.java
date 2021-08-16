@@ -11,12 +11,15 @@ import net.md_5.bungee.config.Configuration;
 public class VKMessages implements Messages {
 
 	private final Map<String, String> strings = Maps.newHashMap();
-
 	public VKMessages(Configuration messages) {
 		for (String key : messages.getKeys())
 			strings.put(key, messages.getString(key));
 	}
 
+	@Override
+	public String colorMessage(String message) {
+		return message;
+	}
 	@Override
 	public String getLegacyMessage(String key) {
 		return strings.get(key);

@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.utils.bossbar;
 
+import me.mastercapexd.auth.Messages;
 import net.md_5.bungee.config.Configuration;
 
 public class BossBarSettings {
@@ -8,7 +9,7 @@ public class BossBarSettings {
 	private final BarStyle barStyle;
 	private final String barText;
 
-	public BossBarSettings(Configuration config) {
+	public BossBarSettings(Configuration config,Messages messages) {
 		enabled = config.getBoolean("use");
 		if (!enabled) {
 			barColor = null;
@@ -18,7 +19,7 @@ public class BossBarSettings {
 		}
 		barColor = BarColor.valueOf(config.getString("bar-color"));
 		barStyle = BarStyle.valueOf(config.getString("bar-style"));
-		barText = config.getString("bar-text");
+		barText = messages.colorMessage(config.getString("bar-text"));
 	}
 
 	public boolean isEnabled() {

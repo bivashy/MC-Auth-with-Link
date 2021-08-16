@@ -10,4 +10,6 @@ public interface Messages {
 	}
 	
 	String getLegacyMessage(String key);
+
+	String colorMessage(String message);
 }

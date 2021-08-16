@@ -18,8 +18,16 @@ public class BungeeMessages implements Messages {
 
 	public BungeeMessages(Configuration messages) {
 		for (String key : messages.getKeys())
-			strings.put(key, applyColor(ChatColor.translateAlternateColorCodes('&', messages.getString(key))));
+			addMessage(key, messages.getString(key));
+	}
 
+	public void addMessage(String path, String message) {
+		strings.put(path, colorMessage(message));
+	}
+
+	@Override
+	public String colorMessage(String message) {
+		return applyColor(ChatColor.translateAlternateColorCodes('&', message));
 	}
 
 	@Override

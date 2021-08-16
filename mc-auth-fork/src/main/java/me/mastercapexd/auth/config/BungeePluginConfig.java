@@ -19,6 +19,7 @@ import me.mastercapexd.auth.objects.Server;
 import me.mastercapexd.auth.objects.StorageDataSettings;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.utils.TimeUtils;
+import me.mastercapexd.auth.utils.bossbar.BossBarSettings;
 import me.mastercapexd.auth.vk.settings.VKSettings;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -40,12 +41,14 @@ public class BungeePluginConfig implements PluginConfig {
 	private final List<Server> authServers, gameServers;
 
 	private final StorageDataSettings storageDataSettings;
-	private final int maxLoginPerIP, maxVKLink;
+	private final int maxLoginPerIP, maxVKLink,messagesDelay;
 	private final VKSettings vkSettings;
 
 	private final Messages bungeeMessages, vkMessages;
 
 	private final VKButtonLabels vkButtonLabels;
+	
+	private final BossBarSettings barSettings;
 
 	private final Configuration config;
 
@@ -74,13 +77,16 @@ public class BungeePluginConfig implements PluginConfig {
 
 		this.maxLoginPerIP = config.getInt("max-login-per-ip");
 		this.maxVKLink = config.getInt("max-vk-link");
-
+		this.messagesDelay = config.getInt("messages-delay");
+	
 		Configuration vk = config.getSection("vk");
 		this.vkSettings = new VKSettings(vk.getBoolean("enabled"), vk);
 
 		this.bungeeMessages = new BungeeMessages(config.getSection("messages"));
 		this.vkMessages = new VKMessages(vk.getSection("vkmessages"));
 		this.vkButtonLabels = new VKButtonLabels(vk.getSection("button-labels"));
+		
+		this.barSettings = new BossBarSettings(config.getSection("boss-bar"),bungeeMessages);
 	}
 
 	@Override
@@ -114,30 +120,37 @@ public class BungeePluginConfig implements PluginConfig {
 		return null;
 	}
 
+	@Override
 	public IdentifierType getActiveIdentifierType() {
 		return activeIdentifierType;
 	}
 
+	@Override
 	public boolean isNameCaseCheckEnabled() {
 		return nameCaseCheckEnabled;
 	}
 
+	@Override
 	public boolean isPasswordConfirmationEnabled() {
 		return passwordConfirmationEnabled;
 	}
 
+	@Override
 	public HashType getActiveHashType() {
 		return activeHashType;
 	}
 
+	@Override
 	public StorageType getStorageType() {
 		return storageType;
 	}
 
+	@Override
 	public Pattern getNamePattern() {
 		return namePattern;
 	}
 
+	@Override
 	public Pattern getPasswordPattern() {
 		return passwordPattern;
 	}
@@ -146,46 +159,57 @@ public class BungeePluginConfig implements PluginConfig {
 		return passwordMinLength;
 	}
 
+	@Override
 	public int getPasswordMaxLength() {
 		return passwordMaxLength;
 	}
 
+	@Override
 	public int getPasswordAttempts() {
 		return passwordAttempts;
 	}
 
+	@Override
 	public long getSessionDurability() {
 		return sessionDurability;
 	}
 
+	@Override
 	public long getAuthTime() {
 		return authTime;
 	}
 
+	@Override
 	public List<Server> getAuthServers() {
 		return authServers;
 	}
 
+	@Override
 	public List<Server> getGameServers() {
 		return gameServers;
 	}
 
+	@Override
 	public StorageDataSettings getStorageDataSettings() {
 		return storageDataSettings;
 	}
 
+	@Override
 	public BungeeMessages getBungeeMessages() {
 		return (BungeeMessages) bungeeMessages;
 	}
 
+	@Override
 	public VKMessages getVKMessages() {
 		return (VKMessages) vkMessages;
 	}
 
+	@Override
 	public VKSettings getVKSettings() {
 		return vkSettings;
 	}
 
+	@Override
 	public VKButtonLabels getVKButtonLabels() {
 		return vkButtonLabels;
 	}
@@ -194,12 +218,24 @@ public class BungeePluginConfig implements PluginConfig {
 		return config;
 	}
 
+	@Override
 	public int getMaxLoginPerIP() {
 		return maxLoginPerIP;
 	}
 
+	@Override
 	public int getMaxVKLink() {
 		return maxVKLink;
+	}
+
+	@Override
+	public int getMessagesDelay() {
+		return this.messagesDelay;
+	}
+
+	@Override
+	public BossBarSettings getBossBarSettings() {
+		return this.barSettings;
 	}
 
 }
