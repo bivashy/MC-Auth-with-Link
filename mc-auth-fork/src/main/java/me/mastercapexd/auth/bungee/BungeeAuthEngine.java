@@ -89,8 +89,10 @@ public class BungeeAuthEngine implements AuthEngine {
 					String id = this.config.getActiveIdentifierType().getId(player);
 					Account account = Auth.getAccount(id);
 					if (account == null) {
-						if (Auth.getBar(id) != null)
+						if (Auth.getBar(id) != null) {
+							Auth.getBar(id).removeAll();
 							Auth.removeBar(id);
+						}
 						ServerInfo connectServer = this.config.findServerInfo(this.config.getGameServers());
 						Connector.connectOrKick(player, connectServer,
 								this.config.getBungeeMessages().getMessage("game-servers-connection-refused"));

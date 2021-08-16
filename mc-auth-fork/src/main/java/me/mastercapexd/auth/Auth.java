@@ -34,8 +34,10 @@ public class Auth {
 		accounts.remove(id);
 		accountTimes.remove(id);
 		attempts.remove(id);
-		if (Auth.getBar(id) != null) 
+		if (Auth.getBar(id) != null) {
+			Auth.getBar(id).removeAll();
 			Auth.removeBar(id);
+		}
 	}
 
 	public static synchronized boolean hasAccount(String id) {
