@@ -9,12 +9,14 @@ import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
 import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.bungee.events.EntryConfirmationStartEvent;
 import me.mastercapexd.auth.objects.IPInfoResponse;
 import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.utils.ListUtils;
 import me.mastercapexd.auth.vk.accounts.VKEntryAccount;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import me.mastercapexd.auth.vk.utils.VKUtils;
+import net.md_5.bungee.api.ProxyServer;
 
 public class ConfirmationMessageBuilder extends MessageBuilder {
 	private final VKEntryAccount entryAccount;
@@ -25,11 +27,13 @@ public class ConfirmationMessageBuilder extends MessageBuilder {
 
 	public ConfirmationMessageBuilder(VKEntryAccount entryAccount, VKReceptioner receptioner) {
 		this.entryAccount = entryAccount;
-		this.vkUtils = receptioner.getPlugin().getVkUtils();
+		this.vkUtils = receptioner.getPlugin().getVKUtils();
 		this.geoUtils = receptioner.getPlugin().getGeoUtils();
 		this.listUtils = receptioner.getPlugin().getListUtils();
 		this.config = receptioner.getConfig();
-
+		EntryConfirmationStartEvent confirmationStartEvent = new EntryConfirmationStartEvent(entryAccount.getVkId(),
+				entryAccount.getAccount());
+		ProxyServer.getInstance().getPluginManager().callEvent(confirmationStartEvent);
 	}
 
 	@Override

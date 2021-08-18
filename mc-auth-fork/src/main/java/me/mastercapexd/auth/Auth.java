@@ -8,9 +8,11 @@ import java.util.Map;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
+import me.mastercapexd.auth.bungee.events.AccountServerEnterEvent;
 import me.mastercapexd.auth.objects.VKConfirmationEntry;
 import me.mastercapexd.auth.utils.bossbar.BossBar;
 import me.mastercapexd.auth.vk.accounts.VKEntryAccount;
+import net.md_5.bungee.api.ProxyServer;
 
 public class Auth {
 
@@ -31,6 +33,10 @@ public class Auth {
 	}
 
 	public static synchronized void removeAccount(String id) {
+		AccountServerEnterEvent accountServerEnterEvent = new AccountServerEnterEvent(accounts.get(id), id);
+		ProxyServer.getInstance().getPluginManager().callEvent(accountServerEnterEvent);
+		if (accountServerEnterEvent.isCancelled())
+			return;
 		accounts.remove(id);
 		accountTimes.remove(id);
 		attempts.remove(id);
@@ -87,7 +93,7 @@ public class Auth {
 	public static synchronized VKEntryAccount getEntryAccount(String id) {
 		return enterAccounts.get(id);
 	}
-	
+
 	public static synchronized List<VKEntryAccount> getEntryAccount(Integer vkId, Integer delay) {
 		List<VKEntryAccount> accounts = new ArrayList<>();
 		for (VKEntryAccount account : enterAccounts.values()) {

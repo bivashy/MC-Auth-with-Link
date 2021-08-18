@@ -19,6 +19,14 @@ public class VKButtonHandler implements Listener {
 		this.commands.add(new VKCallbackButton(name.toLowerCase(), executor));
 	}
 
+	public void removeButton(VKCallbackButton command) {
+		this.commands.remove(command);
+	}
+
+	public ArrayList<VKCallbackButton> getButtons() {
+		return commands;
+	}
+
 	@EventHandler
 	public void onButtonPress(VKCallbackButtonPressEvent e) {
 		String payload = e.getButtonEvent().getPayload();

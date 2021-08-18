@@ -26,7 +26,7 @@ public class AuthPlugin extends Plugin {
 	private BungeePluginConfig config;
 	private AccountFactory accountFactory;
 	private AccountStorage accountStorage;
-	
+
 	private VKCommandHandler vkCommandHandler;
 
 	private VKButtonHandler vkButtonHandler;
@@ -39,17 +39,26 @@ public class AuthPlugin extends Plugin {
 	private ListUtils listUtils = new ListUtils();
 
 	private GeoUtils geoUtils = new GeoUtils();
-	
+
 	private VKUtils vkUtils;
+
+	private static AuthPlugin instance;
 
 	@Override
 	public void onEnable() {
+		instance = this;
 		registerAuth();
 		registerListeners();
 		registerCommands();
 		if (config.getVKSettings().isEnabled())
 			registerVK();
 
+	}
+
+	public AuthPlugin getInstance() {
+		if (instance == null)
+			throw new UnsupportedOperationException("Plugin not enabled!");
+		return instance;
 	}
 
 	private void registerAuth() {
@@ -61,7 +70,7 @@ public class AuthPlugin extends Plugin {
 	}
 
 	private void registerListeners() {
-		this.eventListener = new EventListener(this,config, accountFactory, accountStorage);
+		this.eventListener = new EventListener(config, accountFactory, accountStorage);
 		this.getProxy().getPluginManager().registerListener(this, eventListener);
 	}
 
@@ -98,7 +107,7 @@ public class AuthPlugin extends Plugin {
 		return listUtils;
 	}
 
-	public VKUtils getVkUtils() {
+	public VKUtils getVKUtils() {
 		return vkUtils;
 	}
 
@@ -108,5 +117,25 @@ public class AuthPlugin extends Plugin {
 
 	public GeoUtils getGeoUtils() {
 		return geoUtils;
+	}
+
+	public BungeePluginConfig getConfig() {
+		return config;
+	}
+
+	public AccountFactory getAccountFactory() {
+		return accountFactory;
+	}
+
+	public AccountStorage getAccountStorage() {
+		return accountStorage;
+	}
+
+	public VKCommandHandler getVKCommandHandler() {
+		return vkCommandHandler;
+	}
+
+	public VKButtonHandler getVKButtonHandler() {
+		return vkButtonHandler;
 	}
 }

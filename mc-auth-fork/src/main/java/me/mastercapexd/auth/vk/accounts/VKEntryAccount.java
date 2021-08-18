@@ -1,31 +1,23 @@
 package me.mastercapexd.auth.vk.accounts;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import com.google.gson.Gson;
 import com.ubivashka.vk.bungee.VKAPI;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.messages.Keyboard;
-import com.vk.api.sdk.objects.messages.KeyboardButton;
-import com.vk.api.sdk.objects.messages.KeyboardButtonAction;
-import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
-import com.vk.api.sdk.objects.messages.TemplateActionTypeNames;
 
 import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.VKEnterAnswer;
+import me.mastercapexd.auth.bungee.events.EntryConfirmationSelectEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
-import me.mastercapexd.auth.utils.ListUtils;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class VKEntryAccount {
-	private final static Gson gson = new Gson();
 	private final static Random random = new Random();
 	private final Account account;
 	private final Integer vkId;
@@ -54,6 +46,11 @@ public class VKEntryAccount {
 	}
 
 	public void enterConnect(VKEnterAnswer answer, PluginConfig config, AccountStorage accountStorage) {
+		EntryConfirmationSelectEvent entryConfirmationSelectEvent = new EntryConfirmationSelectEvent(vkId, account,
+				answer);
+		ProxyServer.getInstance().getPluginManager().callEvent(entryConfirmationSelectEvent);
+		if (entryConfirmationSelectEvent.isCancelled())
+			return;
 		Auth.removeEntryAccount(account.getId());
 		Auth.removeAccount(account.getId());
 		ProxiedPlayer proxiedPlayer = account.getIdentifierType().getPlayer(account.getId());

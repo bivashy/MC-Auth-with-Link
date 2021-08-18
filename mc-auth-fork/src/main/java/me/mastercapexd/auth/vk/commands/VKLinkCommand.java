@@ -44,12 +44,16 @@ public class VKLinkCommand extends VKCommandExecutor {
 						receptioner.getConfig().getVKMessages().getLegacyMessage("confirmation-already-linked"));
 				return;
 			}
+			VKLinkEvent event = new VKLinkEvent(e.getUserId(), account);
+			ProxyServer.getInstance().getPluginManager().callEvent(event);
+			if (event.isCancelled())
+				return;
 			account.setVKId(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			ProxiedPlayer player = receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId());
 			if (player != null)
 				player.sendMessage(receptioner.getConfig().getBungeeMessages().getMessage("vk-linked"));
-			ProxyServer.getInstance().getPluginManager().callEvent(new VKLinkEvent(e.getUserId(), account));
+
 			sendMessage(e.getPeer(), receptioner.getConfig().getVKMessages().getLegacyMessage("confirmation-success"));
 			Auth.removeVKConfirmationEntry(e.getUserId());
 		});

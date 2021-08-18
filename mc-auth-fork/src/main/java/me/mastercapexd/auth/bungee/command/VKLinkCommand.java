@@ -46,7 +46,7 @@ public class VKLinkCommand extends Command {
 
 		String screen_name = args[0];
 
-		Integer vkId = plugin.getVkUtils().getVKIdFromScreenName(screen_name);
+		Integer vkId = plugin.getVKUtils().getVKIdFromScreenName(screen_name);
 		if (Auth.getVKConfirmationEntry(vkId) != null) {
 			sender.sendMessage(config.getBungeeMessages().getMessage("vk-already-sent"));
 			return;

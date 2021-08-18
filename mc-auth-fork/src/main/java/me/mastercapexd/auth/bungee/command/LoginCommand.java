@@ -1,16 +1,15 @@
 package me.mastercapexd.auth.bungee.command;
 
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-
 import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.SessionResult;
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.bungee.events.LoginEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.vk.builders.ConfirmationMessageBuilder;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -76,6 +75,10 @@ public class LoginCommand extends Command {
 			new ConfirmationMessageBuilder(Auth.getEntryAccount(id), plugin.getVKReceptioner()).execute();
 
 		if (result != SessionResult.LOGIN_SUCCESS)
+			return;
+		LoginEvent loginEvent = new LoginEvent(account);
+		ProxyServer.getInstance().getPluginManager().callEvent(loginEvent);
+		if (loginEvent.isCancelled())
 			return;
 		accountStorage.saveOrUpdateAccount(account);
 		sender.sendMessage(config.getBungeeMessages().getMessage("login-success"));

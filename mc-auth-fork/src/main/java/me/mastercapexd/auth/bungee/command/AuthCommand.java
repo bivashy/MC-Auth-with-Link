@@ -2,6 +2,7 @@ package me.mastercapexd.auth.bungee.command;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.bungee.events.LoginEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.CommandSender;
@@ -56,6 +57,10 @@ public class AuthCommand extends Command {
 						return;
 					}
 					ServerInfo gameServer = config.findServerInfo(config.getGameServers());
+					LoginEvent loginEvent = new LoginEvent(account, true);
+					ProxyServer.getInstance().getPluginManager().callEvent(loginEvent);
+					if (loginEvent.isCancelled())
+						return;
 					Auth.removeAccount(id);
 					Connector.connectOrKick(p, gameServer,
 							config.getBungeeMessages().getMessage("game-servers-connection-refused"));

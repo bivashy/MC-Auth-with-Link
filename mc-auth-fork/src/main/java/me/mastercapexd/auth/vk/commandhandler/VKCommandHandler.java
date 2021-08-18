@@ -19,6 +19,14 @@ public class VKCommandHandler implements Listener {
 		this.commands.add(new VKCommand(name.toLowerCase(), executor));
 	}
 
+	public void removeCommand(VKCommand command) {
+		commands.remove(command);
+	}
+	
+	public ArrayList<VKCommand> getCommands(){
+		return commands;
+	}
+	
 	@EventHandler
 	public void onVKMessage(VKMessageEvent e) {
 		String message = e.getMessage().getText();

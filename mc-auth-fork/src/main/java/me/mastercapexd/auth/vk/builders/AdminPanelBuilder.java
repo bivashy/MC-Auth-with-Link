@@ -21,7 +21,7 @@ public class AdminPanelBuilder extends MessageBuilder {
 
 	public AdminPanelBuilder(Integer userId, VKReceptioner receptioner) {
 		this.userId = userId;
-		this.vkUtils = receptioner.getPlugin().getVkUtils();
+		this.vkUtils = receptioner.getPlugin().getVKUtils();
 		this.listUtils = receptioner.getPlugin().getListUtils();
 		this.config = receptioner.getConfig();
 	}

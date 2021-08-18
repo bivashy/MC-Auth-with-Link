@@ -49,6 +49,16 @@ public class ChangePasswordCommand extends Command {
 				return;
 			}
 			
+			if (newPassword.length() < config.getPasswordMinLength()) {
+				sender.sendMessage(config.getBungeeMessages().getMessage("password-too-short"));
+				return;
+			}
+
+			if (newPassword.length() > config.getPasswordMaxLength()) {
+				sender.sendMessage(config.getBungeeMessages().getMessage("password-too-long"));
+				return;
+			}
+			
 			BungeeAccount bungeeAccount = (BungeeAccount) account;
 			if (account.getHashType() != config.getActiveHashType())
 				bungeeAccount.setHashType(config.getActiveHashType());

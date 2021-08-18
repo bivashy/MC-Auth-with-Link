@@ -12,8 +12,10 @@ import me.mastercapexd.auth.KickResult;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.RestoreResult;
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.bungee.events.VKUnlinkEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
+import net.md_5.bungee.api.ProxyServer;
 
 public class VKLinkedAccount {
 	private final AuthPlugin plugin;
@@ -52,6 +54,10 @@ public class VKLinkedAccount {
 				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", account));
 				return;
 			}
+		VKUnlinkEvent event = new VKUnlinkEvent(userID, account);
+		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			return;
 		sendMessage(userID, config.getVKMessages().getMessage("unlinked", account));
 		account.setVKId(-1);
 		accountStorage.saveOrUpdateAccount(account);
@@ -77,20 +83,20 @@ public class VKLinkedAccount {
 		Keyboard keyboard = new Keyboard();
 		keyboard.setInline(true);
 		List<KeyboardButton> buttons = new ArrayList<>();
-		buttons.add(plugin.getVkUtils().buildCallbackButton("restore", account, "restore_" + account.getId(),
+		buttons.add(plugin.getVKUtils().buildCallbackButton("restore", account, "restore_" + account.getId(),
 				KeyboardButtonColor.PRIMARY));
-		buttons.add(plugin.getVkUtils().buildCallbackButton("kick", account, "kick_" + account.getId(),
+		buttons.add(plugin.getVKUtils().buildCallbackButton("kick", account, "kick_" + account.getId(),
 				KeyboardButtonColor.PRIMARY));
-		buttons.add(plugin.getVkUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
+		buttons.add(plugin.getVKUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
 				KeyboardButtonColor.PRIMARY));
-		buttons.add(plugin.getVkUtils().buildCallbackButton("return", account, "return", KeyboardButtonColor.DEFAULT));
+		buttons.add(plugin.getVKUtils().buildCallbackButton("return", account, "return", KeyboardButtonColor.DEFAULT));
 		keyboard.setButtons(plugin.getListUtils().chopList(buttons, 3));
-		plugin.getVkUtils().sendMessage(userID, config.getVKMessages().getMessage("account-control", account),
+		plugin.getVKUtils().sendMessage(userID, config.getVKMessages().getMessage("account-control", account),
 				keyboard);
 	}
 
 	private void sendMessage(Integer userID, String message) {
-		plugin.getVkUtils().sendMessage(userID, message);
+		plugin.getVKUtils().sendMessage(userID, message);
 	}
 
 }

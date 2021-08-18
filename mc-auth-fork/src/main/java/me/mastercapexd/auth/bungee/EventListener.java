@@ -5,6 +5,7 @@ import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.ProxyServer;
@@ -19,14 +20,11 @@ import net.md_5.bungee.event.EventHandler;
 
 public class EventListener implements Listener {
 
-	private final AuthPlugin plugin;
 	private final PluginConfig config;
 	private final AccountFactory accountFactory;
 	private final AccountStorage accountStorage;
 
-	public EventListener(AuthPlugin plugin, PluginConfig config, AccountFactory accountFactory,
-			AccountStorage accountStorage) {
-		this.plugin = plugin;
+	public EventListener(PluginConfig config, AccountFactory accountFactory, AccountStorage accountStorage) {
 		this.config = config;
 		this.accountFactory = accountFactory;
 		this.accountStorage = accountStorage;
@@ -50,8 +48,6 @@ public class EventListener implements Listener {
 		}
 		if (!config.isNameCaseCheckEnabled())
 			return;
-
-		
 
 		IdentifierType identifierType = config.getActiveIdentifierType();
 		String id = identifierType == IdentifierType.UUID ? event.getConnection().getUniqueId().toString()
@@ -84,6 +80,10 @@ public class EventListener implements Listener {
 						config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
 			} else {
 				if (account.isSessionActive(config.getSessionDurability())) {
+					SessionEnterEvent sessionEvent = new SessionEnterEvent(account);
+					ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
+					if (sessionEvent.isCancelled())
+						return;
 					player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
 					Auth.removeAccount(id);
 				} else {

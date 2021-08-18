@@ -4,9 +4,11 @@ import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.SessionResult;
+import me.mastercapexd.auth.bungee.events.RegisterEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -78,6 +80,10 @@ public class RegisterCommand extends Command {
 
 		SessionResult result = account.newSession(config.getActiveHashType(), password);
 		if (result != SessionResult.REGISTER_SUCCESS)
+			return;
+		RegisterEvent registerEvent = new RegisterEvent(account);
+		ProxyServer.getInstance().getPluginManager().callEvent(registerEvent);
+		if (registerEvent.isCancelled())
 			return;
 		Auth.removeAccount(id);
 		accountStorage.saveOrUpdateAccount(account);

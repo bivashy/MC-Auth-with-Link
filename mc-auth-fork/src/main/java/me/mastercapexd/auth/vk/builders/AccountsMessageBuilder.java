@@ -33,7 +33,7 @@ public class AccountsMessageBuilder extends MessageBuilder {
 		this.page = page;
 		this.type = type;
 		this.accounts = accounts;
-		this.vkUtils = receptioner.getPlugin().getVkUtils();
+		this.vkUtils = receptioner.getPlugin().getVKUtils();
 		this.listUtils = receptioner.getPlugin().getListUtils();
 		this.config = receptioner.getConfig();
 	}
