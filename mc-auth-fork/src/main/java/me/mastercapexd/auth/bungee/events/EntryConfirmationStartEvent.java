@@ -6,7 +6,6 @@ import net.md_5.bungee.api.plugin.Event;
 public class EntryConfirmationStartEvent extends Event{
 	private final Integer userId;
 	private final Account linkedAccount;
-	private boolean isCancelled = false;
 
 	public EntryConfirmationStartEvent(Integer userId, Account linkedAccount) {
 		this.userId = userId;
