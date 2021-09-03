@@ -40,14 +40,16 @@ public class BungeePluginConfig implements PluginConfig {
 
 	private final List<Server> authServers, gameServers;
 
+	private final List<String> blockedServers, captchaServers;
+
 	private final StorageDataSettings storageDataSettings;
-	private final int maxLoginPerIP, maxVKLink,messagesDelay;
+	private final int maxLoginPerIP, maxVKLink, messagesDelay;
 	private final VKSettings vkSettings;
 
 	private final Messages bungeeMessages, vkMessages;
 
 	private final VKButtonLabels vkButtonLabels;
-	
+
 	private final BossBarSettings barSettings;
 
 	private final Configuration config;
@@ -71,6 +73,10 @@ public class BungeePluginConfig implements PluginConfig {
 				.map(stringFormat -> new Server(stringFormat)).collect(Collectors.toList()));
 		this.gameServers = ImmutableList.copyOf(config.getStringList("game-servers").stream()
 				.map(stringFormat -> new Server(stringFormat)).collect(Collectors.toList()));
+
+		this.blockedServers = ImmutableList.copyOf(config.getStringList("blocked-servers"));
+		this.captchaServers = ImmutableList.copyOf(config.getStringList("captcha-servers"));
+
 		Configuration data = config.getSection("data");
 		this.storageDataSettings = new StorageDataSettings(data.getString("host"), data.getString("database"),
 				data.getString("username"), data.getString("password"), data.getInt("port"));
@@ -78,15 +84,15 @@ public class BungeePluginConfig implements PluginConfig {
 		this.maxLoginPerIP = config.getInt("max-login-per-ip");
 		this.maxVKLink = config.getInt("max-vk-link");
 		this.messagesDelay = config.getInt("messages-delay");
-	
+
 		Configuration vk = config.getSection("vk");
 		this.vkSettings = new VKSettings(vk.getBoolean("enabled"), vk);
 
 		this.bungeeMessages = new BungeeMessages(config.getSection("messages"));
 		this.vkMessages = new VKMessages(vk.getSection("vkmessages"));
 		this.vkButtonLabels = new VKButtonLabels(vk.getSection("button-labels"));
-		
-		this.barSettings = new BossBarSettings(config.getSection("boss-bar"),bungeeMessages);
+
+		this.barSettings = new BossBarSettings(config.getSection("boss-bar"), bungeeMessages);
 	}
 
 	@Override
@@ -96,7 +102,7 @@ public class BungeePluginConfig implements PluginConfig {
 			ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server.getId());
 			if (serverInfo == null)
 				continue;
-			if (serverInfo.getPlayers().size() >= server.getMaxPlayers())
+			if (server.getMaxPlayers() != -1 && (serverInfo.getPlayers().size() >= server.getMaxPlayers()))
 				continue;
 			optimal = serverInfo;
 			break;
@@ -187,6 +193,18 @@ public class BungeePluginConfig implements PluginConfig {
 	@Override
 	public List<Server> getGameServers() {
 		return gameServers;
+	}
+
+	@Override
+	public List<ServerInfo> getBlockedServers() {
+		return blockedServers.stream().map(serverId -> ProxyServer.getInstance().getServerInfo(serverId))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ServerInfo> getCaptchaServers() {
+		return captchaServers.stream().map(serverId -> ProxyServer.getInstance().getServerInfo(serverId))
+				.collect(Collectors.toList());
 	}
 
 	@Override

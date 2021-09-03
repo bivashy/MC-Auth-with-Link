@@ -34,6 +34,10 @@ public interface PluginConfig {
 	List<Server> getAuthServers();
 
 	List<Server> getGameServers();
+	
+	List<ServerInfo> getBlockedServers();
+
+	List<ServerInfo> getCaptchaServers();
 
 	boolean isPasswordConfirmationEnabled();
 
