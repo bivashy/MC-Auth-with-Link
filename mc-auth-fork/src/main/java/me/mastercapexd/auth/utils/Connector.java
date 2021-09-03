@@ -3,6 +3,7 @@ package me.mastercapexd.auth.utils;
 import java.util.function.Consumer;
 
 import net.md_5.bungee.api.Callback;
+import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -20,6 +21,16 @@ public class Connector {
 			player.disconnect(error);
 			return;
 		}
+		serverInfo.ping(new Callback<ServerPing>() {
+
+			@Override
+			public void done(ServerPing result, Throwable throwedError) {
+				if (throwedError != null) {
+					System.out.println(player + " tried to connect in not working server");
+					player.disconnect(error);
+				}
+			}
+		});
 
 		if (player.getServer().getInfo().equals(serverInfo))
 			return;
@@ -28,9 +39,9 @@ public class Connector {
 
 			@Override
 			public void done(Boolean result, Throwable error) {
-				
+
 			}
-		
+
 		});
 	}
 }
