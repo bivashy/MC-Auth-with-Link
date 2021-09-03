@@ -22,10 +22,27 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 			return;
 		}
 		String playerName = args[0];
-		String newPassword = args[1];
 		receptioner.actionWithAccount(e.getUserId(), playerName, account -> {
-			
-			account.setPasswordHash(account.getHashType().hash(newPassword));
+			String oldPassword = account.getPasswordHash();
+			String newPassword = account.getHashType().hash(args[1]);
+			if (oldPassword.equals(newPassword)) {
+				sendMessage(e.getPeer(),
+						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-nothing-to-change"));
+				return;
+			}
+
+			if (newPassword.length() < receptioner.getConfig().getPasswordMinLength()) {
+				sendMessage(e.getPeer(),
+						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-password-too-short"));
+				return;
+			}
+
+			if (newPassword.length() > receptioner.getConfig().getPasswordMaxLength()) {
+				sendMessage(e.getPeer(),
+						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-password-too-long"));
+				return;
+			}
+			account.setPasswordHash(newPassword);
 			sendMessage(e.getPeer(), receptioner.getConfig().getVKMessages().getMessage("changepass-success", account)
 					.replaceAll("(?i)%password%", newPassword));
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
