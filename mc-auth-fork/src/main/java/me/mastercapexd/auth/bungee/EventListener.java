@@ -106,6 +106,8 @@ public class EventListener implements Listener {
 	public void onCaptchaServerConnect(ServerConnectEvent event) {
 		ProxiedPlayer player = event.getPlayer();
 		String id = config.getActiveIdentifierType().getId(player);
+		if (player.getServer() == null)
+			return;
 		ServerInfo serverInfo = player.getServer().getInfo();
 		if (serverInfo == null)
 			return;

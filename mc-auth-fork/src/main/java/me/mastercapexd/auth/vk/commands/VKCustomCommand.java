@@ -7,7 +7,7 @@ import net.md_5.bungee.config.Configuration;
 
 public class VKCustomCommand extends VKCommandExecutor {
 	private final String command, answer;
-	private boolean chat = false,isRegex = false;
+	private boolean chat = false, isRegex = false;
 	private String chatAnswer = null;
 
 	public VKCustomCommand(String command, Configuration section) {
@@ -68,8 +68,9 @@ public class VKCustomCommand extends VKCommandExecutor {
 	@Override
 	public void execute(VKMessageEvent e, String[] args) {
 		if (isChat(e.getPeer())) {
-			if (!isChat() && getChatAnswer() != null)
+			if (!isChat() && chatAnswer != null && !chatAnswer.isEmpty())
 				sendMessage(e.getPeer(), getChatAnswer());
+
 			return;
 		}
 		sendMessage(e.getPeer(), getAnswer());
