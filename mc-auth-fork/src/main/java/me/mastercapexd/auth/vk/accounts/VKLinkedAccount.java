@@ -87,8 +87,9 @@ public class VKLinkedAccount {
 				KeyboardButtonColor.PRIMARY));
 		buttons.add(plugin.getVKUtils().buildCallbackButton("kick", account, "kick_" + account.getId(),
 				KeyboardButtonColor.PRIMARY));
-		buttons.add(plugin.getVKUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
-				KeyboardButtonColor.PRIMARY));
+		if (account.getVKId() != -1)
+			buttons.add(plugin.getVKUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
+					KeyboardButtonColor.PRIMARY));
 		buttons.add(plugin.getVKUtils().buildCallbackButton("return", account, "return", KeyboardButtonColor.DEFAULT));
 		keyboard.setButtons(plugin.getListUtils().chopList(buttons, 3));
 		plugin.getVKUtils().sendMessage(userID, config.getVKMessages().getMessage("account-control", account),
