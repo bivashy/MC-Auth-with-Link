@@ -69,32 +69,7 @@ public class EventListener implements Listener {
 	public void on(PostLoginEvent event) {
 		ProxiedPlayer player = event.getPlayer();
 		String id = config.getActiveIdentifierType().getId(player);
-		accountStorage.getAccount(id).thenAccept(account -> {
-			if (account == null) {
-				@SuppressWarnings("deprecation")
-				Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(),
-						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, -1, 0,
-						player.getAddress().getHostString(), -1, config.getSessionDurability());
-				ServerInfo authServer = config.findServerInfo(config.getAuthServers());
-				Auth.addAccount(newAccount);
-				Connector.connectOrKick(player, authServer,
-						config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
-			} else {
-				if (account.isSessionActive(config.getSessionDurability())) {
-					SessionEnterEvent sessionEvent = new SessionEnterEvent(account);
-					ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
-					if (sessionEvent.isCancelled())
-						return;
-					player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
-					Auth.removeAccount(id);
-				} else {
-					ServerInfo authServer = config.findServerInfo(config.getAuthServers());
-					Auth.addAccount(account);
-					Connector.connectOrKick(player, authServer,
-							config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
-				}
-			}
-		});
+		startLogin(id, player);
 	}
 
 	@EventHandler
@@ -117,14 +92,26 @@ public class EventListener implements Listener {
 	}
 
 	@EventHandler
-	public void onConnect(ServerConnectEvent event) {
+	public void onBlockedServerConnect(ServerConnectEvent event) {
 		ProxiedPlayer player = event.getPlayer();
 		String id = config.getActiveIdentifierType().getId(player);
-		if (!Auth.hasAccount(id))
+		if (!(Auth.hasAccount(id) || config.getCaptchaServers().contains(event.getTarget())))
 			return;
 		if (!config.getBlockedServers().contains(event.getTarget()))
 			return;
 		event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onCaptchaServerConnect(ServerConnectEvent event) {
+		ProxiedPlayer player = event.getPlayer();
+		String id = config.getActiveIdentifierType().getId(player);
+		ServerInfo serverInfo = player.getServer().getInfo();
+		if (serverInfo == null)
+			return;
+		if (!config.getCaptchaServers().contains(serverInfo))
+			return;
+		startLogin(id, player);
 	}
 
 	@EventHandler
@@ -153,6 +140,35 @@ public class EventListener implements Listener {
 			}
 		}
 		return findedExactIPs;
+	}
+
+	private void startLogin(String id, ProxiedPlayer player) {
+		accountStorage.getAccount(id).thenAccept(account -> {
+			if (account == null) {
+				@SuppressWarnings("deprecation")
+				Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(),
+						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, -1, 0,
+						player.getAddress().getHostString(), -1, config.getSessionDurability());
+				ServerInfo authServer = config.findServerInfo(config.getAuthServers());
+				Auth.addAccount(newAccount);
+				Connector.connectOrKick(player, authServer,
+						config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
+			} else {
+				if (account.isSessionActive(config.getSessionDurability())) {
+					SessionEnterEvent sessionEvent = new SessionEnterEvent(account);
+					ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
+					if (sessionEvent.isCancelled())
+						return;
+					player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
+					Auth.removeAccount(id);
+				} else {
+					ServerInfo authServer = config.findServerInfo(config.getAuthServers());
+					Auth.addAccount(account);
+					Connector.connectOrKick(player, authServer,
+							config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
+				}
+			}
+		});
 	}
 
 }
