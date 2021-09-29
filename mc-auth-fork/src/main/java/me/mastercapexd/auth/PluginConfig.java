@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import me.mastercapexd.auth.config.BungeeMessages;
+import me.mastercapexd.auth.config.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.VKButtonLabels;
 import me.mastercapexd.auth.config.VKMessages;
 import me.mastercapexd.auth.objects.Server;
@@ -19,6 +20,8 @@ public interface PluginConfig {
 
 	VKSettings getVKSettings();
 
+	GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
+	
 	IdentifierType getActiveIdentifierType();
 
 	boolean isNameCaseCheckEnabled();
@@ -39,6 +42,8 @@ public interface PluginConfig {
 
 	List<ServerInfo> getCaptchaServers();
 
+	List<String> getAllowedCommands();
+	
 	boolean isPasswordConfirmationEnabled();
 
 	int getPasswordMinLength();
