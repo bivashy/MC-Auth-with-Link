@@ -11,13 +11,15 @@ public class BungeeAccountFactory implements AccountFactory {
 
 	@Override
 	public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
-			String password, Integer vkId, long lastQuit, String lastIp, long lastSessionStart,
-			long sessionTime) {
+			String password, String googleKey, Integer vkId, boolean vkConfirmationEnabled, long lastQuit,
+			String lastIp, long lastSessionStart, long sessionTime) {
 		BungeeAccount account = new BungeeAccount(((identifierType == IdentifierType.NAME) ? id.toLowerCase() : id),
 				identifierType, uuid, name);
 		account.setHashType(hashType);
 		account.setPasswordHash(password);
 		account.setVKId(vkId);
+		account.setGoogleKey(googleKey);
+		account.setVkConfirmationEnabled(vkConfirmationEnabled);
 		account.setLastQuitTime(lastQuit);
 		account.setLastIpAddress(lastIp);
 		account.setLastSessionStart(lastSessionStart);

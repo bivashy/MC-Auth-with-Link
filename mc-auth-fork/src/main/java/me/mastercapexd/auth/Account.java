@@ -24,13 +24,19 @@ public interface Account {
 
 	void setVKId(Integer id);
 
-	boolean isOnline();
+	boolean isVKConfirmationEnabled();
+
+	void setVkConfirmationEnabled(boolean vkConfirmationEnabled);
 
 	long getLastQuitTime();
 
 	void setLastQuitTime(long time);
 
 	String getLastIpAddress();
+
+	String getGoogleKey();
+
+	void setGoogleKey(String googleKey);
 
 	long getLastSessionStart();
 
@@ -46,7 +52,7 @@ public interface Account {
 		return getPasswordHash() != null;
 	}
 
-	default RestoreResult restoreAccount(Integer VKuserID, boolean isAdmin,Integer codeLength) {
+	default RestoreResult restoreAccount(Integer VKuserID, boolean isAdmin, Integer codeLength) {
 		RestoreResult result = RestoreResult.ACCOUNT_VK_NOT_EQUALS;
 		result.setPasswordHash(getPasswordHash());
 		if (!isAdmin)

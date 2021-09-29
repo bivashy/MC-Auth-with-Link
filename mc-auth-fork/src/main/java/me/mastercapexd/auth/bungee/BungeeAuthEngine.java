@@ -63,6 +63,14 @@ public class BungeeAuthEngine implements AuthEngine {
 									0, 120, 0);
 							continue;
 						}
+						if (Auth.hasGoogleAuthAccount(account.getId())) {
+							player.sendMessage(this.config.getBungeeMessages().getMessage("google-need-code-chat"));
+							TitleBar.send(player,
+									this.config.getBungeeMessages().getLegacyMessage("google-need-code-title"),
+									this.config.getBungeeMessages().getLegacyMessage("google-need-code-subtitle"), 0,
+									120, 0);
+							continue;
+						}
 						if (account.isRegistered()) {
 							player.sendMessage(this.config.getBungeeMessages().getMessage("login-chat"));
 							TitleBar.send(player, this.config.getBungeeMessages().getLegacyMessage("login-title"),

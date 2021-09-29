@@ -11,6 +11,15 @@ data:
   password: password
   port: 3306
 
+# Разрешенные команды в этапе авторизации/регистрации в виде REGEX (сайт для проверки: regex101.com)
+allowed-commands:
+  - '^\/l' # Если команда начинается на /l
+  - '^\/login'
+  - '^\/reg'
+  - '^\/register'
+  - '^\/googlecode'
+  - '^\/gcode'
+
 # Это список заблокированных серверов. Если игрок попадет сюда при регистрации/авторизации то его телепортирует в auth-servers
 # Используйте данную функцию если при авторизации/регистрации игрок переходит в другой сервер (Через НПС, через команду и т.д.) 
 # (Регистр имеет значение)
@@ -126,8 +135,60 @@ vk:
   enter:
     # За сколько секунд игрок должен подтвердить вход в аккаунт
     enter-delay: 60
+    # Может ли игрок включать/выключать подтвердение
+    can-toggle-enter: false
+  # Настройка кода при восстановлении аккаунта
   restore:
-    code-length: 7
+    code-length: 7 # Длина кода
+  vk-commands: # Основные команды 
+    enter-accept: # Id команды, не менять!
+      main-command: '/принять' # Обязательное поле
+      aliases: # Не обязательное поле, это алиасы к команде
+        - '/accept'
+    enter-decline:
+      main-command: '/отклонить'
+      aliases:
+        - '/decline'
+    change-pass:
+      main-command: '/пароль'
+      aliases:
+        - '/password'
+    unlink:
+      main-command: '/отвязать'
+      aliases:
+        - '/unlink'
+    accounts:
+      main-command: '/аккаунты'
+      aliases:
+        - '/accounts'
+    kick:
+      main-command: '/кик'
+      aliases:
+        - '/kick'
+    restore:
+      main-command: '/восстановить'
+      aliases:
+        - '/restore'
+    code:
+      main-command: '/код'
+      aliases:
+        - '/code'
+    google:
+      main-command: '/гугл'
+      aliases:
+        - '/google'
+    google-code:
+      main-command: '/гуглкод'
+      aliases:
+        - '/googlecode'
+    google-remove:
+      main-command: '/гуглотвязать'
+      aliases:
+        - '/googleunlink'
+    admin-panel:
+      main-command: '/админ-панель'
+      aliases:
+        - '/admin'
   # Создание комманд в вк, пригодится для создания таких команд как: /информация и так далее
   commands:
     # Команда при вводе которой бот пишет определенное сообщение
@@ -156,6 +217,8 @@ vk:
     enter-decline: 'Отклонить'
     admin-panel-all-accounts: 'Все аккаунты'
     admin-panel-all-linked-accounts: 'Все привязанные аккаунты'
+    enable-confirmation: 'Включить подтверждение входа'
+    disable-confirmation: 'Выключить подтверждение входа'
   vkmessages: #Для переноса строк используйте "<br>" без кавычек.
     # Привязка ВК
     confirmation-error: 'Введен неправильный код! <br>Введите заного /addvk Ваш_Буквенный_Id и не постарайтесь не ошибится при вводе кода'
@@ -189,6 +252,8 @@ vk:
     enter-message: '⚠ Попытка авторизации на ваш аккаунт %nick% с IP адреса %account_ip%. Введите /принять или /отклонить, либо нажмите на кнопки'
     enter-kicked: 'Это был не ваш аккаунт, срочно смените пароль!'
     enter-confirmed: 'Вы успешно вошли в аккаунт!'
+    enter-disabled: 'Вы успешно выключили подтвердение входа! Будьте осторожнее'
+    enter-enabled: 'Вы успешно включили подтвердение входа! Теперь вы в безопасности'
     # Отвязка аккаунта ВК
     unlink-not-enough-arguments: 'Вы не указали ник игрока!'
     unlinked: 'Вы успешно отвязали аккаунт %name%'
@@ -198,6 +263,24 @@ vk:
     admin-panel-no-linked-accounts: 'Не найдено привязанных аккаунтов!'
     admin-panel-accounts: 'Все аккаунты сервера:'
     admin-panel-linked-accounts: 'Все привязанные аккаунты сервера'
+    # Гугл-Код-Аутентификация
+    google-disabled: 'Гугл-Аутентификация отключена!'
+    google-code-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гугл-код [ник] [код]'
+    google-code-account-not-have-google: 'Ошибка! У аккаунта нету гугл-ключа'
+    google-code-account-not-need-enter: 'Вход через гугл аутентификацию не требуется!'
+    google-code-not-valid: 'Введенный код неправильный!'
+    google-code-valid: 'Введенный код правильный'
+    google-code-need-integer: 'Ошибка! Вы должны ввести 6 значную цифру!'
+    # Гугл-Генерация
+    google-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гугл [ник]'
+    google-error: 'Произошла ошибка! Сообщите администратору!'
+    # Гугл-Отвязка
+    google-unlink-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гуглотвязать [ник]'
+    google-unlink-not-have-google: 'Ошибка! У аккаунта нету гугл ключа'
+    google-unlinked: 'Гугл успешно сброшен!'
+google-authenticator:
+   # Включена ли привязка к Google Authenticator, если вы отключите привязку игроки не смогут подтверждать вход, привязывать аккаунты.
+  enabled: false
 messages:
   # Регистрация
   register-chat: '&fПожалуйста зарегистрируйтесь командой &e/register <пароль>'
@@ -211,6 +294,10 @@ messages:
   vk-enter-confirm-need-chat: '&fПодтвердите вход в &9ВК &fдля того чтобы войти в игру'
   vk-enter-confirm-need-title: '&fПодтверждение &9ВК'
   vk-enter-confirm-need-subtitle: '&fПожалуйста подтвердите в &9ВК'
+   # Этап авторизации через гугл
+  google-need-code-chat: '&aВведите гугл код в ВК, либо в чате: /googlecode [код]'
+  google-need-code-title: '&aВведите код'
+  google-need-code-subtitle: '&aGoogle-Authenticator' 
   # Ошибки
   time-left: '&cВремя вышло! Пожалуйста, попробуйте снова.'
   limit-ip-reached: '&cВы находитесь онлайн с большим количеством аккаунтов!'
@@ -254,6 +341,17 @@ messages:
   vk-kicked: '&cВы были кикнуты из сервера по запросу ВК'
   vk-enter-confirmed: '&aВы подтвердили аккаунт в вк'
   vk-enter-declined: '&cВы отклонили вход с аккаунта ВК'
+  # Гугл-Аутентификация
+  google-disabled: '&cПривязка к гугл-аутентификации отключена'
+  google-generated: '&aВы успешно сгенерировали ключ Google-Authenticator: %google_key%'
+  google-regenerated: '&cВнимание! Вы заного сгенерировали ключ Google Authenticator: %google_key%'
+  google-code-not-enough-arguments: '&cНедостаточно аргументов! Использование команды: /googlecode'
+  google-code-not-exists: '&cВы не привязали Google-Authenticator!'
+  google-code-not-need-enter: '&cВход через гугл аутентификацию не требуется!'
+  google-code-wrong-code: '&cНеправильный код'
+  google-code-entered: '&aВы успешно прошли аутентификацию с Google-Authenticator'
+  google-unlink-not-exists: '&cВы не привязали Google-Authenticator!'
+  google-unlinked: '&cВы успешно отвязали Google-Authenticator!'
   # Подключение
   autoconnect: '&aСессия восстановлена. Присоеденяем Вас к серверу...'
   check-name-case-failed: '&cНеправильное имя. Аккаунт зарегистрирован под ником %correct%.'

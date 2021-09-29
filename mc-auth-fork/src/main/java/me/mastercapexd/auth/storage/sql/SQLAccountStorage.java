@@ -5,11 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import com.google.common.collect.Sets;
 
 import me.mastercapexd.auth.Account;
@@ -18,6 +21,7 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
+import me.mastercapexd.auth.storage.StorageColumn;
 
 public abstract class SQLAccountStorage implements AccountStorage {
 
@@ -25,11 +29,13 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	private final AccountFactory accountFactory;
 
 	private final String CREATE_TABLE, SELECT_BY_ID, SELECT_BY_VKID, SELECT_BY_LAST_QUIT_ORDERED, SELECT_VKIDs,
-			SELECT_ALL,SELECT_ALL_LINKED, UPDATE_ID, DELETE;
+			SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE;
+
+	private final List<StorageColumn> createColumns = new ArrayList<>();
 
 	protected SQLAccountStorage(PluginConfig config, AccountFactory accountFactory, String cREATE_TABLE,
 			String sELECT_BY_ID, String sELECT_BY_VKID, String sELECT_BY_LAST_QUIT_ORDERED, String sELECT_VKIDs,
-			String sELECT_ALL,String sELECT_ALL_LINKED, String uPDATE_ID, String dELETE) {
+			String sELECT_ALL, String sELECT_ALL_LINKED, String uPDATE_ID, String dELETE) {
 		this.config = config;
 		this.accountFactory = accountFactory;
 		CREATE_TABLE = cREATE_TABLE;
@@ -41,6 +47,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		SELECT_ALL_LINKED = sELECT_ALL_LINKED;
 		UPDATE_ID = uPDATE_ID;
 		DELETE = dELETE;
+		createColumns.add(new StorageColumn("google_key", "VARCHAR(64)"));
+		createColumns.add(new StorageColumn("vk_confirm_enabled", "VARCHAR(5)"));
 	}
 
 	protected abstract Connection getConnection() throws SQLException;
@@ -53,6 +61,17 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		}
 	}
 
+	protected void createColumns() {
+		createColumns.forEach(column -> {
+			try (Connection connection = this.getConnection()) {
+				column.tryToCreateColumn(connection);
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
 	protected void updateAccount(Account account) {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(UPDATE_ID);
@@ -61,12 +80,14 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setString(2, account.getUniqueId().toString());
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
-			statement.setInt(5, account.getVKId());
-			statement.setLong(6, account.getLastQuitTime());
-			statement.setString(7, account.getLastIpAddress());
-			statement.setLong(8, account.getLastSessionStart());
-			statement.setString(9, account.getIdentifierType().name());
-			statement.setString(10, account.getHashType().name());
+			statement.setString(5, account.getGoogleKey());
+			statement.setInt(6, account.getVKId());
+			statement.setString(7, String.valueOf(account.isVKConfirmationEnabled()));
+			statement.setLong(8, account.getLastQuitTime());
+			statement.setString(9, account.getLastIpAddress());
+			statement.setLong(10, account.getLastSessionStart());
+			statement.setString(11, account.getIdentifierType().name());
+			statement.setString(12, account.getHashType().name());
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -83,8 +104,10 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				account = accountFactory.createAccount(id, IdentifierType.valueOf(resultSet.getString("id_type")),
 						UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
 						HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-						resultSet.getInt("vkId"), resultSet.getLong("last_quit"), resultSet.getString("last_ip"),
-						resultSet.getLong("last_session_start"), config.getSessionDurability());
+						resultSet.getString("google_key"), resultSet.getInt("vkId"),
+						Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
+						resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+						config.getSessionDurability());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -103,8 +126,10 @@ public abstract class SQLAccountStorage implements AccountStorage {
 						IdentifierType.valueOf(resultSet.getString("id_type")),
 						UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
 						HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-						resultSet.getInt("vkId"), resultSet.getLong("last_quit"), resultSet.getString("last_ip"),
-						resultSet.getLong("last_session_start"), config.getSessionDurability());
+						resultSet.getString("google_key"), resultSet.getInt("vkId"),
+						Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
+						resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+						config.getSessionDurability());
 				accounts.add(account);
 			}
 		} catch (SQLException e) {
@@ -143,8 +168,10 @@ public abstract class SQLAccountStorage implements AccountStorage {
 							IdentifierType.valueOf(resultSet.getString("id_type")),
 							UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
 							HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-							resultSet.getInt("vkId"), resultSet.getLong("last_quit"), resultSet.getString("last_ip"),
-							resultSet.getLong("last_session_start"), config.getSessionDurability());
+							resultSet.getString("google_key"), resultSet.getInt("vkId"),
+							Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
+							resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+							config.getSessionDurability());
 					accounts.add(account);
 				}
 			} catch (SQLException e) {
@@ -166,8 +193,10 @@ public abstract class SQLAccountStorage implements AccountStorage {
 							IdentifierType.valueOf(resultSet.getString("id_type")),
 							UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
 							HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-							resultSet.getInt("vkId"), resultSet.getLong("last_quit"), resultSet.getString("last_ip"),
-							resultSet.getLong("last_session_start"), config.getSessionDurability());
+							resultSet.getString("google_key"), resultSet.getInt("vkId"),
+							Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
+							resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+							config.getSessionDurability());
 					accounts.add(account);
 				}
 			} catch (SQLException e) {
@@ -189,8 +218,10 @@ public abstract class SQLAccountStorage implements AccountStorage {
 							IdentifierType.valueOf(resultSet.getString("id_type")),
 							UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
 							HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-							resultSet.getInt("vkId"), resultSet.getLong("last_quit"), resultSet.getString("last_ip"),
-							resultSet.getLong("last_session_start"), config.getSessionDurability());
+							resultSet.getString("google_key"), resultSet.getInt("vkId"),
+							Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
+							resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+							config.getSessionDurability());
 					accounts.add(account);
 				}
 			} catch (SQLException e) {

@@ -22,11 +22,11 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	private final UUID uniqueId;
 	private final String name;
 
-	private String passwordHash, lastIpAddress;
+	private String passwordHash, lastIpAddress, googleKey;
 	private Integer vkId;
 	private long lastQuitTime, lastSessionStart;
 
-	private boolean online;
+	private boolean vkConfirmationEnabled = true;
 
 	public BungeeAccount(String id, IdentifierType identifierType, UUID uniqueId, String name) {
 		this.id = id;
@@ -55,9 +55,15 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 			}
 			setLastIpAddress(proxiedPlayer.getAddress().getHostString());
 			setLastSessionStart(System.currentTimeMillis());
-			if (getVKId() != null && getVKId() != -1) {
+			if (getVKId() != null && getVKId() != -1 && AuthPlugin.getInstance().getConfig().getVKSettings().isEnabled()
+					&& vkConfirmationEnabled) {
 				Auth.addEntryAccount(this, vkId);
 				return SessionResult.NEED_VK_CONFIRM;
+			}
+			if (getGoogleKey() != null && !getGoogleKey().isEmpty()
+					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
+				Auth.addGoogleAuthAccount(this);
+				return SessionResult.NEED_GOOGLE_CODE;
 			}
 			return SessionResult.LOGIN_SUCCESS;
 		}
@@ -150,15 +156,6 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	}
 
 	@Override
-	public boolean isOnline() {
-		return online;
-	}
-
-	public void setOnline(boolean online) {
-		this.online = online;
-	}
-
-	@Override
 	public String getId() {
 		return id;
 	}
@@ -181,6 +178,26 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	@Override
 	public int compareTo(BungeeAccount o) {
 		return name.compareTo(o.getName());
+	}
+
+	@Override
+	public String getGoogleKey() {
+		return googleKey;
+	}
+
+	@Override
+	public void setGoogleKey(String googleKey) {
+		this.googleKey = googleKey;
+	}
+
+	@Override
+	public boolean isVKConfirmationEnabled() {
+		return vkConfirmationEnabled;
+	}
+
+	@Override
+	public void setVkConfirmationEnabled(boolean vkConfirmationEnabled) {
+		this.vkConfirmationEnabled = vkConfirmationEnabled;
 	}
 
 }

@@ -1,9 +1,14 @@
 package me.mastercapexd.auth.bungee;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+
 import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.bungee.command.AuthCommand;
 import me.mastercapexd.auth.bungee.command.ChangePasswordCommand;
+import me.mastercapexd.auth.bungee.command.GoogleCodeCommand;
+import me.mastercapexd.auth.bungee.command.GoogleCommand;
+import me.mastercapexd.auth.bungee.command.GoogleUnlinkCommand;
 import me.mastercapexd.auth.bungee.command.LoginCommand;
 import me.mastercapexd.auth.bungee.command.LogoutCommand;
 import me.mastercapexd.auth.bungee.command.RegisterCommand;
@@ -22,6 +27,8 @@ import me.mastercapexd.auth.vk.utils.VKUtils;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin {
+
+	private GoogleAuthenticator googleAuthenticator;
 
 	private BungeePluginConfig config;
 	private AccountFactory accountFactory;
@@ -52,10 +59,12 @@ public class AuthPlugin extends Plugin {
 		registerCommands();
 		if (config.getVKSettings().isEnabled())
 			registerVK();
+		if (config.getGoogleAuthenticatorSettings().isEnabled())
+			googleAuthenticator = new GoogleAuthenticator();
 
 	}
 
-	public AuthPlugin getInstance() {
+	public static AuthPlugin getInstance() {
 		if (instance == null)
 			throw new UnsupportedOperationException("Plugin not enabled!");
 		return instance;
@@ -80,6 +89,9 @@ public class AuthPlugin extends Plugin {
 		this.getProxy().getPluginManager().registerCommand(this, new LogoutCommand(config, accountStorage));
 		this.getProxy().getPluginManager().registerCommand(this, new ChangePasswordCommand(config, accountStorage));
 		this.getProxy().getPluginManager().registerCommand(this, new AuthCommand(this, config, accountStorage));
+		this.getProxy().getPluginManager().registerCommand(this, new GoogleCodeCommand(this, config, accountStorage));
+		this.getProxy().getPluginManager().registerCommand(this, new GoogleCommand(this, config, accountStorage));
+		this.getProxy().getPluginManager().registerCommand(this, new GoogleUnlinkCommand(config, accountStorage));
 	}
 
 	private void registerVK() {
@@ -137,5 +149,9 @@ public class AuthPlugin extends Plugin {
 
 	public VKButtonHandler getVKButtonHandler() {
 		return vkButtonHandler;
+	}
+
+	public GoogleAuthenticator getGoogleAuthenticator() {
+		return googleAuthenticator;
 	}
 }

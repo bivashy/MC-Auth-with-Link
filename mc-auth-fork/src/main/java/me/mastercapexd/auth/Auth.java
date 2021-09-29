@@ -22,6 +22,7 @@ public class Auth {
 	private static final Map<String, BossBar> bars = Maps.newConcurrentMap();
 	private static final Map<Integer, VKConfirmationEntry> vkConfirmationCodes = Maps.newConcurrentMap();
 	private static final Map<String, VKEntryAccount> enterAccounts = Maps.newConcurrentMap();
+	private static final Map<String, Account> googleAuthAccounts = Maps.newConcurrentMap();
 
 	public static synchronized Collection<String> getAccountIds() {
 		return ImmutableSet.copyOf(accounts.keySet());
@@ -133,5 +134,21 @@ public class Auth {
 
 	public static synchronized void removeBar(String user) {
 		bars.remove(user);
+	}
+
+	public static synchronized void addGoogleAuthAccount(Account account) {
+		googleAuthAccounts.put(account.getId(), account);
+	}
+
+	public static synchronized void removeGoogleAuthAccount(String id) {
+		googleAuthAccounts.remove(id);
+	}
+
+	public static synchronized boolean hasGoogleAuthAccount(String id) {
+		return googleAuthAccounts.containsKey(id);
+	}
+
+	public static synchronized Account getGoogleAuthAccount(String id) {
+		return googleAuthAccounts.getOrDefault(id, null);
 	}
 }
