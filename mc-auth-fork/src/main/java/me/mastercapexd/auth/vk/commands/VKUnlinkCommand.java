@@ -30,4 +30,9 @@ public class VKUnlinkCommand extends VKCommandExecutor {
 			linkedAccount.unlink();
 		});
 	}
+
+	@Override
+	public String getKey() {
+		return "unlink";
+	}
 }

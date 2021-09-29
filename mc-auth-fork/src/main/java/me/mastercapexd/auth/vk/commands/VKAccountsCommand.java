@@ -24,4 +24,9 @@ public class VKAccountsCommand extends VKCommandExecutor {
 		});
 	}
 
+	@Override
+	public String getKey() {
+		return "accounts";
+	}
+
 }

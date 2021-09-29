@@ -28,4 +28,9 @@ public class VKRestoreCommand extends VKCommandExecutor {
 			linkedAccount.restore();
 		});
 	}
+
+	@Override
+	public String getKey() {
+		return "restore";
+	}
 }

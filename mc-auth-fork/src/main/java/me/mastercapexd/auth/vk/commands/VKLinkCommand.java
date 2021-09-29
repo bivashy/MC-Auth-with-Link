@@ -21,13 +21,12 @@ public class VKLinkCommand extends VKCommandExecutor {
 	public void execute(VKMessageEvent e, String[] args) {
 		if (isChat(e.getPeer()))
 			return;
-		String[] arguments = e.getMessage().getText().split("\\s+");
-		if (arguments.length < 2) {
+		if (args.length < 1) {
 			sendMessage(e.getPeer(),
 					receptioner.getConfig().getVKMessages().getLegacyMessage("confirmation-not-enough-arguments"));
 			return;
 		}
-		String code = arguments[1];
+		String code = args[0];
 		VKConfirmationEntry entry = Auth.getVKConfirmationEntry(e.getUserId());
 		if (entry == null) {
 			sendMessage(e.getPeer(), receptioner.getConfig().getVKMessages().getLegacyMessage("confirmation-no-code"));
@@ -58,5 +57,10 @@ public class VKLinkCommand extends VKCommandExecutor {
 			Auth.removeVKConfirmationEntry(e.getUserId());
 		});
 
+	}
+
+	@Override
+	public String getKey() {
+		return "code";
 	}
 }

@@ -73,7 +73,7 @@ public class LoginCommand extends Command {
 
 		if (result == SessionResult.NEED_VK_CONFIRM)
 			new ConfirmationMessageBuilder(Auth.getEntryAccount(id), plugin.getVKReceptioner()).execute();
-
+		
 		if (result != SessionResult.LOGIN_SUCCESS)
 			return;
 		LoginEvent loginEvent = new LoginEvent(account);

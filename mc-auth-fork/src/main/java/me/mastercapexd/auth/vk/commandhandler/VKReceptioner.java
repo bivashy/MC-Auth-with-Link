@@ -27,6 +27,7 @@ import me.mastercapexd.auth.vk.buttons.VKKickButton;
 import me.mastercapexd.auth.vk.buttons.VKPageButton;
 import me.mastercapexd.auth.vk.buttons.VKRestoreButton;
 import me.mastercapexd.auth.vk.buttons.VKReturnButton;
+import me.mastercapexd.auth.vk.buttons.VKToogleConfirmationButton;
 import me.mastercapexd.auth.vk.buttons.VKUnlinkButton;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.buttonshandler.VKCallbackButton;
@@ -35,10 +36,14 @@ import me.mastercapexd.auth.vk.commands.VKAdminPanelCommand;
 import me.mastercapexd.auth.vk.commands.VKChangePasswordCommand;
 import me.mastercapexd.auth.vk.commands.VKEnterAcceptCommand;
 import me.mastercapexd.auth.vk.commands.VKEnterDeclineCommand;
+import me.mastercapexd.auth.vk.commands.VKGoogleCodeCommand;
+import me.mastercapexd.auth.vk.commands.VKGoogleCommand;
+import me.mastercapexd.auth.vk.commands.VKGoogleUnlinkCommand;
 import me.mastercapexd.auth.vk.commands.VKKickCommand;
 import me.mastercapexd.auth.vk.commands.VKLinkCommand;
 import me.mastercapexd.auth.vk.commands.VKRestoreCommand;
 import me.mastercapexd.auth.vk.commands.VKUnlinkCommand;
+import me.mastercapexd.auth.vk.settings.VKMainCommands;
 
 public class VKReceptioner {
 	private static final VkApiClient vk = VKAPI.getInstance().getVK();
@@ -73,19 +78,25 @@ public class VKReceptioner {
 		addButton(buttonFactory.createButton("enterserver", new VKEnterButton(this)));
 		addButton(buttonFactory.createButton("allAccounts", new VKAllAccountsButton(this)));
 		addButton(buttonFactory.createButton("allLinkedAccounts", new VKAllLinkedAccountsButton(this)));
+		addButton(buttonFactory.createButton("toogle-confirmation", new VKToogleConfirmationButton(this)));
 	}
 
 	private void registerCommands() {
-		addCommand(commandFactory.createCommand("/принять", new VKEnterAcceptCommand(this)));
-		addCommand(commandFactory.createCommand("/отклонить", new VKEnterDeclineCommand(this)));
-		addCommand(commandFactory.createCommand("/пароль", new VKChangePasswordCommand(this)));
-		addCommand(commandFactory.createCommand("/отвязать", new VKUnlinkCommand(this)));
-		addCommand(commandFactory.createCommand("/аккаунты", new VKAccountsCommand(this)));
-		addCommand(commandFactory.createCommand("/кик", new VKKickCommand(this)));
-		addCommand(commandFactory.createCommand("/восстановить", new VKRestoreCommand(this)));
-		addCommand(commandFactory.createCommand("/code", new VKLinkCommand(this), Arrays.asList("/код")));
-		addCommand(commandFactory.createCommand("/админ-панель", new VKAdminPanelCommand(this),
-				Arrays.asList("/админпанель", "/админ", "/панель", "/admin-panel", "/adminpanel", "/admin", "/panel")));
+		VKMainCommands mainCommands = config.getVKSettings().getMainCommands();
+
+		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKEnterDeclineCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKChangePasswordCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKUnlinkCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKAccountsCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKKickCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKRestoreCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKLinkCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKGoogleCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKGoogleCodeCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKGoogleUnlinkCommand(this), mainCommands));
+		addCommand(commandFactory.createCommand(new VKAdminPanelCommand(this), mainCommands));
 	}
 
 	public VKCommandFactory getCommandFactory() {

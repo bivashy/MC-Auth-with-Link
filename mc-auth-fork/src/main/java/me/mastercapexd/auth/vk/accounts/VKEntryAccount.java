@@ -11,6 +11,7 @@ import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.VKEnterAnswer;
+import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.events.EntryConfirmationSelectEvent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
@@ -52,19 +53,26 @@ public class VKEntryAccount {
 		if (entryConfirmationSelectEvent.isCancelled())
 			return;
 		Auth.removeEntryAccount(account.getId());
-		Auth.removeAccount(account.getId());
 		ProxiedPlayer proxiedPlayer = account.getIdentifierType().getPlayer(account.getId());
 		if (answer == VKEnterAnswer.DECLINE) {
-			sendMessage(vkId, config.getVKMessages().getMessage("enter-kicked", account));
+			sendMessage(vkId, config.getVKMessages().getMessage("enter-kicked", vkId, account));
 			account.kick(config.getBungeeMessages().getLegacyMessage("vk-enter-declined"));
 		}
 		if (answer == VKEnterAnswer.CONFIRM) {
-			sendMessage(vkId, config.getVKMessages().getMessage("enter-confirmed", account));
+			if (account.getGoogleKey() != null && !account.getGoogleKey().isEmpty()
+					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
+				Auth.addGoogleAuthAccount(account);
+				System.out.println("!");
+				return;
+			}
+			Auth.removeAccount(account.getId());
+			sendMessage(vkId, config.getVKMessages().getMessage("enter-confirmed", vkId, account));
 			accountStorage.saveOrUpdateAccount(account);
-			if (proxiedPlayer != null)
+			if (proxiedPlayer != null) {
 				proxiedPlayer.sendMessage(config.getBungeeMessages().getMessage("vk-enter-confirmed"));
-			Connector.connectOrKick(proxiedPlayer, config.findServerInfo(config.getGameServers()),
-					config.getBungeeMessages().getMessage("game-servers-connection-refused"));
+				Connector.connectOrKick(proxiedPlayer, config.findServerInfo(config.getGameServers()),
+						config.getBungeeMessages().getMessage("game-servers-connection-refused"));
+			}
 		}
 	}
 

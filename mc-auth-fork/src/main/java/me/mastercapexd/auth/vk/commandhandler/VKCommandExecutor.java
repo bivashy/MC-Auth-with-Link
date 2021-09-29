@@ -19,6 +19,8 @@ public abstract class VKCommandExecutor {
 
 	public abstract void execute(VKMessageEvent event, String[] args);
 	
+	public abstract String getKey();
+	
 	public boolean sendMessage(Integer peerId, String message) {
 		try {
 			vk.messages().send(actor).randomId(random.nextInt()).peerId(peerId).message(message).execute();

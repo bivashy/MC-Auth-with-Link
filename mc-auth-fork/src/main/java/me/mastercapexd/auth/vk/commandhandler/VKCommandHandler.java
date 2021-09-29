@@ -2,6 +2,8 @@ package me.mastercapexd.auth.vk.commandhandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
@@ -22,27 +24,31 @@ public class VKCommandHandler implements Listener {
 	public void removeCommand(VKCommand command) {
 		commands.remove(command);
 	}
-	
-	public ArrayList<VKCommand> getCommands(){
+
+	public ArrayList<VKCommand> getCommands() {
 		return commands;
 	}
-	
+
 	@EventHandler
 	public void onVKMessage(VKMessageEvent e) {
-		String message = e.getMessage().getText();
-		if (message == null)
-			return;
-		if (message.isEmpty())
-			return;
-		String[] array = message.split("\\s+");
-		String commandName = array[0];
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		executorService.execute(() -> {
+			String message = e.getMessage().getText();
+			if (message == null)
+				return;
+			if (message.isEmpty())
+				return;
+			String[] array = message.split("\\s+");
+			String commandName = array[0];
 
-		String[] args = Arrays.copyOfRange(array, 1, array.length);
-		for (VKCommand cmd : this.commands) {
-			if (cmd.isExecuted(commandName)) {
-				cmd.execute(e, args);
-				break;
+			String[] args = Arrays.copyOfRange(array, 1, array.length);
+			for (VKCommand cmd : this.commands) {
+				if (cmd.isExecuted(commandName)) {
+					cmd.execute(e, args);
+					break;
+				}
 			}
-		}
+		});
+		executorService.shutdown();
 	}
 }

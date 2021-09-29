@@ -29,4 +29,9 @@ public class VKEnterDeclineCommand extends VKCommandExecutor {
 			account.enterConnect(VKEnterAnswer.DECLINE, receptioner.getConfig(), receptioner.getAccountStorage());
 	}
 
+	@Override
+	public String getKey() {
+		return "enter-decline";
+	}
+
 }

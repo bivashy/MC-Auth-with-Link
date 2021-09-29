@@ -29,4 +29,9 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 			account.enterConnect(VKEnterAnswer.CONFIRM, receptioner.getConfig(), receptioner.getAccountStorage());
 	}
 
+	@Override
+	public String getKey() {
+		return "enter-accept";
+	}
+
 }

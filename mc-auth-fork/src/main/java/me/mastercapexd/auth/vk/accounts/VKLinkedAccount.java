@@ -37,28 +37,28 @@ public class VKLinkedAccount {
 	public void kick() {
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (account.getVKId().intValue() != userID.intValue()) {
-				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", account));
+				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", userID, account));
 				return;
 			}
-		sendMessage(userID, config.getVKMessages().getMessage("kick-starting", account));
+		sendMessage(userID, config.getVKMessages().getMessage("kick-starting", userID, account));
 		KickResult result = account.kick(config.getBungeeMessages().getLegacyMessage("vk-kicked"));
 		if (result == KickResult.PLAYER_OFFLINE)
-			sendMessage(userID, config.getVKMessages().getMessage("player-offline", account));
+			sendMessage(userID, config.getVKMessages().getMessage("player-offline", userID, account));
 		if (result == KickResult.KICKED)
-			sendMessage(userID, config.getVKMessages().getMessage("kicked", account));
+			sendMessage(userID, config.getVKMessages().getMessage("kicked", userID, account));
 	}
 
 	public void unlink() {
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (account.getVKId().intValue() != userID.intValue()) {
-				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", account));
+				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", userID, account));
 				return;
 			}
 		VKUnlinkEvent event = new VKUnlinkEvent(userID, account);
 		ProxyServer.getInstance().getPluginManager().callEvent(event);
 		if (event.isCancelled())
 			return;
-		sendMessage(userID, config.getVKMessages().getMessage("unlinked", account));
+		sendMessage(userID, config.getVKMessages().getMessage("unlinked", userID, account));
 		account.setVKId(-1);
 		accountStorage.saveOrUpdateAccount(account);
 	}
@@ -68,13 +68,13 @@ public class VKLinkedAccount {
 				config.getVKSettings().getRestoreSettings().getCodeLength());
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (result == RestoreResult.ACCOUNT_VK_NOT_EQUALS) {
-				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", account));
+				sendMessage(userID, config.getVKMessages().getMessage("not-your-account", userID, account));
 				return;
 			}
 
 		account.logout(config.getSessionDurability());
 		account.kick(config.getBungeeMessages().getLegacyMessage("vk-kicked"));
-		sendMessage(userID, config.getVKMessages().getMessage("restored", account).replaceAll("(?i)%password%",
+		sendMessage(userID, config.getVKMessages().getMessage("restored", userID, account).replaceAll("(?i)%password%",
 				result.getPasswordHash()));
 		accountStorage.saveOrUpdateAccount(account);
 	}
@@ -90,9 +90,18 @@ public class VKLinkedAccount {
 		if (account.getVKId() != -1)
 			buttons.add(plugin.getVKUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
 					KeyboardButtonColor.PRIMARY));
+		if (config.getVKSettings().getEnterSettings().canToggleEnterConfirmation()) {
+			if (account.isVKConfirmationEnabled()) {
+				buttons.add(plugin.getVKUtils().buildCallbackButton("disable-confirmation",
+						"toogle-confirmation_" + account.getId(), KeyboardButtonColor.NEGATIVE));
+			} else {
+				buttons.add(plugin.getVKUtils().buildCallbackButton("enable-confirmation",
+						"toogle-confirmation_" + account.getId(), KeyboardButtonColor.POSITIVE));
+			}
+		}
 		buttons.add(plugin.getVKUtils().buildCallbackButton("return", account, "return", KeyboardButtonColor.DEFAULT));
 		keyboard.setButtons(plugin.getListUtils().chopList(buttons, 3));
-		plugin.getVKUtils().sendMessage(userID, config.getVKMessages().getMessage("account-control", account),
+		plugin.getVKUtils().sendMessage(userID, config.getVKMessages().getMessage("account-control", userID, account),
 				keyboard);
 	}
 

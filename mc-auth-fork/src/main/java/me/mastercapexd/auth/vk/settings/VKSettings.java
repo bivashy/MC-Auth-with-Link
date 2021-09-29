@@ -2,7 +2,6 @@ package me.mastercapexd.auth.vk.settings;
 
 import java.util.List;
 
-import me.mastercapexd.auth.vk.commands.VKCommands;
 import net.md_5.bungee.config.Configuration;
 
 public class VKSettings {
@@ -10,6 +9,7 @@ public class VKSettings {
 	private final VKConfirmationSettings confirmationSettings;
 	private final VKRestoreSettings restoreSettings;
 	private final VKEnterSettings enterSettings;
+	private final VKMainCommands mainCommands;
 	private final VKCommands commands;
 	private final List<Integer> adminAccounts;
 
@@ -19,6 +19,7 @@ public class VKSettings {
 		this.restoreSettings = new VKRestoreSettings(section.getSection("restore"));
 		this.enterSettings = new VKEnterSettings(section.getSection("enter"));
 		this.commands = new VKCommands(section.getSection("commands"));
+		this.mainCommands = new VKMainCommands(section.getSection("vk-commands"));
 		this.adminAccounts = section.getIntList("admin-accounts");
 	}
 
@@ -46,6 +47,10 @@ public class VKSettings {
 
 	public VKRestoreSettings getRestoreSettings() {
 		return restoreSettings;
+	}
+
+	public VKMainCommands getMainCommands() {
+		return mainCommands;
 	}
 
 }

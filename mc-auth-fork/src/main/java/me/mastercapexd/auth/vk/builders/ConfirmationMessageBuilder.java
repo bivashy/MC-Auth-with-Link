@@ -43,7 +43,7 @@ public class ConfirmationMessageBuilder extends MessageBuilder {
 		sendQuery.keyboard(createKeyboard());
 		IPInfoResponse ipInfoAnswer = geoUtils.getIPInfo(entryAccount.getAccount().getLastIpAddress());
 		sendQuery.message(
-				ipInfoAnswer.setInfo(config.getVKMessages().getMessage("enter-message", entryAccount.getAccount())));
+				ipInfoAnswer.setInfo(config.getVKMessages().getMessage("enter-message",entryAccount.getVkId(), entryAccount.getAccount())));
 		return sendQuery;
 	}
 

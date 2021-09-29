@@ -43,9 +43,15 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 				return;
 			}
 			account.setPasswordHash(newPassword);
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKMessages().getMessage("changepass-success", account)
-					.replaceAll("(?i)%password%", newPassword));
+			sendMessage(e.getPeer(),
+					receptioner.getConfig().getVKMessages().getMessage("changepass-success", e.getUserId(), account)
+							.replaceAll("(?i)%password%", newPassword));
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 		});
+	}
+
+	@Override
+	public String getKey() {
+		return "change-pass";
 	}
 }

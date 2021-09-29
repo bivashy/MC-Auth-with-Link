@@ -100,4 +100,9 @@ public class VKCustomCommand extends VKCommandExecutor {
 	public boolean isRegex() {
 		return isRegex;
 	}
+
+	@Override
+	public String getKey() {
+		return "custom-command";
+	}
 }

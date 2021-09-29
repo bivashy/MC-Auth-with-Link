@@ -2,6 +2,8 @@ package me.mastercapexd.auth.vk.buttonshandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
 
@@ -29,20 +31,24 @@ public class VKButtonHandler implements Listener {
 
 	@EventHandler
 	public void onButtonPress(VKCallbackButtonPressEvent e) {
-		String payload = e.getButtonEvent().getPayload();
-		if (payload == null)
-			return;
-		if (payload.isEmpty())
-			return;
-		String[] array = payload.split("_");
-		String firstPayload = array[0];
-		String[] args = Arrays.copyOfRange(array, 1, array.length);
-		String afterPayload = String.join("_", args);
-		for (VKCallbackButton button : this.commands) {
-			if (button.isExecuted(firstPayload)) {
-				button.execute(e, afterPayload);
-				break;
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		executorService.execute(() -> {
+			String payload = e.getButtonEvent().getPayload();
+			if (payload == null)
+				return;
+			if (payload.isEmpty())
+				return;
+			String[] array = payload.split("_");
+			String firstPayload = array[0];
+			String[] args = Arrays.copyOfRange(array, 1, array.length);
+			String afterPayload = String.join("_", args);
+			for (VKCallbackButton button : this.commands) {
+				if (button.isExecuted(firstPayload)) {
+					button.execute(e, afterPayload);
+					break;
+				}
 			}
-		}
+		});
+		executorService.shutdown();
 	}
 }

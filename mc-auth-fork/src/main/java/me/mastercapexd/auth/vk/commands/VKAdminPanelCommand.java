@@ -19,4 +19,9 @@ public class VKAdminPanelCommand extends VKCommandExecutor {
 			return;
 		new AdminPanelBuilder(e.getUserId(), receptioner).execute();
 	}
+
+	@Override
+	public String getKey() {
+		return "admin-panel";
+	}
 }

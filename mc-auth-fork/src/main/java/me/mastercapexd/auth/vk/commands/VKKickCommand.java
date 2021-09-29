@@ -29,4 +29,9 @@ public class VKKickCommand extends VKCommandExecutor {
 			linkedAccount.kick();
 		});
 	}
+
+	@Override
+	public String getKey() {
+		return "kick";
+	}
 }
