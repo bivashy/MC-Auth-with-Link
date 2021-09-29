@@ -42,9 +42,12 @@ public class BungeePluginConfig implements PluginConfig {
 
 	private final List<String> blockedServers, captchaServers;
 
+	private final List<String> allowedCommands;
+
 	private final StorageDataSettings storageDataSettings;
 	private final int maxLoginPerIP, maxVKLink, messagesDelay;
 	private final VKSettings vkSettings;
+	private final GoogleAuthenticatorSettings googleAuthenticatorSettings;
 
 	private final Messages bungeeMessages, vkMessages;
 
@@ -69,6 +72,8 @@ public class BungeePluginConfig implements PluginConfig {
 		this.sessionDurability = TimeUtils.parseTime(config.getString("session-durability"));
 		this.authTime = config.getLong("auth-time");
 
+		this.allowedCommands = config.getStringList("allowed-commands");
+
 		this.authServers = ImmutableList.copyOf(config.getStringList("auth-servers").stream()
 				.map(stringFormat -> new Server(stringFormat)).collect(Collectors.toList()));
 		this.gameServers = ImmutableList.copyOf(config.getStringList("game-servers").stream()
@@ -87,6 +92,9 @@ public class BungeePluginConfig implements PluginConfig {
 
 		Configuration vk = config.getSection("vk");
 		this.vkSettings = new VKSettings(vk.getBoolean("enabled"), vk);
+
+		Configuration googleAuthenticatorConfiguration = config.getSection("google-authenticator");
+		this.googleAuthenticatorSettings = new GoogleAuthenticatorSettings(googleAuthenticatorConfiguration);
 
 		this.bungeeMessages = new BungeeMessages(config.getSection("messages"));
 		this.vkMessages = new VKMessages(vk.getSection("vkmessages"));
@@ -254,6 +262,16 @@ public class BungeePluginConfig implements PluginConfig {
 	@Override
 	public BossBarSettings getBossBarSettings() {
 		return this.barSettings;
+	}
+
+	@Override
+	public GoogleAuthenticatorSettings getGoogleAuthenticatorSettings() {
+		return googleAuthenticatorSettings;
+	}
+
+	@Override
+	public List<String> getAllowedCommands() {
+		return allowedCommands;
 	}
 
 }

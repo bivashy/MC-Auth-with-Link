@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.regex.Pattern;
+
 import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.Auth;
@@ -84,8 +86,7 @@ public class EventListener implements Listener {
 				return;
 
 		String message = event.getMessage();
-		if (!message.toLowerCase().startsWith("/l") && !message.toLowerCase().startsWith("/reg")
-				&& !message.toLowerCase().startsWith("/login") && !message.toLowerCase().startsWith("/register")) {
+		if (!isAllowedCommand(message)) {
 			player.sendMessage(config.getBungeeMessages().getMessage("disabled-command"));
 			event.setCancelled(true);
 		}
@@ -149,7 +150,7 @@ public class EventListener implements Listener {
 			if (account == null) {
 				@SuppressWarnings("deprecation")
 				Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(),
-						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, -1, 0,
+						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, null, -1, false, 0,
 						player.getAddress().getHostString(), -1, config.getSessionDurability());
 				ServerInfo authServer = config.findServerInfo(config.getAuthServers());
 				Auth.addAccount(newAccount);
@@ -171,6 +172,10 @@ public class EventListener implements Listener {
 				}
 			}
 		});
+	}
+	
+	private boolean isAllowedCommand(String command) {
+		return config.getAllowedCommands().stream().map(s -> Pattern.compile(s)).filter(pattern -> pattern.matcher(command).find()).findAny().orElse(null) !=null;
 	}
 
 }
