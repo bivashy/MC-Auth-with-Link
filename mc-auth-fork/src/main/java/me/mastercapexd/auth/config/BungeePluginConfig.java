@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
+import me.mastercapexd.auth.FillType;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.Messages;
@@ -54,6 +55,8 @@ public class BungeePluginConfig implements PluginConfig {
 	private final VKButtonLabels vkButtonLabels;
 
 	private final BossBarSettings barSettings;
+
+	private final FillType fillType;
 
 	private final Configuration config;
 
@@ -101,10 +104,13 @@ public class BungeePluginConfig implements PluginConfig {
 		this.vkButtonLabels = new VKButtonLabels(vk.getSection("button-labels"));
 
 		this.barSettings = new BossBarSettings(config.getSection("boss-bar"), bungeeMessages);
+
+		this.fillType = FillType.valueOf(config.getString("fill-type"));
 	}
 
 	@Override
 	public ServerInfo findServerInfo(List<Server> servers) {
+		fillType.shuffle(servers);
 		ServerInfo optimal = null;
 		for (Server server : servers) {
 			ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server.getId());

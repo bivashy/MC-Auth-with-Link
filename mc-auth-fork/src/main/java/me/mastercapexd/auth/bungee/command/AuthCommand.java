@@ -1,3 +1,4 @@
+
 package me.mastercapexd.auth.bungee.command;
 
 import me.mastercapexd.auth.Auth;
