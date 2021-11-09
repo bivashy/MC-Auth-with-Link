@@ -62,7 +62,6 @@ public class VKEntryAccount {
 			if (account.getGoogleKey() != null && !account.getGoogleKey().isEmpty()
 					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
 				Auth.addGoogleAuthAccount(account);
-				System.out.println("!");
 				return;
 			}
 			Auth.removeAccount(account.getId());
