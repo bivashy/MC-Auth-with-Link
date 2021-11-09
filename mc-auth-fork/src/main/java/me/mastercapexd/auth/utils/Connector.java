@@ -2,6 +2,7 @@ package me.mastercapexd.auth.utils;
 
 import java.util.function.Consumer;
 
+import me.mastercapexd.auth.bungee.AuthPlugin;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -21,16 +22,17 @@ public class Connector {
 			player.disconnect(error);
 			return;
 		}
-		serverInfo.ping(new Callback<ServerPing>() {
+		if (AuthPlugin.getInstance().getConfig().getConfig().getBoolean("kick-on-server-disabled"))
+			serverInfo.ping(new Callback<ServerPing>() {
 
-			@Override
-			public void done(ServerPing result, Throwable throwedError) {
-				if (throwedError != null) {
-					System.out.println(player + " tried to connect in not working server");
-					player.disconnect(error);
+				@Override
+				public void done(ServerPing result, Throwable throwedError) {
+					if (throwedError != null) {
+						System.out.println(player + " tried to connect in not working server");
+						player.disconnect(error);
+					}
 				}
-			}
-		});
+			});
 
 		if (player.getServer().getInfo().equals(serverInfo))
 			return;
