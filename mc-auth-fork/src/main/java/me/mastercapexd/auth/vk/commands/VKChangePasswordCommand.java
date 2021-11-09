@@ -31,13 +31,13 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 				return;
 			}
 
-			if (newPassword.length() < receptioner.getConfig().getPasswordMinLength()) {
+			if (args[1].length() < receptioner.getConfig().getPasswordMinLength()) {
 				sendMessage(e.getPeer(),
 						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-password-too-short"));
 				return;
 			}
 
-			if (newPassword.length() > receptioner.getConfig().getPasswordMaxLength()) {
+			if (args[1].length() > receptioner.getConfig().getPasswordMaxLength()) {
 				sendMessage(e.getPeer(),
 						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-password-too-long"));
 				return;
