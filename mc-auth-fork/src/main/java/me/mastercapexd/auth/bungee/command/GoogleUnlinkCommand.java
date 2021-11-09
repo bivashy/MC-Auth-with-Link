@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.bungee.command;
 
 import me.mastercapexd.auth.PluginConfig;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
