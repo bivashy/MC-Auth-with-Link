@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.vk.buttonshandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,8 +39,7 @@ public class VKButtonHandler implements Listener {
 				return;
 			String[] array = payload.split("_");
 			String firstPayload = array[0];
-			String[] args = Arrays.copyOfRange(array, 1, array.length);
-			String afterPayload = String.join("_", args);
+			String afterPayload = payload.substring(payload.indexOf("_") + 1);
 			for (VKCallbackButton button : this.commands) {
 				if (button.isExecuted(firstPayload)) {
 					button.execute(e, afterPayload);
