@@ -150,7 +150,7 @@ public class EventListener implements Listener {
 			if (account == null) {
 				@SuppressWarnings("deprecation")
 				Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(),
-						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, null, -1, false, 0,
+						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, null, -1, true, 0,
 						player.getAddress().getHostString(), -1, config.getSessionDurability());
 				ServerInfo authServer = config.findServerInfo(config.getAuthServers());
 				Auth.addAccount(newAccount);
