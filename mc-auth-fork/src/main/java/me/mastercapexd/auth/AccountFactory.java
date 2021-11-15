@@ -28,19 +28,19 @@ public interface AccountFactory {
 
 	default Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			String password, String googleKey, Integer vkId, long sessionTime) {
-		return createAccount(id, identifierType, uuid, name, hashType, password, googleKey, vkId, false, 0, null, 0,
+		return createAccount(id, identifierType, uuid, name, hashType, password, googleKey, vkId, true, 0, null, 0,
 				sessionTime);
 	}
 
 	default Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			String password, Integer vkId, String googleKey, long sessionTime) {
-		return createAccount(id, identifierType, uuid, name, hashType, password, googleKey, vkId, false, 0, null, 0,
+		return createAccount(id, identifierType, uuid, name, hashType, password, googleKey, vkId, true, 0, null, 0,
 				sessionTime);
 	}
 
 	default Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			String password, Integer vkId, long sessionTime) {
-		return createAccount(id, identifierType, uuid, name, hashType, password, null, vkId, false, 0, null, 0,
+		return createAccount(id, identifierType, uuid, name, hashType, password, null, vkId, true, 0, null, 0,
 				sessionTime);
 	}
 
