@@ -46,12 +46,12 @@ public interface AccountFactory {
 
 	default Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			String password, long sessionTime) {
-		return createAccount(id, identifierType, uuid, name, hashType, password, null, -1, false, 0, null, 0,
+		return createAccount(id, identifierType, uuid, name, hashType, password, null, -1, true, 0, null, 0,
 				sessionTime);
 	}
 
 	default Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			long sessionTime) {
-		return createAccount(id, identifierType, uuid, name, hashType, null, null, -1, false, 0, null, 0, sessionTime);
+		return createAccount(id, identifierType, uuid, name, hashType, null, null, -1, true, 0, null, 0, sessionTime);
 	}
 }
