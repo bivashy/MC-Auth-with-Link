@@ -55,6 +55,8 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 			}
 			setLastIpAddress(proxiedPlayer.getAddress().getHostString());
 			setLastSessionStart(System.currentTimeMillis());
+			if (Auth.getEntryAccount(id) != null)
+				return SessionResult.ALREADY_NEED_CONFIRM_ENTER_IN_VK;
 			if (getVKId() != null && getVKId() != -1 && AuthPlugin.getInstance().getConfig().getVKSettings().isEnabled()
 					&& vkConfirmationEnabled) {
 				Auth.addEntryAccount(this, vkId);
@@ -64,7 +66,7 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
 				Auth.addGoogleAuthAccount(this);
 				return SessionResult.NEED_GOOGLE_CODE;
-			}
+			}	
 			return SessionResult.LOGIN_SUCCESS;
 		}
 		return SessionResult.LOGIN_WRONG_PASSWORD;

@@ -59,6 +59,7 @@ public class GoogleCodeCommand extends Command {
 			if (plugin.getGoogleAuthenticator().authorize(account.getGoogleKey(), code)) {
 				sender.sendMessage(config.getBungeeMessages().getMessage("google-code-entered"));
 				Auth.removeGoogleAuthAccount(id);
+				Auth.removeAccount(account.getId());
 				Connector.connectOrKick(player, config.findServerInfo(config.getGameServers()),
 						config.getBungeeMessages().getMessage("game-servers-connection-refused"));
 			} else {

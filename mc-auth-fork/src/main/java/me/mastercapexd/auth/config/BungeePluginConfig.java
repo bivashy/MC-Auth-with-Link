@@ -100,7 +100,11 @@ public class BungeePluginConfig implements PluginConfig {
 		this.googleAuthenticatorSettings = new GoogleAuthenticatorSettings(googleAuthenticatorConfiguration);
 
 		this.bungeeMessages = new BungeeMessages(config.getSection("messages"));
-		this.vkMessages = new VKMessages(vk.getSection("vkmessages"));
+		if (vkSettings.isEnabled()) {
+			this.vkMessages = new VKMessages(vk.getSection("vkmessages"));
+		} else {
+			this.vkMessages = null;
+		}
 		this.vkButtonLabels = new VKButtonLabels(vk.getSection("button-labels"));
 
 		this.barSettings = new BossBarSettings(config.getSection("boss-bar"), bungeeMessages);

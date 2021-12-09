@@ -45,7 +45,7 @@ public class GoogleCommand extends Command {
 				account.setGoogleKey(key);
 			} else {
 				sender.sendMessage(config.getBungeeMessages().getLegacyMessage("google-regenerated")
-						.replace("(?i)%players%", key));
+						.replace("(?i)%google_key%", key));
 				account.setGoogleKey(key);
 			}
 			accountStorage.saveOrUpdateAccount(account);

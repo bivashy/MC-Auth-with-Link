@@ -6,15 +6,18 @@ import net.md_5.bungee.config.Configuration;
 
 public class VKSettings {
 	private final boolean enabled;
-	private final VKConfirmationSettings confirmationSettings;
-	private final VKRestoreSettings restoreSettings;
-	private final VKEnterSettings enterSettings;
-	private final VKMainCommands mainCommands;
-	private final VKCommands commands;
-	private final List<Integer> adminAccounts;
+	private VKConfirmationSettings confirmationSettings;
+	private VKRestoreSettings restoreSettings;
+	private VKEnterSettings enterSettings;
+	private VKMainCommands mainCommands;
+	private VKCommands commands;
+	private List<Integer> adminAccounts;
 
 	public VKSettings(boolean enabled, Configuration section) {
 		this.enabled = enabled;
+		if (!enabled)
+			return;
+
 		this.confirmationSettings = new VKConfirmationSettings(section.getSection("confirmation"));
 		this.restoreSettings = new VKRestoreSettings(section.getSection("restore"));
 		this.enterSettings = new VKEnterSettings(section.getSection("enter"));
