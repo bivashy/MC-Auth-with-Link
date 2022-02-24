@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import me.mastercapexd.auth.AccountFactory;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.objects.StorageDataSettings;
 import me.mastercapexd.auth.storage.sql.SQLAccountStorage;
 
@@ -18,7 +18,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String SELECT_BY_VKID = "SELECT * FROM `auth` WHERE `vkId` = ?;";
 	private static final String SELECT_BY_LAST_QUIT_ORDERED = "SELECT * FROM `auth` ORDER BY `last_quit` DESC LIMIT ?;";
 	private static final String SELECT_ALL = "SELECT * FROM `auth`;";
-	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE `vkId` NOT IN(-1);";
+	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE `vkId` NOT IN(?);";
 	private static final String SELECT_VKIDs = "SELECT `vkId` FROM `auth`;";
 	private static final String UPDATE_ID = "INSERT INTO `auth` (`id`, `uuid`, `name`, `password`,`google_key`,`vkId`,`vk_confirm_enabled`, `last_quit`, `last_ip`, `last_session_start`, `id_type`, `hash_type`) VALUES "
 			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "

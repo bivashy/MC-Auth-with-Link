@@ -12,9 +12,9 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
-import me.mastercapexd.auth.Account;
-import me.mastercapexd.auth.PluginConfig;
-import me.mastercapexd.auth.utils.ListUtils;
+import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.utils.CollectionUtils;
 import me.mastercapexd.auth.vk.VKAccountsPageType;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import me.mastercapexd.auth.vk.utils.VKUtils;
@@ -24,7 +24,6 @@ public class AccountsMessageBuilder extends MessageBuilder {
 	private final Collection<Account> accounts;
 	private final VKAccountsPageType type;
 	private final VKUtils vkUtils;
-	private final ListUtils listUtils;
 	private final PluginConfig config;
 
 	public AccountsMessageBuilder(Integer userId, Integer page, VKAccountsPageType type, Collection<Account> accounts,
@@ -34,7 +33,6 @@ public class AccountsMessageBuilder extends MessageBuilder {
 		this.type = type;
 		this.accounts = accounts;
 		this.vkUtils = receptioner.getPlugin().getVKUtils();
-		this.listUtils = receptioner.getPlugin().getListUtils();
 		this.config = receptioner.getConfig();
 	}
 
@@ -47,12 +45,12 @@ public class AccountsMessageBuilder extends MessageBuilder {
 		return (findedAccounts -> {
 			MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt()).userId(userId);
 			if (findedAccounts.isEmpty()) {
-				sendQuery.message(config.getVKMessages().getLegacyMessage(type.getNoAccountsPath()));
+				sendQuery.message(config.getVKSettings().getVKMessages().getMessage(type.getNoAccountsPath()));
 				return sendQuery;
 			}
-			List<Account> listAccounts = listUtils.getListPage(sortAccounts(accounts), page, 5);
+			List<Account> listAccounts = CollectionUtils.getListPage(sortAccounts(accounts), page, 5);
 			Keyboard keyboard = createKeyboard(listAccounts, findedAccounts);
-			sendQuery.keyboard(keyboard).message(config.getVKMessages().getLegacyMessage(type.getAccountsPath()));
+			sendQuery.keyboard(keyboard).message(config.getVKSettings().getVKMessages().getMessage(type.getAccountsPath()));
 			return sendQuery;
 		});
 	}
@@ -62,7 +60,7 @@ public class AccountsMessageBuilder extends MessageBuilder {
 
 		List<KeyboardButton> accountButtons = new ArrayList<>();
 		accounts.forEach(account -> accountButtons.add(createSettingsButtonFromAccount(account)));
-		keyboard.setButtons(listUtils.chopList(accountButtons, 1));
+		keyboard.setButtons(CollectionUtils.chopList(accountButtons, 1));
 
 		List<KeyboardButton> pageButtons = createPageButtons(allAccounts.size(), page, type);
 		if (!pageButtons.isEmpty())
@@ -95,7 +93,7 @@ public class AccountsMessageBuilder extends MessageBuilder {
 			buttons.add(vkUtils.buildCallbackButton("previous-page", "previouspage_" + page + "_" + type.toString(),
 					KeyboardButtonColor.DEFAULT));
 
-		if (page < listUtils.getMaxPages(size, 5))
+		if (page < CollectionUtils.getMaxPages(size, 5))
 			buttons.add(vkUtils.buildCallbackButton("next-page", "nextpage_" + page + "_" + type.toString(),
 					KeyboardButtonColor.DEFAULT));
 

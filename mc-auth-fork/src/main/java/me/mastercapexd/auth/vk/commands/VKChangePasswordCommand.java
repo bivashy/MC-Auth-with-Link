@@ -2,6 +2,7 @@ package me.mastercapexd.auth.vk.commands;
 
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
+import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
@@ -18,7 +19,7 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 			return;
 		if (args.length < 2) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-not-enough-arguments"));
+					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-not-enough-arguments"));
 			return;
 		}
 		String playerName = args[0];
@@ -27,24 +28,26 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 			String newPassword = account.getHashType().hash(args[1]);
 			if (oldPassword.equals(newPassword)) {
 				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-nothing-to-change"));
+						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-nothing-to-change"));
 				return;
 			}
 
 			if (args[1].length() < receptioner.getConfig().getPasswordMinLength()) {
 				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-password-too-short"));
+						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-password-too-short"));
 				return;
 			}
 
 			if (args[1].length() > receptioner.getConfig().getPasswordMaxLength()) {
 				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKMessages().getLegacyMessage("changepass-password-too-long"));
+						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-password-too-long"));
 				return;
 			}
 			account.setPasswordHash(newPassword);
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKMessages()
-					.getMessage("changepass-success", e.getUserId(), account).replaceAll("(?i)%password%", args[1]));
+
+			VKMessageContext messageContext = VKMessageContext.newContext(e.getUserId(), account);
+			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+					.getMessage("changepass-success", messageContext).replaceAll("(?i)%password%", args[1]));
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 		});
 	}

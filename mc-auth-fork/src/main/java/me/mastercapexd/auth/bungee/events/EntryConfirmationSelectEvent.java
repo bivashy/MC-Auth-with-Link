@@ -1,21 +1,19 @@
 package me.mastercapexd.auth.bungee.events;
 
-import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.VKEnterAnswer;
-import net.md_5.bungee.api.plugin.Event;
+import me.mastercapexd.auth.account.Account;
 
 /**
  * Called when player accepts or declines enter to acccount
  */
-public class EntryConfirmationSelectEvent extends Event implements Cancellable{
+public class EntryConfirmationSelectEvent extends AccountEvent implements Cancellable {
 	private final Integer userId;
-	private final Account linkedAccount;
 	private final VKEnterAnswer selected;
 	private boolean isCancelled = false;
 
-	public EntryConfirmationSelectEvent(Integer userId, Account linkedAccount,VKEnterAnswer selected) {
+	public EntryConfirmationSelectEvent(Integer userId, Account linkedAccount, VKEnterAnswer selected) {
+		super(linkedAccount);
 		this.userId = userId;
-		this.linkedAccount = linkedAccount;
 		this.selected = selected;
 	}
 
@@ -23,14 +21,10 @@ public class EntryConfirmationSelectEvent extends Event implements Cancellable{
 		return userId;
 	}
 
-	public Account getLinkedAccount() {
-		return linkedAccount;
-	}
-
 	public VKEnterAnswer getEnterSelected() {
 		return selected;
 	}
-	
+
 	@Override
 	public void setCancelled(boolean cancelValue) {
 		this.isCancelled = cancelValue;

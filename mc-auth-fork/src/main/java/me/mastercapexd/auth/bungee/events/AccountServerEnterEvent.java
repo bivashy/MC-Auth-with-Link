@@ -1,24 +1,19 @@
 package me.mastercapexd.auth.bungee.events;
 
-import me.mastercapexd.auth.Account;
-import net.md_5.bungee.api.plugin.Event;
+import me.mastercapexd.auth.account.Account;
 
 /**
- * Called when player enters to the game server (Session enter, on login,register, on time left, force login etc.)
+ * Called when player enters to the game server (Session enter, on
+ * login,register, on time left, force login etc.)
  */
 
-public class AccountServerEnterEvent extends Event implements Cancellable {
-	private final Account account;
+public class AccountServerEnterEvent extends AccountEvent implements Cancellable {
 	private final String id;
 	private boolean isCancelled = false;
 
 	public AccountServerEnterEvent(Account account, String id) {
-		this.account = account;
+		super(account);
 		this.id = id;
-	}
-
-	public Account getAccount() {
-		return account;
 	}
 
 	public String getID() {

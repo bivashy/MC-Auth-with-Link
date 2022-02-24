@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.bungee.events;
 
-import me.mastercapexd.auth.Account;
+import me.mastercapexd.auth.account.Account;
 import net.md_5.bungee.api.plugin.Event;
 
 public class SessionEnterEvent extends Event implements Cancellable {

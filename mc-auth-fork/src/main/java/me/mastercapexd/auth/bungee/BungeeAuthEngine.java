@@ -2,15 +2,16 @@ package me.mastercapexd.auth.bungee;
 
 import java.util.concurrent.TimeUnit;
 
-import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.AuthEngine;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.objects.Server;
-import me.mastercapexd.auth.utils.Connector;
 import me.mastercapexd.auth.utils.TitleBar;
 import me.mastercapexd.auth.utils.bossbar.BossBar;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -54,32 +55,33 @@ public class BungeeAuthEngine implements AuthEngine {
 					String id = this.config.getActiveIdentifierType().getId(player);
 					Account account = Auth.getAccount(id);
 					if (account != null) {
-						if (Auth.hasEntryAccount(account.getId())) {
+						player.sendMessage(TextComponent.fromLegacyText("Current step: "+account.getCurrentAuthenticationStep().getStepName())); // debug
+						if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) {
 							player.sendMessage(
 									this.config.getBungeeMessages().getMessage("vk-enter-confirm-need-chat"));
 							TitleBar.send(player,
-									this.config.getBungeeMessages().getLegacyMessage("vk-enter-confirm-need-title"),
-									this.config.getBungeeMessages().getLegacyMessage("vk-enter-confirm-need-subtitle"),
+									this.config.getBungeeMessages().getStringMessage("vk-enter-confirm-need-title"),
+									this.config.getBungeeMessages().getStringMessage("vk-enter-confirm-need-subtitle"),
 									0, 120, 0);
 							continue;
 						}
 						if (Auth.hasGoogleAuthAccount(account.getId())) {
 							player.sendMessage(this.config.getBungeeMessages().getMessage("google-need-code-chat"));
 							TitleBar.send(player,
-									this.config.getBungeeMessages().getLegacyMessage("google-need-code-title"),
-									this.config.getBungeeMessages().getLegacyMessage("google-need-code-subtitle"), 0,
+									this.config.getBungeeMessages().getStringMessage("google-need-code-title"),
+									this.config.getBungeeMessages().getStringMessage("google-need-code-subtitle"), 0,
 									120, 0);
 							continue;
 						}
 						if (account.isRegistered()) {
 							player.sendMessage(this.config.getBungeeMessages().getMessage("login-chat"));
-							TitleBar.send(player, this.config.getBungeeMessages().getLegacyMessage("login-title"),
-									this.config.getBungeeMessages().getLegacyMessage("login-subtitle"), 0, 120, 0);
+							TitleBar.send(player, this.config.getBungeeMessages().getStringMessage("login-title"),
+									this.config.getBungeeMessages().getStringMessage("login-subtitle"), 0, 120, 0);
 							continue;
 						}
 						player.sendMessage(this.config.getBungeeMessages().getMessage("register-chat"));
-						TitleBar.send(player, this.config.getBungeeMessages().getLegacyMessage("register-title"),
-								this.config.getBungeeMessages().getLegacyMessage("register-subtitle"), 0, 120, 0);
+						TitleBar.send(player, this.config.getBungeeMessages().getStringMessage("register-title"),
+								this.config.getBungeeMessages().getStringMessage("register-subtitle"), 0, 120, 0);
 					}
 				}
 			}
@@ -101,14 +103,17 @@ public class BungeeAuthEngine implements AuthEngine {
 							Auth.getBar(id).removeAll();
 							Auth.removeBar(id);
 						}
-						ServerInfo connectServer = this.config.findServerInfo(this.config.getGameServers());
-						Connector.connectOrKick(player, connectServer,
-								this.config.getBungeeMessages().getMessage("game-servers-connection-refused"));
+//						ServerInfo connectServer = this.config.findServerInfo(this.config.getGameServers());
+//						Connector.connectOrKick(player, connectServer,
+//								this.config.getBungeeMessages().getMessage("game-servers-connection-refused"));
 						continue;
 					}
 					int onlineTime = (int) (now - Auth.getJoinTime(id)) / 1000;
-					long authTime = Auth.hasEntryAccount(account.getId()) ? (this.config.getAuthTime() * 2L)
-							: this.config.getAuthTime();
+
+					long authTime = Auth
+							.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())
+											? (this.config.getAuthTime() * 2L)
+											: this.config.getAuthTime();
 					if (onlineTime >= authTime) {
 						player.disconnect(this.config.getBungeeMessages().getMessage("time-left"));
 						Auth.removeAccount(id);

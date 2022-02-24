@@ -7,12 +7,14 @@ import com.ubivashka.vk.bungee.VKAPI;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 
-import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.VKEnterAnswer;
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.events.EntryConfirmationSelectEvent;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
+import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.ProxyServer;
@@ -52,11 +54,13 @@ public class VKEntryAccount {
 		ProxyServer.getInstance().getPluginManager().callEvent(entryConfirmationSelectEvent);
 		if (entryConfirmationSelectEvent.isCancelled())
 			return;
-		Auth.removeEntryAccount(account.getId());
+		Auth.getLinkEntryAuth().removeLinkUser(account.getId(), VKLinkType.getInstance());
 		ProxiedPlayer proxiedPlayer = account.getIdentifierType().getPlayer(account.getId());
+
+		VKMessageContext messageContext = VKMessageContext.newContext(vkId, account);
 		if (answer == VKEnterAnswer.DECLINE) {
-			sendMessage(vkId, config.getVKMessages().getMessage("enter-kicked", vkId, account));
-			account.kick(config.getBungeeMessages().getLegacyMessage("vk-enter-declined"));
+			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-kicked", messageContext));
+			account.kick(config.getBungeeMessages().getStringMessage("vk-enter-declined"));
 		}
 		if (answer == VKEnterAnswer.CONFIRM) {
 			if (account.getGoogleKey() != null && !account.getGoogleKey().isEmpty()
@@ -65,7 +69,7 @@ public class VKEntryAccount {
 				return;
 			}
 			Auth.removeAccount(account.getId());
-			sendMessage(vkId, config.getVKMessages().getMessage("enter-confirmed", vkId, account));
+			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-confirmed", messageContext));
 			accountStorage.saveOrUpdateAccount(account);
 			if (proxiedPlayer != null) {
 				proxiedPlayer.sendMessage(config.getBungeeMessages().getMessage("vk-enter-confirmed"));

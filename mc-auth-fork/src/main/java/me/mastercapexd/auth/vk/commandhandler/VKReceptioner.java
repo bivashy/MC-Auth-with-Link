@@ -11,9 +11,9 @@ import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 
-import me.mastercapexd.auth.Account;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.vk.ButtonFactory;
 import me.mastercapexd.auth.vk.CommandFactory;
@@ -126,7 +126,7 @@ public class VKReceptioner {
 			if (findedAccount == null) {
 				try {
 					vk.messages().send(actor).randomId(random.nextInt()).userId(userId)
-							.message(config.getVKMessages().getLegacyMessage("not-your-account")).execute();
+							.message(config.getVKSettings().getVKMessages().getMessage("not-your-account")).execute();
 				} catch (ApiException | ClientException e1) {
 					e1.printStackTrace();
 				}

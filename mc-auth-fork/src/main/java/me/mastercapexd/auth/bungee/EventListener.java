@@ -1,13 +1,17 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import me.mastercapexd.auth.Account;
-import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.IdentifierType;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
+import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
+import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.ProxyServer;
@@ -16,7 +20,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -35,25 +38,23 @@ public class EventListener implements Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void on(PreLoginEvent event) {
-		String name = event.getConnection().getName();
+	public void onPostLogin(PostLoginEvent event) {
+		String name = event.getPlayer().getName();
 		if (!config.getNamePattern().matcher(name).matches()) {
-			event.setCancelReason(config.getBungeeMessages().getMessage("illegal-name-chars"));
-			event.setCancelled(true);
+			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("illegal-name-chars"));
 			return;
 		}
 		if (config.getMaxLoginPerIP() != 0
-				&& getOnlineExactIP(event.getConnection().getAddress().getAddress().getHostAddress()) >= config
+				&& getOnlineExactIP(event.getPlayer().getAddress().getAddress().getHostAddress()) >= config
 						.getMaxLoginPerIP()) {
-			event.setCancelReason(config.getBungeeMessages().getMessage("limit-ip-reached"));
-			event.setCancelled(true);
+			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("limit-ip-reached"));
 			return;
 		}
 		if (!config.isNameCaseCheckEnabled())
 			return;
 
 		IdentifierType identifierType = config.getActiveIdentifierType();
-		String id = identifierType == IdentifierType.UUID ? event.getConnection().getUniqueId().toString()
+		String id = identifierType == IdentifierType.UUID ? String.valueOf(event.getPlayer().getUniqueId())
 				: name.toLowerCase();
 
 		accountStorage.getAccount(id).thenAccept(account -> {
@@ -61,29 +62,24 @@ public class EventListener implements Listener {
 				return;
 			if (account.getName().equals(name))
 				return;
-			event.getConnection().disconnect(config.getBungeeMessages().getLegacyMessage("check-name-case-failed")
+			event.getPlayer().disconnect(config.getBungeeMessages().getStringMessage("check-name-case-failed")
 					.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", name));
-			event.setCancelled(true);
 		});
 	}
 
 	@EventHandler
-	public void on(PostLoginEvent event) {
+	public void onServerConnected(PostLoginEvent event) {
 		ProxiedPlayer player = event.getPlayer();
-		String id = config.getActiveIdentifierType().getId(player);
-		startLogin(id, player);
+		startLogin(player);
 	}
 
 	@EventHandler
-	public void on(ChatEvent event) {
+	public void onPlayerChat(ChatEvent event) {
 		if (event.isCancelled())
 			return;
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 		if (!Auth.hasAccount(config.getActiveIdentifierType().getId(player)))
 			return;
-		if (!(event.isCommand() || event.isProxyCommand()))
-			if (config.getCaptchaServers().contains(player.getServer().getInfo()))
-				return;
 
 		String message = event.getMessage();
 		if (!isAllowedCommand(message)) {
@@ -96,7 +92,7 @@ public class EventListener implements Listener {
 	public void onBlockedServerConnect(ServerConnectEvent event) {
 		ProxiedPlayer player = event.getPlayer();
 		String id = config.getActiveIdentifierType().getId(player);
-		if (!(Auth.hasAccount(id) || config.getCaptchaServers().contains(event.getTarget())))
+		if (!(Auth.hasAccount(id)))
 			return;
 		if (!config.getBlockedServers().contains(event.getTarget()))
 			return;
@@ -104,29 +100,15 @@ public class EventListener implements Listener {
 	}
 
 	@EventHandler
-	public void onCaptchaServerConnect(ServerConnectEvent event) {
-		ProxiedPlayer player = event.getPlayer();
-		String id = config.getActiveIdentifierType().getId(player);
-		if (player.getServer() == null)
-			return;
-		ServerInfo serverInfo = player.getServer().getInfo();
-		if (serverInfo == null)
-			return;
-		if (!config.getCaptchaServers().contains(serverInfo))
-			return;
-		startLogin(id, player);
-	}
-
-	@EventHandler
-	public void on(PlayerDisconnectEvent event) {
+	public void onPlayerLeave(PlayerDisconnectEvent event) {
 		String id = config.getActiveIdentifierType().getId(event.getPlayer());
 		if (Auth.hasAccount(id)) {
 			Auth.removeAccount(id);
 			return;
 		}
 
-		if (Auth.hasEntryAccount(id))
-			Auth.removeEntryAccount(id);
+		if (Auth.getLinkEntryAuth().hasLinkUser(entryUser -> entryUser.getAccount().getId().equals(id)))
+			Auth.getLinkEntryAuth().removeLinkUsers(entryUser -> entryUser.getAccount().getId().equals(id));
 
 		accountStorage.getAccount(id).thenAccept(account -> {
 			account.setLastQuitTime(System.currentTimeMillis());
@@ -135,47 +117,74 @@ public class EventListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	private int getOnlineExactIP(String address) {
-		int findedExactIPs = 0;
-		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-			if (p.getPendingConnection().getAddress().getAddress().getHostAddress().equals(address)) {
-				findedExactIPs++;
-			}
-		}
-		return findedExactIPs;
+	private long getOnlineExactIP(String address) {
+		return ProxyServer.getInstance().getPlayers().stream().filter(proxyPlayer -> proxyPlayer.getPendingConnection()
+				.getAddress().getAddress().getHostAddress().equals(address)).count();
 	}
 
-	private void startLogin(String id, ProxiedPlayer player) {
+	@SuppressWarnings("deprecation")
+	private void startLogin(ProxiedPlayer player) {
+		String id = config.getActiveIdentifierType().getId(player);
 		accountStorage.getAccount(id).thenAccept(account -> {
+
+			AuthenticationStepCreator authenticationStepCreator = AuthPlugin.getInstance()
+					.getAuthenticationStepCreatorDealership()
+					.findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(AuthPlugin
+							.getInstance().getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
+					.orElse(new NullAuthenticationStepCreator());
+
 			if (account == null) {
-				@SuppressWarnings("deprecation")
 				Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(),
-						player.getUniqueId(), player.getName(), config.getActiveHashType(), null, null, -1, true, 0,
-						player.getAddress().getHostString(), -1, config.getSessionDurability());
+						player.getUniqueId(), player.getName(), config.getActiveHashType(),
+						AccountFactory.DEFAULT_PASSWORD, AccountFactory.DEFAULT_GOOGLE_KEY,
+						AccountFactory.DEFAULT_VK_ID, AccountFactory.DEFAULT_VK_CONFIRMATION_STATE,
+						AccountFactory.DEFAULT_LAST_QUIT, player.getAddress().getHostString(),
+						AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
+
+				AuthenticationStepContext context = AuthPlugin.getInstance().getAuthenticationContextFactoryDealership()
+						.createContext(authenticationStepCreator.getAuthenticationStepName(), newAccount);
+				newAccount.nextAuthenticationStep(context);
+
 				ServerInfo authServer = config.findServerInfo(config.getAuthServers());
 				Auth.addAccount(newAccount);
 				Connector.connectOrKick(player, authServer,
 						config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
-			} else {
-				if (account.isSessionActive(config.getSessionDurability())) {
-					SessionEnterEvent sessionEvent = new SessionEnterEvent(account);
-					ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
-					if (sessionEvent.isCancelled())
-						return;
-					player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
-					Auth.removeAccount(id);
-				} else {
-					ServerInfo authServer = config.findServerInfo(config.getAuthServers());
-					Auth.addAccount(account);
-					Connector.connectOrKick(player, authServer,
-							config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
-				}
+				return;
 			}
+
+			if (!account.getName().equals(player.getName())) {
+				player.disconnect(config.getBungeeMessages().getStringMessage("check-name-case-failed")
+						.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", player.getName()));
+				return;
+			}
+
+			AuthenticationStepContext context = AuthPlugin.getInstance().getAuthenticationContextFactoryDealership()
+					.createContext(authenticationStepCreator.getAuthenticationStepName(), account);
+
+			if (account.isSessionActive(config.getSessionDurability())) {
+				SessionEnterEvent sessionEvent = new SessionEnterEvent(account);
+				ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
+				if (sessionEvent.isCancelled())
+					return;
+				player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
+				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
+						() -> account.nextAuthenticationStep(context), 10, TimeUnit.MILLISECONDS);
+				return;
+			}
+
+			ServerInfo authServer = config.findServerInfo(config.getAuthServers());
+			Auth.addAccount(account);
+			Connector.connectOrKick(player, authServer,
+					config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
+
+			account.nextAuthenticationStep(context);
+
 		});
 	}
-	
+
 	private boolean isAllowedCommand(String command) {
-		return config.getAllowedCommands().stream().map(s -> Pattern.compile(s)).filter(pattern -> pattern.matcher(command).find()).findAny().orElse(null) !=null;
+		return config.getAllowedCommands().stream().map(s -> Pattern.compile(s))
+				.anyMatch(pattern -> pattern.matcher(command).find());
 	}
 
 }

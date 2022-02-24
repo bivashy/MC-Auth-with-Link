@@ -2,24 +2,23 @@ package me.mastercapexd.auth.bungee;
 
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
-import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.AuthEngine;
-import me.mastercapexd.auth.bungee.command.AuthCommand;
-import me.mastercapexd.auth.bungee.command.ChangePasswordCommand;
-import me.mastercapexd.auth.bungee.command.GoogleCodeCommand;
-import me.mastercapexd.auth.bungee.command.GoogleCommand;
-import me.mastercapexd.auth.bungee.command.GoogleUnlinkCommand;
-import me.mastercapexd.auth.bungee.command.LoginCommand;
-import me.mastercapexd.auth.bungee.command.LogoutCommand;
-import me.mastercapexd.auth.bungee.command.RegisterCommand;
-import me.mastercapexd.auth.bungee.command.VKLinkCommand;
+import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.account.factories.BungeeAccountFactory;
+import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep.RegisterAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.vk.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
+import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.config.BungeePluginConfig;
+import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
+import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.utils.GeoUtils;
-import me.mastercapexd.auth.utils.ListUtils;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
@@ -33,6 +32,8 @@ public class AuthPlugin extends Plugin {
 	private BungeePluginConfig config;
 	private AccountFactory accountFactory;
 	private AccountStorage accountStorage;
+	private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
+	private AuthenticationStepContextFactoryDealership authenticationContextFactoryDealership;
 
 	private VKCommandHandler vkCommandHandler;
 
@@ -40,10 +41,8 @@ public class AuthPlugin extends Plugin {
 
 	private VKReceptioner vkReceptioner;
 
-	private volatile AuthEngine authEngine;
+	private AuthEngine authEngine;
 	private EventListener eventListener;
-
-	private ListUtils listUtils = new ListUtils();
 
 	private GeoUtils geoUtils = new GeoUtils();
 
@@ -54,9 +53,9 @@ public class AuthPlugin extends Plugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		registerAuth();
-		registerListeners();
-		registerCommands();
+		initialize();
+		initializeListener();
+		initializeCommand();
 		if (config.getVKSettings().isEnabled())
 			registerVK();
 		if (config.getGoogleAuthenticatorSettings().isEnabled())
@@ -70,28 +69,30 @@ public class AuthPlugin extends Plugin {
 		return instance;
 	}
 
-	private void registerAuth() {
+	private void initialize() {
 		this.config = new BungeePluginConfig(this);
 		this.accountFactory = new BungeeAccountFactory();
 		this.accountStorage = loadAccountStorage(config.getStorageType());
 		this.authEngine = new BungeeAuthEngine(this, config);
-		authEngine.start();
+		this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
+		this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
+		this.authEngine.start();
+
+		this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());;
+		this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
+		this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
+		this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
+		this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
+
 	}
 
-	private void registerListeners() {
+	private void initializeListener() {
 		this.eventListener = new EventListener(config, accountFactory, accountStorage);
 		this.getProxy().getPluginManager().registerListener(this, eventListener);
 	}
 
-	private void registerCommands() {
-		this.getProxy().getPluginManager().registerCommand(this, new RegisterCommand(config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new LoginCommand(this, config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new LogoutCommand(config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new ChangePasswordCommand(config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new AuthCommand(this, config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new GoogleCodeCommand(this, config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new GoogleCommand(this, config, accountStorage));
-		this.getProxy().getPluginManager().registerCommand(this, new GoogleUnlinkCommand(config, accountStorage));
+	private void initializeCommand() {
+		new BungeeCommandsRegistry();
 	}
 
 	private void registerVK() {
@@ -101,7 +102,8 @@ public class AuthPlugin extends Plugin {
 		this.vkReceptioner = new VKReceptioner(this, config, accountStorage, vkCommandHandler, vkButtonHandler);
 		this.getProxy().getPluginManager().registerListener(this, vkButtonHandler);
 		this.getProxy().getPluginManager().registerListener(this, vkCommandHandler);
-		this.getProxy().getPluginManager().registerCommand(this, new VKLinkCommand(this, config, accountStorage));
+		// this.getProxy().getPluginManager().registerCommand(this, new
+		// VKLinkCommand(this, config, accountStorage));
 		this.config.getVKSettings().getCommands().registerCommands(vkReceptioner);
 	}
 
@@ -113,10 +115,6 @@ public class AuthPlugin extends Plugin {
 			return new MySQLAccountStorage(config, accountFactory);
 		}
 		throw new NullPointerException("Wrong account storage!");
-	}
-
-	public ListUtils getListUtils() {
-		return listUtils;
 	}
 
 	public VKUtils getVKUtils() {
@@ -154,4 +152,13 @@ public class AuthPlugin extends Plugin {
 	public GoogleAuthenticator getGoogleAuthenticator() {
 		return googleAuthenticator;
 	}
+
+	public AuthenticationStepCreatorDealership getAuthenticationStepCreatorDealership() {
+		return authenticationStepCreatorDealership;
+	}
+
+	public AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership() {
+		return authenticationContextFactoryDealership;
+	}
+
 }

@@ -3,7 +3,7 @@ package me.mastercapexd.auth.storage;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-import me.mastercapexd.auth.Account;
+import me.mastercapexd.auth.account.Account;
 
 public interface AccountStorage {
 

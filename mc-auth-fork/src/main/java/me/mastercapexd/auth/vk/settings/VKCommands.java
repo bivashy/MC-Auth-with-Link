@@ -2,11 +2,13 @@ package me.mastercapexd.auth.vk.settings;
 
 import java.util.HashMap;
 
+import com.ubivashka.config.processors.BungeeConfigurationHolder;
+
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import me.mastercapexd.auth.vk.commands.VKCustomCommand;
 import net.md_5.bungee.config.Configuration;
 
-public class VKCommands {
+public class VKCommands extends BungeeConfigurationHolder{
 	private final HashMap<String, VKCustomCommand> commands = new HashMap<>();
 
 	public VKCommands(Configuration section) {

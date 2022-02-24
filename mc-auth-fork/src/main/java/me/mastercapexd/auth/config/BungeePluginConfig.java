@@ -5,21 +5,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
+import com.ubivashka.config.annotations.ConfigField;
+import com.ubivashka.config.annotations.ConverterType;
+import com.ubivashka.config.annotations.ImportantField;
+import com.ubivashka.config.processors.BungeeConfigurationHolder;
 
 import me.mastercapexd.auth.FillType;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
-import me.mastercapexd.auth.Messages;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.config.converters.MessageFieldConverter;
+import me.mastercapexd.auth.config.converters.RegexPatternConverter;
+import me.mastercapexd.auth.config.converters.ServerConverter;
+import me.mastercapexd.auth.config.converters.StringTimeConverter;
+import me.mastercapexd.auth.config.messages.bungee.BungeeMessages;
 import me.mastercapexd.auth.objects.Server;
 import me.mastercapexd.auth.objects.StorageDataSettings;
 import me.mastercapexd.auth.storage.StorageType;
-import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.utils.bossbar.BossBarSettings;
 import me.mastercapexd.auth.vk.settings.VKSettings;
 import net.md_5.bungee.api.ProxyServer;
@@ -29,92 +37,86 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-public class BungeePluginConfig implements PluginConfig {
+public class BungeePluginConfig extends BungeeConfigurationHolder implements PluginConfig {
 
-	private final IdentifierType activeIdentifierType;
-	private final boolean nameCaseCheckEnabled, passwordConfirmationEnabled;
-	private final HashType activeHashType;
-	private final StorageType storageType;
-	private final Pattern namePattern, passwordPattern;
-	private final int passwordMinLength, passwordMaxLength, passwordAttempts;
-	private final long sessionDurability, authTime;
+	static {
+		BungeeConfigurationHolder.getContextProcessorsDealership().put("regex", new RegexPatternConverter());
+		BungeeConfigurationHolder.getContextProcessorsDealership().put("time-parser", new StringTimeConverter());
+		BungeeConfigurationHolder.getContextProcessorsDealership().put("message-field", new MessageFieldConverter());
+		BungeeConfigurationHolder.getContextProcessorsDealership().put("server", new ServerConverter());
+	}
 
-	private final List<Server> authServers, gameServers;
+	@ConfigField(path = "id-type")
+	private IdentifierType activeIdentifierType = IdentifierType.NAME;
+	@ConfigField(path = "check-name-case")
+	private Boolean nameCaseCheckEnabled = true;
+	@ConfigField(path = "enable-password-confirm")
+	private Boolean passwordConfirmationEnabled = false;
+	@ConfigField(path = "hash-type")
+	private HashType activeHashType = HashType.SHA256;
+	@ConfigField(path = "storage-type")
+	private StorageType storageType = StorageType.SQLITE;
+	@ConfigField(path = "name-regex-pattern")
+	private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
+	@ConfigField(path = "password-regex-pattern")
+	private Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9_$#@^-]*");
+	@ConfigField(path = "password-min-length")
+	private Integer passwordMinLength = 5;
+	@ConfigField(path = "password-max-length")
+	private Integer passwordMaxLength = 20;
+	@ConfigField(path = "password-attempts")
+	private Integer passwordAttempts = 3;
+	@ConfigField(path = "auth-time")
+	private Long authTime = 60L;
 
-	private final List<String> blockedServers, captchaServers;
+	@ImportantField
+	@ConfigField(path = "auth-servers")
+	private List<Server> authServers = null;
+	@ImportantField
+	@ConfigField(path = "game-servers")
+	private List<Server> gameServers = null;
+	@ConfigField(path = "blocked-servers")
+	private List<String> blockedServers = new ArrayList<>();
+	@ConfigField(path = "allowed-commands")
+	private List<String> allowedCommands = new ArrayList<>();
+	@ImportantField
+	@ConfigField(path = "data")
+	private StorageDataSettings storageDataSettings = null;
+	@ConfigField(path = "max-login-per-ip")
+	private Integer maxLoginPerIP = 0;
+	@ConfigField(path = "messages-delay")
+	private Integer messagesDelay = 5;
+	@ConfigField(path = "vk")
+	private VKSettings vkSettings = new VKSettings();
+	@ConfigField(path = "google-authenticator")
+	private GoogleAuthenticatorSettings googleAuthenticatorSettings = null;
+	@ImportantField
+	@ConfigField(path = "messages")
+	private BungeeMessages bungeeMessages = null;
+	@ConfigField(path = "boss-bar")
+	private BossBarSettings barSettings = null;
+	@ConfigField(path = "fill-type")
+	private FillType fillType;
+	@ConverterType("time-parser")
+	@ConfigField(path = "session-durability")
+	private Long sessionDurability = 14400L;
+	@ConfigField(path = "authentication-steps")
+	private List<String> authenticationSteps = new ArrayList<>(
+			Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
 
-	private final List<String> allowedCommands;
-
-	private final StorageDataSettings storageDataSettings;
-	private final int maxLoginPerIP, maxVKLink, messagesDelay;
-	private final VKSettings vkSettings;
-	private final GoogleAuthenticatorSettings googleAuthenticatorSettings;
-
-	private final Messages bungeeMessages, vkMessages;
-
-	private final VKButtonLabels vkButtonLabels;
-
-	private final BossBarSettings barSettings;
-
-	private final FillType fillType;
-
-	private final Configuration config;
+	private final Plugin plugin;
+	private Configuration config;
 
 	public BungeePluginConfig(Plugin plugin) {
+		this.plugin = plugin;
+
 		config = loadConfiguration(plugin.getDataFolder(), plugin.getResourceAsStream("config.yml"));
-		this.activeIdentifierType = IdentifierType.valueOf(config.getString("id-type").toUpperCase());
-		this.nameCaseCheckEnabled = config.getBoolean("check-name-case");
-		this.passwordConfirmationEnabled = config.getBoolean("enable-password-confirm");
-		this.activeHashType = HashType.valueOf(config.getString("hash-type").toUpperCase());
-		this.storageType = StorageType.valueOf(config.getString("storage-type").toUpperCase());
-		this.namePattern = Pattern.compile(config.getString("name-regex-pattern"));
-		this.passwordPattern = Pattern.compile(config.getString("password-regex-pattern"));
-		this.passwordMinLength = config.getInt("password-min-length");
-		this.passwordMaxLength = config.getInt("password-max-length");
-		this.passwordAttempts = config.getInt("password-attempts");
-		this.sessionDurability = TimeUtils.parseTime(config.getString("session-durability"));
-		this.authTime = config.getLong("auth-time");
-
-		this.allowedCommands = config.getStringList("allowed-commands");
-
-		this.authServers = ImmutableList.copyOf(config.getStringList("auth-servers").stream()
-				.map(stringFormat -> new Server(stringFormat)).collect(Collectors.toList()));
-		this.gameServers = ImmutableList.copyOf(config.getStringList("game-servers").stream()
-				.map(stringFormat -> new Server(stringFormat)).collect(Collectors.toList()));
-
-		this.blockedServers = ImmutableList.copyOf(config.getStringList("blocked-servers"));
-		this.captchaServers = ImmutableList.copyOf(config.getStringList("captcha-servers"));
-
-		Configuration data = config.getSection("data");
-		this.storageDataSettings = new StorageDataSettings(data.getString("host"), data.getString("database"),
-				data.getString("username"), data.getString("password"), data.getInt("port"));
-
-		this.maxLoginPerIP = config.getInt("max-login-per-ip");
-		this.maxVKLink = config.getInt("max-vk-link");
-		this.messagesDelay = config.getInt("messages-delay");
-
-		Configuration vk = config.getSection("vk");
-		this.vkSettings = new VKSettings(vk.getBoolean("enabled"), vk);
-
-		Configuration googleAuthenticatorConfiguration = config.getSection("google-authenticator");
-		this.googleAuthenticatorSettings = new GoogleAuthenticatorSettings(googleAuthenticatorConfiguration);
-
-		this.bungeeMessages = new BungeeMessages(config.getSection("messages"));
-		if (vkSettings.isEnabled()) {
-			this.vkMessages = new VKMessages(vk.getSection("vkmessages"));
-		} else {
-			this.vkMessages = null;
-		}
-		this.vkButtonLabels = new VKButtonLabels(vk.getSection("button-labels"));
-
-		this.barSettings = new BossBarSettings(config.getSection("boss-bar"), bungeeMessages);
-
-		this.fillType = FillType.valueOf(config.getString("fill-type"));
+		init(config);
 	}
 
 	@Override
 	public ServerInfo findServerInfo(List<Server> servers) {
-		fillType.shuffle(servers);
+		servers = fillType.shuffle(servers);
 		ServerInfo optimal = null;
 		for (Server server : servers) {
 			ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server.getId());
@@ -126,6 +128,12 @@ public class BungeePluginConfig implements PluginConfig {
 			break;
 		}
 		return optimal;
+	}
+
+	@Override
+	public void reload() {
+		config = loadConfiguration(plugin.getDataFolder(), plugin.getResourceAsStream("config.yml"));
+		init(config);
 	}
 
 	private Configuration loadConfiguration(File folder, InputStream resourceAsStream) {
@@ -210,19 +218,13 @@ public class BungeePluginConfig implements PluginConfig {
 
 	@Override
 	public List<Server> getGameServers() {
-		return gameServers;
+		return Collections.unmodifiableList(gameServers);
 	}
 
 	@Override
 	public List<ServerInfo> getBlockedServers() {
-		return blockedServers.stream().map(serverId -> ProxyServer.getInstance().getServerInfo(serverId))
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<ServerInfo> getCaptchaServers() {
-		return captchaServers.stream().map(serverId -> ProxyServer.getInstance().getServerInfo(serverId))
-				.collect(Collectors.toList());
+		return Collections.unmodifiableList(blockedServers.stream()
+				.map(serverId -> ProxyServer.getInstance().getServerInfo(serverId)).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -236,18 +238,8 @@ public class BungeePluginConfig implements PluginConfig {
 	}
 
 	@Override
-	public VKMessages getVKMessages() {
-		return (VKMessages) vkMessages;
-	}
-
-	@Override
 	public VKSettings getVKSettings() {
 		return vkSettings;
-	}
-
-	@Override
-	public VKButtonLabels getVKButtonLabels() {
-		return vkButtonLabels;
 	}
 
 	public Configuration getConfig() {
@@ -257,11 +249,6 @@ public class BungeePluginConfig implements PluginConfig {
 	@Override
 	public int getMaxLoginPerIP() {
 		return maxLoginPerIP;
-	}
-
-	@Override
-	public int getMaxVKLink() {
-		return maxVKLink;
 	}
 
 	@Override
@@ -281,7 +268,19 @@ public class BungeePluginConfig implements PluginConfig {
 
 	@Override
 	public List<String> getAllowedCommands() {
-		return allowedCommands;
+		return Collections.unmodifiableList(allowedCommands);
+	}
+
+	@Override
+	public List<String> getAuthenticationSteps() {
+		return Collections.unmodifiableList(authenticationSteps);
+	}
+
+	@Override
+	public String getAuthenticationStepName(int index) {
+		return index >= 0 && index < authenticationSteps.size()
+				? authenticationSteps.get(index)
+				: "NULL";
 	}
 
 }

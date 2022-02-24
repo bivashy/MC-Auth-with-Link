@@ -1,24 +1,20 @@
 package me.mastercapexd.auth.bungee.events;
 
-import me.mastercapexd.auth.Account;
-import net.md_5.bungee.api.plugin.Event;
+import me.mastercapexd.auth.account.Account;
 
-public class LoginEvent extends Event implements Cancellable {
-	private final Account account;
+/** Deprecated LoginEvent. Use NewAuthenticationStepEvent for this purpose **/
+@Deprecated
+public class LoginEvent extends AccountEvent implements Cancellable {
 	private boolean isForced = false;
 	private boolean isCancelled = false;
 
 	public LoginEvent(Account account) {
-		this.account = account;
+		super(account);
 	}
 
 	public LoginEvent(Account account, boolean isForced) {
-		this.account = account;
+		super(account);
 		this.isForced = isForced;
-	}
-
-	public Account getAccount() {
-		return account;
 	}
 
 	public boolean isForced() {

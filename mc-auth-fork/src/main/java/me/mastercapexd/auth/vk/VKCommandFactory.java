@@ -9,7 +9,7 @@ import me.mastercapexd.auth.vk.settings.VKCommandSettings;
 import me.mastercapexd.auth.vk.settings.VKMainCommands;
 
 public interface VKCommandFactory {
-	public VKCommand createCommand(String commandName, VKCommandExecutor executor, List<String> aliases,
+	VKCommand createCommand(String commandName, VKCommandExecutor executor, List<String> aliases,
 			boolean isRegex);
 
 	default VKCommand createCommand(String commandName, VKCommandExecutor executor, boolean isRegex) {

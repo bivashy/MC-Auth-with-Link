@@ -8,6 +8,8 @@ import com.ubivashka.vk.callback.objects.CallbackButtonEvent;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 
+import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
@@ -23,12 +25,13 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 		if (!receptioner.getConfig().getVKSettings().getEnterSettings().canToggleEnterConfirmation())
 			return;
 		receptioner.getAccountStorage().getAccount(id).thenAccept(account -> {
-			account.setVkConfirmationEnabled(!account.isVKConfirmationEnabled());
+			LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
+			linkUser.getLinkUserInfo().setConfirmationEnabled(!linkUser.getLinkUserInfo().isConfirmationEnabled());
 			CallbackButtonEvent buttonEvent = e.getButtonEvent();
 			Map<String, String> myMap = new HashMap<String, String>();
 			myMap.put("type", "show_snackbar");
-			if (account.isVKConfirmationEnabled()) {
-				myMap.put("text", receptioner.getConfig().getVKMessages().getLegacyMessage("enter-enabled"));
+			if (linkUser.getLinkUserInfo().isConfirmationEnabled()) {
+				myMap.put("text", receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-enabled"));
 				String json = GSON.toJson(myMap);
 				try {
 					VK.messages().sendMessageEventAnswer(ACTOR, buttonEvent.getEventID(), buttonEvent.getUserID(),
@@ -37,7 +40,7 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 					e1.printStackTrace();
 				}
 			} else {
-				myMap.put("text", receptioner.getConfig().getVKMessages().getLegacyMessage("enter-disabled"));
+				myMap.put("text", receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-disabled"));
 				String json = GSON.toJson(myMap);
 				try {
 					VK.messages().sendMessageEventAnswer(ACTOR, buttonEvent.getEventID(), buttonEvent.getUserID(),

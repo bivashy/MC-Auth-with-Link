@@ -2,28 +2,39 @@ package me.mastercapexd.auth.vk.settings;
 
 import java.util.List;
 
+import com.ubivashka.config.annotations.ConfigField;
+import com.ubivashka.config.processors.BungeeConfigurationHolder;
+
+import me.mastercapexd.auth.config.VKButtonLabels;
+import me.mastercapexd.auth.config.messages.vk.VKMessages;
 import net.md_5.bungee.config.Configuration;
 
-public class VKSettings {
-	private final boolean enabled;
-	private VKConfirmationSettings confirmationSettings;
-	private VKRestoreSettings restoreSettings;
-	private VKEnterSettings enterSettings;
-	private VKMainCommands mainCommands;
-	private VKCommands commands;
-	private List<Integer> adminAccounts;
-
-	public VKSettings(boolean enabled, Configuration section) {
-		this.enabled = enabled;
-		if (!enabled)
-			return;
-
-		this.confirmationSettings = new VKConfirmationSettings(section.getSection("confirmation"));
-		this.restoreSettings = new VKRestoreSettings(section.getSection("restore"));
-		this.enterSettings = new VKEnterSettings(section.getSection("enter"));
-		this.commands = new VKCommands(section.getSection("commands"));
-		this.mainCommands = new VKMainCommands(section.getSection("vk-commands"));
-		this.adminAccounts = section.getIntList("admin-accounts");
+public class VKSettings extends BungeeConfigurationHolder {
+	@ConfigField
+	private boolean enabled = false;
+	@ConfigField(path = "confirmation")
+	private VKConfirmationSettings confirmationSettings = null;
+	@ConfigField(path = "restore")
+	private VKRestoreSettings restoreSettings  = null;
+	@ConfigField(path = "enter")
+	private VKEnterSettings enterSettings = null;
+	@ConfigField(path = "vk-commands")
+	private VKMainCommands mainCommands = null;
+	@ConfigField(path = "commands")
+	private VKCommands commands = null;
+	@ConfigField(path = "max-vk-link")
+	private Integer maxVkLinkCount = 0;
+	@ConfigField(path = "vkmessages")
+	private VKMessages messages = null;
+	@ConfigField(path = "button-labels")
+	private VKButtonLabels buttonLabels = null;
+	@ConfigField(path = "admin-accounts")
+	private List<Integer> adminAccounts = null;
+	public VKSettings() {
+	}
+	
+	public VKSettings(Configuration section) {
+		init(section);
 	}
 
 	public boolean isEnabled() {
@@ -56,4 +67,15 @@ public class VKSettings {
 		return mainCommands;
 	}
 
+	public int getMaxLinkCount() {
+		return maxVkLinkCount;
+	}
+
+	public VKMessages getVKMessages() {
+		return messages;
+	}
+
+	public VKButtonLabels getVKButtonLabels() {
+		return buttonLabels;
+	}
 }

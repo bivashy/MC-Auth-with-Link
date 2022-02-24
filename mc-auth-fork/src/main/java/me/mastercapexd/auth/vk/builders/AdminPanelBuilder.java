@@ -8,28 +8,26 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
-import me.mastercapexd.auth.PluginConfig;
-import me.mastercapexd.auth.utils.ListUtils;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.utils.CollectionUtils;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import me.mastercapexd.auth.vk.utils.VKUtils;
 
 public class AdminPanelBuilder extends MessageBuilder {
 	private final Integer userId;
 	private final VKUtils vkUtils;
-	private final ListUtils listUtils;
 	private final PluginConfig config;
 
 	public AdminPanelBuilder(Integer userId, VKReceptioner receptioner) {
 		this.userId = userId;
 		this.vkUtils = receptioner.getPlugin().getVKUtils();
-		this.listUtils = receptioner.getPlugin().getListUtils();
 		this.config = receptioner.getConfig();
 	}
 
 	@Override
 	public MessagesSendQuery build() {
 		MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt()).userId(userId);
-		sendQuery.keyboard(buildKeyboard()).message(config.getVKMessages().getLegacyMessage("admin-panel"));
+		sendQuery.keyboard(buildKeyboard()).message(config.getVKSettings().getVKMessages().getMessage("admin-panel"));
 		return sendQuery;
 	}
 
@@ -39,7 +37,7 @@ public class AdminPanelBuilder extends MessageBuilder {
 		List<KeyboardButton> buttons = new ArrayList<>();
 		buttons.add(createAllAccountsButton());
 		buttons.add(createAllLinkedAccountsButton());
-		keyboard.setButtons(listUtils.chopList(buttons, 3));
+		keyboard.setButtons(CollectionUtils.chopList(buttons, 3));
 		return keyboard;
 	}
 

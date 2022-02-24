@@ -1,25 +1,24 @@
 package me.mastercapexd.auth.utils.bossbar;
 
-import me.mastercapexd.auth.Messages;
+import com.ubivashka.config.annotations.ConfigField;
+import com.ubivashka.config.annotations.ConverterType;
+import com.ubivashka.config.processors.BungeeConfigurationHolder;
+
 import net.md_5.bungee.config.Configuration;
 
-public class BossBarSettings {
-	private final boolean enabled;
-	private final BarColor barColor;
-	private final BarStyle barStyle;
-	private final String barText;
+public class BossBarSettings extends BungeeConfigurationHolder{
+	@ConfigField(path = "use")
+	private Boolean enabled = false;
+	@ConfigField(path = "bar-color")
+	private BarColor barColor = null;
+	@ConfigField(path = "bar-style")
+	private BarStyle barStyle = null;
+	@ConfigField(path = "bar-text")
+	@ConverterType("message-field")
+	private String barText = null;
 
-	public BossBarSettings(Configuration config,Messages messages) {
-		enabled = config.getBoolean("use");
-		if (!enabled) {
-			barColor = null;
-			barStyle = null;
-			barText = null;
-			return;
-		}
-		barColor = BarColor.valueOf(config.getString("bar-color"));
-		barStyle = BarStyle.valueOf(config.getString("bar-style"));
-		barText = messages.colorMessage(config.getString("bar-text"));
+	public BossBarSettings(Configuration config) {
+		init(config);
 	}
 
 	public boolean isEnabled() {
@@ -32,3 +31,4 @@ public class BossBarSettings {
 		return new BossBar(barText, barColor, barStyle);
 	}
 }
+

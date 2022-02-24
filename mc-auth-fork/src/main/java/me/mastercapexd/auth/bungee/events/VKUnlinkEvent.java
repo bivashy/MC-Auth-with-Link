@@ -1,24 +1,18 @@
 package me.mastercapexd.auth.bungee.events;
 
-import me.mastercapexd.auth.Account;
-import net.md_5.bungee.api.plugin.Event;
+import me.mastercapexd.auth.account.Account;
 
-public class VKUnlinkEvent extends Event implements Cancellable {
+public class VKUnlinkEvent extends AccountEvent implements Cancellable {
 	private final Integer userId;
-	private final Account unlinkedAccount;
 	private boolean isCancelled = false;
 
 	public VKUnlinkEvent(Integer userId, Account unlinkedAccount) {
+		super(unlinkedAccount);
 		this.userId = userId;
-		this.unlinkedAccount = unlinkedAccount;
 	}
 
 	public Integer getUserId() {
 		return userId;
-	}
-
-	public Account getUnLinkedAccount() {
-		return unlinkedAccount;
 	}
 
 	@Override

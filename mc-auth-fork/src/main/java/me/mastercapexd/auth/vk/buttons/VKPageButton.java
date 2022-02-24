@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
 
-import me.mastercapexd.auth.Account;
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.vk.VKAccountsPageType;
 import me.mastercapexd.auth.vk.builders.AccountsMessageBuilder;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonExecutor;

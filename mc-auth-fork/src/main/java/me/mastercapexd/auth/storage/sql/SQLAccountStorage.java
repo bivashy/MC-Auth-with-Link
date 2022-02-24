@@ -15,15 +15,29 @@ import java.util.concurrent.Executors;
 
 import com.google.common.collect.Sets;
 
-import me.mastercapexd.auth.Account;
-import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageColumn;
 
 public abstract class SQLAccountStorage implements AccountStorage {
+	private static final String ACCOUNT_ID_COLUMN_KEY = "id";
+	private static final String ID_TYPE_COLUMN_KEY = "id_type";
+	private static final String UNIQUE_ID_COLUMN_KEY = "uuid";
+	private static final String NICKNAME_COLUMN_KEY = "name";
+	private static final String HASH_TYPE_COLUMN_KEY = "hash_type";
+	private static final String PASSWORD_COLUMN_KEY = "password";
+	private static final String GOOGLE_KEY_COLUMN_KEY = "google_key";
+	private static final String VK_ID_COLUMN_KEY = "vkId";
+	private static final String VK_CONFIRMATION_ENABLED_COLUMN_KEY = "vk_confirm_enabled";
+	private static final String LAST_QUIT_COLUMN_KEY = "last_quit";
+	private static final String LAST_IP_COLUMN_KEY = "last_ip";
+	private static final String LAST_SESSION_START_COLUMN_KEY = "last_session_start";
 
 	private final PluginConfig config;
 	private final AccountFactory accountFactory;
@@ -33,22 +47,22 @@ public abstract class SQLAccountStorage implements AccountStorage {
 
 	private final List<StorageColumn> createColumns = new ArrayList<>();
 
-	protected SQLAccountStorage(PluginConfig config, AccountFactory accountFactory, String cREATE_TABLE,
-			String sELECT_BY_ID, String sELECT_BY_VKID, String sELECT_BY_LAST_QUIT_ORDERED, String sELECT_VKIDs,
-			String sELECT_ALL, String sELECT_ALL_LINKED, String uPDATE_ID, String dELETE) {
+	protected SQLAccountStorage(PluginConfig config, AccountFactory accountFactory, String CREATE_TABLE,
+			String SELECT_BY_ID, String SELECT_BY_VKID, String SELECT_BY_LAST_QUIT_ORDERED, String SELECT_VKIDs,
+			String SELECT_ALL, String SELECT_ALL_LINKED, String UPDATE_ID, String DELETE) {
 		this.config = config;
 		this.accountFactory = accountFactory;
-		CREATE_TABLE = cREATE_TABLE;
-		SELECT_BY_ID = sELECT_BY_ID;
-		SELECT_BY_VKID = sELECT_BY_VKID;
-		SELECT_BY_LAST_QUIT_ORDERED = sELECT_BY_LAST_QUIT_ORDERED;
-		SELECT_VKIDs = sELECT_VKIDs;
-		SELECT_ALL = sELECT_ALL;
-		SELECT_ALL_LINKED = sELECT_ALL_LINKED;
-		UPDATE_ID = uPDATE_ID;
-		DELETE = dELETE;
-		createColumns.add(new StorageColumn("google_key", "VARCHAR(64)"));
-		createColumns.add(new StorageColumn("vk_confirm_enabled", "VARCHAR(5)"));
+		this.CREATE_TABLE = CREATE_TABLE;
+		this.SELECT_BY_ID = SELECT_BY_ID;
+		this.SELECT_BY_VKID = SELECT_BY_VKID;
+		this.SELECT_BY_LAST_QUIT_ORDERED = SELECT_BY_LAST_QUIT_ORDERED;
+		this.SELECT_VKIDs = SELECT_VKIDs;
+		this.SELECT_ALL = SELECT_ALL;
+		this.SELECT_ALL_LINKED = SELECT_ALL_LINKED;
+		this.UPDATE_ID = UPDATE_ID;
+		this.DELETE = DELETE;
+		createColumns.add(new StorageColumn(GOOGLE_KEY_COLUMN_KEY, "VARCHAR(64)"));
+		createColumns.add(new StorageColumn(VK_CONFIRMATION_ENABLED_COLUMN_KEY, "VARCHAR(5)"));
 	}
 
 	protected abstract Connection getConnection() throws SQLException;
@@ -75,14 +89,19 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	protected void updateAccount(Account account) {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(UPDATE_ID);
+
+			LinkUserInfo vkLinkInfo = account
+					.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
+					.getLinkUserInfo();
+
 			statement.setString(1, account.getIdentifierType() == IdentifierType.NAME ? account.getId().toLowerCase()
 					: account.getId());
 			statement.setString(2, account.getUniqueId().toString());
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
 			statement.setString(5, account.getGoogleKey());
-			statement.setInt(6, account.getVKId());
-			statement.setString(7, String.valueOf(account.isVKConfirmationEnabled()));
+			statement.setInt(6, vkLinkInfo.getLinkUserId());
+			statement.setString(7, String.valueOf(vkLinkInfo.isConfirmationEnabled()));
 			statement.setLong(8, account.getLastQuitTime());
 			statement.setString(9, account.getLastIpAddress());
 			statement.setLong(10, account.getLastSessionStart());
@@ -101,12 +120,13 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setString(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				account = accountFactory.createAccount(id, IdentifierType.valueOf(resultSet.getString("id_type")),
-						UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
-						HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-						resultSet.getString("google_key"), resultSet.getInt("vkId"),
-						Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
-						resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+				account = accountFactory.createAccount(id,
+						IdentifierType.valueOf(resultSet.getString(ID_TYPE_COLUMN_KEY)),
+						UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)), resultSet.getString(NICKNAME_COLUMN_KEY),
+						HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
+						resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
+						Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
+						resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
 						config.getSessionDurability());
 			}
 		} catch (SQLException e) {
@@ -122,13 +142,13 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				Account account = accountFactory.createAccount(resultSet.getString("id"),
-						IdentifierType.valueOf(resultSet.getString("id_type")),
-						UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
-						HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-						resultSet.getString("google_key"), resultSet.getInt("vkId"),
-						Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
-						resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+				Account account = accountFactory.createAccount(resultSet.getString(ACCOUNT_ID_COLUMN_KEY),
+						IdentifierType.valueOf(resultSet.getString(ID_TYPE_COLUMN_KEY)),
+						UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)), resultSet.getString(NICKNAME_COLUMN_KEY),
+						HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
+						resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
+						Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
+						resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
 						config.getSessionDurability());
 				accounts.add(account);
 			}
@@ -164,13 +184,13 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				statement.setInt(1, limit);
 				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()) {
-					Account account = accountFactory.createAccount(resultSet.getString("id"),
-							IdentifierType.valueOf(resultSet.getString("id_type")),
-							UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
-							HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-							resultSet.getString("google_key"), resultSet.getInt("vkId"),
-							Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
-							resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+					Account account = accountFactory.createAccount(resultSet.getString(ACCOUNT_ID_COLUMN_KEY),
+							IdentifierType.valueOf(resultSet.getString(ID_TYPE_COLUMN_KEY)),
+							UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)), resultSet.getString(NICKNAME_COLUMN_KEY),
+							HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
+							resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
+							Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
+							resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
 							config.getSessionDurability());
 					accounts.add(account);
 				}
@@ -189,13 +209,13 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SELECT_ALL);
 				while (resultSet.next()) {
-					Account account = accountFactory.createAccount(resultSet.getString("id"),
-							IdentifierType.valueOf(resultSet.getString("id_type")),
-							UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
-							HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-							resultSet.getString("google_key"), resultSet.getInt("vkId"),
-							Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
-							resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+					Account account = accountFactory.createAccount(resultSet.getString(ACCOUNT_ID_COLUMN_KEY),
+							IdentifierType.valueOf(resultSet.getString(ID_TYPE_COLUMN_KEY)),
+							UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)), resultSet.getString(NICKNAME_COLUMN_KEY),
+							HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
+							resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
+							Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
+							resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
 							config.getSessionDurability());
 					accounts.add(account);
 				}
@@ -211,16 +231,17 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		return CompletableFuture.supplyAsync(() -> {
 			Collection<Account> accounts = Sets.newHashSet();
 			try (Connection connection = this.getConnection()) {
-				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery(SELECT_ALL_LINKED);
+				PreparedStatement statement = connection.prepareStatement(SELECT_ALL_LINKED);
+				statement.setInt(0, AccountFactory.DEFAULT_VK_ID);
+				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()) {
-					Account account = accountFactory.createAccount(resultSet.getString("id"),
-							IdentifierType.valueOf(resultSet.getString("id_type")),
-							UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"),
-							HashType.valueOf(resultSet.getString("hash_type")), resultSet.getString("password"),
-							resultSet.getString("google_key"), resultSet.getInt("vkId"),
-							Boolean.valueOf(resultSet.getString("vk_confirm_enabled")), resultSet.getLong("last_quit"),
-							resultSet.getString("last_ip"), resultSet.getLong("last_session_start"),
+					Account account = accountFactory.createAccount(resultSet.getString(ACCOUNT_ID_COLUMN_KEY),
+							IdentifierType.valueOf(resultSet.getString(ID_TYPE_COLUMN_KEY)),
+							UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)), resultSet.getString(NICKNAME_COLUMN_KEY),
+							HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
+							resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
+							Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
+							resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
 							config.getSessionDurability());
 					accounts.add(account);
 				}
@@ -239,8 +260,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SELECT_VKIDs);
 				while (resultSet.next()) {
-					Integer vkId = resultSet.getInt("vkId");
-					if (vkId == null || vkId == -1)
+					Integer vkId = resultSet.getInt(VK_ID_COLUMN_KEY);
+					if (vkId == null || vkId == AccountFactory.DEFAULT_VK_ID)
 						continue;
 					vkIDs.add(vkId);
 				}

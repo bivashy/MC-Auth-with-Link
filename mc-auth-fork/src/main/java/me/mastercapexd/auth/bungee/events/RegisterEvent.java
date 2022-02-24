@@ -1,18 +1,12 @@
 package me.mastercapexd.auth.bungee.events;
 
-import me.mastercapexd.auth.Account;
-import net.md_5.bungee.api.plugin.Event;
+import me.mastercapexd.auth.account.Account;
 
-public class RegisterEvent extends Event implements Cancellable{
-	private final Account account;
+public class RegisterEvent extends AccountEvent implements Cancellable {
 	private boolean isCancelled = false;
 
 	public RegisterEvent(Account account) {
-		this.account = account;
-	}
-
-	public Account getAccount() {
-		return account;
+		super(account);
 	}
 
 	@Override

@@ -8,42 +8,43 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
-import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.bungee.events.EntryConfirmationStartEvent;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
+import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.objects.IPInfoResponse;
 import me.mastercapexd.auth.utils.GeoUtils;
-import me.mastercapexd.auth.utils.ListUtils;
-import me.mastercapexd.auth.vk.accounts.VKEntryAccount;
+import me.mastercapexd.auth.utils.CollectionUtils;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import me.mastercapexd.auth.vk.utils.VKUtils;
 import net.md_5.bungee.api.ProxyServer;
 
 public class ConfirmationMessageBuilder extends MessageBuilder {
-	private final VKEntryAccount entryAccount;
-	private final ListUtils listUtils;
+	private final LinkEntryUser linkEntryUser;
 	private final PluginConfig config;
 	private final GeoUtils geoUtils;
 	private final VKUtils vkUtils;
 
-	public ConfirmationMessageBuilder(VKEntryAccount entryAccount, VKReceptioner receptioner) {
-		this.entryAccount = entryAccount;
+	public ConfirmationMessageBuilder(LinkEntryUser linkEntryUser, VKReceptioner receptioner) {
+		this.linkEntryUser = linkEntryUser;
 		this.vkUtils = receptioner.getPlugin().getVKUtils();
 		this.geoUtils = receptioner.getPlugin().getGeoUtils();
-		this.listUtils = receptioner.getPlugin().getListUtils();
 		this.config = receptioner.getConfig();
-		EntryConfirmationStartEvent confirmationStartEvent = new EntryConfirmationStartEvent(entryAccount.getVkId(),
-				entryAccount.getAccount());
+		EntryConfirmationStartEvent confirmationStartEvent = new EntryConfirmationStartEvent(
+				linkEntryUser.getLinkUserInfo().getLinkUserId(), linkEntryUser.getAccount());
 		ProxyServer.getInstance().getPluginManager().callEvent(confirmationStartEvent);
 	}
 
 	@Override
 	public MessagesSendQuery build() {
 		MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt())
-				.userId(entryAccount.getVkId());
+				.userId(linkEntryUser.getLinkUserInfo().getLinkUserId());
 		sendQuery.keyboard(createKeyboard());
-		IPInfoResponse ipInfoAnswer = geoUtils.getIPInfo(entryAccount.getAccount().getLastIpAddress());
-		sendQuery.message(
-				ipInfoAnswer.setInfo(config.getVKMessages().getMessage("enter-message",entryAccount.getVkId(), entryAccount.getAccount())));
+		IPInfoResponse ipInfoAnswer = geoUtils.getIPInfo(linkEntryUser.getAccount().getLastIpAddress());
+
+		VKMessageContext messageContext = VKMessageContext.newContext(linkEntryUser.getLinkUserInfo().getLinkUserId(),
+				linkEntryUser.getAccount());
+		sendQuery.message(ipInfoAnswer.setInfo(config.getVKSettings().getVKMessages().getMessage("enter-message", messageContext)));
 		return sendQuery;
 	}
 
@@ -53,18 +54,18 @@ public class ConfirmationMessageBuilder extends MessageBuilder {
 		List<KeyboardButton> buttons = new ArrayList<>();
 		buttons.add(createConfirmButton());
 		buttons.add(createDeclineButton());
-		enterKeyboard.setButtons(listUtils.chopList(buttons, 2));
+		enterKeyboard.setButtons(CollectionUtils.chopList(buttons, 2));
 		return enterKeyboard;
 	}
 
 	private KeyboardButton createConfirmButton() {
-		return vkUtils.buildCallbackButton("enter-confirm", entryAccount.getAccount(),
-				"enterserver_confirm_" + entryAccount.getButtonUuid(), KeyboardButtonColor.POSITIVE);
+		return vkUtils.buildCallbackButton("enter-confirm", linkEntryUser.getAccount(), "enterserver_confirm",
+				KeyboardButtonColor.POSITIVE);
 	}
 
 	private KeyboardButton createDeclineButton() {
-		return vkUtils.buildCallbackButton("enter-decline", entryAccount.getAccount(),
-				"enterserver_decline_" + entryAccount.getButtonUuid(), KeyboardButtonColor.NEGATIVE);
+		return vkUtils.buildCallbackButton("enter-decline", linkEntryUser.getAccount(), "enterserver_decline",
+				KeyboardButtonColor.NEGATIVE);
 	}
 
 }

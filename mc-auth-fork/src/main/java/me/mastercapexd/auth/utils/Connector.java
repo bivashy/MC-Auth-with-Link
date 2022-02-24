@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.utils;
 
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
-import me.mastercapexd.auth.bungee.AuthPlugin;
-import net.md_5.bungee.api.Callback;
-import net.md_5.bungee.api.ServerPing;
+import me.mastercapexd.auth.bungee.events.PlayerPreConnectServerEvent;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -12,38 +12,24 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class Connector {
 
 	public static void connectOrKick(ProxiedPlayer player, ServerInfo serverInfo, BaseComponent[] error) {
-		connect(player, serverInfo, error, p -> p.disconnect(error), null);
+		connect(player, serverInfo, p -> p.disconnect(error), null);
 	}
 
-	public static void connect(ProxiedPlayer player, ServerInfo serverInfo, BaseComponent[] error,
+	public static void connect(ProxiedPlayer player, ServerInfo serverInfo,
 			Consumer<ProxiedPlayer> onFail, Runnable afterConnect) {
+		PlayerPreConnectServerEvent preConnectServerEvent = new PlayerPreConnectServerEvent(player,serverInfo);
+		ProxyServer.getInstance().getPluginManager().callEvent(preConnectServerEvent);
+		if (preConnectServerEvent.isCancelled())
+			return;
 		if (serverInfo == null) {
-			System.out.println(player + " tried to connect in null server");
-			player.disconnect(error);
+			ProxyServer.getInstance().getLogger().log(Level.WARNING, "Player: "+player.getName()+" tried to connect in null server");
+			onFail.accept(player);
 			return;
 		}
-		if (AuthPlugin.getInstance().getConfig().getConfig().getBoolean("kick-on-server-disabled"))
-			serverInfo.ping(new Callback<ServerPing>() {
-
-				@Override
-				public void done(ServerPing result, Throwable throwedError) {
-					if (throwedError != null) {
-						System.out.println(player + " tried to connect in not working server");
-						player.disconnect(error);
-					}
-				}
-			});
-
-		if (player.getServer().getInfo().equals(serverInfo))
+		
+		if (player.getServer()!=null && player.getServer().getInfo().equals(serverInfo))
 			return;
-		TitleBar.send(player, "", "", 0, 10, 0);
-		player.connect(serverInfo, new Callback<Boolean>() {
 
-			@Override
-			public void done(Boolean result, Throwable error) {
-
-			}
-
-		});
+		player.connect(serverInfo, (result,exception) -> {});
 	}
 }

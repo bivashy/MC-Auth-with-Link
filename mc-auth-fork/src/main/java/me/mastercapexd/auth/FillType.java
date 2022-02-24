@@ -1,5 +1,6 @@
 package me.mastercapexd.auth;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,19 +10,21 @@ public enum FillType {
 	RANDOM {
 
 		@Override
-		public void shuffle(List<Server> servers) {
-			Collections.shuffle(servers);
+		public List<Server> shuffle(List<Server> servers) {
+			List<Server> modifableServers = new ArrayList<>(servers); //Method argument can pass unmodifable list
+			Collections.shuffle(modifableServers);
+			return modifableServers;
 		}
 
 	},
 	GRADUALLY {
 
 		@Override
-		public void shuffle(List<Server> servers) {
-
+		public List<Server> shuffle(List<Server> servers) {
+			return servers;
 		}
 
 	};
 
-	public abstract void shuffle(List<Server> servers);
+	public abstract List<Server> shuffle(List<Server> servers);
 }

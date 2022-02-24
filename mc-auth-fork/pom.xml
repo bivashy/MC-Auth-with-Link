@@ -4,46 +4,172 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.mastercapexd</groupId>
 	<artifactId>Auth</artifactId>
-	<version>1.5-SNAPSHOT</version>
+	<version>1.6.0-SNAPSHOT</version>
 
 	<properties>
+
+		<!-- Manifest -->
+		<manifest.contact>https://vk.me/bbaty45/</manifest.contact>
+		<manifest.developer>Ubivashka</manifest.developer>
+		<manifest.version>${project.version}</manifest.version>
+
+		<!-- Building -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>8</java.version>
+		<project.mainclass>me.mastercapexd.auth.bungee.AuthPlugin
+		</project.mainclass>
+
+		<!-- Dependencies -->
+		<bungeecord.version>1.17-R0.1-SNAPSHOT</bungeecord.version>
+		<vk-api-bungee.version>0.2.3-Snapshot</vk-api-bungee.version>
+		<jbcrypt.version>0.4</jbcrypt.version>
+		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
+		<mysql.connector.version>6.0.6</mysql.connector.version>
+		<google.authenticator.version>1.4.0</google.authenticator.version>
+		<zxing.library.version>3.3.0</zxing.library.version>
+		<configuration-library.version>1.1.5-bungee</configuration-library.version>
+		<lamp.command-library.version>2.9.3</lamp.command-library.version>
+
+		<!-- Maven plugins -->
+		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+		<maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
+		<maven.source.plugin.version>3.2.0</maven.source.plugin.version>
 	</properties>
+
 	<repositories>
-		<repository>
-			<id>bungeecord-repo</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</repository>
+
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
+
+		<repository>
+			<id>aikar</id>
+			<url>https://repo.aikar.co/content/groups/aikar/</url>
+		</repository>
+		<repository>
+			<id>bungeecord-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+
 	</repositories>
+
+	<dependencies>
+
+		<!-- BungeeCord API -->
+		<dependency>
+			<groupId>net.md-5</groupId>
+			<artifactId>bungeecord-api</artifactId>
+			<version>${bungeecord.version}</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- BungeeCord API -->
+		<dependency>
+			<groupId>net.md-5</groupId>
+			<artifactId>bungeecord-api</artifactId>
+			<version>${bungeecord.version}</version>
+			<type>javadoc</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- VK API For Spigot or BungeeCord -->
+		<dependency>
+			<groupId>com.github.U61vashka</groupId>
+			<artifactId>VK-API-Spigot-Bungee</artifactId>
+			<version>${vk-api-bungee.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- BCrypt library -->
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>${jbcrypt.version}</version>
+		</dependency>
+
+		<!-- SQLite library -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>${sqlite.jdbc.version}</version>
+		</dependency>
+
+		<!-- MySQL library -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
+		</dependency>
+
+		<!-- GoogleAuthenticator library -->
+		<dependency>
+			<groupId>com.warrenstrange</groupId>
+			<artifactId>googleauth</artifactId>
+			<version>${google.authenticator.version}</version>
+		</dependency>
+
+		<!-- GoogleAuthenticator library -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>${zxing.library.version}</version>
+		</dependency>
+
+		<!-- Configuration library for BungeeCord -->
+		<dependency>
+			<groupId>com.github.U61vashka</groupId>
+			<artifactId>ConfigurationLibrary</artifactId>
+			<version>${configuration-library.version}</version>
+		</dependency>
+
+		<!-- Lamp Core Command Library -->
+		<dependency>
+			<groupId>com.github.Revxrsal.Lamp</groupId>
+			<artifactId>common</artifactId>
+			<version>${lamp.command-library.version}</version>
+		</dependency>
+
+		<!-- Lamp Bungee Command Library -->
+		<dependency>
+			<groupId>com.github.Revxrsal.Lamp</groupId>
+			<artifactId>bungee</artifactId>
+			<version>${lamp.command-library.version}</version>
+		</dependency>
+	</dependencies>
+
 	<build>
+		<finalName>${project.name}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<defaultGoal>clean package install</defaultGoal>
 		<plugins>
+			<!-- Maven compiler plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>${maven.compiler.plugin.version}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<compilerArgs>
+						<arg>-Xlint:deprecation</arg>
+						<arg>-Xlint:unchecked</arg>
+					</compilerArgs>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+
+			<!-- Maven assembly plugin -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>me.mastercapexd.auth.bungee.AuthPlugin</mainClass>
+							<mainClass>${project.mainclass}</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -62,55 +188,21 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Maven source plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven.source.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>net.md-5</groupId>
-			<artifactId>bungeecord-api</artifactId>
-			<version>1.17-R0.1-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.md-5</groupId>
-			<artifactId>bungeecord-api</artifactId>
-			<version>1.17-R0.1-SNAPSHOT</version>
-			<type>javadoc</type>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.U61vashka</groupId>
-			<artifactId>VK-API-Spigot-Bungee</artifactId>
-			<version>0.2.0-Snapshot</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mindrot</groupId>
-			<artifactId>jbcrypt</artifactId>
-			<version>0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.36.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.warrenstrange</groupId>
-			<artifactId>googleauth</artifactId>
-			<version>1.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-			<version>3.3.0</version>
-		</dependency>
-	</dependencies>
-
 </project>

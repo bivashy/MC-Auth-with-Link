@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.vk.utils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -16,15 +17,16 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonAction;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.objects.messages.TemplateActionTypeNames;
+import com.vk.api.sdk.objects.users.responses.GetResponse;
 
-import me.mastercapexd.auth.Account;
-import me.mastercapexd.auth.PluginConfig;
+import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.config.PluginConfig;
 
 public class VKUtils {
-	private static final VkApiClient vk = VKAPI.getInstance().getVK();
-	private static final GroupActor actor = VKAPI.getInstance().getActor();
-	private static final Random random = new Random();
-	private static final Gson gson = new Gson();
+	private static final VkApiClient VK = VKAPI.getInstance().getVK();
+	private static final GroupActor ACTOR = VKAPI.getInstance().getActor();
+	private static final Random RANDOM = new Random();
+	private static final Gson GSON = new Gson();
 
 	private PluginConfig config;
 
@@ -36,7 +38,7 @@ public class VKUtils {
 		if (peerId == null)
 			return false;
 		try {
-			List<Conversation> conversations = vk.messages().getConversationsById(actor, peerId).execute().getItems();
+			List<Conversation> conversations = VK.messages().getConversationsById(ACTOR, peerId).execute().getItems();
 			if (conversations.isEmpty())
 				return false;
 			return conversations.get(0).getPeer().getType() == ConversationPeerType.CHAT;
@@ -47,7 +49,7 @@ public class VKUtils {
 
 	public boolean sendMessage(Integer userId, String message) {
 		try {
-			vk.messages().send(actor).randomId(random.nextInt()).userId(userId).message(message).execute();
+			VK.messages().send(ACTOR).randomId(RANDOM.nextInt()).userId(userId).message(message).execute();
 			return true;
 		} catch (ApiException | ClientException e) {
 			e.printStackTrace();
@@ -57,7 +59,7 @@ public class VKUtils {
 
 	public boolean sendMessage(Integer userId, String message, Keyboard keyboard) {
 		try {
-			vk.messages().send(actor).randomId(random.nextInt()).userId(userId).message(message).keyboard(keyboard)
+			VK.messages().send(ACTOR).randomId(RANDOM.nextInt()).userId(userId).message(message).keyboard(keyboard)
 					.execute();
 			return true;
 		} catch (ApiException | ClientException e) {
@@ -66,28 +68,36 @@ public class VKUtils {
 		}
 	}
 
-	public Integer getVKIdFromScreenName(String screenName) {
+	public static Optional<GetResponse> fetchUserFromIdentificator(String vkIdentificator) {
 		try {
-			return vk.utils().resolveScreenName(actor, screenName).execute().getObjectId();
-		} catch (Exception e) {
-			return -1;
+			return VK.users().get(ACTOR).userIds(vkIdentificator).execute().stream().findFirst();
+		}catch(ApiException | ClientException e) {
+			e.printStackTrace();
 		}
+		return Optional.empty();
+	}
+	
+	public static Optional<Integer> fetchIdFromScreenName(String screenName) {
+		try {
+			return Optional.of(VK.utils().resolveScreenName(ACTOR, screenName).execute().getObjectId());
+		} catch (ApiException | ClientException e) {
+			e.printStackTrace();
+		}
+		return Optional.empty();
 
 	}
 
 	public KeyboardButton buildCallbackButton(String labelPath, String payload, KeyboardButtonColor color) {
-		return new KeyboardButton()
-				.setAction(new KeyboardButtonAction().setLabel(config.getVKButtonLabels().getButtonLabel(labelPath))
-						.setType(TemplateActionTypeNames.CALLBACK).setPayload(gson.toJson(payload)))
-				.setColor(color);
+		return new KeyboardButton().setAction(new KeyboardButtonAction()
+				.setLabel(config.getVKSettings().getVKButtonLabels().getButtonLabel(labelPath))
+				.setType(TemplateActionTypeNames.CALLBACK).setPayload(GSON.toJson(payload))).setColor(color);
 	}
 
 	public KeyboardButton buildCallbackButton(String labelPath, Account account, String payload,
 			KeyboardButtonColor color) {
-		return new KeyboardButton().setAction(
-				new KeyboardButtonAction().setLabel(config.getVKButtonLabels().getButtonLabel(labelPath, account))
-						.setType(TemplateActionTypeNames.CALLBACK).setPayload(gson.toJson(payload)))
-				.setColor(color);
+		return new KeyboardButton().setAction(new KeyboardButtonAction()
+				.setLabel(config.getVKSettings().getVKButtonLabels().getButtonLabel(labelPath, account))
+				.setType(TemplateActionTypeNames.CALLBACK).setPayload(GSON.toJson(payload))).setColor(color);
 	}
 
 }
