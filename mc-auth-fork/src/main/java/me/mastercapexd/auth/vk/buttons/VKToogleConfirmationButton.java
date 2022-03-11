@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
-import com.ubivashka.vk.callback.objects.CallbackButtonEvent;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 
@@ -27,7 +26,7 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 		receptioner.getAccountStorage().getAccount(id).thenAccept(account -> {
 			LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
 			linkUser.getLinkUserInfo().setConfirmationEnabled(!linkUser.getLinkUserInfo().isConfirmationEnabled());
-			CallbackButtonEvent buttonEvent = e.getButtonEvent();
+			com.ubivashka.vk.api.parsers.objects.CallbackButtonEvent buttonEvent = e.getButtonEvent();
 			Map<String, String> myMap = new HashMap<String, String>();
 			myMap.put("type", "show_snackbar");
 			if (linkUser.getLinkUserInfo().isConfirmationEnabled()) {

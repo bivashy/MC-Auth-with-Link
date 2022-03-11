@@ -9,7 +9,6 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.KickResult;
 import me.mastercapexd.auth.RestoreResult;
-import me.mastercapexd.auth.SessionResult;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.link.user.LinkUser;
@@ -82,7 +81,7 @@ public interface Account {
 	
 	boolean nextAuthenticationStep(AuthenticationStepContext stepContext);
 	
-	SessionResult logout(long sessionDurability);
+	void logout(long sessionDurability);
 
 	boolean isSessionActive(long sessionDurability);
 

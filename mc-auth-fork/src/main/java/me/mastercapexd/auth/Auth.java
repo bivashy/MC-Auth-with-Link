@@ -7,11 +7,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.bungee.events.AccountServerEnterEvent;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.utils.bossbar.BossBar;
-import net.md_5.bungee.api.ProxyServer;
 
 public class Auth {
 
@@ -37,10 +35,6 @@ public class Auth {
 	}
 
 	public static synchronized void removeAccount(String id) {
-		AccountServerEnterEvent accountServerEnterEvent = new AccountServerEnterEvent(ACCOUNTS.get(id), id);
-		ProxyServer.getInstance().getPluginManager().callEvent(accountServerEnterEvent);
-		if (accountServerEnterEvent.isCancelled())
-			return;
 		ACCOUNTS.remove(id);
 		ATTEMPTS.remove(id);
 		ACCOUNT_JOIN_TIMES.remove(id);

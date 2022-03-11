@@ -22,6 +22,7 @@ import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
+import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import me.mastercapexd.auth.vk.utils.VKUtils;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -105,6 +106,8 @@ public class AuthPlugin extends Plugin {
 		// this.getProxy().getPluginManager().registerCommand(this, new
 		// VKLinkCommand(this, config, accountStorage));
 		this.config.getVKSettings().getCommands().registerCommands(vkReceptioner);
+		
+		new VKCommandRegistry();
 	}
 
 	private AccountStorage loadAccountStorage(StorageType storageType) {

@@ -5,7 +5,7 @@ import java.util.UUID;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.account.BungeeAccount;
+import me.mastercapexd.auth.bungee.account.BungeeAccount;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 
 public class BungeeAccountFactory implements AccountFactory {

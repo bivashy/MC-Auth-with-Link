@@ -42,6 +42,8 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 		if (loginEvent.isCancelled())
 			return;
 
+		account.setLastIpAddress(player.getAddress().getHostString());
+		account.setLastSessionStart(System.currentTimeMillis());
 		PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
 		Auth.removeAccount(accountId);
 		ServerInfo connectServer = PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getGameServers());

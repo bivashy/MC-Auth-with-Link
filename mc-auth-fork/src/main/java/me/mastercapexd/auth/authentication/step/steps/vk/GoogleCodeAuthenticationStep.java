@@ -12,14 +12,13 @@ import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
+public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep{
 	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
-	public static final String STEP_NAME = "VK_LINK";
+	public static final String STEP_NAME = "GOOGLE_LINK";
 	private final LinkEntryUser entryUser;
 
-	public VKLinkAuthenticationStep(AuthenticationStepContext context) {
+	public GoogleCodeAuthenticationStep(AuthenticationStepContext context) {
 		super(STEP_NAME, context);
 		entryUser = new VKLinkEntryUser(context.getAccount());
 	}
@@ -35,16 +34,15 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
 			return true;
 		LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
-
+		
 		if (linkUser == null || linkUser.getLinkUserInfo() == null
 				|| linkUser.getLinkUserInfo().getLinkUserId() == AccountFactory.DEFAULT_VK_ID
 				|| !AuthPlugin.getInstance().getConfig().getVKSettings().isEnabled()
 				|| !linkUser.getLinkUserInfo().isConfirmationEnabled())
 			return true;
-
+		
 		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance()))
 			return true;
-
 		Auth.getLinkEntryAuth().addLinkUser(entryUser);
 		return false;
 	}

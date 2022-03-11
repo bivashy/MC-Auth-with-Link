@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.account;
+package me.mastercapexd.auth.bungee.account;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.KickResult;
-import me.mastercapexd.auth.SessionResult;
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
@@ -64,7 +64,6 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 		}
 		String stepCreatorName = PLUGIN.getConfig()
 				.getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
-
 		AuthenticationStepCreator authenticationStepCreator = PLUGIN.getAuthenticationStepCreatorDealership()
 				.findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName))
 				.orElse(new NullAuthenticationStepCreator());
@@ -90,12 +89,11 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	}
 
 	@Override
-	public SessionResult logout(long sessionDurability) {
+	public void logout(long sessionDurability) {
 		if (!isSessionActive(sessionDurability))
-			return SessionResult.LOGOUT_FAILED_NOT_LOGGED_IN;
+			return;
 
 		setLastSessionStart(0);
-		return SessionResult.LOGOUT_SUCCESS;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -244,20 +242,15 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 
 	@Override
 	public void setCurrentConfigurationAuthenticationStepCreatorIndex(int index) {
-		if (index < 0 || index > PLUGIN.getConfig().getAuthenticationSteps().size())
-			return;
-		String stepCreatorName = PLUGIN.getConfig()
-				.getAuthenticationStepName(index);
+		String stepName = PLUGIN.getConfig().getAuthenticationStepName(index);
 
 		AuthenticationStepCreator authenticationStepCreator = PLUGIN.getAuthenticationStepCreatorDealership()
-				.findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName))
+				.findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepName))
 				.orElse(new NullAuthenticationStepCreator());
-		
-		String stepName = PLUGIN.getConfig()
-				.getAuthenticationStepName(index);
-		
-		AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryDealership().createContext(stepName, this);
-		
+
+		AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryDealership()
+				.createContext(stepName, this);
+		currentConfigurationAuthenticationStepCreatorIndex = index;
 		currentAuthenticationStep = authenticationStepCreator.createNewAuthenticationStep(stepContext);
 	}
 
@@ -266,8 +259,9 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 		List<String> authenticationSteps = PLUGIN.getConfig().getAuthenticationSteps();
 		String nextStepName = PLUGIN.getConfig()
 				.getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
-
-		setCurrentConfigurationAuthenticationStepCreatorIndex(currentConfigurationAuthenticationStepCreatorIndex);
+		if (currentAuthenticationStep == null)
+			setCurrentConfigurationAuthenticationStepCreatorIndex(
+					currentConfigurationAuthenticationStepCreatorIndex - 1);
 
 		if (currentAuthenticationStep.shouldPassToNextStep()
 				&& currentConfigurationAuthenticationStepCreatorIndex != authenticationSteps.size() - 1)

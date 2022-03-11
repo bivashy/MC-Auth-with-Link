@@ -7,7 +7,7 @@ import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepComman
 import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.bungee.commands.annotations.OtherPlayer;
 import me.mastercapexd.auth.bungee.commands.annotations.Password;
-import me.mastercapexd.auth.bungee.commands.annotations.RegisterAccount;
+import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.bungee.commands.annotations.VkUse;
 import me.mastercapexd.auth.bungee.commands.exception.CustomExceptionHandler;
 import me.mastercapexd.auth.config.BungeePluginConfig;
@@ -117,9 +117,9 @@ public class BungeeCommandsRegistry {
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("already-logged-in"));
 
 			Account account = Auth.getAccount(id);
-			if (!account.isRegistered() && !context.parameter().hasAnnotation(RegisterAccount.class))
+			if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("account-not-found"));
-			if (account.isRegistered() && context.parameter().hasAnnotation(RegisterAccount.class))
+			if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("account-exists"));
 			return account;
 		});

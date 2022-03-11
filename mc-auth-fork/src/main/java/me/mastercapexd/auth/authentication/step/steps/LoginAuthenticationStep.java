@@ -1,12 +1,10 @@
 package me.mastercapexd.auth.authentication.step.steps;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class LoginAuthenticationStep extends AbstractAuthenticationStep {
 	
@@ -17,17 +15,9 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep {
 		super(STEP_NAME, context);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean shouldPassToNextStep() {
-		boolean canPass = authenticationStepContext.canPassToNextStep();
-		if (canPass) {
-			Account account = authenticationStepContext.getAccount();
-			ProxiedPlayer player = account.getIdentifierType().getPlayer(account.getId());
-			account.setLastIpAddress(player.getAddress().getHostString());
-			account.setLastSessionStart(System.currentTimeMillis());
-		}
-		return canPass;
+		return authenticationStepContext.canPassToNextStep();
 	}
 
 	@Override

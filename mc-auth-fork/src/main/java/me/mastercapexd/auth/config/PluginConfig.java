@@ -55,6 +55,8 @@ public interface PluginConfig {
 
 	long getSessionDurability();
 
+	long getJoinDelay();
+	
 	long getAuthTime();
 
 	BungeeMessages getBungeeMessages();

@@ -3,6 +3,12 @@ package me.mastercapexd.auth.link.vk;
 import com.google.common.base.Predicate;
 
 import me.mastercapexd.auth.link.AbstractLinkType;
+import me.mastercapexd.auth.link.message.Message.MessageBuilder;
+import me.mastercapexd.auth.link.message.keyboard.IKeyboard.IKeyboardBuilder;
+import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
+import me.mastercapexd.auth.link.message.vk.VKButton;
+import me.mastercapexd.auth.link.message.vk.VKKeyboard;
+import me.mastercapexd.auth.link.message.vk.VKMessage;
 import me.mastercapexd.auth.link.user.LinkUser;
 
 public class VKLinkType extends AbstractLinkType {
@@ -21,6 +27,21 @@ public class VKLinkType extends AbstractLinkType {
 
 	public static VKLinkType getInstance() {
 		return INSTANCE;
+	}
+
+	@Override
+	public MessageBuilder newMessageBuilder() {
+		return VKMessage.newBuilder("");
+	}
+
+	@Override
+	public IKeyboardBuilder newKeyboardBuilder() {
+		return VKKeyboard.newBuilder();
+	}
+
+	@Override
+	public ButtonBuilder newButtonBuilder() {
+		return VKButton.newBuilder("");
 	}
 
 }

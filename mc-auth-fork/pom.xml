@@ -21,14 +21,16 @@
 
 		<!-- Dependencies -->
 		<bungeecord.version>1.17-R0.1-SNAPSHOT</bungeecord.version>
-		<vk-api-bungee.version>0.2.3-Snapshot</vk-api-bungee.version>
+		<velocity.version>3.0.1</velocity.version>
+		<vk-api-bungee.version>0.3.1-Snapshot</vk-api-bungee.version>
 		<jbcrypt.version>0.4</jbcrypt.version>
 		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
 		<mysql.connector.version>6.0.6</mysql.connector.version>
 		<google.authenticator.version>1.4.0</google.authenticator.version>
 		<zxing.library.version>3.3.0</zxing.library.version>
-		<configuration-library.version>1.1.5-bungee</configuration-library.version>
-		<lamp.command-library.version>2.9.3</lamp.command-library.version>
+		<configuration-library.version>1.1.5</configuration-library.version>
+		<lamp.command-library.version>2.9.5</lamp.command-library.version>
+		<vk.lamp.module.version>0.0.2</vk.lamp.module.version>
 
 		<!-- Maven plugins -->
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -44,12 +46,13 @@
 		</repository>
 
 		<repository>
-			<id>aikar</id>
-			<url>https://repo.aikar.co/content/groups/aikar/</url>
-		</repository>
-		<repository>
 			<id>bungeecord-repo</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+
+		<repository>
+			<id>velocity</id>
+			<url>https://nexus.velocitypowered.com/repository/maven-public/</url>
 		</repository>
 
 	</repositories>
@@ -65,12 +68,20 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- BungeeCord API -->
+		<!-- BungeeCord Javadoc API -->
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
 			<version>${bungeecord.version}</version>
 			<type>javadoc</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Velocity API -->
+		<dependency>
+			<groupId>com.velocitypowered</groupId>
+			<artifactId>velocity-api</artifactId>
+			<version>${velocity.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -131,11 +142,31 @@
 			<version>${lamp.command-library.version}</version>
 		</dependency>
 
-		<!-- Lamp Bungee Command Library -->
+		<!-- Lamp Bungee Module -->
 		<dependency>
 			<groupId>com.github.Revxrsal.Lamp</groupId>
 			<artifactId>bungee</artifactId>
 			<version>${lamp.command-library.version}</version>
+		</dependency>
+
+		<!-- Lamp Velocity Module -->
+		<dependency>
+			<groupId>com.github.Revxrsal.Lamp</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${lamp.command-library.version}</version>
+		</dependency>
+
+		<!-- Lamp Vk Module Command -->
+		<dependency>
+			<groupId>com.github.U61vashka</groupId>
+			<artifactId>VkLampModule</artifactId>
+			<version>0.0.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vk.api</groupId>
+					<artifactId>sdk</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 

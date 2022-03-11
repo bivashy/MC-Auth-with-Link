@@ -1,18 +1,15 @@
 package me.mastercapexd.auth.link.message;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import me.mastercapexd.auth.link.message.keyboard.button.Button;
-import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 
-public abstract class AbstractMessage<T extends LinkUser> implements Message<T> {
+public abstract class AbstractMessage implements Message {
 	protected final Map<String, String> additionalInfos = new HashMap<>();
 	protected String rawContent = "";
-	protected List<Button> buttons = new ArrayList<>();
+	protected IKeyboard keyboard;
 
 	public AbstractMessage(String rawContent) {
 		this.rawContent = rawContent;
@@ -29,17 +26,14 @@ public abstract class AbstractMessage<T extends LinkUser> implements Message<T> 
 
 	}
 
-	/**
-	 * @return Unmodifable list instances of {@link Button}
-	 */
 	@Override
-	public List<Button> getButtons() {
-		return Collections.unmodifiableList(buttons);
+	public IKeyboard getKeyboard() {
+		return keyboard;
 	}
 
 	@Override
-	public void setButtons(List<Button> buttons) {
-		this.buttons = buttons;
+	public void setKeyboard(IKeyboard keyboard) {
+		this.keyboard = keyboard;
 	}
 
 	/**

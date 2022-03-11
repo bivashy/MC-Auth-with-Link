@@ -13,9 +13,7 @@ import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.Nul
 import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -145,10 +143,7 @@ public class EventListener implements Listener {
 						.createContext(authenticationStepCreator.getAuthenticationStepName(), newAccount);
 				newAccount.nextAuthenticationStep(context);
 
-				ServerInfo authServer = config.findServerInfo(config.getAuthServers());
 				Auth.addAccount(newAccount);
-				Connector.connectOrKick(player, authServer,
-						config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
 				return;
 			}
 
@@ -168,15 +163,11 @@ public class EventListener implements Listener {
 					return;
 				player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
 				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
-						() -> account.nextAuthenticationStep(context), 10, TimeUnit.MILLISECONDS);
+						() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
 				return;
 			}
 
-			ServerInfo authServer = config.findServerInfo(config.getAuthServers());
 			Auth.addAccount(account);
-			Connector.connectOrKick(player, authServer,
-					config.getBungeeMessages().getMessage("auth-servers-connection-refused"));
-
 			account.nextAuthenticationStep(context);
 
 		});

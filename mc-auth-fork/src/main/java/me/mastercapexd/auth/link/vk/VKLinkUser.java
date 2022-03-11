@@ -3,7 +3,6 @@ package me.mastercapexd.auth.link.vk;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.user.AbstractLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
-import me.mastercapexd.auth.link.user.info.vk.VKLinkUserInfo;
 
 public class VKLinkUser extends AbstractLinkUser {
 	private VKLinkUserInfo linkInfoAccount;

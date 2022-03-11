@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.yaml.snakeyaml.Yaml;
+
+import com.google.gson.JsonIOException;
 import com.ubivashka.config.annotations.ConfigField;
 import com.ubivashka.config.annotations.ConverterType;
 import com.ubivashka.config.annotations.ImportantField;
@@ -100,6 +103,9 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 	@ConverterType("time-parser")
 	@ConfigField(path = "session-durability")
 	private Long sessionDurability = 14400L;
+	@ConverterType("time-parser")
+	@ConfigField(path = "join-delay")
+	private long joinDelay = 1000L;
 	@ConfigField(path = "authentication-steps")
 	private List<String> authenticationSteps = new ArrayList<>(
 			Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
@@ -206,6 +212,11 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 		return sessionDurability;
 	}
 
+	@Override
+	public long getJoinDelay() {
+		return joinDelay;
+	}
+	
 	@Override
 	public long getAuthTime() {
 		return authTime;

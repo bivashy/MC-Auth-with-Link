@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.link.user.info.vk;
+package me.mastercapexd.auth.link.vk;
 
 import me.mastercapexd.auth.link.user.info.AbstractLinkUserInfo;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;

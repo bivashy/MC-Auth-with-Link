@@ -11,7 +11,6 @@ import me.mastercapexd.auth.objects.Server;
 import me.mastercapexd.auth.utils.TitleBar;
 import me.mastercapexd.auth.utils.bossbar.BossBar;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -55,7 +54,6 @@ public class BungeeAuthEngine implements AuthEngine {
 					String id = this.config.getActiveIdentifierType().getId(player);
 					Account account = Auth.getAccount(id);
 					if (account != null) {
-						player.sendMessage(TextComponent.fromLegacyText("Current step: "+account.getCurrentAuthenticationStep().getStepName())); // debug
 						if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) {
 							player.sendMessage(
 									this.config.getBungeeMessages().getMessage("vk-enter-confirm-need-chat"));
@@ -103,9 +101,6 @@ public class BungeeAuthEngine implements AuthEngine {
 							Auth.getBar(id).removeAll();
 							Auth.removeBar(id);
 						}
-//						ServerInfo connectServer = this.config.findServerInfo(this.config.getGameServers());
-//						Connector.connectOrKick(player, connectServer,
-//								this.config.getBungeeMessages().getMessage("game-servers-connection-refused"));
 						continue;
 					}
 					int onlineTime = (int) (now - Auth.getJoinTime(id)) / 1000;
