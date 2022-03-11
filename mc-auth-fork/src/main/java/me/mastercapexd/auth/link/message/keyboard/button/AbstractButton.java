@@ -22,4 +22,11 @@ public abstract class AbstractButton implements Button {
 		return Collections.unmodifiableMap(additionalInfo);
 	}
 
+	@Override
+	public void putAdditionalInfo(String key, String value) {
+		additionalInfo.put(key, value);
+	}
+	
+	
+
 }

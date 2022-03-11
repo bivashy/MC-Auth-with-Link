@@ -4,6 +4,8 @@ import me.mastercapexd.auth.link.AbstractLinkType;
 import me.mastercapexd.auth.link.message.Message.MessageBuilder;
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard.IKeyboardBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
+import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction.ButtonActionBuilder;
+import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColorBuilder;
 
 public class GoogleLinkType extends AbstractLinkType {
 	private static final GoogleLinkType INSTANCE = new GoogleLinkType();
@@ -26,11 +28,20 @@ public class GoogleLinkType extends AbstractLinkType {
 	public IKeyboardBuilder newKeyboardBuilder() {
 		throw new UnsupportedOperationException(UNSUPPORTED_MESSAGE);
 	}
-		
+
 	@Override
 	public ButtonBuilder newButtonBuilder() {
 		throw new UnsupportedOperationException(UNSUPPORTED_MESSAGE);
 	}
 
-	
+	@Override
+	public ButtonColorBuilder newButtonColorBuilder() {
+		throw new UnsupportedOperationException(UNSUPPORTED_MESSAGE);
+	}
+
+	@Override
+	public ButtonActionBuilder newButtonActionBuilder() {
+		throw new UnsupportedOperationException(UNSUPPORTED_MESSAGE);
+	}
+
 }

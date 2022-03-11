@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.vk.commands;
 
-import com.ubivashka.lamp.commands.vk.core.BaseVkActor;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.ubivashka.vk.api.providers.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
@@ -34,14 +33,13 @@ public class VKCommandRegistry {
 	private void registerContexts() {
 		commandHandler.registerContextValue(LinkType.class, VKLinkType.getInstance());
 
-		commandHandler.registerValueResolver(LinkCommandActorWrapper.class,
+		commandHandler.registerContextResolver(LinkCommandActorWrapper.class,
 				context -> new VKCommandActorWrapper(context.actor()));
-		
-		commandHandler.registerValueResolver(VKCommandActorWrapper.class,
+
+		commandHandler.registerContextResolver(VKCommandActorWrapper.class,
 				context -> new VKCommandActorWrapper(context.actor()));
 	}
 
 	private void registerCommands() {
-		commandHandler.register(new VkTestCommand());
 	}
 }

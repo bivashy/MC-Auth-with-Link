@@ -6,13 +6,19 @@ import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.objects.messages.TemplateActionTypeNames;
 
 import me.mastercapexd.auth.link.message.keyboard.button.AbstractButton;
+import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction;
+import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor;
 
 public class VKButton extends AbstractButton {
+
+	public static final String COLOR_INFO_KEY = "color";
+	public static final String ACTION_INFO_KEY = "action";
 
 	private KeyboardButton keyboardButton = new KeyboardButton();
 
 	private KeyboardButtonAction action = new KeyboardButtonAction().setType(TemplateActionTypeNames.TEXT);
 	private KeyboardButtonColor color = KeyboardButtonColor.DEFAULT;
+	private String payload;
 
 	public VKButton(String label) {
 		super(label);
@@ -23,6 +29,8 @@ public class VKButton extends AbstractButton {
 	}
 
 	public KeyboardButton getKeyboardButton() {
+		if (payload != null)
+			action.setPayload(payload);
 		action.setLabel(label);
 		keyboardButton.setAction(action);
 		keyboardButton.setColor(color);
@@ -33,8 +41,16 @@ public class VKButton extends AbstractButton {
 		return action;
 	}
 
+	public void setAction(KeyboardButtonAction action) {
+		this.action = action;
+	}
+
 	public KeyboardButtonColor getColor() {
 		return color;
+	}
+
+	public void setColor(KeyboardButtonColor color) {
+		this.color = color;
 	}
 
 	public class VKButtonBuilder implements ButtonBuilder {
@@ -60,6 +76,24 @@ public class VKButton extends AbstractButton {
 		@Override
 		public ButtonBuilder label(String label) {
 			VKButton.this.label = label;
+			return this;
+		}
+
+		@Override
+		public ButtonBuilder color(ButtonColor color) {
+			color.apply(VKButton.this);
+			return this;
+		}
+
+		@Override
+		public ButtonBuilder action(ButtonAction action) {
+			action.apply(VKButton.this);
+			return this;
+		}
+
+		@Override
+		public ButtonBuilder customId(String id) {
+			VKButton.this.payload = id;
 			return this;
 		}
 
