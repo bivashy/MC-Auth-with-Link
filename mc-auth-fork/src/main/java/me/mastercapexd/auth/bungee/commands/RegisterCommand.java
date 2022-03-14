@@ -6,7 +6,7 @@ import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
-import me.mastercapexd.auth.bungee.commands.annotations.Password;
+import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -26,7 +26,7 @@ public class RegisterCommand {
 
 	@Default
 	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
-	public void register(ProxiedPlayer player, @AuthenticationAccount Account account, @Password String password) {
+	public void register(ProxiedPlayer player, @AuthenticationAccount Account account, NewPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 		String stepName = plugin.getConfig()
@@ -34,7 +34,7 @@ public class RegisterCommand {
 		
 		if(account.getHashType()!=config.getActiveHashType()) 
 			account.setHashType(config.getActiveHashType());
-		account.setPasswordHash(account.getHashType().hash(password));
+		account.setPasswordHash(account.getHashType().hash(password.getNewPassword()));
 		
 		accountStorage.saveOrUpdateAccount(account);
 		

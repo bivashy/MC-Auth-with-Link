@@ -7,7 +7,7 @@ import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationSte
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.OtherPlayer;
-import me.mastercapexd.auth.bungee.commands.annotations.Password;
+import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.CommandSender;
@@ -63,7 +63,7 @@ public class AuthCommand {
 	@Subcommand({ "changepassword", "changepass" })
 	@CommandPermission("auth.admin")
 	public void changePassword(CommandSender sender, @OtherPlayer ProxiedPlayer proxiedPlayer,
-			@Password String newPlayerPassword) {
+			NewPassword newPlayerPassword) {
 		if (proxiedPlayer == null)
 			return;
 		String id = config.getActiveIdentifierType().getId(proxiedPlayer);
@@ -72,7 +72,7 @@ public class AuthCommand {
 				sender.sendMessage(config.getBungeeMessages().getMessage("account-not-found"));
 				return;
 			}
-			account.setPasswordHash(account.getHashType().hash(newPlayerPassword));
+			account.setPasswordHash(account.getHashType().hash(newPlayerPassword.getNewPassword()));
 			accountStorage.saveOrUpdateAccount(account);
 			sender.sendMessage(config.getBungeeMessages().getMessage("auth-change-success"));
 		});

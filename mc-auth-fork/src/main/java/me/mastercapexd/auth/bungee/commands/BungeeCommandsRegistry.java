@@ -3,13 +3,14 @@ package me.mastercapexd.auth.bungee.commands;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.bungee.commands.annotations.OtherPlayer;
-import me.mastercapexd.auth.bungee.commands.annotations.Password;
-import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.bungee.commands.annotations.VkUse;
 import me.mastercapexd.auth.bungee.commands.exception.CustomExceptionHandler;
+import me.mastercapexd.auth.bungee.commands.parameters.DoublePassword;
+import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.BungeePluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.Messages;
@@ -19,13 +20,15 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import revxrsal.commands.CommandHandler;
 import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.core.BungeeHandler;
+import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.exception.SendMessageException;
 
 public class BungeeCommandsRegistry {
 	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
-	public static final BungeeHandler BUNGEE_COMMAND_HANDLER = new BungeeHandler(PLUGIN);
+	public static final CommandHandler BUNGEE_COMMAND_HANDLER = new BungeeHandler(PLUGIN).disableStackTraceSanitizing();
 
 	public BungeeCommandsRegistry() {
 		register();
@@ -42,18 +45,32 @@ public class BungeeCommandsRegistry {
 	private void registerCommandContexts() {
 		BungeePluginConfig config = PLUGIN.getConfig();
 
-		BUNGEE_COMMAND_HANDLER.registerParameterValidator(String.class, (value, parameter, actor) -> {
-			if (!parameter.hasAnnotation(Password.class))
-				return;
-			if (value.length() < config.getPasswordMinLength())
+		BUNGEE_COMMAND_HANDLER.registerValueResolver(DoublePassword.class, (context) -> {
+			ArgumentStack arguments = context.arguments();
+			String oldPassword = arguments.pop();
+			if (arguments.isEmpty())
+				throw new SendMessageException(config.getBungeeMessages().getStringMessage("enter-new-password"));
+			String newPassword = arguments.pop();
+			DoublePassword password = new DoublePassword(oldPassword, newPassword);
+			if (oldPassword.equals(newPassword))
+				throw new SendMessageException(config.getBungeeMessages().getStringMessage("nothing-to-change"));
+
+			if (newPassword.length() < config.getPasswordMinLength())
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-short"));
 
-			if (value.length() > config.getPasswordMaxLength())
+			if (newPassword.length() > config.getPasswordMaxLength())
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
+			return password;
+		});
 
-			if (!config.getPasswordPattern().matcher(value).matches())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("illegal-password-chars"));
+		BUNGEE_COMMAND_HANDLER.registerValueResolver(NewPassword.class, context -> {
+			String newRawPassword = context.pop();
+			if (newRawPassword.length() < config.getPasswordMinLength())
+				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-short"));
 
+			if (newRawPassword.length() > config.getPasswordMaxLength())
+				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
+			return new NewPassword(newRawPassword);
 		});
 
 		Messages<BaseComponent[], BungeeMessageContext> authenticationStepUsageMessages = config.getBungeeMessages()
@@ -74,7 +91,8 @@ public class BungeeCommandsRegistry {
 			String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
 			if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
 				return;
-			throw new SendMessageException(authenticationStepUsageMessages.getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
+			throw new SendMessageException(authenticationStepUsageMessages
+					.getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {
@@ -139,7 +157,9 @@ public class BungeeCommandsRegistry {
 		BUNGEE_COMMAND_HANDLER.register(new GoogleCommand());
 		BUNGEE_COMMAND_HANDLER.register(new GoogleUnlinkCommand());
 		BUNGEE_COMMAND_HANDLER.register(new LogoutCommand());
-		BUNGEE_COMMAND_HANDLER.register(new VKLinkCommand());
+
+		if (PLUGIN.getConfig().getVKSettings().isEnabled())
+			BUNGEE_COMMAND_HANDLER.register(new VKLinkCommand());
 	}
 
 }

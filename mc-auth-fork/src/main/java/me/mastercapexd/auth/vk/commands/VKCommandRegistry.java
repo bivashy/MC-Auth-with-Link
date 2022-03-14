@@ -10,11 +10,12 @@ import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import net.md_5.bungee.api.ProxyServer;
+import revxrsal.commands.CommandHandler;
 
 public class VKCommandRegistry {
 	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
-	private final VkHandler commandHandler = new VkHandler(VK_API_PROVIDER.getVkApiClient(),
-			VK_API_PROVIDER.getActor());
+	private final CommandHandler commandHandler = new VkHandler(VK_API_PROVIDER.getVkApiClient(),
+			VK_API_PROVIDER.getActor()).disableStackTraceSanitizing();
 
 	static {
 		ProxyServer.getInstance().getPluginManager().registerListener(AuthPlugin.getInstance(), new MessageListener());
@@ -25,7 +26,6 @@ public class VKCommandRegistry {
 	}
 
 	private void register() {
-		commandHandler.disableStackTraceSanitizing();
 		registerContexts();
 		registerCommands();
 	}
@@ -38,6 +38,7 @@ public class VKCommandRegistry {
 
 		commandHandler.registerContextResolver(VKCommandActorWrapper.class,
 				context -> new VKCommandActorWrapper(context.actor()));
+
 	}
 
 	private void registerCommands() {
