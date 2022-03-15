@@ -73,9 +73,6 @@ public class BungeeCommandsRegistry {
 			return new NewPassword(newRawPassword);
 		});
 
-		Messages<BaseComponent[], BungeeMessageContext> authenticationStepUsageMessages = config.getBungeeMessages()
-				.getSubMessages("authentication-step-usage");
-
 		BUNGEE_COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {
 			if (!actor.as(BungeeCommandActor.class).isPlayer())
 				return;
@@ -91,7 +88,7 @@ public class BungeeCommandsRegistry {
 			String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
 			if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
 				return;
-			throw new SendMessageException(authenticationStepUsageMessages
+			throw new SendMessageException(config.getBungeeMessages().getSubMessages("authentication-step-usage")
 					.getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
 		});
 
@@ -119,14 +116,14 @@ public class BungeeCommandsRegistry {
 					throw new SendMessageException(config.getBungeeMessages().getStringMessage("players-only"));
 				return selfPlayer;
 			}
-			String value = context.arguments().pop();
+			String value = context.pop();
 			ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
 			if (player == null)
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("player-offline"));
 			return player;
 		});
 
-		BUNGEE_COMMAND_HANDLER.registerValueResolver(Account.class, (context) -> {
+		BUNGEE_COMMAND_HANDLER.registerContextResolver(Account.class, (context) -> {
 			ProxiedPlayer player = context.actor().as(BungeeCommandActor.class).asPlayer();
 			if (player == null)
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("players-only"));

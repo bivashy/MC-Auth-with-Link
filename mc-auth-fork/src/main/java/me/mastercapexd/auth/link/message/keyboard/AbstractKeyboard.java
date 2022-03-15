@@ -24,7 +24,6 @@ public abstract class AbstractKeyboard implements IKeyboard {
 			buttons.add(new ArrayList<>());
 
 		buttons.get(row).add(button);
-		System.out.println(buttons);
 	}
 
 	@Override
