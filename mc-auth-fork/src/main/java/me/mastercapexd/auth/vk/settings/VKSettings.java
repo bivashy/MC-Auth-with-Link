@@ -19,7 +19,7 @@ public class VKSettings extends BungeeConfigurationHolder {
 	@ConfigField(path = "enter")
 	private VKEnterSettings enterSettings = null;
 	@ConfigField(path = "vk-commands")
-	private VKMainCommands mainCommands = null;
+	private VKCommandPaths commandPaths = null;
 	@ConfigField(path = "commands")
 	private VKCommands commands = null;
 	@ConfigField(path = "max-vk-link")
@@ -63,8 +63,8 @@ public class VKSettings extends BungeeConfigurationHolder {
 		return restoreSettings;
 	}
 
-	public VKMainCommands getMainCommands() {
-		return mainCommands;
+	public VKCommandPaths getCommandPaths() {
+		return commandPaths;
 	}
 
 	public int getMaxLinkCount() {

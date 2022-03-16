@@ -43,7 +43,7 @@ import me.mastercapexd.auth.vk.commands.VKKickCommand;
 import me.mastercapexd.auth.vk.commands.VKLinkCommand;
 import me.mastercapexd.auth.vk.commands.VKRestoreCommand;
 import me.mastercapexd.auth.vk.commands.VKUnlinkCommand;
-import me.mastercapexd.auth.vk.settings.VKMainCommands;
+import me.mastercapexd.auth.vk.settings.VKCommandPaths;
 
 public class VKReceptioner {
 	private static final VkApiClient vk = VKAPI.getInstance().getVK();
@@ -82,7 +82,7 @@ public class VKReceptioner {
 	}
 
 	private void registerCommands() {
-		VKMainCommands mainCommands = config.getVKSettings().getMainCommands();
+		VKCommandPaths mainCommands = config.getVKSettings().getCommandPaths();
 
 		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
@@ -92,7 +92,7 @@ public class VKReceptioner {
 		addCommand(commandFactory.createCommand(new VKAccountsCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKKickCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKRestoreCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKLinkCommand(this), mainCommands));
+		//	addCommand(commandFactory.createCommand(new VKLinkCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleCodeCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleUnlinkCommand(this), mainCommands));

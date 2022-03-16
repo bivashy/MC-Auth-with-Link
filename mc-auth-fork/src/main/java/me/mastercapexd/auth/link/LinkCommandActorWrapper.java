@@ -5,4 +5,6 @@ import revxrsal.commands.command.CommandActor;
 
 public interface LinkCommandActorWrapper extends CommandActor {
 	void send(Message message);
+
+	Integer userId();
 }

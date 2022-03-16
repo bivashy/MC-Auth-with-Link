@@ -5,8 +5,8 @@ import java.util.List;
 
 import me.mastercapexd.auth.vk.commandhandler.VKCommand;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
-import me.mastercapexd.auth.vk.settings.VKCommandSettings;
-import me.mastercapexd.auth.vk.settings.VKMainCommands;
+import me.mastercapexd.auth.vk.settings.VKCommandPath;
+import me.mastercapexd.auth.vk.settings.VKCommandPaths;
 
 public interface VKCommandFactory {
 	VKCommand createCommand(String commandName, VKCommandExecutor executor, List<String> aliases,
@@ -24,12 +24,12 @@ public interface VKCommandFactory {
 		return createCommand(commandName, executor, new ArrayList<>(), false);
 	}
 
-	default VKCommand createCommand(VKCommandExecutor executor, VKCommandSettings settings) {
-		return createCommand(settings.getMainCommand(), executor, settings.getAliases(), false);
+	default VKCommand createCommand(VKCommandExecutor executor, VKCommandPath settings) {
+		return createCommand(settings.getCommandPath(), executor, settings.getAliases(), false);
 	}
 
-	default VKCommand createCommand(VKCommandExecutor executor, VKMainCommands mainCommands) {
-		return createCommand(executor,mainCommands.getSettings(executor.getKey()));
+	default VKCommand createCommand(VKCommandExecutor executor, VKCommandPaths mainCommands) {
+		return createCommand(executor,mainCommands.getPath(executor.getKey()));
 	}
 			
 }

@@ -11,14 +11,12 @@ import me.mastercapexd.auth.bungee.commands.annotations.VkUse;
 import me.mastercapexd.auth.bungee.commands.exception.CustomExceptionHandler;
 import me.mastercapexd.auth.bungee.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
+import me.mastercapexd.auth.bungee.commands.parameters.RegisterPassword;
 import me.mastercapexd.auth.config.BungeePluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.messages.Messages;
-import me.mastercapexd.auth.config.messages.bungee.BungeeMessageContext;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.bungee.BungeeCommandActor;
@@ -71,6 +69,26 @@ public class BungeeCommandsRegistry {
 			if (newRawPassword.length() > config.getPasswordMaxLength())
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
 			return new NewPassword(newRawPassword);
+		});
+
+		BUNGEE_COMMAND_HANDLER.registerValueResolver(RegisterPassword.class, context -> {
+			ArgumentStack arguments = context.arguments();
+			String registerPassword = arguments.pop();
+
+			if (config.isPasswordConfirmationEnabled()) {
+				if (arguments.isEmpty())
+					throw new SendMessageException(config.getBungeeMessages().getStringMessage("confirm-password"));
+				String confirmationPassword = arguments.pop();
+				if (!confirmationPassword.equals(registerPassword))
+					throw new SendMessageException(config.getBungeeMessages().getStringMessage("confirm-failed"));
+			}
+
+			if (registerPassword.length() < config.getPasswordMinLength())
+				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-short"));
+
+			if (registerPassword.length() > config.getPasswordMaxLength())
+				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
+			return new RegisterPassword(registerPassword);
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {

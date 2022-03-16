@@ -14,7 +14,7 @@ import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 
-@Command({"reg","register"})
+@Command({ "reg", "register" })
 public class RegisterCommand {
 
 	@Dependency
@@ -26,21 +26,22 @@ public class RegisterCommand {
 
 	@Default
 	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
-	public void register(ProxiedPlayer player, @AuthenticationAccount Account account, NewPassword password) {
+	public void register(ProxiedPlayer player, @AuthenticationAccount Account account,
+			me.mastercapexd.auth.bungee.commands.parameters.RegisterPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 		String stepName = plugin.getConfig()
 				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
-		
-		if(account.getHashType()!=config.getActiveHashType()) 
+
+		if (account.getHashType() != config.getActiveHashType())
 			account.setHashType(config.getActiveHashType());
-		account.setPasswordHash(account.getHashType().hash(password.getNewPassword()));
-		
+		account.setPasswordHash(account.getHashType().hash(password.getPassword()));
+
 		accountStorage.saveOrUpdateAccount(account);
-		
+
 		account.nextAuthenticationStep(
 				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
-		
+
 		player.sendMessage(config.getBungeeMessages().getMessage("register-success"));
 	}
 }

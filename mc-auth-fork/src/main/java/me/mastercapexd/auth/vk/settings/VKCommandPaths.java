@@ -7,16 +7,16 @@ import com.ubivashka.config.processors.BungeeConfigurationHolder;
 
 import net.md_5.bungee.config.Configuration;
 
-public class VKMainCommands extends BungeeConfigurationHolder{
+public class VKCommandPaths extends BungeeConfigurationHolder{
 
 	@ConfigField
-	private HashMap<String, VKCommandSettings> vkCommands = new HashMap<>();
+	private HashMap<String, VKCommandPath> vkCommands = new HashMap<>();
 
-	public VKMainCommands(Configuration section) {
+	public VKCommandPaths(Configuration section) {
 		init(section);
 	}
 
-	public VKCommandSettings getSettings(String commandKey) {
+	public VKCommandPath getPath(String commandKey) {
 		return vkCommands.getOrDefault(commandKey, null);
 	}
 }

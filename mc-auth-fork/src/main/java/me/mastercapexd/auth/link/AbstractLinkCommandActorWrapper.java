@@ -4,11 +4,11 @@ import java.util.UUID;
 
 import revxrsal.commands.command.CommandActor;
 
-public abstract class AbstractLinkCommandActorWrapper implements LinkCommandActorWrapper {
+public abstract class AbstractLinkCommandActorWrapper<T extends CommandActor> implements LinkCommandActorWrapper {
 
-	protected final CommandActor actor;
+	protected final T actor;
 
-	public AbstractLinkCommandActorWrapper(CommandActor actor) {
+	public AbstractLinkCommandActorWrapper(T actor) {
 		this.actor = actor;
 	}
 
@@ -33,7 +33,7 @@ public abstract class AbstractLinkCommandActorWrapper implements LinkCommandActo
 	}
 
 	@Override
-	public <T extends CommandActor> T as(Class<T> type) {
+	public <E extends CommandActor> E as(Class<E> type) {
 		return actor.as(type);
 	}
 
