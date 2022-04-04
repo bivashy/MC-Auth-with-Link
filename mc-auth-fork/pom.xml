@@ -160,7 +160,7 @@
 		<dependency>
 			<groupId>com.github.U61vashka</groupId>
 			<artifactId>VkLampModule</artifactId>
-			<version>${0.0.3}</version>
+			<version>${vk.lamp.module.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.vk.api</groupId>
