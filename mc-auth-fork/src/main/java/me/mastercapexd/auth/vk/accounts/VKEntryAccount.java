@@ -15,6 +15,7 @@ import me.mastercapexd.auth.bungee.events.EntryConfirmationSelectEvent;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.ProxyServer;
@@ -55,7 +56,7 @@ public class VKEntryAccount {
 		if (entryConfirmationSelectEvent.isCancelled())
 			return;
 		Auth.getLinkEntryAuth().removeLinkUser(account.getId(), VKLinkType.getInstance());
-		ProxiedPlayer proxiedPlayer = account.getIdentifierType().getPlayer(account.getId());
+		ProxyPlayer proxyPlayer = account.getIdentifierType().getPlayer(account.getId());
 
 		VKMessageContext messageContext = VKMessageContext.newContext(vkId, account);
 		if (answer == VKEnterAnswer.DECLINE) {
@@ -71,10 +72,9 @@ public class VKEntryAccount {
 			Auth.removeAccount(account.getId());
 			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-confirmed", messageContext));
 			accountStorage.saveOrUpdateAccount(account);
-			if (proxiedPlayer != null) {
-				proxiedPlayer.sendMessage(config.getBungeeMessages().getMessage("vk-enter-confirmed"));
-				Connector.connectOrKick(proxiedPlayer, config.findServerInfo(config.getGameServers()),
-						config.getBungeeMessages().getMessage("game-servers-connection-refused"));
+			if (proxyPlayer != null) {
+				proxyPlayer.sendMessage(config.getBungeeMessages().getStringMessage("vk-enter-confirmed"));
+				proxyPlayer.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());
 			}
 		}
 	}

@@ -6,7 +6,6 @@ import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
-import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

@@ -1,14 +1,13 @@
 package me.mastercapexd.auth.link.message.keyboard;
 
-import com.vk.api.sdk.objects.messages.Keyboard;
-
+import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.link.message.Message;
 import me.mastercapexd.auth.link.message.keyboard.button.Button;
 
 /**
  * @author Ubivashka 2 dimensional keyboard for vk telegram or something
  */
-public interface IKeyboard {
+public interface IKeyboard extends Castable<IKeyboard> {
 	/**
 	 * Attach keyboard to message
 	 * 
@@ -35,26 +34,11 @@ public interface IKeyboard {
 
 	void addButton(int row, Button button);
 
-	/**
-	 * Method that casts real keyboard object to the T
-	 * 
-	 * @param <T> Real type of keyboard for example: {@link Keyboard}
-	 * @return Real keyboard that can be used for attaching keyboard or changing
-	 *         custom values
-	 */
-	default <T extends IKeyboard> T as(Class<T> clazz) {
-		return clazz.cast(this);
-	}
-
-	public static interface IKeyboardBuilder {
+	public static interface IKeyboardBuilder extends Castable<IKeyboardBuilder> {
 		IKeyboardBuilder button(int row, Button button);
 
 		IKeyboardBuilder inline(boolean inline);
 
 		IKeyboard build();
-
-		default <T extends IKeyboardBuilder> T as(Class<T> clazz) {
-			return clazz.cast(this);
-		}
 	}
 }

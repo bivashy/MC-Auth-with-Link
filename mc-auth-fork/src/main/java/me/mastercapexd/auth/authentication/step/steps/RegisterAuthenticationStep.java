@@ -6,7 +6,7 @@ import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
 
@@ -18,16 +18,15 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
 		isRegistered = context.getAccount().isRegistered();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean shouldPassToNextStep() {
 		boolean isCurrentAccountRegistered = authenticationStepContext.getAccount().isRegistered();
 		if (!isRegistered && isCurrentAccountRegistered) {
 			Account account = authenticationStepContext.getAccount();
-			ProxiedPlayer player = account.getIdentifierType().getPlayer(account.getId());
-			
-			Auth.removeAccount(account.getId());;
-			account.setLastIpAddress(player.getAddress().getHostString());
+			ProxyPlayer player = account.getIdentifierType().getPlayer(account.getId());
+
+			Auth.removeAccount(account.getId());
+			account.setLastIpAddress(player.getRemoteAddress().getHostString());
 			account.setLastSessionStart(System.currentTimeMillis());
 		}
 		return isCurrentAccountRegistered;

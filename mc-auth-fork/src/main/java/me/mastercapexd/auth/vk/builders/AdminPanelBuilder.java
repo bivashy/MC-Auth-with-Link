@@ -26,7 +26,7 @@ public class AdminPanelBuilder extends MessageBuilder {
 
 	@Override
 	public MessagesSendQuery build() {
-		MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt()).userId(userId);
+		MessagesSendQuery sendQuery = CLIENT.messages().send(ACTOR).randomId(RANDOM.nextInt()).userId(userId);
 		sendQuery.keyboard(buildKeyboard()).message(config.getVKSettings().getVKMessages().getMessage("admin-panel"));
 		return sendQuery;
 	}

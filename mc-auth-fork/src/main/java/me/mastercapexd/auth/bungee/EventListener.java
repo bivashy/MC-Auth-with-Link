@@ -11,7 +11,9 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -75,31 +77,33 @@ public class EventListener implements Listener {
 	public void onPlayerChat(ChatEvent event) {
 		if (event.isCancelled())
 			return;
-		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+		if (!(event.getSender() instanceof ProxiedPlayer))
+			return;
+		ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer((ProxiedPlayer) event.getSender());
 		if (!Auth.hasAccount(config.getActiveIdentifierType().getId(player)))
 			return;
 
 		String message = event.getMessage();
 		if (!isAllowedCommand(message)) {
-			player.sendMessage(config.getBungeeMessages().getMessage("disabled-command"));
+			player.sendMessage(config.getBungeeMessages().getStringMessage("disabled-command"));
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
 	public void onBlockedServerConnect(ServerConnectEvent event) {
-		ProxiedPlayer player = event.getPlayer();
+		ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer(event.getPlayer());
 		String id = config.getActiveIdentifierType().getId(player);
 		if (!(Auth.hasAccount(id)))
 			return;
-		if (!config.getBlockedServers().contains(event.getTarget()))
+		if (!config.getBlockedServers().stream().anyMatch(server -> event.getTarget().getName().equals(server.getId())))
 			return;
 		event.setCancelled(true);
 	}
 
 	@EventHandler
 	public void onPlayerLeave(PlayerDisconnectEvent event) {
-		String id = config.getActiveIdentifierType().getId(event.getPlayer());
+		String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(event.getPlayer()));
 		if (Auth.hasAccount(id)) {
 			Auth.removeAccount(id);
 			return;
@@ -122,7 +126,7 @@ public class EventListener implements Listener {
 
 	@SuppressWarnings("deprecation")
 	private void startLogin(ProxiedPlayer player) {
-		String id = config.getActiveIdentifierType().getId(player);
+		String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 		accountStorage.getAccount(id).thenAccept(account -> {
 
 			AuthenticationStepCreator authenticationStepCreator = AuthPlugin.getInstance()

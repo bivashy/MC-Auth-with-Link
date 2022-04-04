@@ -9,7 +9,7 @@ public class VKLinkUser extends AbstractLinkUser {
 
 	public VKLinkUser(Account account, Integer vkId, boolean confirmationEnabled) {
 		super(VKLinkType.getInstance(), account);
-		this.linkInfoAccount = new VKLinkUserInfo(vkId,confirmationEnabled);
+		this.linkInfoAccount = new VKLinkUserInfo(vkId, confirmationEnabled);
 	}
 
 	@Override

@@ -1,13 +1,11 @@
 package me.mastercapexd.auth.link.message.keyboard.button;
 
-public interface ButtonColor {
+import me.mastercapexd.auth.function.Castable;
+
+public interface ButtonColor extends Castable<ButtonColor> {
 	void apply(Button button);
 
-	default <T extends ButtonColor> T as(Class<T> clazz) {
-		return clazz.cast(this);
-	}
-
-	public interface ButtonColorBuilder {
+	public interface ButtonColorBuilder extends Castable<ButtonColorBuilder> {
 		ButtonColor red();
 
 		ButtonColor blue();
@@ -17,9 +15,5 @@ public interface ButtonColor {
 		ButtonColor white();
 
 		ButtonColor grey();
-
-		default <T extends ButtonColorBuilder> T as(Class<T> clazz) {
-			return clazz.cast(this);
-		}
 	}
 }

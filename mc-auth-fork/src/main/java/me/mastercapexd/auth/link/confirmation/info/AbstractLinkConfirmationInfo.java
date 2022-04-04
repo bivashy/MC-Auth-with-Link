@@ -2,10 +2,10 @@ package me.mastercapexd.auth.link.confirmation.info;
 
 import me.mastercapexd.auth.link.user.info.AbstractLinkUserInfo;
 
-public abstract class AbstractLinkConfirmationInfo extends AbstractLinkUserInfo implements LinkConfirmationInfo{
+public abstract class AbstractLinkConfirmationInfo extends AbstractLinkUserInfo implements LinkConfirmationInfo {
 
 	private static final String ERROR = "Cannot access in confirmation info";
-	
+
 	public AbstractLinkConfirmationInfo(Integer linkUserId) {
 		super(linkUserId);
 	}
@@ -25,6 +25,4 @@ public abstract class AbstractLinkConfirmationInfo extends AbstractLinkUserInfo 
 		throw new UnsupportedOperationException(ERROR);
 	}
 
-	
-	
 }

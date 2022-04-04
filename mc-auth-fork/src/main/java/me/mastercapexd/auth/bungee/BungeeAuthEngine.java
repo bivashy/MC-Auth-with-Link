@@ -5,11 +5,13 @@ import java.util.concurrent.TimeUnit;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-import me.mastercapexd.auth.objects.Server;
+import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.utils.TitleBar;
-import me.mastercapexd.auth.utils.bossbar.BossBar;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -51,7 +53,8 @@ public class BungeeAuthEngine implements AuthEngine {
 				if (serverInfo == null)
 					continue;
 				for (ProxiedPlayer player : serverInfo.getPlayers()) {
-					String id = this.config.getActiveIdentifierType().getId(player);
+					String id = this.config.getActiveIdentifierType()
+							.getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 					Account account = Auth.getAccount(id);
 					if (account != null) {
 						if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) {
@@ -94,7 +97,8 @@ public class BungeeAuthEngine implements AuthEngine {
 				if (serverInfo == null)
 					continue;
 				for (ProxiedPlayer player : serverInfo.getPlayers()) {
-					String id = this.config.getActiveIdentifierType().getId(player);
+					String id = this.config.getActiveIdentifierType()
+							.getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 					Account account = Auth.getAccount(id);
 					if (account == null) {
 						if (Auth.getBar(id) != null) {
@@ -105,10 +109,9 @@ public class BungeeAuthEngine implements AuthEngine {
 					}
 					int onlineTime = (int) (now - Auth.getJoinTime(id)) / 1000;
 
-					long authTime = Auth
-							.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())
-											? (this.config.getAuthTime() * 2L)
-											: this.config.getAuthTime();
+					long authTime = Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())
+							? (this.config.getAuthTime() * 2L)
+							: this.config.getAuthTime();
 					if (onlineTime >= authTime) {
 						player.disconnect(this.config.getBungeeMessages().getMessage("time-left"));
 						Auth.removeAccount(id);
@@ -117,12 +120,12 @@ public class BungeeAuthEngine implements AuthEngine {
 					if (!this.config.getBossBarSettings().isEnabled())
 						continue;
 					if (Auth.getBar(id) == null) {
-						BossBar bossBar = this.config.getBossBarSettings().createBossBar();
-						bossBar.addPlayer(player);
+						ProxyBossbar bossBar = this.config.getBossBarSettings().createBossBar();
+						bossBar.send(new BungeeProxyPlayer(player));
 						Auth.addBar(id, bossBar);
 					}
-					BossBar bar = Auth.getBar(id);
-					bar.setProgress(1.0F - onlineTime / (float) authTime);
+					ProxyBossbar bar = Auth.getBar(id);
+					bar.progress(1.0F - onlineTime / (float) authTime);
 				}
 			}
 		}, 0L, 1000L, TimeUnit.MILLISECONDS);

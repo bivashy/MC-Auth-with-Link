@@ -6,6 +6,7 @@ import java.util.Random;
 public class RandomCodeFactory {
 	private static final String letters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 	private static final String numbers = "1234567890";
+
 	public static int random(int min, int max) {
 		if (min >= max) {
 			return -1;
@@ -25,7 +26,8 @@ public class RandomCodeFactory {
 	}
 
 	public static String generateCode(int length) {
-		if(length<=0) return "";
+		if (length <= 0)
+			return "";
 		String s = "";
 		for (int i = 0; i < length; i++) {
 			s = s + generateRandomCharacter();

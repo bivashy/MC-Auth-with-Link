@@ -7,7 +7,10 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.ubivashka.vk.bungee.VKAPI;
+import com.ubivashka.vk.api.providers.VkApiProvider;
+import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
+import com.vk.api.sdk.client.VkApiClient;
+import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
@@ -19,6 +22,9 @@ import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.utils.CollectionUtils;
 
 public class VKMessageContext implements MessageContext {
+	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
+	private static final VkApiClient CLIENT = VK_API_PROVIDER.getVkApiClient();
+	private static final GroupActor ACTOR = VK_API_PROVIDER.getActor();
 	private static final String IGNORE_CASE_REGEX = "(?i)";
 
 	private final Integer userID;
@@ -50,8 +56,7 @@ public class VKMessageContext implements MessageContext {
 		Map<String, String> vkUserPlaceholders = new HashMap<>();
 
 		try {
-			List<GetResponse> userInfoResponses = VKAPI.getInstance().getVK().users()
-					.get(VKAPI.getInstance().getActor()).userIds(String.valueOf(userID)).execute();
+			List<GetResponse> userInfoResponses = CLIENT.users().get(ACTOR).userIds(String.valueOf(userID)).execute();
 			if (!userInfoResponses.isEmpty()) {
 				GetResponse userInfoResponse = userInfoResponses.get(0);
 				vkUserPlaceholders = Stream

@@ -22,19 +22,21 @@ public class VKEnterDeclineCommand extends VKCommandExecutor {
 
 	@Override
 	public void execute(VKMessageEvent e, String[] args) {
-		Predicate<LinkEntryUser> filter = entryUser -> entryUser.getLinkUserInfo().getLinkUserId()
-				.equals(e.getUserId()) && entryUser.getLinkType().equals(VKLinkType.getInstance())
+		Predicate<LinkEntryUser> filter = entryUser -> entryUser.getLinkUserInfo().getLinkUserId().equals(e.getUserId())
+				&& entryUser.getLinkType().equals(VKLinkType.getInstance())
 				&& Duration.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS)
 						.getSeconds() > receptioner.getConfig().getVKSettings().getEnterSettings().getEnterDelay();
-		
+
 		if (isChat(e.getPeer()))
 			return;
 		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(filter);
 		if (accounts.isEmpty())
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-no-enter"));
-		
-		//for (VKEntryAccount account : accounts)
-			//account.enterConnect(VKEnterAnswer.CONFIRM, receptioner.getConfig(), receptioner.getAccountStorage());
+			sendMessage(e.getPeer(),
+					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-no-enter"));
+
+		// for (VKEntryAccount account : accounts)
+		// account.enterConnect(VKEnterAnswer.CONFIRM, receptioner.getConfig(),
+		// receptioner.getAccountStorage());
 	}
 
 	@Override

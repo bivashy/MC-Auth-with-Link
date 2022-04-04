@@ -6,7 +6,13 @@ public final class TimeUtils {
 
 	public static long parseTime(String timeString) {
 		Calendar calendar = Calendar.getInstance();
-		for (String rawText : timeString.split("\\s+")) {
+		String[] splittedText = timeString.split("\\s+");
+		if (splittedText.length == 1)
+			try {
+				return Long.parseLong(splittedText[0]);
+			} catch (NumberFormatException ignored) {
+			}
+		for (String rawText : splittedText) {
 			String formatted = rawText.toLowerCase().replaceAll("\\d", "");
 			if (formatted.equals("d"))
 				calendar.add(Calendar.DATE, Integer.parseInt(rawText.replace("d", "")));

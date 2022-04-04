@@ -1,12 +1,12 @@
 package me.mastercapexd.auth.vk.commands;
 
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
-import net.md_5.bungee.config.Configuration;
 
 public class VKCustomCommand extends VKCommandExecutor {
 	private final String command, answer;
@@ -14,20 +14,20 @@ public class VKCustomCommand extends VKCommandExecutor {
 	private String chatAnswer = null;
 	private String jsonKeyboard = null;
 
-	public VKCustomCommand(String command, Configuration section) {
-		if (section.contains("regex")) {
-			this.command = section.getString("regex");
+	public VKCustomCommand(String command, ConfigurationSectionHolder sectionHolder) {
+		if (sectionHolder.contains("regex")) {
+			this.command = sectionHolder.getString("regex");
 			isRegex = true;
 		} else {
 			this.command = command;
 		}
-		answer = section.getString("answer");
-		if (section.contains("chat"))
-			chat = section.getBoolean("chat");
+		answer = sectionHolder.getString("answer");
+		if (sectionHolder.contains("chat"))
+			chat = sectionHolder.getBoolean("chat");
 		if (!chat)
-			chatAnswer = section.getString("chat-answer");
-		if (section.contains("keyboard"))
-			jsonKeyboard = section.getString("keyboard");
+			chatAnswer = sectionHolder.getString("chat-answer");
+		if (sectionHolder.contains("keyboard"))
+			jsonKeyboard = sectionHolder.getString("keyboard");
 
 	}
 

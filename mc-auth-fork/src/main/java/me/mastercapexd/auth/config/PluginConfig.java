@@ -5,18 +5,17 @@ import java.util.regex.Pattern;
 
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
-import me.mastercapexd.auth.config.messages.bungee.BungeeMessages;
-import me.mastercapexd.auth.objects.Server;
-import me.mastercapexd.auth.objects.StorageDataSettings;
+import me.mastercapexd.auth.config.bossbar.BossBarSettings;
+import me.mastercapexd.auth.config.messages.proxy.ProxyMessages;
+import me.mastercapexd.auth.config.server.Server;
+import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.storage.StorageType;
-import me.mastercapexd.auth.utils.bossbar.BossBarSettings;
-import me.mastercapexd.auth.vk.settings.VKSettings;
-import net.md_5.bungee.api.config.ServerInfo;
 
 public interface PluginConfig {
 
 	StorageDataSettings getStorageDataSettings();
-	
+
 	IdentifierType getActiveIdentifierType();
 
 	boolean isNameCaseCheckEnabled();
@@ -32,15 +31,15 @@ public interface PluginConfig {
 	List<Server> getAuthServers();
 
 	List<Server> getGameServers();
-	
-	List<ServerInfo> getBlockedServers();
+
+	List<Server> getBlockedServers();
 
 	List<String> getAllowedCommands();
 
 	List<String> getAuthenticationSteps();
-	
+
 	String getAuthenticationStepName(int index);
-	
+
 	boolean isPasswordConfirmationEnabled();
 
 	int getPasswordMinLength();
@@ -56,25 +55,19 @@ public interface PluginConfig {
 	long getSessionDurability();
 
 	long getJoinDelay();
-	
+
 	long getAuthTime();
 
-	BungeeMessages getBungeeMessages();
-	
+	ProxyMessages getBungeeMessages();
+
 	BossBarSettings getBossBarSettings();
 
-	ServerInfo findServerInfo(List<Server> servers);
-	
-	void reload();
-	
-	
-	
-	GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
-	
+	Server findServerInfo(List<Server> servers);
 
+	void reload();
+
+	GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
 
 	VKSettings getVKSettings();
-
-	
 
 }

@@ -46,7 +46,8 @@ public class AuthenticationStepContextFactoryDealership
 	public AuthenticationStepContext createContext(String stepName, Account account) {
 		return authenticationStepContextFactories
 				.getOrDefault(stepName,
-						AuthenticationStepContextFactory.of(new DefaultAuthenticationStepContext(account))).createContext(account);
+						AuthenticationStepContextFactory.of(new DefaultAuthenticationStepContext(account)))
+				.createContext(account);
 	}
 
 }

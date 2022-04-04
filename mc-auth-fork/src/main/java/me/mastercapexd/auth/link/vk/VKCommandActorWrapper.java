@@ -6,7 +6,7 @@ import me.mastercapexd.auth.link.AbstractLinkCommandActorWrapper;
 import me.mastercapexd.auth.link.message.Message;
 
 public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseVkActor> {
-		
+
 	public VKCommandActorWrapper(BaseVkActor actor) {
 		super(actor);
 	}
@@ -15,7 +15,7 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 	public void send(Message message) {
 		message.sendMessage(actor.as(BaseVkActor.class).getPeerId());
 	}
-	
+
 	@Override
 	public Integer userId() {
 		return actor.getAuthorId();

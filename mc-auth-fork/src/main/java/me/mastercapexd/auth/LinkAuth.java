@@ -34,7 +34,7 @@ public class LinkAuth<T extends LinkUser> {
 		removeLinkUsers(
 				linkUser -> linkUser.getAccount().getId().equals(id) && linkUser.getLinkType().equals(linkType));
 	}
-	
+
 	public synchronized void removeLinkUser(T linkUser) {
 		linkUsers.remove(linkUser);
 	}

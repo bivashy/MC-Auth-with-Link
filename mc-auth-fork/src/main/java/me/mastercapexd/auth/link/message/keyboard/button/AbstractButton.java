@@ -26,7 +26,5 @@ public abstract class AbstractButton implements Button {
 	public void putAdditionalInfo(String key, String value) {
 		additionalInfo.put(key, value);
 	}
-	
-	
 
 }

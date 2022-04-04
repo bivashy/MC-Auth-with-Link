@@ -10,10 +10,10 @@ import me.mastercapexd.auth.bungee.events.VKLinkEvent;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class VKLinkCommand extends VKCommandExecutor {
 	private VKReceptioner receptioner;
@@ -31,13 +31,13 @@ public class VKLinkCommand extends VKCommandExecutor {
 					.getMessage("confirmation-not-enough-arguments"));
 			return;
 		}
-		
+
 		Predicate<LinkConfirmationUser> filter = linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
 				&& linkUser.getLinkUserInfo().getLinkUserId().intValue() == e.getUserId().intValue();
-		
+
 		String code = args[0];
-		LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
-				.getLinkUsers(filter).stream().findFirst().orElse(null);
+		LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth().getLinkUsers(filter).stream().findFirst()
+				.orElse(null);
 		if (confirmationUser == null) {
 			sendMessage(e.getPeer(),
 					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-no-code"));
@@ -65,9 +65,9 @@ public class VKLinkCommand extends VKCommandExecutor {
 			account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
 					.setLinkUserId(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
-			ProxiedPlayer player = receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId());
+			ProxyPlayer player = receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId());
 			if (player != null)
-				player.sendMessage(receptioner.getConfig().getBungeeMessages().getMessage("vk-linked"));
+				player.sendMessage(receptioner.getConfig().getBungeeMessages().getStringMessage("vk-linked"));
 
 			sendMessage(e.getPeer(),
 					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-success"));

@@ -9,7 +9,7 @@ import com.google.common.collect.Maps;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
-import me.mastercapexd.auth.utils.bossbar.BossBar;
+import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 
 public class Auth {
 
@@ -19,7 +19,7 @@ public class Auth {
 	private static final Map<String, Account> ACCOUNTS = Maps.newConcurrentMap();
 	private static final Map<String, Long> ACCOUNT_JOIN_TIMES = Maps.newConcurrentMap();
 	private static final Map<String, Integer> ATTEMPTS = Maps.newConcurrentMap();
-	private static final Map<String, BossBar> BARS = Maps.newConcurrentMap();
+	private static final Map<String, ProxyBossbar> BARS = Maps.newConcurrentMap();
 	private static final Map<String, Account> googleAuthAccounts = Maps.newConcurrentMap();
 
 	private static final LinkAuth<LinkConfirmationUser> LINK_CONFIRMATION_AUTH = new LinkAuth<>();
@@ -77,13 +77,13 @@ public class Auth {
 		return LINK_ENTRY_AUTH;
 	}
 
-	public static synchronized void addBar(String user, BossBar bar) {
+	public static synchronized void addBar(String user, ProxyBossbar bar) {
 		if (BARS.containsKey(user))
 			BARS.get(user).removeAll();
 		BARS.put(user, bar);
 	}
 
-	public static synchronized BossBar getBar(String user) {
+	public static synchronized ProxyBossbar getBar(String user) {
 		return BARS.get(user);
 	}
 

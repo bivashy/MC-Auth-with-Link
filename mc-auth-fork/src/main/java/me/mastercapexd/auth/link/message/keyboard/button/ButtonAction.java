@@ -1,19 +1,13 @@
 package me.mastercapexd.auth.link.message.keyboard.button;
 
-public interface ButtonAction {
+import me.mastercapexd.auth.function.Castable;
+
+public interface ButtonAction extends Castable<ButtonAction> {
 	void apply(Button button);
 
-	default <T extends ButtonAction> T as(Class<T> clazz) {
-		return clazz.cast(this);
-	}
-
-	public interface ButtonActionBuilder {
+	public interface ButtonActionBuilder extends Castable<ButtonActionBuilder> {
 		ButtonAction callback(String id);
 
 		ButtonAction link(String url);
-
-		default <T extends ButtonActionBuilder> T as(Class<T> clazz) {
-			return clazz.cast(this);
-		}
 	}
 }

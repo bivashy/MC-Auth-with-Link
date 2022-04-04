@@ -16,8 +16,7 @@ public class StorageColumn {
 		ResultSet resultSet = connection.getMetaData().getColumns(null, null, "auth", columnName);
 		if (resultSet.next())
 			return false;
-		return connection.createStatement()
-				.execute("ALTER TABLE `auth` ADD `" + columnName + "` " + columnType + ";");
+		return connection.createStatement().execute("ALTER TABLE `auth` ADD `" + columnName + "` " + columnType + ";");
 	}
 
 }

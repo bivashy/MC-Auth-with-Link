@@ -1,11 +1,12 @@
 package me.mastercapexd.auth.config.messages.vk;
 
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
 import me.mastercapexd.auth.config.messages.AbstractMessages;
-import net.md_5.bungee.config.Configuration;
 
 public class VKMessages extends AbstractMessages<String, VKMessageContext> {
-	public VKMessages(Configuration configurationSection) {
-		super(configurationSection,"<br>");
+	public VKMessages(ConfigurationSectionHolder configurationSection) {
+		super(configurationSection, "<br>");
 	}
 
 	@Override
@@ -19,7 +20,8 @@ public class VKMessages extends AbstractMessages<String, VKMessageContext> {
 	}
 
 	@Override
-	protected AbstractMessages<String, VKMessageContext> createMessages(Configuration configurationSection) {
+	protected AbstractMessages<String, VKMessageContext> createMessages(
+			ConfigurationSectionHolder configurationSection) {
 		return new VKMessages(configurationSection);
 	}
 

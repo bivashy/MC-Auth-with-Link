@@ -3,8 +3,8 @@ package me.mastercapexd.auth.bungee.commands;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
@@ -18,14 +18,13 @@ public class GoogleCommand {
 	@Dependency
 	private AccountStorage accountStorage;
 
-	@SuppressWarnings("deprecation")
 	@Default
 	@GoogleUse
-	public void linkGoogle(ProxiedPlayer player) {
+	public void linkGoogle(ProxyPlayer player) {
 		String id = config.getActiveIdentifierType().getId(player);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				player.sendMessage(config.getBungeeMessages().getMessage("account-not-found"));
+				player.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			String key = plugin.getGoogleAuthenticator().createCredentials().getKey();

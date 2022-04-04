@@ -8,10 +8,8 @@ import me.mastercapexd.auth.link.vk.VKLinkUserInfo;
 public class VKLinkEntryUser extends AbstractLinkEntryUser {
 
 	public VKLinkEntryUser(Account account) {
-		super(VKLinkType.getInstance(), account,
-				new VKLinkUserInfo(
-						account.getLinkUsers().stream().filter(VKLinkType.getLinkUserPredicate())
-								.findFirst().orElse(null).getLinkUserInfo()));
+		super(VKLinkType.getInstance(), account, new VKLinkUserInfo(account.getLinkUsers().stream()
+				.filter(VKLinkType.getLinkUserPredicate()).findFirst().orElse(null).getLinkUserInfo()));
 	}
 
 }

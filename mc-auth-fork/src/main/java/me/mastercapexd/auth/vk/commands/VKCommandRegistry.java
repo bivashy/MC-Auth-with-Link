@@ -17,9 +17,9 @@ import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.Orphans;
@@ -31,7 +31,7 @@ public class VKCommandRegistry {
 			VK_API_PROVIDER.getActor()).disableStackTraceSanitizing();
 
 	static {
-		ProxyServer.getInstance().getPluginManager().registerListener(PLUGIN, new MessageListener());
+		ProxyPlugin.instance().getCore().registerListener(PLUGIN, new MessageListener());
 	}
 
 	public VKCommandRegistry() {
@@ -82,10 +82,10 @@ public class VKCommandRegistry {
 						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-already-linked"));
 
 			return new MessengerLinkContext(code, confirmationUser, () -> {
-				ProxiedPlayer player = PLUGIN.getConfig().getActiveIdentifierType()
+				ProxyPlayer player = PLUGIN.getConfig().getActiveIdentifierType()
 						.getPlayer(confirmationUser.getAccount().getId());
 				if (player != null)
-					player.sendMessage(PLUGIN.getConfig().getBungeeMessages().getMessage("vk-linked"));
+					player.sendMessage(PLUGIN.getConfig().getBungeeMessages().getStringMessage("vk-linked"));
 
 				commandActor
 						.reply(PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-success"));

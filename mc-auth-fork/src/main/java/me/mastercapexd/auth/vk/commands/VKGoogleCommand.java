@@ -33,7 +33,8 @@ public class VKGoogleCommand extends VKCommandExecutor {
 	@Override
 	public void execute(VKMessageEvent e, String[] args) {
 		if (!receptioner.getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-disabled"));
+			sendMessage(e.getPeer(),
+					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-disabled"));
 			return;
 		}
 		if (args.length == 0) {
@@ -54,7 +55,8 @@ public class VKGoogleCommand extends VKCommandExecutor {
 						.message("Ключ:" + key).execute();
 			} catch (WriterException | ApiException | ClientException | IOException ex) {
 				ex.printStackTrace();
-				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-error"));
+				sendMessage(e.getPeer(),
+						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-error"));
 			}
 		});
 	}

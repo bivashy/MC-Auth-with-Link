@@ -7,10 +7,9 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.events.LoginEvent;
-import me.mastercapexd.auth.utils.Connector;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.server.Server;
 
 public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
@@ -30,25 +29,24 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 		enterServer();
 		return true;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void enterServer() {
 		Account account = authenticationStepContext.getAccount();
 		String accountId = account.getId();
-		ProxiedPlayer player = account.getIdentifierType().getPlayer(accountId);
+		ProxyPlayer player = account.getIdentifierType().getPlayer(accountId);
 		LoginEvent loginEvent = new LoginEvent(account);
-		ProxyServer.getInstance().getPluginManager().callEvent(loginEvent);	
-		
+		ProxyPlugin.instance().getCore().callEvent(loginEvent);
+
 		if (loginEvent.isCancelled())
 			return;
 
-		account.setLastIpAddress(player.getAddress().getHostString());
+		account.setLastIpAddress(player.getRemoteAddress().getHostString());
 		account.setLastSessionStart(System.currentTimeMillis());
 		PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
 		Auth.removeAccount(accountId);
-		ServerInfo connectServer = PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getGameServers());
-		Connector.connectOrKick(player, connectServer,
-				PLUGIN.getConfig().getBungeeMessages().getMessage("game-servers-connection-refused"));
+		Server connectServer = PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getGameServers()).asProxyServer();
+		player.sendTo(connectServer);
 	}
 
 	public static class EnterServerAuthenticationStepCreator extends AbstractAuthenticationStepCreator {

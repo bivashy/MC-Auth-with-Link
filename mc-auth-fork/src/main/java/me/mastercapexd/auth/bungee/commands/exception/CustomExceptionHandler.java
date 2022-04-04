@@ -46,7 +46,8 @@ public class CustomExceptionHandler extends BungeeExceptionAdapter {
 
 	@Override
 	public void missingArgument(CommandActor actor, MissingArgumentException exception) {
-		actor.reply(messages.getStringMessage("unresolved-argument").replaceAll("%argument_name%", exception.getParameter().getName()));
+		actor.reply(messages.getStringMessage("unresolved-argument").replaceAll("%argument_name%",
+				exception.getParameter().getName()));
 	}
 
 	@Override

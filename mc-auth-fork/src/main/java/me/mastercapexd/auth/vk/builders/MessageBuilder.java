@@ -3,7 +3,7 @@ package me.mastercapexd.auth.vk.builders;
 import java.util.Random;
 
 import com.google.gson.Gson;
-import com.ubivashka.vk.bungee.VKAPI;
+import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -11,10 +11,10 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
 public abstract class MessageBuilder {
-	public static final VkApiClient vk = VKAPI.getInstance().getVK();
-	public static final GroupActor actor = VKAPI.getInstance().getActor();
-	public static final Random random = new Random();
-	public static final Gson gson = new Gson();
+	public static final VkApiClient CLIENT = BungeeVkApiPlugin.getInstance().getVkApiProvider().getVkApiClient();
+	public static final GroupActor ACTOR = BungeeVkApiPlugin.getInstance().getVkApiProvider().getActor();
+	public static final Random RANDOM = new Random();
+	public static final Gson GSON = new Gson();
 
 	public abstract MessagesSendQuery build();
 

@@ -24,7 +24,7 @@ public interface Account {
 	HashType getHashType();
 
 	void setHashType(HashType hashType);
-	
+
 	UUID getUniqueId();
 
 	String getName();
@@ -45,14 +45,14 @@ public interface Account {
 	 * @return List of link users for example VK link user that holds vk id and etc.
 	 */
 	List<LinkUser> getLinkUsers();
-	
+
 	/**
 	 * @param linkUser that will be added to list of link users
 	 */
 	void addLinkUser(LinkUser linkUser);
-	
+
 	/**
-	 * @param filter 
+	 * @param filter
 	 * @return ILinkUser that fits filter
 	 */
 	Optional<LinkUser> findFirstLinkUser(Predicate<LinkUser> filter);
@@ -64,23 +64,23 @@ public interface Account {
 	String getLastIpAddress();
 
 	void setLastIpAddress(String hostString);
-	
+
 	String getGoogleKey();
 
 	void setGoogleKey(String googleKey);
 
 	long getLastSessionStart();
-	
+
 	void setLastSessionStart(long currentTimeMillis);
-	
+
 	int getCurrentConfigurationAuthenticationStepCreatorIndex();
-	
+
 	void setCurrentConfigurationAuthenticationStepCreatorIndex(int index);
-	
+
 	AuthenticationStep getCurrentAuthenticationStep();
-	
+
 	boolean nextAuthenticationStep(AuthenticationStepContext stepContext);
-	
+
 	void logout(long sessionDurability);
 
 	boolean isSessionActive(long sessionDurability);
@@ -95,7 +95,8 @@ public interface Account {
 		RestoreResult result = RestoreResult.ACCOUNT_VK_NOT_EQUALS;
 		result.setPasswordHash(getPasswordHash());
 		if (!isAdmin)
-			if (findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo().getLinkUserId() != VKuserID) {
+			if (findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
+					.getLinkUserId() != VKuserID) {
 				return result;
 			}
 		String newPass = RandomCodeFactory.generateCode(codeLength);

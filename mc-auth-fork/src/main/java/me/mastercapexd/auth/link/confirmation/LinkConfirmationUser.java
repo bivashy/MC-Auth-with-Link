@@ -5,6 +5,6 @@ import me.mastercapexd.auth.link.user.LinkUser;
 
 public interface LinkConfirmationUser extends LinkUser {
 	LinkConfirmationInfo getConfirmationInfo();
-	
+
 	Long getLinkTimeoutMillis();
 }

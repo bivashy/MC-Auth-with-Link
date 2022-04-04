@@ -9,10 +9,10 @@ import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction.ButtonActionBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColorBuilder;
 import me.mastercapexd.auth.link.message.vk.VKButton;
-import me.mastercapexd.auth.link.message.vk.VKKeyboard;
-import me.mastercapexd.auth.link.message.vk.VKMessage;
 import me.mastercapexd.auth.link.message.vk.VKButtonAction.VKButtonActionBuilder;
 import me.mastercapexd.auth.link.message.vk.VKButtonColor.VKButtonColorBuilder;
+import me.mastercapexd.auth.link.message.vk.VKKeyboard;
+import me.mastercapexd.auth.link.message.vk.VKMessage;
 import me.mastercapexd.auth.link.user.LinkUser;
 
 public class VKLinkType extends AbstractLinkType {

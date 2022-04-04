@@ -1,5 +1,10 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.regex.Pattern;
+
+import com.ubivashka.configuration.BungeeConfigurationProcessor;
+import com.ubivashka.configuration.ConfigurationProcessor;
+import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.AuthEngine;
@@ -12,13 +17,22 @@ import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep
 import me.mastercapexd.auth.authentication.step.steps.vk.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.config.BungeePluginConfig;
+import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
+import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
+import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
+import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
+import me.mastercapexd.auth.proxy.ProxyCore;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.ProxyPluginProvider;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.utils.GeoUtils;
+import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandHandler;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
@@ -26,7 +40,18 @@ import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import me.mastercapexd.auth.vk.utils.VKUtils;
 import net.md_5.bungee.api.plugin.Plugin;
 
-public class AuthPlugin extends Plugin {
+public class AuthPlugin extends Plugin implements ProxyPlugin {
+	public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor()
+			.registerFieldResolver(Server.class,
+					(context) -> new Server(context.as(SingleObjectResolverContext.class).getConfigurationValue()))
+			.registerFieldResolver(Long.class,
+					(context) -> TimeUtils.parseTime(
+							context.as(SingleObjectResolverContext.class).getConfigurationValue().toString()))
+			.registerFieldResolver(Pattern.class,
+					(context) -> Pattern
+							.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString()))
+			.registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
+			.registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
 
 	private GoogleAuthenticator googleAuthenticator;
 
@@ -53,6 +78,7 @@ public class AuthPlugin extends Plugin {
 
 	@Override
 	public void onEnable() {
+		ProxyPluginProvider.setPluginInstance(this);
 		instance = this;
 		initialize();
 		initializeListener();
@@ -79,7 +105,7 @@ public class AuthPlugin extends Plugin {
 		this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
 		this.authEngine.start();
 
-		this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());;
+		this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
 		this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
 		this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
 		this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
@@ -103,10 +129,8 @@ public class AuthPlugin extends Plugin {
 		this.vkReceptioner = new VKReceptioner(this, config, accountStorage, vkCommandHandler, vkButtonHandler);
 		this.getProxy().getPluginManager().registerListener(this, vkButtonHandler);
 		this.getProxy().getPluginManager().registerListener(this, vkCommandHandler);
-		// this.getProxy().getPluginManager().registerCommand(this, new
-		// VKLinkCommand(this, config, accountStorage));
 		this.config.getVKSettings().getCommands().registerCommands(vkReceptioner);
-		
+
 		new VKCommandRegistry();
 	}
 
@@ -164,4 +188,13 @@ public class AuthPlugin extends Plugin {
 		return authenticationContextFactoryDealership;
 	}
 
+	@Override
+	public ProxyCore getCore() {
+		return BungeeProxyCore.INSTANCE;
+	}
+
+	@Override
+	public ConfigurationProcessor getConfigurationProcessor() {
+		return CONFIGURATION_PROCESSOR;
+	}
 }

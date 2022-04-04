@@ -17,6 +17,7 @@ import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreat
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -99,10 +100,10 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isSessionActive(long sessionDurability) {
-		ProxiedPlayer proxiedPlayer = identifierType.getPlayer(getId());
+		ProxyPlayer proxiedPlayer = identifierType.getPlayer(getId());
 		if (proxiedPlayer == null)
 			return (getLastSessionStart() + sessionDurability >= System.currentTimeMillis());
-		return proxiedPlayer.getAddress().getHostString().equals(getLastIpAddress())
+		return proxiedPlayer.getRemoteAddress().getHostString().equals(getLastIpAddress())
 				&& (getLastSessionStart() + sessionDurability >= System.currentTimeMillis());
 	}
 

@@ -5,7 +5,7 @@ import me.mastercapexd.auth.link.confirmation.AbstractLinkConfirmationUser;
 import me.mastercapexd.auth.link.confirmation.info.LinkConfirmationInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 
-public class VKConfirmationUser extends AbstractLinkConfirmationUser{
+public class VKConfirmationUser extends AbstractLinkConfirmationUser {
 
 	public VKConfirmationUser(Account account, LinkConfirmationInfo confirmationInfo) {
 		super(VKLinkType.getInstance(), account, confirmationInfo);

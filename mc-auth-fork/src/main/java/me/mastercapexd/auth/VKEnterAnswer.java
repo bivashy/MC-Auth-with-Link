@@ -10,7 +10,7 @@ public enum VKEnterAnswer {
 	}
 
 	public static VKEnterAnswer getByPayload(String payload) {
-		for (VKEnterAnswer answer : values()) 
+		for (VKEnterAnswer answer : values())
 			if (answer.payload.equals(payload))
 				return answer;
 		return null;

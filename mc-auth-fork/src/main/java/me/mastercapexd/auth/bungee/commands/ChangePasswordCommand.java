@@ -2,8 +2,8 @@ package me.mastercapexd.auth.bungee.commands;
 
 import me.mastercapexd.auth.bungee.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
@@ -17,16 +17,16 @@ public class ChangePasswordCommand {
 	private AccountStorage accountStorage;
 
 	@Default
-	public void changePlayerPassword(ProxiedPlayer sender, DoublePassword password) {
+	public void changePlayerPassword(ProxyPlayer sender, DoublePassword password) {
 		String id = config.getActiveIdentifierType().getId(sender);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				sender.sendMessage(config.getBungeeMessages().getMessage("account-not-found"));
+				sender.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
 				return;
 			}
 
 			if (!account.getHashType().checkHash(password.getOldPassword(), account.getPasswordHash())) {
-				sender.sendMessage(config.getBungeeMessages().getMessage("wrong-old-password"));
+				sender.sendMessage(config.getBungeeMessages().getStringMessage("wrong-old-password"));
 				return;
 			}
 
@@ -35,7 +35,7 @@ public class ChangePasswordCommand {
 
 			account.setPasswordHash(account.getHashType().hash(password.getNewPassword()));
 			accountStorage.saveOrUpdateAccount(account);
-			sender.sendMessage(config.getBungeeMessages().getMessage("change-success"));
+			sender.sendMessage(config.getBungeeMessages().getStringMessage("change-success"));
 		});
 	}
 }

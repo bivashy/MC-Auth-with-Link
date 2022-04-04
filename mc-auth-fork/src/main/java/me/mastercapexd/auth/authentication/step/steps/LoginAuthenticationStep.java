@@ -7,7 +7,7 @@ import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationS
 import me.mastercapexd.auth.bungee.AuthPlugin;
 
 public class LoginAuthenticationStep extends AbstractAuthenticationStep {
-	
+
 	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
 	public static final String STEP_NAME = "LOGIN";
 
@@ -22,7 +22,8 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep {
 
 	@Override
 	public boolean shouldSkip() {
-		return !Auth.hasAccount(authenticationStepContext.getAccount().getId()) || authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
+		return !Auth.hasAccount(authenticationStepContext.getAccount().getId())
+				|| authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
 	}
 
 	public static class LoginAuthenticationStepCreator extends AbstractAuthenticationStepCreator {

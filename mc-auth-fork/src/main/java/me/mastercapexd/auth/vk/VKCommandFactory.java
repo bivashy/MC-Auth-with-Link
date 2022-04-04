@@ -3,14 +3,13 @@ package me.mastercapexd.auth.vk;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.mastercapexd.auth.config.vk.VKCommandPath;
+import me.mastercapexd.auth.config.vk.VKCommandPaths;
 import me.mastercapexd.auth.vk.commandhandler.VKCommand;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
-import me.mastercapexd.auth.vk.settings.VKCommandPath;
-import me.mastercapexd.auth.vk.settings.VKCommandPaths;
 
 public interface VKCommandFactory {
-	VKCommand createCommand(String commandName, VKCommandExecutor executor, List<String> aliases,
-			boolean isRegex);
+	VKCommand createCommand(String commandName, VKCommandExecutor executor, List<String> aliases, boolean isRegex);
 
 	default VKCommand createCommand(String commandName, VKCommandExecutor executor, boolean isRegex) {
 		return createCommand(commandName, executor, new ArrayList<>(), isRegex);
@@ -29,7 +28,7 @@ public interface VKCommandFactory {
 	}
 
 	default VKCommand createCommand(VKCommandExecutor executor, VKCommandPaths mainCommands) {
-		return createCommand(executor,mainCommands.getPath(executor.getKey()));
+		return createCommand(executor, mainCommands.getPath(executor.getKey()));
 	}
-			
+
 }

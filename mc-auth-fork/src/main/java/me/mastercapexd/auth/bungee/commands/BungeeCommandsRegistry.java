@@ -12,10 +12,11 @@ import me.mastercapexd.auth.bungee.commands.exception.CustomExceptionHandler;
 import me.mastercapexd.auth.bungee.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.bungee.commands.parameters.RegisterPassword;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.BungeePluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.CommandHandler;
@@ -94,7 +95,7 @@ public class BungeeCommandsRegistry {
 		BUNGEE_COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {
 			if (!actor.as(BungeeCommandActor.class).isPlayer())
 				return;
-			ProxiedPlayer player = actor.as(BungeeCommandActor.class).asPlayer();
+			ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer(actor.as(BungeeCommandActor.class).asPlayer());
 			String accountId = config.getActiveIdentifierType().getId(player);
 			if (!Auth.hasAccount(accountId))
 				return;
@@ -124,25 +125,23 @@ public class BungeeCommandsRegistry {
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("vk-disabled"));
 		});
 
-		BUNGEE_COMMAND_HANDLER.registerValueResolver(CommandSender.class,
-				context -> context.actor().as(BungeeCommandActor.class).getSender());
-
-		BUNGEE_COMMAND_HANDLER.registerValueResolver(ProxiedPlayer.class, (context) -> {
+		BUNGEE_COMMAND_HANDLER.registerValueResolver(ProxyPlayer.class, (context) -> {
 			if (!context.parameter().hasAnnotation(OtherPlayer.class)) {
 				ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
 				if (selfPlayer == null)
 					throw new SendMessageException(config.getBungeeMessages().getStringMessage("players-only"));
-				return selfPlayer;
+				return BungeeProxyPlayerFactory.wrapPlayer(selfPlayer);
 			}
 			String value = context.pop();
 			ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
 			if (player == null)
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("player-offline"));
-			return player;
+			return BungeeProxyPlayerFactory.wrapPlayer(player);
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerContextResolver(Account.class, (context) -> {
-			ProxiedPlayer player = context.actor().as(BungeeCommandActor.class).asPlayer();
+			ProxyPlayer player = BungeeProxyPlayerFactory
+					.wrapPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
 			if (player == null)
 				throw new SendMessageException(config.getBungeeMessages().getStringMessage("players-only"));
 			String id = config.getActiveIdentifierType().getId(player);

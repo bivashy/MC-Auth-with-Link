@@ -8,14 +8,14 @@ import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColor
 
 public interface LinkType {
 	String getLinkName();
-	
+
 	MessageBuilder newMessageBuilder();
-	
+
 	IKeyboardBuilder newKeyboardBuilder();
-	
+
 	ButtonBuilder newButtonBuilder();
-	
+
 	ButtonColorBuilder newButtonColorBuilder();
-	
+
 	ButtonActionBuilder newButtonActionBuilder();
 }

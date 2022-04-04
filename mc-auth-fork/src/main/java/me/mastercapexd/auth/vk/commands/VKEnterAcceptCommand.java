@@ -40,11 +40,12 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-no-enter"));
 			return;
 		}
-		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {;
+		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {
+			;
 			entryUser.setConfirmed(true);
 			return filter.test(entryUser);
 		});
-		
+
 		Account account = accounts.stream().findFirst().orElse(null).getAccount();
 		String stepName = PLUGIN.getConfig()
 				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());

@@ -18,8 +18,8 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 		if (isChat(e.getPeer()))
 			return;
 		if (args.length < 2) {
-			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-not-enough-arguments"));
+			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+					.getMessage("changepass-not-enough-arguments"));
 			return;
 		}
 		String playerName = args[0];
@@ -27,20 +27,20 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 			String oldPassword = account.getPasswordHash();
 			String newPassword = account.getHashType().hash(args[1]);
 			if (oldPassword.equals(newPassword)) {
-				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-nothing-to-change"));
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+						.getMessage("changepass-nothing-to-change"));
 				return;
 			}
 
 			if (args[1].length() < receptioner.getConfig().getPasswordMinLength()) {
-				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-password-too-short"));
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+						.getMessage("changepass-password-too-short"));
 				return;
 			}
 
 			if (args[1].length() > receptioner.getConfig().getPasswordMaxLength()) {
-				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("changepass-password-too-long"));
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+						.getMessage("changepass-password-too-long"));
 				return;
 			}
 			account.setPasswordHash(newPassword);

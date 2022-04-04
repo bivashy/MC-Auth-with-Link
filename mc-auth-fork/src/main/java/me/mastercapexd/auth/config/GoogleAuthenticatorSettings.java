@@ -1,16 +1,16 @@
 package me.mastercapexd.auth.config;
 
-import com.ubivashka.config.annotations.ConfigField;
-import com.ubivashka.config.processors.BungeeConfigurationHolder;
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
-import net.md_5.bungee.config.Configuration;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class GoogleAuthenticatorSettings extends BungeeConfigurationHolder{
+public class GoogleAuthenticatorSettings implements ConfigurationHolder {
 	@ConfigField
 	private boolean enabled = false;
 
-	public GoogleAuthenticatorSettings(Configuration section) {
-		init(section);
+	public GoogleAuthenticatorSettings(ConfigurationSectionHolder sectionHolder) {
+		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 
 	public boolean isEnabled() {

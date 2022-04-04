@@ -12,27 +12,23 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.yaml.snakeyaml.Yaml;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.google.gson.JsonIOException;
-import com.ubivashka.config.annotations.ConfigField;
-import com.ubivashka.config.annotations.ConverterType;
-import com.ubivashka.config.annotations.ImportantField;
-import com.ubivashka.config.processors.BungeeConfigurationHolder;
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.configuration.annotations.ImportantField;
+import com.ubivashka.configuration.annotations.SingleObject;
 
-import me.mastercapexd.auth.FillType;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
-import me.mastercapexd.auth.config.converters.MessageFieldConverter;
-import me.mastercapexd.auth.config.converters.RegexPatternConverter;
-import me.mastercapexd.auth.config.converters.ServerConverter;
-import me.mastercapexd.auth.config.converters.StringTimeConverter;
-import me.mastercapexd.auth.config.messages.bungee.BungeeMessages;
-import me.mastercapexd.auth.objects.Server;
-import me.mastercapexd.auth.objects.StorageDataSettings;
+import me.mastercapexd.auth.config.bossbar.BossBarSettings;
+import me.mastercapexd.auth.config.messages.proxy.ProxyMessages;
+import me.mastercapexd.auth.config.server.FillType;
+import me.mastercapexd.auth.config.server.Server;
+import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.vk.VKSettings;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.storage.StorageType;
-import me.mastercapexd.auth.utils.bossbar.BossBarSettings;
-import me.mastercapexd.auth.vk.settings.VKSettings;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -40,73 +36,71 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-public class BungeePluginConfig extends BungeeConfigurationHolder implements PluginConfig {
-
-	static {
-		BungeeConfigurationHolder.getContextProcessorsDealership().put("regex", new RegexPatternConverter());
-		BungeeConfigurationHolder.getContextProcessorsDealership().put("time-parser", new StringTimeConverter());
-		BungeeConfigurationHolder.getContextProcessorsDealership().put("message-field", new MessageFieldConverter());
-		BungeeConfigurationHolder.getContextProcessorsDealership().put("server", new ServerConverter());
-	}
-
-	@ConfigField(path = "id-type")
+public class BungeePluginConfig implements PluginConfig {
+	@ConfigField("id-type")
 	private IdentifierType activeIdentifierType = IdentifierType.NAME;
-	@ConfigField(path = "check-name-case")
+	@ConfigField("check-name-case")
 	private Boolean nameCaseCheckEnabled = true;
-	@ConfigField(path = "enable-password-confirm")
+	@ConfigField("enable-password-confirm")
 	private Boolean passwordConfirmationEnabled = false;
-	@ConfigField(path = "hash-type")
+	@ConfigField("hash-type")
 	private HashType activeHashType = HashType.SHA256;
-	@ConfigField(path = "storage-type")
+	@ConfigField("storage-type")
 	private StorageType storageType = StorageType.SQLITE;
-	@ConfigField(path = "name-regex-pattern")
+	@SingleObject
+	@ConfigField("name-regex-pattern")
 	private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
-	@ConfigField(path = "password-regex-pattern")
+	@SingleObject
+	@ConfigField("password-regex-pattern")
 	private Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9_$#@^-]*");
-	@ConfigField(path = "password-min-length")
+	@ConfigField("password-min-length")
 	private Integer passwordMinLength = 5;
-	@ConfigField(path = "password-max-length")
+	@ConfigField("password-max-length")
 	private Integer passwordMaxLength = 20;
-	@ConfigField(path = "password-attempts")
+	@ConfigField("password-attempts")
 	private Integer passwordAttempts = 3;
-	@ConfigField(path = "auth-time")
+	@SingleObject
+	@ConfigField("auth-time")
 	private Long authTime = 60L;
 
 	@ImportantField
-	@ConfigField(path = "auth-servers")
+	@SingleObject
+	@ConfigField("auth-servers")
 	private List<Server> authServers = null;
+	@SingleObject
 	@ImportantField
-	@ConfigField(path = "game-servers")
+	@ConfigField("game-servers")
 	private List<Server> gameServers = null;
-	@ConfigField(path = "blocked-servers")
-	private List<String> blockedServers = new ArrayList<>();
-	@ConfigField(path = "allowed-commands")
+	@SingleObject
+	@ConfigField("blocked-servers")
+	private List<Server> blockedServers = new ArrayList<>();
+	@ConfigField("allowed-commands")
 	private List<String> allowedCommands = new ArrayList<>();
 	@ImportantField
-	@ConfigField(path = "data")
+	@ConfigField("data")
 	private StorageDataSettings storageDataSettings = null;
-	@ConfigField(path = "max-login-per-ip")
+	@ConfigField("max-login-per-ip")
 	private Integer maxLoginPerIP = 0;
-	@ConfigField(path = "messages-delay")
+	@ConfigField("messages-delay")
 	private Integer messagesDelay = 5;
-	@ConfigField(path = "vk")
+	@ConfigField("vk")
 	private VKSettings vkSettings = new VKSettings();
-	@ConfigField(path = "google-authenticator")
+	@ConfigField("google-authenticator")
 	private GoogleAuthenticatorSettings googleAuthenticatorSettings = null;
 	@ImportantField
-	@ConfigField(path = "messages")
-	private BungeeMessages bungeeMessages = null;
-	@ConfigField(path = "boss-bar")
+	@ConfigField("messages")
+	private ProxyMessages proxyMessages = null;
+	@ConfigField("boss-bar")
 	private BossBarSettings barSettings = null;
-	@ConfigField(path = "fill-type")
+	@ConfigField("fill-type")
 	private FillType fillType;
-	@ConverterType("time-parser")
-	@ConfigField(path = "session-durability")
+	@SingleObject
+	@ConfigField("session-durability")
 	private Long sessionDurability = 14400L;
-	@ConverterType("time-parser")
-	@ConfigField(path = "join-delay")
-	private long joinDelay = 1000L;
-	@ConfigField(path = "authentication-steps")
+	@SingleObject
+	@ConfigField("join-delay")
+	private Long joinDelay = 1000L;
+	@ConfigField("authentication-steps")
 	private List<String> authenticationSteps = new ArrayList<>(
 			Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
 
@@ -115,31 +109,31 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 
 	public BungeePluginConfig(Plugin plugin) {
 		this.plugin = plugin;
-
 		config = loadConfiguration(plugin.getDataFolder(), plugin.getResourceAsStream("config.yml"));
-		init(config);
+		ProxyPlugin.instance().getConfigurationProcessor().resolve(config, this);
 	}
 
 	@Override
-	public ServerInfo findServerInfo(List<Server> servers) {
-		servers = fillType.shuffle(servers);
-		ServerInfo optimal = null;
-		for (Server server : servers) {
+	public Server findServerInfo(List<Server> servers) {
+		List<Server> filteredServers = fillType.shuffle(servers.stream().filter(server -> {
 			ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server.getId());
 			if (serverInfo == null)
-				continue;
+				return false;
 			if (server.getMaxPlayers() != -1 && (serverInfo.getPlayers().size() >= server.getMaxPlayers()))
-				continue;
-			optimal = serverInfo;
-			break;
-		}
-		return optimal;
+				return false;
+			return true;
+		}).collect(Collectors.toList()));
+
+		if (filteredServers.isEmpty())
+			return servers.get(0);
+
+		return filteredServers.get(0);
 	}
 
 	@Override
 	public void reload() {
 		config = loadConfiguration(plugin.getDataFolder(), plugin.getResourceAsStream("config.yml"));
-		init(config);
+		ProxyPlugin.instance().getConfigurationProcessor().resolve(config, this);
 	}
 
 	private Configuration loadConfiguration(File folder, InputStream resourceAsStream) {
@@ -216,7 +210,7 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 	public long getJoinDelay() {
 		return joinDelay;
 	}
-	
+
 	@Override
 	public long getAuthTime() {
 		return authTime;
@@ -233,9 +227,8 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 	}
 
 	@Override
-	public List<ServerInfo> getBlockedServers() {
-		return Collections.unmodifiableList(blockedServers.stream()
-				.map(serverId -> ProxyServer.getInstance().getServerInfo(serverId)).collect(Collectors.toList()));
+	public List<Server> getBlockedServers() {
+		return Collections.unmodifiableList(blockedServers);
 	}
 
 	@Override
@@ -244,8 +237,8 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 	}
 
 	@Override
-	public BungeeMessages getBungeeMessages() {
-		return (BungeeMessages) bungeeMessages;
+	public ProxyMessages getBungeeMessages() {
+		return (ProxyMessages) proxyMessages;
 	}
 
 	@Override
@@ -289,9 +282,7 @@ public class BungeePluginConfig extends BungeeConfigurationHolder implements Plu
 
 	@Override
 	public String getAuthenticationStepName(int index) {
-		return index >= 0 && index < authenticationSteps.size()
-				? authenticationSteps.get(index)
-				: "NULL";
+		return index >= 0 && index < authenticationSteps.size() ? authenticationSteps.get(index) : "NULL";
 	}
 
 }

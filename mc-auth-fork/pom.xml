@@ -22,14 +22,14 @@
 		<!-- Dependencies -->
 		<bungeecord.version>1.17-R0.1-SNAPSHOT</bungeecord.version>
 		<velocity.version>3.0.1</velocity.version>
-		<vk-api-bungee.version>0.3.1-Snapshot</vk-api-bungee.version>
+		<vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
 		<jbcrypt.version>0.4</jbcrypt.version>
 		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
 		<mysql.connector.version>6.0.6</mysql.connector.version>
 		<google.authenticator.version>1.4.0</google.authenticator.version>
 		<zxing.library.version>3.3.0</zxing.library.version>
-		<configuration-library.version>1.1.5</configuration-library.version>
-		<lamp.command-library.version>2.9.5</lamp.command-library.version>
+		<configuration-library.version>2.0.2</configuration-library.version>
+		<lamp.command-library.version>3.0.2</lamp.command-library.version>
 		<vk.lamp.module.version>0.0.2</vk.lamp.module.version>
 
 		<!-- Maven plugins -->
@@ -52,7 +52,7 @@
 
 		<repository>
 			<id>velocity</id>
-			<url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+			<url>https://repo.velocitypowered.com/snapshots/</url>
 		</repository>
 
 	</repositories>
@@ -130,8 +130,8 @@
 
 		<!-- Configuration library for BungeeCord -->
 		<dependency>
-			<groupId>com.github.U61vashka</groupId>
-			<artifactId>ConfigurationLibrary</artifactId>
+			<groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+			<artifactId>bungee</artifactId>
 			<version>${configuration-library.version}</version>
 		</dependency>
 
@@ -191,6 +191,8 @@
 					</compilerArgs>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					 <!-- Disable annotation processing for ourselves. -->
+					<compilerArgument>-proc:none</compilerArgument>
 				</configuration>
 			</plugin>
 

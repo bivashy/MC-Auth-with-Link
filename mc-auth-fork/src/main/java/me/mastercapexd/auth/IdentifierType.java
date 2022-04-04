@@ -1,17 +1,17 @@
 package me.mastercapexd.auth;
 
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public enum IdentifierType {
 
 	UUID {
-		public String getId(ProxiedPlayer proxiedPlayer) {
-			return proxiedPlayer.getUniqueId().toString();
+		public String getId(ProxyPlayer player) {
+			return player.getUniqueId().toString();
 		}
 
-		public ProxiedPlayer getPlayer(String id) {
-			return ProxyServer.getInstance().getPlayer(java.util.UUID.fromString(id));
+		public ProxyPlayer getPlayer(String id) {
+			return ProxyPlugin.instance().getCore().getPlayer(java.util.UUID.fromString(id));
 		}
 
 		public String fromRawString(String uuid) {
@@ -19,12 +19,12 @@ public enum IdentifierType {
 		}
 	},
 	NAME {
-		public String getId(ProxiedPlayer proxiedPlayer) {
-			return proxiedPlayer.getName().toLowerCase();
+		public String getId(ProxyPlayer player) {
+			return player.getNickname().toLowerCase();
 		}
 
-		public ProxiedPlayer getPlayer(String id) {
-			return ProxyServer.getInstance().getPlayer(id);
+		public ProxyPlayer getPlayer(String id) {
+			return ProxyPlugin.instance().getCore().getPlayer(id);
 		}
 
 		public String fromRawString(String name) {
@@ -32,9 +32,9 @@ public enum IdentifierType {
 		}
 	};
 
-	public abstract String getId(ProxiedPlayer proxiedPlayer);
+	public abstract String getId(ProxyPlayer proxiedPlayer);
 
-	public abstract ProxiedPlayer getPlayer(String id);
+	public abstract ProxyPlayer getPlayer(String id);
 
 	public abstract String fromRawString(String id);
 }

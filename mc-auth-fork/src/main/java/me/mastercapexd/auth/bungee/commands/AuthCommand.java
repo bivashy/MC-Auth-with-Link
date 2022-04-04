@@ -9,16 +9,17 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.OtherPlayer;
 import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bungee.annotation.CommandPermission;
+import revxrsal.commands.command.CommandActor;
 
 @Command({ "auth", "authadmin", "adminauth" })
+@CommandPermission("auth.admin")
 public class AuthCommand {
 
 	@Dependency
@@ -28,70 +29,64 @@ public class AuthCommand {
 	@Dependency
 	private AccountStorage accountStorage;
 
-	@SuppressWarnings("deprecation")
 	@Default
-	@CommandPermission("auth.admin")
-	public void accountInfos(CommandSender sender) {
+	public void accountInfos(CommandActor commandActor) {
 		accountStorage.getAllAccounts().thenAccept(accounts -> {
-			sender.sendMessage(config.getBungeeMessages().getStringMessage("info-registered").replace("%players%",
+			commandActor.reply(config.getBungeeMessages().getStringMessage("info-registered").replace("%players%",
 					String.valueOf(accounts.size())));
-			sender.sendMessage(config.getBungeeMessages().getStringMessage("info-auth").replaceAll("%players%",
+			commandActor.reply(config.getBungeeMessages().getStringMessage("info-auth").replaceAll("%players%",
 					String.valueOf(Auth.getAccountIds().size())));
-			sender.sendMessage(config.getBungeeMessages().getStringMessage("info-version").replace("%version%",
+			commandActor.reply(config.getBungeeMessages().getStringMessage("info-version").replace("%version%",
 					plugin.getDescription().getVersion()));
 		});
 	}
 
 	@Subcommand({ "force", "forcejoin", "fjoin" })
-	@CommandPermission("auth.admin")
-	public void forceEnter(CommandSender sender, @OtherPlayer ProxiedPlayer proxiedPlayer) {
-		if (proxiedPlayer == null)
+	public void forceEnter(CommandActor commandActor, @OtherPlayer ProxyPlayer proxyPlayer) {
+		if (proxyPlayer == null)
 			return;
-		String id = config.getActiveIdentifierType().getId(proxiedPlayer);
+		String id = config.getActiveIdentifierType().getId(proxyPlayer);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				sender.sendMessage(config.getBungeeMessages().getMessage("account-not-found"));
+				commandActor.reply(config.getBungeeMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			AuthenticationStepContext context = new DefaultAuthenticationStepContext(account);
 			EnterServerAuthenticationStep enterServerAuthenticationStep = new EnterServerAuthenticationStep(context);
 			enterServerAuthenticationStep.enterServer();
-			sender.sendMessage(config.getBungeeMessages().getMessage("force-connect-success"));
+			commandActor.reply(config.getBungeeMessages().getStringMessage("force-connect-success"));
 		});
 	}
 
 	@Subcommand({ "changepassword", "changepass" })
-	@CommandPermission("auth.admin")
-	public void changePassword(CommandSender sender, @OtherPlayer ProxiedPlayer proxiedPlayer,
+	public void changePassword(CommandActor actor, @OtherPlayer ProxyPlayer proxyPlayer,
 			NewPassword newPlayerPassword) {
-		if (proxiedPlayer == null)
+		if (proxyPlayer == null)
 			return;
-		String id = config.getActiveIdentifierType().getId(proxiedPlayer);
+		String id = config.getActiveIdentifierType().getId(proxyPlayer);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				sender.sendMessage(config.getBungeeMessages().getMessage("account-not-found"));
+				actor.reply(config.getBungeeMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			account.setPasswordHash(account.getHashType().hash(newPlayerPassword.getNewPassword()));
 			accountStorage.saveOrUpdateAccount(account);
-			sender.sendMessage(config.getBungeeMessages().getMessage("auth-change-success"));
+			actor.reply(config.getBungeeMessages().getStringMessage("auth-change-success"));
 		});
 	}
 
-	@Subcommand({ "reset", "resetaccount" })
-	@CommandPermission("auth.admin")
-	public void resetAccount(CommandSender sender, @OtherPlayer ProxiedPlayer proxiedPlayer) {
-		if (proxiedPlayer == null)
+	@Subcommand({ "reset", "resetaccount", "deleteaccount" })
+	public void resetAccount(CommandActor actor, @OtherPlayer ProxyPlayer proxyPlayer) {
+		if (proxyPlayer == null)
 			return;
-		String id = config.getActiveIdentifierType().getId(proxiedPlayer);
+		String id = config.getActiveIdentifierType().getId(proxyPlayer);
 		accountStorage.deleteAccount(id);
-		sender.sendMessage(config.getBungeeMessages().getMessage("auth-delete-success"));
+		actor.reply(config.getBungeeMessages().getStringMessage("auth-delete-success"));
 	}
 
 	@Subcommand("reload")
-	@CommandPermission("auth.admin")
-	public void reload(CommandSender sender) {
+	public void reload(CommandActor actor) {
 		plugin.getConfig().reload();
-		sender.sendMessage(config.getBungeeMessages().getMessage("auth-reloaded"));
+		actor.reply(config.getBungeeMessages().getStringMessage("auth-reloaded"));
 	}
 }

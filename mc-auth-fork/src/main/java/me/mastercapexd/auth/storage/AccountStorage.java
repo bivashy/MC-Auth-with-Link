@@ -14,7 +14,7 @@ public interface AccountStorage {
 	CompletableFuture<Collection<Account>> getAccounts(int limit);
 
 	CompletableFuture<Collection<Account>> getAllAccounts();
-	
+
 	CompletableFuture<Collection<Account>> getAllLinkedAccounts();
 
 	CompletableFuture<Collection<Integer>> getVKIDs();

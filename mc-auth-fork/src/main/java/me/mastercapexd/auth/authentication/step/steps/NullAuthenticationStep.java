@@ -5,7 +5,7 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
 
 public class NullAuthenticationStep extends AbstractAuthenticationStep {
-	
+
 	private static final String STEP_NAME = "NULL";
 
 	public NullAuthenticationStep() {
@@ -21,7 +21,7 @@ public class NullAuthenticationStep extends AbstractAuthenticationStep {
 	public boolean shouldSkip() {
 		return true;
 	}
-	
+
 	public static class NullAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
 		public NullAuthenticationStepCreator() {
 			super(STEP_NAME);

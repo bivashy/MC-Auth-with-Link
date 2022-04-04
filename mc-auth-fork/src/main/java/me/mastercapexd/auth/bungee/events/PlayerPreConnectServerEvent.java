@@ -8,9 +8,9 @@ public class PlayerPreConnectServerEvent extends Event implements Cancellable {
 	private boolean cancelled;
 	private final ProxiedPlayer player;
 	private final ServerInfo serverInfo;
-	
-	public PlayerPreConnectServerEvent(ProxiedPlayer player,ServerInfo serverInfo) {
-		this.player=player;
+
+	public PlayerPreConnectServerEvent(ProxiedPlayer player, ServerInfo serverInfo) {
+		this.player = player;
 		this.serverInfo = serverInfo;
 	}
 
@@ -21,7 +21,7 @@ public class PlayerPreConnectServerEvent extends Event implements Cancellable {
 	public ServerInfo getServerInfo() {
 		return serverInfo;
 	}
-	
+
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;

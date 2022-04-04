@@ -10,6 +10,6 @@ public interface VKButtonExecutor {
 	public static final VkApiClient VK = VKAPI.getInstance().getVK();
 	public static final GroupActor ACTOR = VKAPI.getInstance().getActor();
 	public static final Gson GSON = new Gson();
-	
+
 	void execute(VKCallbackButtonPressEvent event, String afterPayload);
 }

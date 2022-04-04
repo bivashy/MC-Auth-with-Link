@@ -7,7 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class TitleBar {
 
-	public static void send(ProxiedPlayer proxiedPlayer, String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut) {
+	public static void send(ProxiedPlayer proxiedPlayer, String titleMessage, String subtitleMessage, int fadeIn,
+			int stay, int fadeOut) {
 		Title title = ProxyServer.getInstance().createTitle();
 		title.title(TextComponent.fromLegacyText(titleMessage));
 		title.subTitle(TextComponent.fromLegacyText(subtitleMessage));

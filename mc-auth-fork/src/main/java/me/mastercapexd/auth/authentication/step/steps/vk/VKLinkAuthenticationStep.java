@@ -12,7 +12,6 @@ import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();

@@ -13,8 +13,8 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.objects.IPInfoResponse;
-import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.utils.CollectionUtils;
+import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import me.mastercapexd.auth.vk.utils.VKUtils;
 import net.md_5.bungee.api.ProxyServer;
@@ -37,14 +37,15 @@ public class ConfirmationMessageBuilder extends MessageBuilder {
 
 	@Override
 	public MessagesSendQuery build() {
-		MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt())
+		MessagesSendQuery sendQuery = CLIENT.messages().send(ACTOR).randomId(RANDOM.nextInt())
 				.userId(linkEntryUser.getLinkUserInfo().getLinkUserId());
 		sendQuery.keyboard(createKeyboard());
 		IPInfoResponse ipInfoAnswer = geoUtils.getIPInfo(linkEntryUser.getAccount().getLastIpAddress());
 
 		VKMessageContext messageContext = VKMessageContext.newContext(linkEntryUser.getLinkUserInfo().getLinkUserId(),
 				linkEntryUser.getAccount());
-		sendQuery.message(ipInfoAnswer.setInfo(config.getVKSettings().getVKMessages().getMessage("enter-message", messageContext)));
+		sendQuery.message(ipInfoAnswer
+				.setInfo(config.getVKSettings().getVKMessages().getMessage("enter-message", messageContext)));
 		return sendQuery;
 	}
 

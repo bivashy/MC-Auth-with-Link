@@ -3,18 +3,18 @@ package me.mastercapexd.auth.config;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.ubivashka.config.annotations.ConfigField;
-import com.ubivashka.config.processors.BungeeConfigurationHolder;
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.account.Account;
-import net.md_5.bungee.config.Configuration;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKButtonLabels extends BungeeConfigurationHolder{
+public class VKButtonLabels implements ConfigurationHolder {
 	@ConfigField
 	private Map<String, String> labels = Maps.newHashMap();
 
-	public VKButtonLabels(Configuration messages) {
-		init(messages);
+	public VKButtonLabels(ConfigurationSectionHolder sectionHolder) {
+		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 
 	public String getButtonLabel(String key) {

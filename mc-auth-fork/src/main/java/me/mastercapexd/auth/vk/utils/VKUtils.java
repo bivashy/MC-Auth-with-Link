@@ -71,12 +71,12 @@ public class VKUtils {
 	public static Optional<GetResponse> fetchUserFromIdentificator(String vkIdentificator) {
 		try {
 			return VK.users().get(ACTOR).userIds(vkIdentificator).execute().stream().findFirst();
-		}catch(ApiException | ClientException e) {
+		} catch (ApiException | ClientException e) {
 			e.printStackTrace();
 		}
 		return Optional.empty();
 	}
-	
+
 	public static Optional<Integer> fetchIdFromScreenName(String screenName) {
 		try {
 			return Optional.of(VK.utils().resolveScreenName(ACTOR, screenName).execute().getObjectId());

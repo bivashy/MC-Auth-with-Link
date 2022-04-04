@@ -26,8 +26,8 @@ public class VKKeyboard extends AbstractKeyboard {
 
 	public Keyboard buildKeyboard() {
 		List<List<KeyboardButton>> buildedButtons = buttons.stream().map(buttonList -> {
-			List<KeyboardButton> buttons = buttonList.stream().map(button -> button.as(VKButton.class)).map(VKButton::getKeyboardButton)
-					.collect(Collectors.toList());
+			List<KeyboardButton> buttons = buttonList.stream().map(button -> button.as(VKButton.class))
+					.map(VKButton::getKeyboardButton).collect(Collectors.toList());
 			return buttons;
 		}).collect(Collectors.toList());
 

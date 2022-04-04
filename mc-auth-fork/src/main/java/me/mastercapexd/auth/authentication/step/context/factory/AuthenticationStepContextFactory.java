@@ -11,7 +11,7 @@ public interface AuthenticationStepContextFactory {
 	static AuthenticationStepContextFactory of(Supplier<AuthenticationStepContext> supplier) {
 		return of(supplier.get());
 	}
-	
+
 	static AuthenticationStepContextFactory of(AuthenticationStepContext context) {
 		return (account) -> context;
 	}

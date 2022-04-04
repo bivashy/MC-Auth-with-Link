@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.objects.StorageDataSettings;
+import me.mastercapexd.auth.config.storage.StorageDataSettings;
 import me.mastercapexd.auth.storage.sql.SQLAccountStorage;
 
 public class MySQLAccountStorage extends SQLAccountStorage {
