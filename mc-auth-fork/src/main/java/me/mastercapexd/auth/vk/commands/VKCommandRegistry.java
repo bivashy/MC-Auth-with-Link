@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.vk.commands;
 
-import com.ubivashka.lamp.commands.vk.core.BaseVkActor;
+import com.ubivashka.lamp.commands.vk.VkActor;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.ubivashka.vk.api.providers.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
@@ -15,6 +15,7 @@ import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.messenger.commands.AccountsCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -55,7 +56,7 @@ public class VKCommandRegistry {
 
 		commandHandler.registerValueResolver(MessengerLinkContext.class, (context) -> {
 			String code = context.popForParameter();
-			BaseVkActor commandActor = context.actor().as(BaseVkActor.class);
+			VkActor commandActor = context.actor().as(VkActor.class);
 
 			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
 					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
@@ -103,5 +104,8 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("code").getCommandPaths())
 						.handler(new LinkCodeCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("accounts").getCommandPaths())
+						.handler(new AccountsCommand()));
 	}
 }
