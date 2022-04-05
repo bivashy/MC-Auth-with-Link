@@ -90,8 +90,6 @@ public class VKReceptioner {
 		addCommand(commandFactory.createCommand(new VKAccountsCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKKickCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKRestoreCommand(this), mainCommands));
-		// addCommand(commandFactory.createCommand(new VKLinkCommand(this),
-		// mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleCodeCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleUnlinkCommand(this), mainCommands));
