@@ -17,7 +17,6 @@ import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
 import me.mastercapexd.auth.vk.utils.VKUtils;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;

@@ -6,9 +6,10 @@ import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
+import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
@@ -25,13 +26,13 @@ public class LoginCommand {
 	@SuppressWarnings("deprecation")
 	@Default
 	@AuthenticationStepCommand(stepName = LoginAuthenticationStep.STEP_NAME)
-	public void login(ProxiedPlayer player, Account account, String password) {
+	public void login(ProxyPlayer player, Account account, String password) {
 		String id = account.getId();
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 
 		if (!account.getHashType().checkHash(password, account.getPasswordHash())) {
 			if (config.getPasswordAttempts() < 1) {
-				player.sendMessage(config.getBungeeMessages().getMessage("wrong-password"));
+				player.sendMessage(config.getBungeeMessages().getStringMessage("wrong-password"));
 				return;
 			}
 			Auth.incrementAttempts(id);
@@ -41,7 +42,7 @@ public class LoginCommand {
 						.replaceAll("%attempts%", String.valueOf(config.getPasswordAttempts() - attempts)));
 				return;
 			}
-			player.disconnect(config.getBungeeMessages().getMessage("attempts-limit"));
+			player.disconnect(config.getBungeeMessages().getStringMessage("attempts-limit"));
 			return;
 		}
 
@@ -55,6 +56,6 @@ public class LoginCommand {
 				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 		account.nextAuthenticationStep(
 				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
-		player.sendMessage(config.getBungeeMessages().getMessage("login-success"));
+		player.sendMessage(config.getBungeeMessages().getStringMessage("login-success"));
 	}
 }

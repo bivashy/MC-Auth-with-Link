@@ -7,8 +7,8 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
@@ -25,7 +25,7 @@ public class RegisterCommand {
 
 	@Default
 	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
-	public void register(ProxiedPlayer player, @AuthenticationAccount Account account,
+	public void register(ProxyPlayer player, @AuthenticationAccount Account account,
 			me.mastercapexd.auth.bungee.commands.parameters.RegisterPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
@@ -41,6 +41,6 @@ public class RegisterCommand {
 		account.nextAuthenticationStep(
 				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
 
-		player.sendMessage(config.getBungeeMessages().getMessage("register-success"));
+		player.sendMessage(config.getBungeeMessages().getStringMessage("register-success"));
 	}
 }
