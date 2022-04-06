@@ -15,6 +15,7 @@ import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
@@ -98,6 +99,7 @@ public class VKCommandRegistry {
 	private void registerDependencies() {
 		commandHandler.registerDependency(AccountStorage.class, PLUGIN.getAccountStorage());
 		commandHandler.registerDependency(PluginConfig.class, PLUGIN.getConfig());
+		commandHandler.registerDependency(ProxyPlugin.class, PLUGIN);
 	}
 
 	private void registerCommands() {
@@ -107,5 +109,8 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("accounts").getCommandPaths())
 						.handler(new AccountsCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
+						.handler(new AccountEnterAcceptCommand()));
 	}
 }
