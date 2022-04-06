@@ -41,9 +41,10 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 			return;
 		}
 		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {
-			;
-			entryUser.setConfirmed(true);
-			return filter.test(entryUser);
+			boolean isUserValid = filter.test(entryUser);
+			if(isUserValid)
+				entryUser.setConfirmed(true);
+			return isUserValid;
 		});
 
 		Account account = accounts.stream().findFirst().orElse(null).getAccount();
