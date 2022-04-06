@@ -8,18 +8,19 @@ import java.util.logging.Logger;
 
 import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
 import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
+import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
 
 public enum BungeeProxyCore implements ProxyCore {
 	INSTANCE;
@@ -55,6 +56,11 @@ public enum BungeeProxyCore implements ProxyCore {
 	@Override
 	public ProxyBossbar createBossbar(String title) {
 		return new BungeeProxyBossbar(title);
+	}
+
+	@Override
+	public ProxyComponent component(String text) {
+		return new BungeeMultiProxyComponent(text);
 	}
 
 	@Override

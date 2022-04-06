@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
@@ -58,8 +59,8 @@ public class BungeeAuthEngine implements AuthEngine {
 					Account account = Auth.getAccount(id);
 					if (account != null) {
 						if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) {
-							player.sendMessage(
-									this.config.getBungeeMessages().getMessage("vk-enter-confirm-need-chat"));
+							player.sendMessage(this.config.getBungeeMessages().getMessage("vk-enter-confirm-need-chat")
+									.as(BungeeMultiProxyComponent.class).components());
 							TitleBar.send(player,
 									this.config.getBungeeMessages().getStringMessage("vk-enter-confirm-need-title"),
 									this.config.getBungeeMessages().getStringMessage("vk-enter-confirm-need-subtitle"),
@@ -67,7 +68,8 @@ public class BungeeAuthEngine implements AuthEngine {
 							continue;
 						}
 						if (Auth.hasGoogleAuthAccount(account.getId())) {
-							player.sendMessage(this.config.getBungeeMessages().getMessage("google-need-code-chat"));
+							player.sendMessage(this.config.getBungeeMessages().getMessage("google-need-code-chat")
+									.as(BungeeMultiProxyComponent.class).components());
 							TitleBar.send(player,
 									this.config.getBungeeMessages().getStringMessage("google-need-code-title"),
 									this.config.getBungeeMessages().getStringMessage("google-need-code-subtitle"), 0,
@@ -75,12 +77,14 @@ public class BungeeAuthEngine implements AuthEngine {
 							continue;
 						}
 						if (account.isRegistered()) {
-							player.sendMessage(this.config.getBungeeMessages().getMessage("login-chat"));
+							player.sendMessage(this.config.getBungeeMessages().getMessage("login-chat")
+									.as(BungeeMultiProxyComponent.class).components());
 							TitleBar.send(player, this.config.getBungeeMessages().getStringMessage("login-title"),
 									this.config.getBungeeMessages().getStringMessage("login-subtitle"), 0, 120, 0);
 							continue;
 						}
-						player.sendMessage(this.config.getBungeeMessages().getMessage("register-chat"));
+						player.sendMessage(this.config.getBungeeMessages().getMessage("register-chat")
+								.as(BungeeMultiProxyComponent.class).components());
 						TitleBar.send(player, this.config.getBungeeMessages().getStringMessage("register-title"),
 								this.config.getBungeeMessages().getStringMessage("register-subtitle"), 0, 120, 0);
 					}
@@ -113,7 +117,8 @@ public class BungeeAuthEngine implements AuthEngine {
 							? (this.config.getAuthTime() * 2L)
 							: this.config.getAuthTime();
 					if (onlineTime >= authTime) {
-						player.disconnect(this.config.getBungeeMessages().getMessage("time-left"));
+						player.disconnect(this.config.getBungeeMessages().getMessage("time-left")
+								.as(BungeeMultiProxyComponent.class).components());
 						Auth.removeAccount(id);
 						continue;
 					}

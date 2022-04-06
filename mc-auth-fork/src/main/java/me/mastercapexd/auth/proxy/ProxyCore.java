@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 
@@ -23,6 +24,8 @@ public interface ProxyCore extends Castable<ProxyCore> {
 
 	ProxyBossbar createBossbar(String title);
 
+	ProxyComponent component(String text);
+	
 	Server serverFromName(String serverName);
 
 	void registerListener(ProxyPlugin plugin, Object listener);

@@ -7,6 +7,7 @@ import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.server.Server;
 
 public interface ProxyPlayer extends Castable<ProxyPlayer> {
+	void disconnect(String reason);
 
 	void sendMessage(String message);
 

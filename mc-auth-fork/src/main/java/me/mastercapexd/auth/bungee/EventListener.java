@@ -11,6 +11,7 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
+import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -41,13 +42,13 @@ public class EventListener implements Listener {
 	public void onPostLogin(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
 		if (!config.getNamePattern().matcher(name).matches()) {
-			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("illegal-name-chars"));
+			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("illegal-name-chars").as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (config.getMaxLoginPerIP() != 0
 				&& getOnlineExactIP(event.getPlayer().getAddress().getAddress().getHostAddress()) >= config
 						.getMaxLoginPerIP()) {
-			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("limit-ip-reached"));
+			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("limit-ip-reached").as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (!config.isNameCaseCheckEnabled())
@@ -165,7 +166,7 @@ public class EventListener implements Listener {
 				ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
 				if (sessionEvent.isCancelled())
 					return;
-				player.sendMessage(config.getBungeeMessages().getMessage("autoconnect"));
+				player.sendMessage(config.getBungeeMessages().getMessage("autoconnect").as(BungeeMultiProxyComponent.class).components());
 				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
 						() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
 				return;
