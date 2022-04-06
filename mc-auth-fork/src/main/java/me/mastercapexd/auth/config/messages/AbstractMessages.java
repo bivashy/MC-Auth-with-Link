@@ -8,12 +8,12 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
 
-public abstract class AbstractMessages<T, C extends MessageContext> implements Messages<T, C>, ConfigurationHolder {
+public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationHolder {
 	private static final String MESSAGE_NOT_FOUND_ERROR = "Message with key %s not found!";
 	protected static final String DEFAULT_DELIMITER = "\n";
 
 	protected Map<String, String> messages = Maps.newHashMap();
-	protected HashMap<String, AbstractMessages<T, C>> subMessages = new HashMap<>();
+	protected HashMap<String, AbstractMessages<T>> subMessages = new HashMap<>();
 
 	public AbstractMessages(ConfigurationSectionHolder configurationSection, CharSequence delimiter) {
 		for (String key : configurationSection.getKeys()) {
@@ -40,19 +40,30 @@ public abstract class AbstractMessages<T, C extends MessageContext> implements M
 	}
 
 	@Override
-	public Messages<T, C> getSubMessages(String key) {
+	public Messages<T> getSubMessages(String key) {
 		return subMessages.getOrDefault(key, null);
 	}
 
 	@Override
 	public String getStringMessage(String key) {
-		return messages.getOrDefault(key, String.format(MESSAGE_NOT_FOUND_ERROR, key));
+		return getStringMessage(key, String.format(MESSAGE_NOT_FOUND_ERROR, key));
+	}
+
+	@Override
+	public String getStringMessage(String key,String defaultValue) {
+		return messages.getOrDefault(key, defaultValue);
+	}
+
+	
+	@Override
+	public T getMessage(String key, MessageContext context) {
+		return fromText(context.formatString(getStringMessage(key)));
 	}
 
 	public void addMessage(String path, String message) {
 		String formattedMessage = formatString(message);
 		messages.put(path, formattedMessage);
 	}
-
-	protected abstract AbstractMessages<T, C> createMessages(ConfigurationSectionHolder configurationSection);
+	
+	protected abstract AbstractMessages<T> createMessages(ConfigurationSectionHolder configurationSection);
 }

@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.bungee.commands.exception;
 
 import me.mastercapexd.auth.config.messages.AbstractMessages;
+import me.mastercapexd.auth.config.messages.Messages;
 import revxrsal.commands.bungee.exception.BungeeExceptionAdapter;
 import revxrsal.commands.bungee.exception.InvalidPlayerException;
 import revxrsal.commands.bungee.exception.SenderNotConsoleException;
@@ -25,9 +26,9 @@ import revxrsal.commands.exception.SendableException;
 import revxrsal.commands.exception.TooManyArgumentsException;
 
 public class CustomExceptionHandler extends BungeeExceptionAdapter {
-	private final AbstractMessages<?, ?> messages;
+	private final Messages<?> messages;
 
-	public CustomExceptionHandler(AbstractMessages<?, ?> messagees) {
+	public CustomExceptionHandler(AbstractMessages<?> messagees) {
 		this.messages = messagees;
 	}
 

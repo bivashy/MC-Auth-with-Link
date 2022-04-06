@@ -7,11 +7,12 @@ import java.util.regex.Pattern;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.messages.AbstractMessages;
+import me.mastercapexd.auth.config.messages.MessageContext;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class ProxyMessages extends AbstractMessages<BaseComponent[], ProxyMessageContext> {
+public class ProxyMessages extends AbstractMessages<BaseComponent[]> {
 
 	private static final Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]){6}");
 
@@ -25,7 +26,7 @@ public class ProxyMessages extends AbstractMessages<BaseComponent[], ProxyMessag
 	}
 
 	@Override
-	public BaseComponent[] getMessage(String key, ProxyMessageContext context) {
+	public BaseComponent[] getMessage(String key, MessageContext context) {
 		return TextComponent.fromLegacyText(context.formatString(getStringMessage(key)));
 	}
 
@@ -48,9 +49,14 @@ public class ProxyMessages extends AbstractMessages<BaseComponent[], ProxyMessag
 	}
 
 	@Override
-	protected AbstractMessages<BaseComponent[], ProxyMessageContext> createMessages(
+	protected AbstractMessages<BaseComponent[]> createMessages(
 			ConfigurationSectionHolder configurationSection) {
 		return new ProxyMessages(configurationSection);
+	}
+
+	@Override
+	public BaseComponent[] fromText(String text) {
+		return TextComponent.fromLegacyText(text);
 	}
 
 }
