@@ -1,5 +1,9 @@
 package me.mastercapexd.auth.bungee.server;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -22,5 +26,16 @@ public class BungeeServer implements Server {
 		for (ProxyPlayer player : players)
 			player.<ProxiedPlayer>getRealPlayer().connect(bungeeServerInfo, (result, exception) -> {
 			});
+	}
+
+	@Override
+	public List<ProxyPlayer> getPlayers() {
+		return bungeeServerInfo.getPlayers().stream().map(bungeePlayer -> new BungeeProxyPlayer(bungeePlayer))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public int getPlayersCount() {
+		return bungeeServerInfo.getPlayers().size();
 	}
 }
