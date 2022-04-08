@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config;
+package me.mastercapexd.auth.bungee.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import com.ubivashka.configuration.holders.BungeeConfigurationHolder;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.config.AbstractPluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;

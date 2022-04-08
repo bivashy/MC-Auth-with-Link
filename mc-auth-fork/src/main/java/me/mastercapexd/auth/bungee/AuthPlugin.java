@@ -16,7 +16,7 @@ import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.Nul
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep.RegisterAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.vk.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
-import me.mastercapexd.auth.config.BungeePluginConfig;
+import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
