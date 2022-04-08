@@ -5,14 +5,13 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.events.LoginEvent;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 
 public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	public static final String STEP_NAME = "ENTER_SERVER";
 
 	public EnterServerAuthenticationStep(AuthenticationStepContext context) {

@@ -9,14 +9,14 @@ import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
 public class VKEnterAcceptCommand extends VKCommandExecutor {
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	private final VKReceptioner receptioner;
 
 	public VKEnterAcceptCommand(VKReceptioner receptioner) {
@@ -42,7 +42,7 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 		}
 		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {
 			boolean isUserValid = filter.test(entryUser);
-			if(isUserValid)
+			if (isUserValid)
 				entryUser.setConfirmed(true);
 			return isUserValid;
 		});

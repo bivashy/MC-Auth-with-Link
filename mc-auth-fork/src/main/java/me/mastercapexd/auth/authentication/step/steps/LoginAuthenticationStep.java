@@ -4,11 +4,11 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class LoginAuthenticationStep extends AbstractAuthenticationStep {
 
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	public static final String STEP_NAME = "LOGIN";
 
 	public LoginAuthenticationStep(AuthenticationStepContext context) {

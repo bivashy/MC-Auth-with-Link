@@ -7,7 +7,6 @@ import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
@@ -28,7 +27,7 @@ import revxrsal.commands.orphan.Orphans;
 
 public class VKCommandRegistry {
 	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	private final CommandHandler commandHandler = new VkHandler(VK_API_PROVIDER.getVkApiClient(),
 			VK_API_PROVIDER.getActor()).disableStackTraceSanitizing();
 
@@ -109,8 +108,8 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("accounts").getCommandPaths())
 						.handler(new AccountsCommand()));
-		commandHandler.register(
-				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
-						.handler(new AccountEnterAcceptCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
+				.handler(new AccountEnterAcceptCommand()));
 	}
 }

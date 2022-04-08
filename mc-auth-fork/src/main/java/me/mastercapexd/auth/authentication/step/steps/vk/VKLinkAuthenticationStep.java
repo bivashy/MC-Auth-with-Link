@@ -12,9 +12,10 @@ import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	public static final String STEP_NAME = "VK_LINK";
 	private final LinkEntryUser entryUser;
 
@@ -37,7 +38,7 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 
 		if (linkUser == null || linkUser.getLinkUserInfo() == null
 				|| linkUser.getLinkUserInfo().getLinkUserId() == AccountFactory.DEFAULT_VK_ID
-				|| !AuthPlugin.getInstance().getConfig().getVKSettings().isEnabled()
+				|| !PLUGIN.getConfig().getVKSettings().isEnabled()
 				|| !linkUser.getLinkUserInfo().isConfirmationEnabled())
 			return true;
 

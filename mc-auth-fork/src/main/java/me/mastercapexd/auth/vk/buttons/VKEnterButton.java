@@ -9,14 +9,14 @@ import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.VKEnterAnswer;
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
 public class VKEnterButton implements VKButtonExecutor {
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	private final VKReceptioner receptioner;
 
 	public VKEnterButton(VKReceptioner receptioner) {

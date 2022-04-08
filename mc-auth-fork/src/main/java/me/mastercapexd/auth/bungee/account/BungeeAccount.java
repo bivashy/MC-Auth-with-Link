@@ -15,8 +15,8 @@ import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,7 +24,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 
-	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 
 	private final List<LinkUser> linkUsers = new ArrayList<>();
 
