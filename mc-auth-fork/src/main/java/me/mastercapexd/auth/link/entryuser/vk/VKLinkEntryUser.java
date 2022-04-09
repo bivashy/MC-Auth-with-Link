@@ -9,7 +9,7 @@ public class VKLinkEntryUser extends AbstractLinkEntryUser {
 
 	public VKLinkEntryUser(Account account) {
 		super(VKLinkType.getInstance(), account, new VKLinkUserInfo(account.getLinkUsers().stream()
-				.filter(VKLinkType.getLinkUserPredicate()).findFirst().orElse(null).getLinkUserInfo()));
+				.filter(VKLinkType.LINK_USER_FILTER).findFirst().orElse(null).getLinkUserInfo()));
 	}
 
 }

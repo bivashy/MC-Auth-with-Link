@@ -8,12 +8,9 @@ import java.util.function.Predicate;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.KickResult;
-import me.mastercapexd.auth.RestoreResult;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.link.vk.VKLinkType;
-import me.mastercapexd.auth.utils.RandomCodeFactory;
 
 public interface Account {
 
@@ -90,20 +87,4 @@ public interface Account {
 	default boolean isRegistered() {
 		return getPasswordHash() != null;
 	}
-
-	default RestoreResult restoreAccount(Integer VKuserID, boolean isAdmin, Integer codeLength) {
-		RestoreResult result = RestoreResult.ACCOUNT_VK_NOT_EQUALS;
-		result.setPasswordHash(getPasswordHash());
-		if (!isAdmin)
-			if (findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
-					.getLinkUserId() != VKuserID) {
-				return result;
-			}
-		String newPass = RandomCodeFactory.generateCode(codeLength);
-		result = RestoreResult.RESTORED;
-		result.setPasswordHash(newPass);
-		setPasswordHash(getHashType().hash(newPass));
-		return result;
-	}
-
 }
