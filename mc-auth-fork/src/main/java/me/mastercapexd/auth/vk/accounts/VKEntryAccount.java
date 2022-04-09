@@ -14,12 +14,12 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.events.EntryConfirmationSelectEvent;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.utils.Connector;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class VKEntryAccount {
 	private final static Random random = new Random();
@@ -64,7 +64,8 @@ public class VKEntryAccount {
 			account.kick(config.getProxyMessages().getStringMessage("vk-enter-declined"));
 		}
 		if (answer == VKEnterAnswer.CONFIRM) {
-			if (account.getGoogleKey() != null && !account.getGoogleKey().isEmpty()
+			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()
 					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
 				Auth.addGoogleAuthAccount(account);
 				return;

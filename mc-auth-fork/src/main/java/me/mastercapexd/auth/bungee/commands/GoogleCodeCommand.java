@@ -4,6 +4,8 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
@@ -33,7 +35,8 @@ public class GoogleCodeCommand {
 				player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
-			if (account.getGoogleKey() == null || account.getGoogleKey().isEmpty()) {
+			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
 				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-exists"));
 				return;
 			}
@@ -41,7 +44,7 @@ public class GoogleCodeCommand {
 				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-need-enter"));
 				return;
 			}
-			if (plugin.getGoogleAuthenticator().authorize(account.getGoogleKey(), code)) {
+			if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
 				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-entered"));
 				Auth.removeGoogleAuthAccount(playerId);
 				Auth.removeAccount(account.getId());

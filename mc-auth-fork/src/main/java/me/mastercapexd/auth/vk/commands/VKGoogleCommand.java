@@ -19,6 +19,9 @@ import com.vk.api.sdk.objects.photos.responses.PhotoUploadResponse;
 import com.vk.api.sdk.objects.photos.responses.SaveMessagesPhotoResponse;
 
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.google.GoogleLinkUser;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
@@ -45,7 +48,8 @@ public class VKGoogleCommand extends VKCommandExecutor {
 		String playerName = args[0];
 		receptioner.actionWithAccount(e.getUserId(), playerName, account -> {
 			String key = receptioner.getPlugin().getGoogleAuthenticator().createCredentials().getKey();
-			account.setGoogleKey(key);
+			account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(new GoogleLinkUser(account, key))
+					.getLinkUserInfo().getIdentificator().setString(playerName);
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			String googleUrl = "otpauth://totp/Minecraft?secret=" + key + "&issuer=" + account.getName();
 			try {

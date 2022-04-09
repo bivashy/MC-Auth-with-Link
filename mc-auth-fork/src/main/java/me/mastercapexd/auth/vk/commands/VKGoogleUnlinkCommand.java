@@ -2,6 +2,8 @@ package me.mastercapexd.auth.vk.commands;
 
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
@@ -26,12 +28,13 @@ public class VKGoogleUnlinkCommand extends VKCommandExecutor {
 		}
 		String playerName = args[0];
 		receptioner.actionWithAccount(e.getUserId(), playerName, account -> {
-			if (account.getGoogleKey() == null || account.getGoogleKey().isEmpty()) {
+			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
 				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
 						.getMessage("google-unlink-not-have-google"));
 				return;
 			}
-			account.setGoogleKey(null);
+			linkUser.getLinkUserInfo().getIdentificator().setString(GoogleLinkType.NULL_KEY);
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			sendMessage(e.getPeer(),
 					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-unlinked"));

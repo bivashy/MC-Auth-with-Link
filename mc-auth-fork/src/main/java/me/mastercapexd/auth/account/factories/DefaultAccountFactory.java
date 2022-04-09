@@ -6,6 +6,7 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.account.BungeeAccount;
+import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 
 public class DefaultAccountFactory implements AccountFactory {
@@ -20,12 +21,12 @@ public class DefaultAccountFactory implements AccountFactory {
 
 		account.setHashType(hashType);
 		account.setPasswordHash(password);
-		account.setGoogleKey(googleKey);
 		account.setLastQuitTime(lastQuit);
 		account.setLastIpAddress(lastIp);
 		account.setLastSessionStart(lastSessionStart);
 
 		account.addLinkUser(new VKLinkUser(account, vkId, vkConfirmationEnabled));
+		account.addLinkUser(new GoogleLinkUser(account, googleKey));
 		return account;
 	}
 }

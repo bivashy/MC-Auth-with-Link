@@ -20,8 +20,11 @@ import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.link.vk.VKLinkUser;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageColumn;
 
@@ -90,15 +93,17 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(UPDATE_ID);
 
-			LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
-					.getLinkUserInfo();
+			LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER)
+					.orElse(new VKLinkUser(account, AccountFactory.DEFAULT_VK_ID)).getLinkUserInfo();
+			LinkUserInfo googleLinkInfo = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
+					.orElse(new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY)).getLinkUserInfo();
 
 			statement.setString(1, account.getIdentifierType() == IdentifierType.NAME ? account.getId().toLowerCase()
 					: account.getId());
 			statement.setString(2, account.getUniqueId().toString());
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
-			statement.setString(5, account.getGoogleKey());
+			statement.setString(5, googleLinkInfo.getIdentificator().asString());
 			statement.setInt(6, vkLinkInfo.getIdentificator().asNumber());
 			statement.setString(7, String.valueOf(vkLinkInfo.getConfirmationState().shouldSendConfirmation()));
 			statement.setLong(8, account.getLastQuitTime());

@@ -3,11 +3,11 @@ package me.mastercapexd.auth.vk.commands;
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
 import me.mastercapexd.auth.Auth;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.utils.Connector;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class VKGoogleCodeCommand extends VKCommandExecutor {
 	private final VKReceptioner receptioner;
@@ -36,7 +36,8 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 		}
 		Integer enteredCode = Integer.parseInt(args[1]);
 		receptioner.actionWithAccount(e.getUserId(), playerName, account -> {
-			if (account.getGoogleKey() == null && account.getGoogleKey().isEmpty()) {
+			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
 				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
 						.getMessage("google-code-account-not-have-google"));
 				return;
@@ -46,14 +47,15 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 						.getMessage("google-code-account-not-need-enter"));
 				return;
 			}
-			if (receptioner.getPlugin().getGoogleAuthenticator().authorize(account.getGoogleKey(), enteredCode)) {
+			if (receptioner.getPlugin().getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
 				Auth.removeGoogleAuthAccount(account.getId());
 				Auth.removeAccount(account.getId());
 				ProxyPlayer proxyPlayer = account.getIdentifierType().getPlayer(account.getId());
 				if (proxyPlayer != null) {
 					sendMessage(e.getPeer(),
 							receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-code-valid"));
-					proxyPlayer.sendTo(receptioner.getConfig().findServerInfo(receptioner.getConfig().getGameServers()).asProxyServer());
+					proxyPlayer.sendTo(receptioner.getConfig().findServerInfo(receptioner.getConfig().getGameServers())
+							.asProxyServer());
 				}
 				return;
 			}

@@ -58,10 +58,6 @@ public interface Account {
 
 	void setLastIpAddress(String hostString);
 
-	String getGoogleKey();
-
-	void setGoogleKey(String googleKey);
-
 	long getLastSessionStart();
 
 	void setLastSessionStart(long currentTimeMillis);

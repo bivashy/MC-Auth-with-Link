@@ -2,6 +2,8 @@ package me.mastercapexd.auth.bungee.commands;
 
 import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
@@ -25,12 +27,13 @@ public class GoogleUnlinkCommand {
 				return;
 			}
 
-			if (account.getGoogleKey() == null || account.getGoogleKey().isEmpty()) {
+			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
 				player.sendMessage(config.getProxyMessages().getStringMessage("google-unlink-not-exists"));
 				return;
 			}
 			player.sendMessage(config.getProxyMessages().getStringMessage("google-unlinked"));
-			account.setGoogleKey(null);
+			linkUser.getLinkUserInfo().getIdentificator().setString(GoogleLinkType.NULL_KEY);
 			accountStorage.saveOrUpdateAccount(account);
 		});
 	}
