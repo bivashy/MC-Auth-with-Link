@@ -34,7 +34,7 @@ public class BungeeCommandsRegistry {
 	}
 
 	private void register() {
-		BUNGEE_COMMAND_HANDLER.setExceptionHandler(new CustomExceptionHandler(PLUGIN.getConfig().getBungeeMessages()));
+		BUNGEE_COMMAND_HANDLER.setExceptionHandler(new CustomExceptionHandler(PLUGIN.getConfig().getProxyMessages()));
 
 		registerCommandContexts();
 		registerDependencies();
@@ -48,27 +48,27 @@ public class BungeeCommandsRegistry {
 			ArgumentStack arguments = context.arguments();
 			String oldPassword = arguments.pop();
 			if (arguments.isEmpty())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("enter-new-password"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("enter-new-password"));
 			String newPassword = arguments.pop();
 			DoublePassword password = new DoublePassword(oldPassword, newPassword);
 			if (oldPassword.equals(newPassword))
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("nothing-to-change"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("nothing-to-change"));
 
 			if (newPassword.length() < config.getPasswordMinLength())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-short"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("password-too-short"));
 
 			if (newPassword.length() > config.getPasswordMaxLength())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("password-too-long"));
 			return password;
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerValueResolver(NewPassword.class, context -> {
 			String newRawPassword = context.pop();
 			if (newRawPassword.length() < config.getPasswordMinLength())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-short"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("password-too-short"));
 
 			if (newRawPassword.length() > config.getPasswordMaxLength())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("password-too-long"));
 			return new NewPassword(newRawPassword);
 		});
 
@@ -78,17 +78,17 @@ public class BungeeCommandsRegistry {
 
 			if (config.isPasswordConfirmationEnabled()) {
 				if (arguments.isEmpty())
-					throw new SendMessageException(config.getBungeeMessages().getStringMessage("confirm-password"));
+					throw new SendMessageException(config.getProxyMessages().getStringMessage("confirm-password"));
 				String confirmationPassword = arguments.pop();
 				if (!confirmationPassword.equals(registerPassword))
-					throw new SendMessageException(config.getBungeeMessages().getStringMessage("confirm-failed"));
+					throw new SendMessageException(config.getProxyMessages().getStringMessage("confirm-failed"));
 			}
 
 			if (registerPassword.length() < config.getPasswordMinLength())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-short"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("password-too-short"));
 
 			if (registerPassword.length() > config.getPasswordMaxLength())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("password-too-long"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("password-too-long"));
 			return new RegisterPassword(registerPassword);
 		});
 
@@ -107,7 +107,7 @@ public class BungeeCommandsRegistry {
 			String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
 			if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
 				return;
-			throw new SendMessageException(config.getBungeeMessages().getSubMessages("authentication-step-usage")
+			throw new SendMessageException(config.getProxyMessages().getSubMessages("authentication-step-usage")
 					.getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
 		});
 
@@ -115,27 +115,27 @@ public class BungeeCommandsRegistry {
 			if (!command.hasAnnotation(GoogleUse.class))
 				return;
 			if (!config.getGoogleAuthenticatorSettings().isEnabled())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("google-disabled"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("google-disabled"));
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {
 			if (!command.hasAnnotation(VkUse.class))
 				return;
 			if (!config.getVKSettings().isEnabled())
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("vk-disabled"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("vk-disabled"));
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerValueResolver(ProxyPlayer.class, (context) -> {
 			if (!context.parameter().hasAnnotation(OtherPlayer.class)) {
 				ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
 				if (selfPlayer == null)
-					throw new SendMessageException(config.getBungeeMessages().getStringMessage("players-only"));
+					throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
 				return BungeeProxyPlayerFactory.wrapPlayer(selfPlayer);
 			}
 			String value = context.pop();
 			ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
 			if (player == null)
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("player-offline"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("player-offline"));
 			return BungeeProxyPlayerFactory.wrapPlayer(player);
 		});
 
@@ -143,16 +143,16 @@ public class BungeeCommandsRegistry {
 			ProxyPlayer player = BungeeProxyPlayerFactory
 					.wrapPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
 			if (player == null)
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("players-only"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
 			String id = config.getActiveIdentifierType().getId(player);
 			if (!Auth.hasAccount(id))
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("already-logged-in"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("already-logged-in"));
 
 			Account account = Auth.getAccount(id);
 			if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("account-not-found"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("account-not-found"));
 			if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))
-				throw new SendMessageException(config.getBungeeMessages().getStringMessage("account-exists"));
+				throw new SendMessageException(config.getProxyMessages().getStringMessage("account-exists"));
 			return account;
 		});
 	}

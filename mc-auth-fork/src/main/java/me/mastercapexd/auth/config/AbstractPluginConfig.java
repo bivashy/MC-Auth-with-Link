@@ -208,7 +208,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	}
 
 	@Override
-	public ProxyMessages getBungeeMessages() {
+	public ProxyMessages getProxyMessages() {
 		return (ProxyMessages) proxyMessages;
 	}
 

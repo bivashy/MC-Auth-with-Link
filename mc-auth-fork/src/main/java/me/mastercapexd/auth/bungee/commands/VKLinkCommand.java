@@ -36,39 +36,39 @@ public class VKLinkCommand {
 	@VkUse
 	public void vkLink(ProxyPlayer player, @Optional String vkIdentificator) {
 		if (vkIdentificator == null)
-			throw new BungeeSendableException(config.getBungeeMessages().getStringMessage("vk-usage"));
+			throw new BungeeSendableException(config.getProxyMessages().getStringMessage("vk-usage"));
 
 		String accountId = config.getActiveIdentifierType().getId(player);
 
 		ProxyServer.getInstance().getScheduler().runAsync(plugin, () -> {
 			GetResponse user = VKUtils.fetchUserFromIdentificator(vkIdentificator).orElse(null);
 			if (user == null) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("vk-user-not-exists"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("vk-user-not-exists"));
 				return;
 			}
 
 			if (Auth.getLinkEntryAuth().hasLinkUser(accountId, VKLinkType.getInstance())) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("vk-already-sent"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("vk-already-sent"));
 				return;
 			}
 			Integer userId = user.getId();
 
 			accountStorage.getAccount(accountId).thenAccept(account -> {
 				if (account == null || !account.isRegistered()) {
-					player.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
+					player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 					return;
 				}
 				LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
 						.getLinkUserInfo();
 
 				if (vkLinkInfo.getIdentificator() != null && vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
-					player.sendMessage(config.getBungeeMessages().getStringMessage("already-linked"));
+					player.sendMessage(config.getProxyMessages().getStringMessage("already-linked"));
 					return;
 				}
 				accountStorage.getAccountsByVKID(userId).thenAccept(accounts -> {
 					if (config.getVKSettings().getMaxLinkCount() != 0
 							&& accounts.size() >= config.getVKSettings().getMaxLinkCount()) {
-						player.sendMessage(config.getBungeeMessages().getStringMessage("vk-link-limit-reached"));
+						player.sendMessage(config.getProxyMessages().getStringMessage("vk-link-limit-reached"));
 						return;
 					}
 					String code = RandomCodeFactory
@@ -77,7 +77,7 @@ public class VKLinkCommand {
 					Auth.getLinkConfirmationAuth()
 							.addLinkUser(new VKConfirmationUser(account,
 									new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
-					player.sendMessage(config.getBungeeMessages().getStringMessage("confirmation-vk-sent")
+					player.sendMessage(config.getProxyMessages().getStringMessage("confirmation-vk-sent")
 							.replaceAll("(?i)%code%", code));
 				});
 			});

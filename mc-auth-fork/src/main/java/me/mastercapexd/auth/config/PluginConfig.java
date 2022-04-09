@@ -58,7 +58,7 @@ public interface PluginConfig {
 
 	long getAuthTime();
 
-	ProxyMessages getBungeeMessages();
+	ProxyMessages getProxyMessages();
 
 	BossBarSettings getBossBarSettings();
 

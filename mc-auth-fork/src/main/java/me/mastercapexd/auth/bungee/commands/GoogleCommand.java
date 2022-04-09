@@ -24,16 +24,16 @@ public class GoogleCommand {
 		String id = config.getActiveIdentifierType().getId(player);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			String key = plugin.getGoogleAuthenticator().createCredentials().getKey();
 			if (account.getGoogleKey() == null || account.getGoogleKey().isEmpty()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("google-generated")
+				player.sendMessage(config.getProxyMessages().getStringMessage("google-generated")
 						.replaceAll("(?i)%google_key%", key));
 				account.setGoogleKey(key);
 			} else {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("google-regenerated")
+				player.sendMessage(config.getProxyMessages().getStringMessage("google-regenerated")
 						.replace("(?i)%google_key%", key));
 				account.setGoogleKey(key);
 			}

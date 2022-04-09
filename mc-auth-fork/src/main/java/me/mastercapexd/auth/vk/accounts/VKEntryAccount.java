@@ -61,7 +61,7 @@ public class VKEntryAccount {
 		VKMessageContext messageContext = VKMessageContext.newContext(vkId, account);
 		if (answer == VKEnterAnswer.DECLINE) {
 			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-kicked", messageContext));
-			account.kick(config.getBungeeMessages().getStringMessage("vk-enter-declined"));
+			account.kick(config.getProxyMessages().getStringMessage("vk-enter-declined"));
 		}
 		if (answer == VKEnterAnswer.CONFIRM) {
 			if (account.getGoogleKey() != null && !account.getGoogleKey().isEmpty()
@@ -73,7 +73,7 @@ public class VKEntryAccount {
 			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-confirmed", messageContext));
 			accountStorage.saveOrUpdateAccount(account);
 			if (proxyPlayer != null) {
-				proxyPlayer.sendMessage(config.getBungeeMessages().getStringMessage("vk-enter-confirmed"));
+				proxyPlayer.sendMessage(config.getProxyMessages().getStringMessage("vk-enter-confirmed"));
 				proxyPlayer.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());
 			}
 		}

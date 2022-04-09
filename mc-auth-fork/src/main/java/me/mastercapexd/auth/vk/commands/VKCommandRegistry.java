@@ -86,7 +86,7 @@ public class VKCommandRegistry {
 				ProxyPlayer player = PLUGIN.getConfig().getActiveIdentifierType()
 						.getPlayer(confirmationUser.getAccount().getId());
 				if (player != null)
-					player.sendMessage(PLUGIN.getConfig().getBungeeMessages().getStringMessage("vk-linked"));
+					player.sendMessage(PLUGIN.getConfig().getProxyMessages().getStringMessage("vk-linked"));
 
 				commandActor
 						.reply(PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-success"));

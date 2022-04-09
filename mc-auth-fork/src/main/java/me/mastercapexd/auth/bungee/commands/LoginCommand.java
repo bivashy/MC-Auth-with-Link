@@ -32,17 +32,17 @@ public class LoginCommand {
 
 		if (!account.getHashType().checkHash(password, account.getPasswordHash())) {
 			if (config.getPasswordAttempts() < 1) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("wrong-password"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("wrong-password"));
 				return;
 			}
 			Auth.incrementAttempts(id);
 			int attempts = Auth.getPlayerAttempts(id);
 			if (attempts < config.getPasswordAttempts()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("wrong-password")
+				player.sendMessage(config.getProxyMessages().getStringMessage("wrong-password")
 						.replaceAll("%attempts%", String.valueOf(config.getPasswordAttempts() - attempts)));
 				return;
 			}
-			player.disconnect(config.getBungeeMessages().getStringMessage("attempts-limit"));
+			player.disconnect(config.getProxyMessages().getStringMessage("attempts-limit"));
 			return;
 		}
 
@@ -56,6 +56,6 @@ public class LoginCommand {
 				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 		account.nextAuthenticationStep(
 				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
-		player.sendMessage(config.getBungeeMessages().getStringMessage("login-success"));
+		player.sendMessage(config.getProxyMessages().getStringMessage("login-success"));
 	}
 }

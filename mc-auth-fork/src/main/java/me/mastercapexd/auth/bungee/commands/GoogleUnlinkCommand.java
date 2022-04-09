@@ -21,15 +21,15 @@ public class GoogleUnlinkCommand {
 		String id = config.getActiveIdentifierType().getId(player);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
 
 			if (account.getGoogleKey() == null || account.getGoogleKey().isEmpty()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("google-unlink-not-exists"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("google-unlink-not-exists"));
 				return;
 			}
-			player.sendMessage(config.getBungeeMessages().getStringMessage("google-unlinked"));
+			player.sendMessage(config.getProxyMessages().getStringMessage("google-unlinked"));
 			account.setGoogleKey(null);
 			accountStorage.saveOrUpdateAccount(account);
 		});

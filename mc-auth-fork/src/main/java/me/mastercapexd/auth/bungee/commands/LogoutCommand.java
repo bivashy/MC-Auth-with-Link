@@ -20,13 +20,13 @@ public class LogoutCommand {
 	public void logout(ProxyPlayer player) {
 		String id = config.getActiveIdentifierType().getId(player);
 		if (Auth.hasAccount(id))
-			throw new BungeeSendableException(config.getBungeeMessages().getStringMessage("already-logged-out"));
+			throw new BungeeSendableException(config.getProxyMessages().getStringMessage("already-logged-out"));
 
 		accountStorage.getAccount(id).thenAccept(account -> {
 			account.logout(config.getSessionDurability());
 			accountStorage.saveOrUpdateAccount(account);
 			Auth.addAccount(account);
-			player.sendMessage(config.getBungeeMessages().getStringMessage("logout-success"));
+			player.sendMessage(config.getProxyMessages().getStringMessage("logout-success"));
 			player.sendTo(config.findServerInfo(config.getAuthServers()).asProxyServer());
 		});
 	}

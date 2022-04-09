@@ -42,13 +42,13 @@ public class EventListener implements Listener {
 	public void onPostLogin(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
 		if (!config.getNamePattern().matcher(name).matches()) {
-			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("illegal-name-chars").as(BungeeMultiProxyComponent.class).components());
+			event.getPlayer().disconnect(config.getProxyMessages().getMessage("illegal-name-chars").as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (config.getMaxLoginPerIP() != 0
 				&& getOnlineExactIP(event.getPlayer().getAddress().getAddress().getHostAddress()) >= config
 						.getMaxLoginPerIP()) {
-			event.getPlayer().disconnect(config.getBungeeMessages().getMessage("limit-ip-reached").as(BungeeMultiProxyComponent.class).components());
+			event.getPlayer().disconnect(config.getProxyMessages().getMessage("limit-ip-reached").as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (!config.isNameCaseCheckEnabled())
@@ -63,7 +63,7 @@ public class EventListener implements Listener {
 				return;
 			if (account.getName().equals(name))
 				return;
-			event.getPlayer().disconnect(config.getBungeeMessages().getStringMessage("check-name-case-failed")
+			event.getPlayer().disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
 					.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", name));
 		});
 	}
@@ -86,7 +86,7 @@ public class EventListener implements Listener {
 
 		String message = event.getMessage();
 		if (!isAllowedCommand(message)) {
-			player.sendMessage(config.getBungeeMessages().getStringMessage("disabled-command"));
+			player.sendMessage(config.getProxyMessages().getStringMessage("disabled-command"));
 			event.setCancelled(true);
 		}
 	}
@@ -153,7 +153,7 @@ public class EventListener implements Listener {
 			}
 
 			if (!account.getName().equals(player.getName())) {
-				player.disconnect(config.getBungeeMessages().getStringMessage("check-name-case-failed")
+				player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
 						.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", player.getName()));
 				return;
 			}
@@ -166,7 +166,7 @@ public class EventListener implements Listener {
 				ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
 				if (sessionEvent.isCancelled())
 					return;
-				player.sendMessage(config.getBungeeMessages().getMessage("autoconnect").as(BungeeMultiProxyComponent.class).components());
+				player.sendMessage(config.getProxyMessages().getMessage("autoconnect").as(BungeeMultiProxyComponent.class).components());
 				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
 						() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
 				return;

@@ -21,7 +21,7 @@ public class GoogleCodeCommand {
 
 	@Default
 	public void defaultCommand(ProxyPlayer player) {
-		player.sendMessage(config.getBungeeMessages().getStringMessage("google-code-not-enough-arguments"));
+		player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-enough-arguments"));
 	}
 
 	@GoogleUse
@@ -30,25 +30,25 @@ public class GoogleCodeCommand {
 		String playerId = config.getActiveIdentifierType().getId(player);
 		accountStorage.getAccount(playerId).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			if (account.getGoogleKey() == null || account.getGoogleKey().isEmpty()) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("google-code-not-exists"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-exists"));
 				return;
 			}
 			if (!Auth.hasGoogleAuthAccount(playerId)) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("google-code-not-need-enter"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-need-enter"));
 				return;
 			}
 			if (plugin.getGoogleAuthenticator().authorize(account.getGoogleKey(), code)) {
-				player.sendMessage(config.getBungeeMessages().getStringMessage("google-code-entered"));
+				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-entered"));
 				Auth.removeGoogleAuthAccount(playerId);
 				Auth.removeAccount(account.getId());
 				player.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());
 				return;
 			}
-			player.sendMessage(config.getBungeeMessages().getStringMessage("google-code-wrong-code"));
+			player.sendMessage(config.getProxyMessages().getStringMessage("google-code-wrong-code"));
 		});
 	}
 }

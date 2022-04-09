@@ -21,12 +21,12 @@ public class ChangePasswordCommand {
 		String id = config.getActiveIdentifierType().getId(sender);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				sender.sendMessage(config.getBungeeMessages().getStringMessage("account-not-found"));
+				sender.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
 
 			if (!account.getHashType().checkHash(password.getOldPassword(), account.getPasswordHash())) {
-				sender.sendMessage(config.getBungeeMessages().getStringMessage("wrong-old-password"));
+				sender.sendMessage(config.getProxyMessages().getStringMessage("wrong-old-password"));
 				return;
 			}
 
@@ -35,7 +35,7 @@ public class ChangePasswordCommand {
 
 			account.setPasswordHash(account.getHashType().hash(password.getNewPassword()));
 			accountStorage.saveOrUpdateAccount(account);
-			sender.sendMessage(config.getBungeeMessages().getStringMessage("change-success"));
+			sender.sendMessage(config.getProxyMessages().getStringMessage("change-success"));
 		});
 	}
 }

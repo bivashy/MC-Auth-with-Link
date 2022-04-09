@@ -41,6 +41,6 @@ public class RegisterCommand {
 		account.nextAuthenticationStep(
 				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
 
-		player.sendMessage(config.getBungeeMessages().getStringMessage("register-success"));
+		player.sendMessage(config.getProxyMessages().getStringMessage("register-success"));
 	}
 }

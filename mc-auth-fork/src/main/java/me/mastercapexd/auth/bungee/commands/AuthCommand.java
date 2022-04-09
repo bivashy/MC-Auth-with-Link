@@ -32,11 +32,11 @@ public class AuthCommand {
 	@Default
 	public void accountInfos(CommandActor commandActor) {
 		accountStorage.getAllAccounts().thenAccept(accounts -> {
-			commandActor.reply(config.getBungeeMessages().getStringMessage("info-registered").replace("%players%",
+			commandActor.reply(config.getProxyMessages().getStringMessage("info-registered").replace("%players%",
 					String.valueOf(accounts.size())));
-			commandActor.reply(config.getBungeeMessages().getStringMessage("info-auth").replaceAll("%players%",
+			commandActor.reply(config.getProxyMessages().getStringMessage("info-auth").replaceAll("%players%",
 					String.valueOf(Auth.getAccountIds().size())));
-			commandActor.reply(config.getBungeeMessages().getStringMessage("info-version").replace("%version%",
+			commandActor.reply(config.getProxyMessages().getStringMessage("info-version").replace("%version%",
 					plugin.getDescription().getVersion()));
 		});
 	}
@@ -48,13 +48,13 @@ public class AuthCommand {
 		String id = config.getActiveIdentifierType().getId(proxyPlayer);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				commandActor.reply(config.getBungeeMessages().getStringMessage("account-not-found"));
+				commandActor.reply(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			AuthenticationStepContext context = new DefaultAuthenticationStepContext(account);
 			EnterServerAuthenticationStep enterServerAuthenticationStep = new EnterServerAuthenticationStep(context);
 			enterServerAuthenticationStep.enterServer();
-			commandActor.reply(config.getBungeeMessages().getStringMessage("force-connect-success"));
+			commandActor.reply(config.getProxyMessages().getStringMessage("force-connect-success"));
 		});
 	}
 
@@ -66,12 +66,12 @@ public class AuthCommand {
 		String id = config.getActiveIdentifierType().getId(proxyPlayer);
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (account == null || !account.isRegistered()) {
-				actor.reply(config.getBungeeMessages().getStringMessage("account-not-found"));
+				actor.reply(config.getProxyMessages().getStringMessage("account-not-found"));
 				return;
 			}
 			account.setPasswordHash(account.getHashType().hash(newPlayerPassword.getNewPassword()));
 			accountStorage.saveOrUpdateAccount(account);
-			actor.reply(config.getBungeeMessages().getStringMessage("auth-change-success"));
+			actor.reply(config.getProxyMessages().getStringMessage("auth-change-success"));
 		});
 	}
 
@@ -81,12 +81,12 @@ public class AuthCommand {
 			return;
 		String id = config.getActiveIdentifierType().getId(proxyPlayer);
 		accountStorage.deleteAccount(id);
-		actor.reply(config.getBungeeMessages().getStringMessage("auth-delete-success"));
+		actor.reply(config.getProxyMessages().getStringMessage("auth-delete-success"));
 	}
 
 	@Subcommand("reload")
 	public void reload(CommandActor actor) {
 		plugin.getConfig().reload();
-		actor.reply(config.getBungeeMessages().getStringMessage("auth-reloaded"));
+		actor.reply(config.getProxyMessages().getStringMessage("auth-reloaded"));
 	}
 }
