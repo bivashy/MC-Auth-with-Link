@@ -8,7 +8,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.account.BungeeAccount;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 
-public class BungeeAccountFactory implements AccountFactory {
+public class DefaultAccountFactory implements AccountFactory {
 
 	@Override
 	public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,

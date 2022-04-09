@@ -9,7 +9,7 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.account.factories.BungeeAccountFactory;
+import me.mastercapexd.auth.account.factories.DefaultAccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
@@ -18,9 +18,9 @@ import me.mastercapexd.auth.authentication.step.steps.vk.VKLinkAuthenticationSte
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
+import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
@@ -98,7 +98,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
 	private void initialize() {
 		this.config = new BungeePluginConfig(this);
-		this.accountFactory = new BungeeAccountFactory();
+		this.accountFactory = new DefaultAccountFactory();
 		this.accountStorage = loadAccountStorage(config.getStorageType());
 		this.authEngine = new BungeeAuthEngine(this, config);
 		this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
