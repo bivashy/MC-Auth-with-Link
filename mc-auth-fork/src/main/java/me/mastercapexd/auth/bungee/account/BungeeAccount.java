@@ -37,7 +37,6 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	private final String name;
 
 	private String passwordHash, lastIpAddress, googleKey;
-	private Integer vkId;
 	private long lastQuitTime, lastSessionStart;
 
 	private boolean vkConfirmationEnabled = true;
@@ -125,16 +124,6 @@ public class BungeeAccount implements Account, Comparable<BungeeAccount> {
 	@Override
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
-	}
-
-	@Override
-	public Integer getVKId() {
-		return vkId;
-	}
-
-	@Override
-	public void setVKId(Integer id) {
-		this.vkId = id;
 	}
 
 	@Override

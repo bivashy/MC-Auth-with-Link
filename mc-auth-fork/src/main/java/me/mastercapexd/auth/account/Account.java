@@ -30,10 +30,6 @@ public interface Account {
 
 	void setPasswordHash(String passwordHash);
 
-	Integer getVKId();
-
-	void setVKId(Integer id);
-
 	boolean isVKConfirmationEnabled();
 
 	void setVkConfirmationEnabled(boolean vkConfirmationEnabled);
