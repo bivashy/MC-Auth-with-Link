@@ -60,7 +60,7 @@ public class VKCommandRegistry {
 
 			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
 					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
-							&& linkUser.getLinkUserInfo().getLinkUserId().equals(commandActor.getAuthorId()))
+							&& linkUser.getLinkUserInfo().getIdentificator().asNumber().equals(commandActor.getAuthorId()))
 					.stream().findFirst().orElse(null);
 
 			if (confirmationUser == null)
@@ -78,7 +78,7 @@ public class VKCommandRegistry {
 			LinkUserInfo vkLinkUserInfo = confirmationUser.getAccount()
 					.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo();
 
-			if (vkLinkUserInfo.getLinkUserId() != AccountFactory.DEFAULT_VK_ID)
+			if (vkLinkUserInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID)
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-already-linked"));
 

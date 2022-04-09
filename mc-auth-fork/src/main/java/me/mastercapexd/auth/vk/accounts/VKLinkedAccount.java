@@ -47,7 +47,7 @@ public class VKLinkedAccount {
 
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
-					.getLinkUserId() != userID) {
+					.getIdentificator().asNumber() != userID) {
 				sendMessage(userID,
 						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
 				return;
@@ -63,7 +63,7 @@ public class VKLinkedAccount {
 	public void unlink() {
 		if (!config.getVKSettings().isAdminUser(userID))
 			if (account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
-					.getLinkUserId() != userID) {
+					.getIdentificator().asNumber() != userID) {
 				sendMessage(userID,
 						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
 				return;
@@ -74,25 +74,25 @@ public class VKLinkedAccount {
 			return;
 		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("unlinked", messageContext));
 		account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
-				.setLinkUserId(AccountFactory.DEFAULT_VK_ID);
+				.getIdentificator().setNumber(AccountFactory.DEFAULT_VK_ID);
 		accountStorage.saveOrUpdateAccount(account);
 	}
 
 	public void restore() {
-		RestoreResult result = account.restoreAccount(userID, config.getVKSettings().isAdminUser(userID),
-				config.getVKSettings().getRestoreSettings().getCodeLength());
-		if (!config.getVKSettings().isAdminUser(userID))
-			if (result == RestoreResult.ACCOUNT_VK_NOT_EQUALS) {
-				sendMessage(userID,
-						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
-				return;
-			}
-
-		account.logout(config.getSessionDurability());
-		account.kick(config.getBungeeMessages().getStringMessage("vk-kicked"));
-		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("restored", messageContext)
-				.replaceAll("(?i)%password%", result.getPasswordHash()));
-		accountStorage.saveOrUpdateAccount(account);
+//		RestoreResult result = account.restoreAccount(userID, config.getVKSettings().isAdminUser(userID),
+//				config.getVKSettings().getRestoreSettings().getCodeLength());
+//		if (!config.getVKSettings().isAdminUser(userID))
+//			if (result == RestoreResult.ACCOUNT_VK_NOT_EQUALS) {
+//				sendMessage(userID,
+//						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
+//				return;
+//			}
+//
+//		account.logout(config.getSessionDurability());
+//		account.kick(config.getBungeeMessages().getStringMessage("vk-kicked"));
+//		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("restored", messageContext)
+//				.replaceAll("(?i)%password%", result.getPasswordHash()));
+//		accountStorage.saveOrUpdateAccount(account);
 	}
 
 	public void sendAccountSettingsKeyboard() {
@@ -107,12 +107,12 @@ public class VKLinkedAccount {
 		LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
 				.getLinkUserInfo();
 
-		if (vkLinkInfo.getLinkUserId() != AccountFactory.DEFAULT_VK_ID)
+		if (vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID)
 			buttons.add(plugin.getVKUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
 					KeyboardButtonColor.PRIMARY));
 		if (config.getVKSettings().getEnterSettings().canToggleEnterConfirmation()) {
 			if (account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
-					.isConfirmationEnabled()) {
+					.getConfirmationState().shouldSendConfirmation()) {
 				buttons.add(plugin.getVKUtils().buildCallbackButton("disable-confirmation",
 						"toogle-confirmation_" + account.getId(), KeyboardButtonColor.NEGATIVE));
 			} else {

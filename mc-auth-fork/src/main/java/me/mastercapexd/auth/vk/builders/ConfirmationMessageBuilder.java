@@ -31,18 +31,18 @@ public class ConfirmationMessageBuilder extends MessageBuilder {
 		this.geoUtils = receptioner.getPlugin().getGeoUtils();
 		this.config = receptioner.getConfig();
 		EntryConfirmationStartEvent confirmationStartEvent = new EntryConfirmationStartEvent(
-				linkEntryUser.getLinkUserInfo().getLinkUserId(), linkEntryUser.getAccount());
+				linkEntryUser.getLinkUserInfo().getIdentificator().asNumber(), linkEntryUser.getAccount());
 		ProxyServer.getInstance().getPluginManager().callEvent(confirmationStartEvent);
 	}
 
 	@Override
 	public MessagesSendQuery build() {
 		MessagesSendQuery sendQuery = CLIENT.messages().send(ACTOR).randomId(RANDOM.nextInt())
-				.userId(linkEntryUser.getLinkUserInfo().getLinkUserId());
+				.userId(linkEntryUser.getLinkUserInfo().getIdentificator().asNumber());
 		sendQuery.keyboard(createKeyboard());
 		IPInfoResponse ipInfoAnswer = geoUtils.getIPInfo(linkEntryUser.getAccount().getLastIpAddress());
 
-		VKMessageContext messageContext = VKMessageContext.newContext(linkEntryUser.getLinkUserInfo().getLinkUserId(),
+		VKMessageContext messageContext = VKMessageContext.newContext(linkEntryUser.getLinkUserInfo().getIdentificator().asNumber(),
 				linkEntryUser.getAccount());
 		sendQuery.message(ipInfoAnswer
 				.setInfo(config.getVKSettings().getVKMessages().getMessage("enter-message", messageContext)));

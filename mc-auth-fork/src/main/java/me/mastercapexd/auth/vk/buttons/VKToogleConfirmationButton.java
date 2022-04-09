@@ -8,6 +8,7 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
@@ -25,11 +26,12 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 			return;
 		receptioner.getAccountStorage().getAccount(id).thenAccept(account -> {
 			LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
-			linkUser.getLinkUserInfo().setConfirmationEnabled(!linkUser.getLinkUserInfo().isConfirmationEnabled());
+			LinkUserConfirmationState confirmationState = linkUser.getLinkUserInfo().getConfirmationState();
+			confirmationState.setSendConfirmation(!confirmationState.shouldSendConfirmation());
 			com.ubivashka.vk.api.parsers.objects.CallbackButtonEvent buttonEvent = e.getButtonEvent();
 			Map<String, String> myMap = new HashMap<String, String>();
 			myMap.put("type", "show_snackbar");
-			if (linkUser.getLinkUserInfo().isConfirmationEnabled()) {
+			if (confirmationState.shouldSendConfirmation()) {
 				myMap.put("text", receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-enabled"));
 				String json = GSON.toJson(myMap);
 				try {

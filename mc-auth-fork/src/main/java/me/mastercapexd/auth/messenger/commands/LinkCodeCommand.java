@@ -21,7 +21,7 @@ public class LinkCodeCommand implements OrphanCommand {
 		accountStorage.getAccount(linkContext.getConfirmationUser().getAccount().getId()).thenAccept(account -> {
 
 			account.findFirstLinkUser(linkUser -> linkUser.getLinkType().getLinkName().equals(linkType.getLinkName()))
-					.orElse(null).getLinkUserInfo().setLinkUserId(actorWrapper.userId());
+					.orElse(null).getLinkUserInfo().getIdentificator().setNumber(actorWrapper.userId());
 
 			accountStorage.saveOrUpdateAccount(account);
 

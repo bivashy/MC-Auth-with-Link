@@ -99,8 +99,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
 			statement.setString(5, account.getGoogleKey());
-			statement.setInt(6, vkLinkInfo.getLinkUserId());
-			statement.setString(7, String.valueOf(vkLinkInfo.isConfirmationEnabled()));
+			statement.setInt(6, vkLinkInfo.getIdentificator().asNumber());
+			statement.setString(7, String.valueOf(vkLinkInfo.getConfirmationState().shouldSendConfirmation()));
 			statement.setLong(8, account.getLastQuitTime());
 			statement.setString(9, account.getLastIpAddress());
 			statement.setLong(10, account.getLastSessionStart());

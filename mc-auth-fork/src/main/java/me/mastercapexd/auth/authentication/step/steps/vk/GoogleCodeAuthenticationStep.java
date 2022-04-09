@@ -9,6 +9,7 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -33,12 +34,12 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
 		Account account = authenticationStepContext.getAccount();
 		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
 			return true;
-		LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
+		LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType()==GoogleLinkType.getInstance()).orElse(null);
 
 		if (linkUser == null || linkUser.getLinkUserInfo() == null
-				|| linkUser.getLinkUserInfo().getLinkUserId() == AccountFactory.DEFAULT_VK_ID
-				|| !PLUGIN.getConfig().getVKSettings().isEnabled()
-				|| !linkUser.getLinkUserInfo().isConfirmationEnabled())
+				|| linkUser.getLinkUserInfo().getIdentificator().asString() == AccountFactory.DEFAULT_GOOGLE_KEY
+				|| !PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled()
+				|| !linkUser.getLinkUserInfo().getConfirmationState().shouldSendConfirmation())
 			return true;
 
 		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance()))

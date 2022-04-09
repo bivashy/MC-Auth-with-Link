@@ -22,11 +22,11 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
-	
+
 	@Default
 	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType) {
 		Predicate<LinkEntryUser> filter = entryUser -> {
-			return entryUser.getLinkUserInfo().getLinkUserId().equals(actorWrapper.userId())
+			return entryUser.getLinkUserInfo().getIdentificator().asNumber() == actorWrapper.userId()
 					&& entryUser.getLinkType().equals(linkType)
 					&& Duration.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS)
 							.getSeconds() <= config.getVKSettings().getEnterSettings().getEnterDelay();
@@ -40,7 +40,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 		}
 		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {
 			boolean isUserValid = filter.test(entryUser);
-			if(isUserValid)
+			if (isUserValid)
 				entryUser.setConfirmed(true);
 			return isUserValid;
 		});
@@ -51,5 +51,5 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 		account.nextAuthenticationStep(
 				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
 	}
-	
+
 }

@@ -11,6 +11,7 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.confirmation.info.DefaultConfirmationInfo;
 import me.mastercapexd.auth.link.confirmation.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -60,7 +61,7 @@ public class VKLinkCommand {
 				LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
 						.getLinkUserInfo();
 
-				if (vkLinkInfo.getLinkUserId() != null && vkLinkInfo.getLinkUserId() != AccountFactory.DEFAULT_VK_ID) {
+				if (vkLinkInfo.getIdentificator() != null && vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
 					player.sendMessage(config.getBungeeMessages().getStringMessage("already-linked"));
 					return;
 				}
@@ -74,7 +75,8 @@ public class VKLinkCommand {
 							.generateCode(config.getVKSettings().getConfirmationSettings().getCodeLength());
 
 					Auth.getLinkConfirmationAuth()
-							.addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(userId, code)));
+							.addLinkUser(new VKConfirmationUser(account,
+									new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
 					player.sendMessage(config.getBungeeMessages().getStringMessage("confirmation-vk-sent")
 							.replaceAll("(?i)%code%", code));
 				});

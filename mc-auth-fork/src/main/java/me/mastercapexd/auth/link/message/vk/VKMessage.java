@@ -34,7 +34,7 @@ public class VKMessage extends AbstractMessage {
 
 	@Override
 	public LinkUserSendMessageResult sendMessage(LinkUser user) {
-		return sendMessage(user.getLinkUserInfo().getLinkUserId());
+		return sendMessage(user.getLinkUserInfo().getIdentificator().asNumber());
 	}
 
 	@Override

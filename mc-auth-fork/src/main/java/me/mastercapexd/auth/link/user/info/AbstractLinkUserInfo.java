@@ -1,45 +1,43 @@
 package me.mastercapexd.auth.link.user.info;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import me.mastercapexd.auth.link.user.info.confirmation.DefaultLinkUserConfirmationState;
+import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public abstract class AbstractLinkUserInfo implements LinkUserInfo {
-	protected final Map<String, String> additionalInfo = new HashMap<>();
-	protected Boolean confirmationEnabled = true;
-	protected Integer linkUserId;
+	protected LinkUserConfirmationState confirmationState;
+	protected LinkUserIdentificator userIdentificator;
 
-	public AbstractLinkUserInfo(Integer linkUserId, Boolean confirmationEnabled) {
-		this.linkUserId = linkUserId;
-		this.confirmationEnabled = confirmationEnabled;
+	public AbstractLinkUserInfo(LinkUserIdentificator userIdentificator, LinkUserConfirmationState confirmationState) {
+		this.confirmationState = confirmationState;
+		this.userIdentificator = userIdentificator;
 	}
 
-	public AbstractLinkUserInfo(Integer linkUserId) {
-		this(linkUserId, true);
-	}
-
-	@Override
-	public Map<String, String> getAdditionalInfos() {
-		return Collections.unmodifiableMap(additionalInfo);
+	public AbstractLinkUserInfo(LinkUserIdentificator userIdentificator) {
+		this.confirmationState = new DefaultLinkUserConfirmationState();
+		this.userIdentificator = userIdentificator;
 	}
 
 	@Override
-	public Integer getLinkUserId() {
-		return linkUserId;
+	public LinkUserConfirmationState getConfirmationState() {
+		return confirmationState;
 	}
 
 	@Override
-	public void setLinkUserId(Integer linkUserId) {
-		this.linkUserId = linkUserId;
+	public LinkUserIdentificator getIdentificator() {
+		return userIdentificator;
 	}
 
 	@Override
-	public Boolean isConfirmationEnabled() {
-		return confirmationEnabled;
+	public LinkUserInfo setIdentificator(LinkUserIdentificator userIdentificator) {
+		this.userIdentificator = userIdentificator;
+		return this;
 	}
 
 	@Override
-	public void setConfirmationEnabled(Boolean confirmationEnabled) {
-		this.confirmationEnabled = confirmationEnabled;
+	public LinkUserInfo setConfirmationState(LinkUserConfirmationState confirmationState) {
+		this.confirmationState = confirmationState;
+		return this;
 	}
+
 }

@@ -50,7 +50,7 @@ public class VKMessageContext implements MessageContext {
 						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_ip%", account.getLastIpAddress()),
 						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_last_ip%", account.getLastIpAddress()),
 						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%vk_id%",
-								String.valueOf(vkLinkUserInfo.getLinkUserId())))
+								String.valueOf(vkLinkUserInfo.getIdentificator().asNumber())))
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
 		Map<String, String> vkUserPlaceholders = new HashMap<>();

@@ -32,7 +32,7 @@ public class ProxyMessageContext implements MessageContext {
 				.of(CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_name%", account.getName()),
 
 						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_vk_id%",
-								String.valueOf(vkLinkUserInfo.getLinkUserId())),
+								String.valueOf(vkLinkUserInfo.getIdentificator().asNumber())),
 
 						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_last_ip%", account.getLastIpAddress()))
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));

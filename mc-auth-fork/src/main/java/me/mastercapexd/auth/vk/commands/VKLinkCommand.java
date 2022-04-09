@@ -33,7 +33,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 		}
 
 		Predicate<LinkConfirmationUser> filter = linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
-				&& linkUser.getLinkUserInfo().getLinkUserId().intValue() == e.getUserId().intValue();
+				&& linkUser.getLinkUserInfo().getIdentificator().asNumber() == e.getUserId().intValue();
 
 		String code = args[0];
 		LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth().getLinkUsers(filter).stream().findFirst()
@@ -53,7 +53,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 			LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
 					.getLinkUserInfo();
 
-			if (vkLinkInfo.getLinkUserId() != AccountFactory.DEFAULT_VK_ID) {
+			if (vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
 				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
 						.getMessage("confirmation-already-linked"));
 				return;
@@ -63,7 +63,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 			if (event.isCancelled())
 				return;
 			account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
-					.setLinkUserId(e.getUserId());
+					.getIdentificator().setNumber(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			ProxyPlayer player = receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId());
 			if (player != null)
