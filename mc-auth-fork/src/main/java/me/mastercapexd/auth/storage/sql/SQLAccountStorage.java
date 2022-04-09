@@ -90,7 +90,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(UPDATE_ID);
 
-			LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
+			LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
 					.getLinkUserInfo();
 
 			statement.setString(1, account.getIdentifierType() == IdentifierType.NAME ? account.getId().toLowerCase()

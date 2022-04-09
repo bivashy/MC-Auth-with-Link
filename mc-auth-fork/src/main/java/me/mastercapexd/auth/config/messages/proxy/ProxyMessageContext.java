@@ -25,7 +25,7 @@ public class ProxyMessageContext implements MessageContext {
 
 	@Override
 	public Map<String, String> getPlaceholders() {
-		LinkUserInfo vkLinkUserInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
+		LinkUserInfo vkLinkUserInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
 				.getLinkUserInfo();
 
 		Map<String, String> placeholders = Stream

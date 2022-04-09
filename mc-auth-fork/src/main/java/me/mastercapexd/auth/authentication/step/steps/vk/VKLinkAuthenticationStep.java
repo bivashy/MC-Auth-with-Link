@@ -34,7 +34,7 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 		Account account = authenticationStepContext.getAccount();
 		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
 			return true;
-		LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
+		LinkUser linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null);
 
 		if (linkUser == null || linkUser.getLinkUserInfo() == null
 				|| linkUser.getLinkUserInfo().getIdentificator().asNumber() == AccountFactory.DEFAULT_VK_ID

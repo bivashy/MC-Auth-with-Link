@@ -16,17 +16,11 @@ import me.mastercapexd.auth.link.message.vk.VKMessage;
 import me.mastercapexd.auth.link.user.LinkUser;
 
 public class VKLinkType extends AbstractLinkType {
+	public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType()==getInstance();
 	private static final VKLinkType INSTANCE = new VKLinkType();
 
 	private VKLinkType() {
 		super("VK");
-	}
-
-	/**
-	 * @return predicate that checks if ILinkType of ILinkUser equals to VKLinkType
-	 */
-	public static Predicate<LinkUser> getLinkUserPredicate() {
-		return (linkUser) -> linkUser.getLinkType().equals(getInstance());
 	}
 
 	public static VKLinkType getInstance() {

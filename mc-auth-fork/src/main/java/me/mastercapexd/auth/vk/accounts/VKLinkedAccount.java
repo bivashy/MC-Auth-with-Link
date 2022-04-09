@@ -46,7 +46,7 @@ public class VKLinkedAccount {
 	public void kick() {
 
 		if (!config.getVKSettings().isAdminUser(userID))
-			if (account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
+			if (account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo()
 					.getIdentificator().asNumber() != userID) {
 				sendMessage(userID,
 						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
@@ -62,7 +62,7 @@ public class VKLinkedAccount {
 
 	public void unlink() {
 		if (!config.getVKSettings().isAdminUser(userID))
-			if (account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
+			if (account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo()
 					.getIdentificator().asNumber() != userID) {
 				sendMessage(userID,
 						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
@@ -73,7 +73,7 @@ public class VKLinkedAccount {
 		if (event.isCancelled())
 			return;
 		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("unlinked", messageContext));
-		account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
+		account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo()
 				.getIdentificator().setNumber(AccountFactory.DEFAULT_VK_ID);
 		accountStorage.saveOrUpdateAccount(account);
 	}
@@ -104,14 +104,14 @@ public class VKLinkedAccount {
 		buttons.add(plugin.getVKUtils().buildCallbackButton("kick", account, "kick_" + account.getId(),
 				KeyboardButtonColor.PRIMARY));
 
-		LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null)
+		LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
 				.getLinkUserInfo();
 
 		if (vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID)
 			buttons.add(plugin.getVKUtils().buildCallbackButton("unlink", account, "unlink_" + account.getId(),
 					KeyboardButtonColor.PRIMARY));
 		if (config.getVKSettings().getEnterSettings().canToggleEnterConfirmation()) {
-			if (account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null).getLinkUserInfo()
+			if (account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo()
 					.getConfirmationState().shouldSendConfirmation()) {
 				buttons.add(plugin.getVKUtils().buildCallbackButton("disable-confirmation",
 						"toogle-confirmation_" + account.getId(), KeyboardButtonColor.NEGATIVE));

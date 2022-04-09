@@ -25,7 +25,7 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 		if (!receptioner.getConfig().getVKSettings().getEnterSettings().canToggleEnterConfirmation())
 			return;
 		receptioner.getAccountStorage().getAccount(id).thenAccept(account -> {
-			LinkUser linkUser = account.findFirstLinkUser(VKLinkType.getLinkUserPredicate()).orElse(null);
+			LinkUser linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null);
 			LinkUserConfirmationState confirmationState = linkUser.getLinkUserInfo().getConfirmationState();
 			confirmationState.setSendConfirmation(!confirmationState.shouldSendConfirmation());
 			com.ubivashka.vk.api.parsers.objects.CallbackButtonEvent buttonEvent = e.getButtonEvent();
