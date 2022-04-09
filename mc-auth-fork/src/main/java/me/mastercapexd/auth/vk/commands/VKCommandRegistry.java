@@ -60,7 +60,7 @@ public class VKCommandRegistry {
 
 			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
 					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
-							&& linkUser.getLinkUserInfo().getIdentificator().asNumber().equals(commandActor.getAuthorId()))
+							&& linkUser.getLinkUserInfo().getIdentificator().asNumber()==commandActor.getAuthorId())
 					.stream().findFirst().orElse(null);
 
 			if (confirmationUser == null)
