@@ -34,7 +34,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 
 		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(filter);
 		if (accounts.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-no-enter"));
+			actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-no-accounts"));
 			return;
 		}
 		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {

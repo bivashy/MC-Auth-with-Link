@@ -32,7 +32,7 @@ public class VKEnterDeclineCommand extends VKCommandExecutor {
 		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(filter);
 		if (accounts.isEmpty())
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-no-enter"));
+					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-no-accounts"));
 
 		// for (VKEntryAccount account : accounts)
 		// account.enterConnect(VKEnterAnswer.CONFIRM, receptioner.getConfig(),
