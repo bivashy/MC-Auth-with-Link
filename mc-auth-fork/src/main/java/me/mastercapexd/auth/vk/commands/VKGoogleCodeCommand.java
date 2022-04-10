@@ -3,8 +3,11 @@ package me.mastercapexd.auth.vk.commands;
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
 import me.mastercapexd.auth.Auth;
+import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;

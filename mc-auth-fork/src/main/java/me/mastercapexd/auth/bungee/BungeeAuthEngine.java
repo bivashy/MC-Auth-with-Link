@@ -9,9 +9,12 @@ import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.utils.TitleBar;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -21,6 +24,9 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class BungeeAuthEngine implements AuthEngine {
 
+	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("google");
+	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("vk");
+	
 	private final Plugin plugin;
 
 	private final PluginConfig config;
@@ -59,20 +65,20 @@ public class BungeeAuthEngine implements AuthEngine {
 					Account account = Auth.getAccount(id);
 					if (account != null) {
 						if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) {
-							player.sendMessage(this.config.getProxyMessages().getMessage("vk-enter-confirm-need-chat")
+							player.sendMessage(VK_MESSAGES.getMessage("enter-confirm-need-chat")
 									.as(BungeeMultiProxyComponent.class).components());
 							TitleBar.send(player,
-									this.config.getProxyMessages().getStringMessage("vk-enter-confirm-need-title"),
-									this.config.getProxyMessages().getStringMessage("vk-enter-confirm-need-subtitle"),
+									VK_MESSAGES.getStringMessage("enter-confirm-need-title"),
+									VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"),
 									0, 120, 0);
 							continue;
 						}
 						if (Auth.hasGoogleAuthAccount(account.getId())) {
-							player.sendMessage(this.config.getProxyMessages().getMessage("google-need-code-chat")
+							player.sendMessage(GOOGLE_MESSAGES.getMessage("need-code-chat")
 									.as(BungeeMultiProxyComponent.class).components());
 							TitleBar.send(player,
-									this.config.getProxyMessages().getStringMessage("google-need-code-title"),
-									this.config.getProxyMessages().getStringMessage("google-need-code-subtitle"), 0,
+									GOOGLE_MESSAGES.getStringMessage("need-code-title"),
+									GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0,
 									120, 0);
 							continue;
 						}

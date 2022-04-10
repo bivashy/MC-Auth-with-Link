@@ -8,11 +8,14 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.VkUse;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeSendableException;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.confirmation.info.DefaultConfirmationInfo;
 import me.mastercapexd.auth.link.confirmation.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
@@ -25,6 +28,7 @@ import revxrsal.commands.annotation.Optional;
 
 @Command({ "addvk", "vkadd", "vklink", "linkvk" })
 public class VKLinkCommand {
+	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("vk");
 	@Dependency
 	private AuthPlugin plugin;
 	@Dependency
@@ -36,19 +40,19 @@ public class VKLinkCommand {
 	@VkUse
 	public void vkLink(ProxyPlayer player, @Optional String vkIdentificator) {
 		if (vkIdentificator == null)
-			throw new BungeeSendableException(config.getProxyMessages().getStringMessage("vk-usage"));
+			throw new BungeeSendableException(VK_MESSAGES.getStringMessage("usage"));
 
 		String accountId = config.getActiveIdentifierType().getId(player);
 
 		ProxyServer.getInstance().getScheduler().runAsync(plugin, () -> {
 			GetResponse user = VKUtils.fetchUserFromIdentificator(vkIdentificator).orElse(null);
 			if (user == null) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("vk-user-not-exists"));
+				player.sendMessage(VK_MESSAGES.getStringMessage("user-not-exists"));
 				return;
 			}
 
 			if (Auth.getLinkEntryAuth().hasLinkUser(accountId, VKLinkType.getInstance())) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("vk-already-sent"));
+				player.sendMessage(VK_MESSAGES.getStringMessage("already-sent"));
 				return;
 			}
 			Integer userId = user.getId();
@@ -63,13 +67,13 @@ public class VKLinkCommand {
 
 				if (vkLinkInfo.getIdentificator() != null
 						&& vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
-					player.sendMessage(config.getProxyMessages().getStringMessage("already-linked"));
+					player.sendMessage(VK_MESSAGES.getStringMessage("already-linked"));
 					return;
 				}
 				accountStorage.getAccountsByVKID(userId).thenAccept(accounts -> {
 					if (config.getVKSettings().getMaxLinkCount() != 0
 							&& accounts.size() >= config.getVKSettings().getMaxLinkCount()) {
-						player.sendMessage(config.getProxyMessages().getStringMessage("vk-link-limit-reached"));
+						player.sendMessage(VK_MESSAGES.getStringMessage("link-limit-reached"));
 						return;
 					}
 					String code = RandomCodeFactory
@@ -77,7 +81,7 @@ public class VKLinkCommand {
 
 					Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account,
 							new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
-					player.sendMessage(config.getProxyMessages().getStringMessage("confirmation-vk-sent")
+					player.sendMessage(VK_MESSAGES.getStringMessage("confirmation-sent")
 							.replaceAll("(?i)%code%", code));
 				});
 			});

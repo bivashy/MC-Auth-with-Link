@@ -4,8 +4,11 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
@@ -14,6 +17,8 @@ import revxrsal.commands.annotation.Dependency;
 
 @Command({ "googlecode", "gcode" })
 public class GoogleCodeCommand {
+	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
+			.getProxyMessages().getSubMessages("google");
 	@Dependency
 	private AuthPlugin plugin;
 	@Dependency
@@ -23,7 +28,7 @@ public class GoogleCodeCommand {
 
 	@Default
 	public void defaultCommand(ProxyPlayer player) {
-		player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-enough-arguments"));
+		player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-enough-arguments"));
 	}
 
 	@GoogleUse
@@ -37,22 +42,22 @@ public class GoogleCodeCommand {
 			}
 			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-exists"));
+				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
 				return;
 			}
 			if (!Auth.hasGoogleAuthAccount(playerId)) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-need-enter"));
+				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-need-enter"));
 				return;
 			}
 			if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(),
 					code)) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-entered"));
+				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-entered"));
 				Auth.removeGoogleAuthAccount(playerId);
 				Auth.removeAccount(account.getId());
 				player.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());
 				return;
 			}
-			player.sendMessage(config.getProxyMessages().getStringMessage("google-code-wrong-code"));
+			player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-wrong-code"));
 		});
 	}
 }

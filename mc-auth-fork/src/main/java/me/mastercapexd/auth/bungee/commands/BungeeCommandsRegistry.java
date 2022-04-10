@@ -115,14 +115,14 @@ public class BungeeCommandsRegistry {
 			if (!command.hasAnnotation(GoogleUse.class))
 				return;
 			if (!config.getGoogleAuthenticatorSettings().isEnabled())
-				throw new SendMessageException(config.getProxyMessages().getStringMessage("google-disabled"));
+				throw new SendMessageException(config.getProxyMessages().getSubMessages("google").getStringMessage("disabled"));
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {
 			if (!command.hasAnnotation(VkUse.class))
 				return;
 			if (!config.getVKSettings().isEnabled())
-				throw new SendMessageException(config.getProxyMessages().getStringMessage("vk-disabled"));
+				throw new SendMessageException(config.getProxyMessages().getSubMessages("vk").getStringMessage("disabled"));
 		});
 
 		BUNGEE_COMMAND_HANDLER.registerValueResolver(ProxyPlayer.class, (context) -> {

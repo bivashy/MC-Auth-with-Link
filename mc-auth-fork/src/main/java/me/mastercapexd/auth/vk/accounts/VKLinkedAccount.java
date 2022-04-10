@@ -52,7 +52,7 @@ public class VKLinkedAccount {
 				return;
 			}
 		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("kick-starting", messageContext));
-		KickResult result = account.kick(config.getProxyMessages().getStringMessage("vk-kicked"));
+		KickResult result = account.kick(config.getProxyMessages().getSubMessages("vk").getStringMessage("kicked"));
 		if (result == KickResult.PLAYER_OFFLINE)
 			sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("player-offline", messageContext));
 		if (result == KickResult.KICKED)
