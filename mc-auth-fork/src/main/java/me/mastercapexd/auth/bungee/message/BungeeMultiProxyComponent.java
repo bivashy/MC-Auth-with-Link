@@ -21,7 +21,7 @@ public class BungeeMultiProxyComponent implements MultiProxyComponent {
 	}
 
 	public BungeeMultiProxyComponent(String legacyText) {
-		this(TextComponent.fromLegacyText(applyColor(legacyText)));
+		this(TextComponent.fromLegacyText(colorText(legacyText)));
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class BungeeMultiProxyComponent implements MultiProxyComponent {
 		return components;
 	}
 
-	private static String applyColor(String message) {
+	private static String colorText(String message) {
 		Matcher matcher = HEX_PATTERN.matcher(message);
 		while (matcher.find()) {
 			final ChatColor hexColor = ChatColor
@@ -59,6 +59,6 @@ public class BungeeMultiProxyComponent implements MultiProxyComponent {
 			message = before + hexColor + after;
 			matcher = HEX_PATTERN.matcher(message);
 		}
-		return message;
+		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 }
