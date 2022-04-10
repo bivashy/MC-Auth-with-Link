@@ -5,6 +5,7 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
@@ -25,7 +26,12 @@ public class LinkCodeCommand implements OrphanCommand {
 
 			accountStorage.saveOrUpdateAccount(account);
 
-			linkContext.onSuccess();
+			ProxyPlayer player = config.getActiveIdentifierType()
+					.getPlayer(linkContext.getConfirmationUser().getAccount().getId());
+			if (player != null)
+				player.sendMessage(linkType.getProxyMessages().getStringMessage("linked"));
+
+			actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-success"));
 
 			Auth.getLinkConfirmationAuth().removeLinkUser(linkContext.getConfirmationUser());
 

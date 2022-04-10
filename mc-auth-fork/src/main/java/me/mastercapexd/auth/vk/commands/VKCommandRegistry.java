@@ -60,7 +60,7 @@ public class VKCommandRegistry {
 
 			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
 					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
-							&& linkUser.getLinkUserInfo().getIdentificator().asNumber()==commandActor.getAuthorId())
+							&& linkUser.getLinkUserInfo().getIdentificator().asNumber() == commandActor.getAuthorId())
 					.stream().findFirst().orElse(null);
 
 			if (confirmationUser == null)
@@ -75,22 +75,14 @@ public class VKCommandRegistry {
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-error"));
 
-			LinkUserInfo vkLinkUserInfo = confirmationUser.getAccount()
-					.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo();
+			LinkUserInfo vkLinkUserInfo = confirmationUser.getAccount().findFirstLinkUser(VKLinkType.LINK_USER_FILTER)
+					.orElse(null).getLinkUserInfo();
 
 			if (vkLinkUserInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID)
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-already-linked"));
 
-			return new MessengerLinkContext(code, confirmationUser, () -> {
-				ProxyPlayer player = PLUGIN.getConfig().getActiveIdentifierType()
-						.getPlayer(confirmationUser.getAccount().getId());
-				if (player != null)
-					player.sendMessage(PLUGIN.getConfig().getProxyMessages().getStringMessage("vk-linked"));
-
-				commandActor
-						.reply(PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-success"));
-			});
+			return new MessengerLinkContext(code, confirmationUser);
 		});
 
 	}
@@ -99,6 +91,7 @@ public class VKCommandRegistry {
 		commandHandler.registerDependency(AccountStorage.class, PLUGIN.getAccountStorage());
 		commandHandler.registerDependency(PluginConfig.class, PLUGIN.getConfig());
 		commandHandler.registerDependency(ProxyPlugin.class, PLUGIN);
+		commandHandler.registerDependency(LinkType.class, VKLinkType.getInstance());
 	}
 
 	private void registerCommands() {
