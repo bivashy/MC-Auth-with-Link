@@ -25,8 +25,8 @@ public class VKEnterButton implements VKButtonExecutor {
 
 	@Override
 	public void execute(VKCallbackButtonPressEvent e, String payload) {
-		Predicate<LinkEntryUser> filter = entryUser -> entryUser.getLinkUserInfo().getIdentificator().asNumber()
-				.equals(e.getButtonEvent().getUserID()) && entryUser.getLinkType().equals(VKLinkType.getInstance())
+		Predicate<LinkEntryUser> filter = entryUser -> entryUser.getLinkUserInfo().getIdentificator().asNumber() == e
+				.getButtonEvent().getUserID() && entryUser.getLinkType().equals(VKLinkType.getInstance())
 				&& Duration.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS)
 						.getSeconds() <= receptioner.getConfig().getVKSettings().getEnterSettings().getEnterDelay();
 
