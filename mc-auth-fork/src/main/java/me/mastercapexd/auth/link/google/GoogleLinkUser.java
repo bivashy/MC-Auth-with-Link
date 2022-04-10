@@ -11,7 +11,7 @@ public class GoogleLinkUser extends AbstractLinkUser {
 		super(GoogleLinkType.getInstance(), account);
 		this.linkInfoAccount = new GoogleLinkUserInfo(googleKey, confirmationEnabled);
 	}
-	
+
 	public GoogleLinkUser(Account account, String googleKey) {
 		super(GoogleLinkType.getInstance(), account);
 		this.linkInfoAccount = new GoogleLinkUserInfo(googleKey);

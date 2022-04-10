@@ -34,7 +34,6 @@ public class LinkCodeCommand implements OrphanCommand {
 			actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-success"));
 
 			Auth.getLinkConfirmationAuth().removeLinkUser(linkContext.getConfirmationUser());
-
 		});
 	}
 }

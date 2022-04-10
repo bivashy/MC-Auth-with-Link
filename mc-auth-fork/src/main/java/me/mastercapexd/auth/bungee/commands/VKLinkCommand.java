@@ -61,7 +61,8 @@ public class VKLinkCommand {
 				LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
 						.getLinkUserInfo();
 
-				if (vkLinkInfo.getIdentificator() != null && vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
+				if (vkLinkInfo.getIdentificator() != null
+						&& vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
 					player.sendMessage(config.getProxyMessages().getStringMessage("already-linked"));
 					return;
 				}
@@ -74,9 +75,8 @@ public class VKLinkCommand {
 					String code = RandomCodeFactory
 							.generateCode(config.getVKSettings().getConfirmationSettings().getCodeLength());
 
-					Auth.getLinkConfirmationAuth()
-							.addLinkUser(new VKConfirmationUser(account,
-									new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
+					Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account,
+							new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
 					player.sendMessage(config.getProxyMessages().getStringMessage("confirmation-vk-sent")
 							.replaceAll("(?i)%code%", code));
 				});

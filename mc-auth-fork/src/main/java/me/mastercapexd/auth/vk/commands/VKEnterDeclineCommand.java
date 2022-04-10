@@ -22,8 +22,8 @@ public class VKEnterDeclineCommand extends VKCommandExecutor {
 
 	@Override
 	public void execute(VKMessageEvent e, String[] args) {
-		Predicate<LinkEntryUser> filter = entryUser -> entryUser.getLinkUserInfo().getIdentificator().asNumber()==e.getUserId()
-				&& entryUser.getLinkType().equals(VKLinkType.getInstance())
+		Predicate<LinkEntryUser> filter = entryUser -> entryUser.getLinkUserInfo().getIdentificator().asNumber() == e
+				.getUserId() && entryUser.getLinkType().equals(VKLinkType.getInstance())
 				&& Duration.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS)
 						.getSeconds() > receptioner.getConfig().getVKSettings().getEnterSettings().getEnterDelay();
 

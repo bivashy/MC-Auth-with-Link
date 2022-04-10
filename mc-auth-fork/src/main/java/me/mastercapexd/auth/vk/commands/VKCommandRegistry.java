@@ -19,7 +19,6 @@ import me.mastercapexd.auth.messenger.commands.AccountsCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;

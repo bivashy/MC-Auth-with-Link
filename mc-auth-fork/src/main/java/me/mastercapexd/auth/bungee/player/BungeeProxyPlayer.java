@@ -13,12 +13,11 @@ public class BungeeProxyPlayer implements ProxyPlayer {
 	public BungeeProxyPlayer(ProxiedPlayer player) {
 		this.player = player;
 	}
-	
+
 	@Override
 	public void disconnect(String reason) {
 		player.disconnect(TextComponent.fromLegacyText(reason));
 	}
-
 
 	@Override
 	public void sendMessage(String message) {
@@ -46,7 +45,7 @@ public class BungeeProxyPlayer implements ProxyPlayer {
 	public <T> T getRealPlayer() {
 		return (T) getBungeePlayer();
 	}
-	
+
 	public ProxiedPlayer getBungeePlayer() {
 		return player;
 	}

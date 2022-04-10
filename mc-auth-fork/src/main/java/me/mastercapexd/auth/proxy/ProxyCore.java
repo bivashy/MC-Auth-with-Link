@@ -25,7 +25,7 @@ public interface ProxyCore extends Castable<ProxyCore> {
 	ProxyBossbar createBossbar(String title);
 
 	ProxyComponent component(String text);
-	
+
 	Server serverFromName(String serverName);
 
 	void registerListener(ProxyPlugin plugin, Object listener);

@@ -17,7 +17,8 @@ public interface LinkType {
 	Messages<ProxyComponent> getProxyMessages();
 
 	/**
-	 * Returns link messages that uses in social site, for example vk message, or telegram messages
+	 * Returns link messages that uses in social site, for example vk message, or
+	 * telegram messages
 	 * 
 	 * @return
 	 */

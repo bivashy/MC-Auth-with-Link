@@ -62,8 +62,8 @@ public class VKLinkCommand extends VKCommandExecutor {
 			ProxyServer.getInstance().getPluginManager().callEvent(event);
 			if (event.isCancelled())
 				return;
-			account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo()
-					.getIdentificator().setNumber(e.getUserId());
+			account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo().getIdentificator()
+					.setNumber(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			ProxyPlayer player = receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId());
 			if (player != null)

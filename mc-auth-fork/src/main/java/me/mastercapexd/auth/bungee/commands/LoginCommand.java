@@ -6,7 +6,6 @@ import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
-import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -38,8 +37,8 @@ public class LoginCommand {
 			Auth.incrementAttempts(id);
 			int attempts = Auth.getPlayerAttempts(id);
 			if (attempts < config.getPasswordAttempts()) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("wrong-password")
-						.replaceAll("%attempts%", String.valueOf(config.getPasswordAttempts() - attempts)));
+				player.sendMessage(config.getProxyMessages().getStringMessage("wrong-password").replaceAll("%attempts%",
+						String.valueOf(config.getPasswordAttempts() - attempts)));
 				return;
 			}
 			player.disconnect(config.getProxyMessages().getStringMessage("attempts-limit"));

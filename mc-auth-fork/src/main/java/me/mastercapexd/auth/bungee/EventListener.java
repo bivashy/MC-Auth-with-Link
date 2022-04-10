@@ -42,13 +42,15 @@ public class EventListener implements Listener {
 	public void onPostLogin(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
 		if (!config.getNamePattern().matcher(name).matches()) {
-			event.getPlayer().disconnect(config.getProxyMessages().getMessage("illegal-name-chars").as(BungeeMultiProxyComponent.class).components());
+			event.getPlayer().disconnect(config.getProxyMessages().getMessage("illegal-name-chars")
+					.as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (config.getMaxLoginPerIP() != 0
 				&& getOnlineExactIP(event.getPlayer().getAddress().getAddress().getHostAddress()) >= config
 						.getMaxLoginPerIP()) {
-			event.getPlayer().disconnect(config.getProxyMessages().getMessage("limit-ip-reached").as(BungeeMultiProxyComponent.class).components());
+			event.getPlayer().disconnect(config.getProxyMessages().getMessage("limit-ip-reached")
+					.as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (!config.isNameCaseCheckEnabled())
@@ -166,7 +168,8 @@ public class EventListener implements Listener {
 				ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
 				if (sessionEvent.isCancelled())
 					return;
-				player.sendMessage(config.getProxyMessages().getMessage("autoconnect").as(BungeeMultiProxyComponent.class).components());
+				player.sendMessage(config.getProxyMessages().getMessage("autoconnect")
+						.as(BungeeMultiProxyComponent.class).components());
 				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
 						() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
 				return;

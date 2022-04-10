@@ -44,7 +44,8 @@ public class GoogleCodeCommand {
 				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-not-need-enter"));
 				return;
 			}
-			if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
+			if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(),
+					code)) {
 				player.sendMessage(config.getProxyMessages().getStringMessage("google-code-entered"));
 				Auth.removeGoogleAuthAccount(playerId);
 				Auth.removeAccount(account.getId());

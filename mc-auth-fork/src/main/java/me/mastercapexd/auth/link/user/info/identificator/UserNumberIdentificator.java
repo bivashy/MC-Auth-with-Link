@@ -32,5 +32,5 @@ public class UserNumberIdentificator implements LinkUserIdentificator {
 	public LinkUserIdentificator setString(String userId) {
 		throw new UnsupportedOperationException("Cannot set identificator as string");
 	}
-	
+
 }

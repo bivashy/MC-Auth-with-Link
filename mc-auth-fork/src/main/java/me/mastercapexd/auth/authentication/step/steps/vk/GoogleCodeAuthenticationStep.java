@@ -34,7 +34,8 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
 		Account account = authenticationStepContext.getAccount();
 		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
 			return true;
-		LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType()==GoogleLinkType.getInstance()).orElse(null);
+		LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType() == GoogleLinkType.getInstance())
+				.orElse(null);
 
 		if (linkUser == null || linkUser.getLinkUserInfo() == null
 				|| linkUser.getLinkUserInfo().getIdentificator().asString() == AccountFactory.DEFAULT_GOOGLE_KEY

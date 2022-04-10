@@ -50,11 +50,10 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 	}
 
 	@Override
-	public String getStringMessage(String key,String defaultValue) {
+	public String getStringMessage(String key, String defaultValue) {
 		return messages.getOrDefault(key, defaultValue);
 	}
 
-	
 	@Override
 	public T getMessage(String key, MessageContext context) {
 		return fromText(context.formatString(getStringMessage(key)));
@@ -64,6 +63,6 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 		String formattedMessage = formatString(message);
 		messages.put(path, formattedMessage);
 	}
-	
+
 	protected abstract AbstractMessages<T> createMessages(ConfigurationSectionHolder configurationSection);
 }

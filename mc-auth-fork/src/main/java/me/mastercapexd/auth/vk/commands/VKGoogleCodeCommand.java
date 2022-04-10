@@ -47,7 +47,8 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 						.getMessage("google-code-account-not-need-enter"));
 				return;
 			}
-			if (receptioner.getPlugin().getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
+			if (receptioner.getPlugin().getGoogleAuthenticator()
+					.authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
 				Auth.removeGoogleAuthAccount(account.getId());
 				Auth.removeAccount(account.getId());
 				ProxyPlayer proxyPlayer = account.getIdentifierType().getPlayer(account.getId());

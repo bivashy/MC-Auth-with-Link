@@ -23,9 +23,9 @@ public interface LinkUserInfo extends CastableInterface<LinkUserInfo> {
 	LinkUserConfirmationState getConfirmationState();
 
 	/**
-	 * Set user identificator, may throw
-	 * {@link UnsupportedOperationException} if {@link LinkUserInfo} cannot process
-	 * provided {@link LinkUserIdentificator} identificator.
+	 * Set user identificator, may throw {@link UnsupportedOperationException} if
+	 * {@link LinkUserInfo} cannot process provided {@link LinkUserIdentificator}
+	 * identificator.
 	 * 
 	 * @param userIdentificator that should be applied
 	 * @return this {@link LinkUserInfo}
@@ -33,9 +33,9 @@ public interface LinkUserInfo extends CastableInterface<LinkUserInfo> {
 	LinkUserInfo setIdentificator(LinkUserIdentificator userIdentificator);
 
 	/**
-	 * Set user confirmation state, may throw
-	 * {@link UnsupportedOperationException} if {@link LinkUserInfo} cannot process
-	 * provided {@link LinkUserConfirmationState} confirmationState.
+	 * Set user confirmation state, may throw {@link UnsupportedOperationException}
+	 * if {@link LinkUserInfo} cannot process provided
+	 * {@link LinkUserConfirmationState} confirmationState.
 	 * 
 	 * @param confirmationState that should be applied
 	 * @return this {@link LinkUserInfo}

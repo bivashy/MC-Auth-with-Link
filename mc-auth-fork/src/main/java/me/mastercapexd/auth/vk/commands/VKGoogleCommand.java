@@ -21,7 +21,6 @@ import com.vk.api.sdk.objects.photos.responses.SaveMessagesPhotoResponse;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;

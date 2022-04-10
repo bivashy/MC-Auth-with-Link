@@ -7,7 +7,6 @@ import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;

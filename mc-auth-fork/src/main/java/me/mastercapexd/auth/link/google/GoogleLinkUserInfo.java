@@ -23,12 +23,12 @@ public class GoogleLinkUserInfo extends AbstractLinkUserInfo {
 	@Override
 	public LinkUserConfirmationState getConfirmationState() {
 		return new LinkUserConfirmationState() {
-			
+
 			@Override
 			public boolean shouldSendConfirmation() {
-				return userIdentificator.asString()!=null && !userIdentificator.asString().isEmpty();
+				return userIdentificator.asString() != null && !userIdentificator.asString().isEmpty();
 			}
-			
+
 			@Override
 			public LinkUserConfirmationState setSendConfirmation(boolean sendConfirmation) {
 				// TODO Auto-generated method stub
@@ -41,6 +41,5 @@ public class GoogleLinkUserInfo extends AbstractLinkUserInfo {
 	public LinkUserInfo setConfirmationState(LinkUserConfirmationState confirmationState) {
 		throw new UnsupportedOperationException("Cannot set confirmation state for google link");
 	}
-	
-	
+
 }

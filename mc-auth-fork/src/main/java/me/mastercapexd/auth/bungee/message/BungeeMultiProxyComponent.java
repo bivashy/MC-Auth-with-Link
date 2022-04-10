@@ -44,7 +44,7 @@ public class BungeeMultiProxyComponent implements MultiProxyComponent {
 		return Arrays.stream(components).map(baseComponent -> new BungeeProxyComponent(baseComponent))
 				.toArray(ProxyComponent[]::new);
 	}
-	
+
 	public BaseComponent[] components() {
 		return components;
 	}

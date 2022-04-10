@@ -3,7 +3,7 @@ package me.mastercapexd.auth.proxy.api.title;
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
-public abstract class ProxyTitle implements Castable<ProxyTitle>{
+public abstract class ProxyTitle implements Castable<ProxyTitle> {
 	protected String title = "", subtitle = "";
 	protected int fadeIn = 10, stay = 60, fadeOut = 10;
 

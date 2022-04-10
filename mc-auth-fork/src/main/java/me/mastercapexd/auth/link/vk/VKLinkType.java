@@ -19,7 +19,7 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class VKLinkType extends AbstractLinkType {
-	public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType()==getInstance();
+	public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
 	private static final VKLinkType INSTANCE = new VKLinkType();
 	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 
@@ -66,5 +66,4 @@ public class VKLinkType extends AbstractLinkType {
 		return PLUGIN.getConfig().getVKSettings().getVKMessages();
 	}
 
-	
 }
