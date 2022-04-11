@@ -24,9 +24,11 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class BungeeAuthEngine implements AuthEngine {
 
-	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("google");
-	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("vk");
-	
+	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
+			.getProxyMessages().getSubMessages("google");
+	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages()
+			.getSubMessages("vk");
+
 	private final Plugin plugin;
 
 	private final PluginConfig config;
@@ -34,13 +36,6 @@ public class BungeeAuthEngine implements AuthEngine {
 	private ScheduledTask authTask;
 
 	private ScheduledTask messageTask;
-
-	public BungeeAuthEngine(Plugin plugin, PluginConfig config, ScheduledTask authTask, ScheduledTask messageTask) {
-		this.plugin = plugin;
-		this.config = config;
-		this.authTask = authTask;
-		this.messageTask = messageTask;
-	}
 
 	public BungeeAuthEngine(Plugin plugin, PluginConfig config) {
 		this.plugin = plugin;
@@ -67,19 +62,15 @@ public class BungeeAuthEngine implements AuthEngine {
 						if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) {
 							player.sendMessage(VK_MESSAGES.getMessage("enter-confirm-need-chat")
 									.as(BungeeMultiProxyComponent.class).components());
-							TitleBar.send(player,
-									VK_MESSAGES.getStringMessage("enter-confirm-need-title"),
-									VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"),
-									0, 120, 0);
+							TitleBar.send(player, VK_MESSAGES.getStringMessage("enter-confirm-need-title"),
+									VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
 							continue;
 						}
 						if (Auth.hasGoogleAuthAccount(account.getId())) {
 							player.sendMessage(GOOGLE_MESSAGES.getMessage("need-code-chat")
 									.as(BungeeMultiProxyComponent.class).components());
-							TitleBar.send(player,
-									GOOGLE_MESSAGES.getStringMessage("need-code-title"),
-									GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0,
-									120, 0);
+							TitleBar.send(player, GOOGLE_MESSAGES.getStringMessage("need-code-title"),
+									GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0, 120, 0);
 							continue;
 						}
 						if (account.isRegistered()) {

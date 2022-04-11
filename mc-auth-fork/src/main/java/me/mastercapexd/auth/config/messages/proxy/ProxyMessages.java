@@ -4,6 +4,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.messages.AbstractMessages;
 import me.mastercapexd.auth.config.messages.MessageContext;
+import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class ProxyMessages extends AbstractMessages<ProxyComponent> {
@@ -28,7 +29,7 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 	}
 
 	@Override
-	protected AbstractMessages<ProxyComponent> createMessages(ConfigurationSectionHolder configurationSection) {
+	protected Messages<ProxyComponent> createMessages(ConfigurationSectionHolder configurationSection) {
 		return new ProxyMessages(configurationSection);
 	}
 

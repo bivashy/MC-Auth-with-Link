@@ -4,6 +4,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.messages.AbstractMessages;
 import me.mastercapexd.auth.config.messages.MessageContext;
+import me.mastercapexd.auth.config.messages.Messages;
 
 public class VKMessages extends AbstractMessages<String> {
 	public VKMessages(ConfigurationSectionHolder configurationSection) {
@@ -21,7 +22,7 @@ public class VKMessages extends AbstractMessages<String> {
 	}
 
 	@Override
-	protected AbstractMessages<String> createMessages(ConfigurationSectionHolder configurationSection) {
+	protected Messages<String> createMessages(ConfigurationSectionHolder configurationSection) {
 		return new VKMessages(configurationSection);
 	}
 

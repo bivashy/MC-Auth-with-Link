@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.config.messages;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -13,7 +12,7 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 	protected static final String DEFAULT_DELIMITER = "\n";
 
 	protected Map<String, String> messages = Maps.newHashMap();
-	protected HashMap<String, AbstractMessages<T>> subMessages = new HashMap<>();
+	protected Map<String, Messages<T>> subMessages = Maps.newHashMap();
 
 	public AbstractMessages(ConfigurationSectionHolder configurationSection, CharSequence delimiter) {
 		for (String key : configurationSection.getKeys()) {
@@ -64,5 +63,5 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 		messages.put(path, formattedMessage);
 	}
 
-	protected abstract AbstractMessages<T> createMessages(ConfigurationSectionHolder configurationSection);
+	protected abstract Messages<T> createMessages(ConfigurationSectionHolder configurationSection);
 }
