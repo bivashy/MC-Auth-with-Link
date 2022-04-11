@@ -330,14 +330,6 @@ messages:
   login-chat: '&fПожалуйста войдите используя команду &e/login <password>'
   login-title: '&eАвторизация'
   login-subtitle: '&fПожалуйста введите &e/login <пароль>'
-  # Подтверждение входа через ВК
-  vk-enter-confirm-need-chat: '&fПодтвердите вход в &9ВК &fдля того чтобы войти в игру'
-  vk-enter-confirm-need-title: '&fПодтверждение &9ВК'
-  vk-enter-confirm-need-subtitle: '&fПожалуйста подтвердите в &9ВК'
-   # Этап авторизации через гугл
-  google-need-code-chat: '&aВведите гугл код в ВК, либо в чате: /googlecode [код]'
-  google-need-code-title: '&aВведите код'
-  google-need-code-subtitle: '&aGoogle-Authenticator' 
   # Ошибки
   time-left: '&cВремя вышло! Пожалуйста, попробуйте снова.'
   limit-ip-reached: '&cВы находитесь онлайн с большим количеством аккаунтов!'
@@ -369,6 +361,11 @@ messages:
   logout-success: '&aВы вышли из аккаунта'
   # ВК
   vk:
+    # Подтверждение входа через ВК
+    enter-confirm-need-chat: '&fПодтвердите вход в &9ВК &fдля того чтобы войти в игру'
+    enter-confirm-need-title: '&fПодтверждение &9ВК'
+    enter-confirm-need-subtitle: '&fПожалуйста подтвердите в &9ВК'
+    
     disabled: '&cПривязка к ВК отключена'
     usage: '&a/addvk буквенный_id'
     link-limit-reached: 'Слишком много привязанных аккаунтов на данный ВК'
@@ -384,6 +381,11 @@ messages:
   vk-send-code-error: '&cПроизошла ошибка при отправке сообщения на данный id, свяжитесь с администрацией'
   # Гугл-Аутентификация
   google:
+    # Этап авторизации через гугл
+    need-code-chat: '&aВведите гугл код в ВК, либо в чате: /googlecode [код]'
+    need-code-title: '&aВведите код'
+    need-code-subtitle: '&aGoogle-Authenticator' 
+    
     disabled: '&cПривязка к гугл-аутентификации отключена'
     generated: '&aВы успешно сгенерировали ключ Google-Authenticator: %google_key%'
     regenerated: '&cВнимание! Вы заного сгенерировали ключ Google Authenticator: %google_key%'
