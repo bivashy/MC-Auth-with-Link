@@ -28,7 +28,7 @@
 		<mysql.connector.version>6.0.6</mysql.connector.version>
 		<google.authenticator.version>1.4.0</google.authenticator.version>
 		<zxing.library.version>3.3.0</zxing.library.version>
-		<configuration-library.version>2.0.2</configuration-library.version>
+		<configuration-library.version>2.0.3</configuration-library.version>
 		<lamp.command-library.version>3.0.2</lamp.command-library.version>
 		<vk.lamp.module.version>0.0.3</vk.lamp.module.version>
 

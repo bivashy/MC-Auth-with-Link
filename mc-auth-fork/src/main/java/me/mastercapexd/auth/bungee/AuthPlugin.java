@@ -42,15 +42,23 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
 	public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor()
-			.registerFieldResolver(Server.class,
-					(context) -> new Server(context.as(SingleObjectResolverContext.class).getConfigurationValue()))
-			.registerFieldResolver(Long.class,
-					(context) -> TimeUtils.parseTime(
-							context.as(SingleObjectResolverContext.class).getConfigurationValue().toString()))
-			.registerFieldResolver(Pattern.class,
-					(context) -> Pattern
-							.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString()))
-			.registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
+			.registerFieldResolver(Server.class, (context) -> {
+				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+				if (configurationValue == null)
+					return null;
+				return new Server(context.as(SingleObjectResolverContext.class).getConfigurationValue());
+			}).registerFieldResolver(Long.class, (context) -> {
+				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+				if (configurationValue == null)
+					return null;
+				return TimeUtils.parseTime(String.valueOf(configurationValue));
+			}).registerFieldResolver(Pattern.class, (context) -> {
+				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+				if (configurationValue == null)
+					return null;
+				return Pattern
+						.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
+			}).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
 			.registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
 
 	private GoogleAuthenticator googleAuthenticator;
