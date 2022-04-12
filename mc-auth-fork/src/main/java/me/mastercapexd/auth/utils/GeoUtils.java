@@ -6,13 +6,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import me.mastercapexd.auth.objects.IPInfoResponse;
 
 public class GeoUtils {
+	private static final Gson GSON = new Gson();
 	private static final String API_SITE = "http://ip-api.com/json/";
 
 	public IPInfoResponse getIPInfo(String ip) {
@@ -20,7 +21,7 @@ public class GeoUtils {
 			return new IPInfoResponse();
 		JsonObject json;
 		try {
-			json = new JsonParser().parse(getURLContent(API_SITE + ip)).getAsJsonObject();
+			json = GSON.fromJson(getURLContent(API_SITE + ip),JsonObject.class);
 		} catch (JsonSyntaxException | IOException e) {
 			e.printStackTrace();
 			return new IPInfoResponse();
