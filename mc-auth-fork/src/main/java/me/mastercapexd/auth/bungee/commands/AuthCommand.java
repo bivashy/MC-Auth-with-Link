@@ -6,10 +6,9 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.bungee.commands.annotations.OtherPlayer;
+import me.mastercapexd.auth.bungee.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
@@ -42,7 +41,7 @@ public class AuthCommand {
 	}
 
 	@Subcommand({ "force", "forcejoin", "fjoin" })
-	public void forceEnter(CommandActor commandActor, @OtherPlayer ProxyPlayer proxyPlayer) {
+	public void forceEnter(CommandActor commandActor, ArgumentProxyPlayer proxyPlayer) {
 		if (proxyPlayer == null)
 			return;
 		String id = config.getActiveIdentifierType().getId(proxyPlayer);
@@ -59,7 +58,7 @@ public class AuthCommand {
 	}
 
 	@Subcommand({ "changepassword", "changepass" })
-	public void changePassword(CommandActor actor, @OtherPlayer ProxyPlayer proxyPlayer,
+	public void changePassword(CommandActor actor, ArgumentProxyPlayer proxyPlayer,
 			NewPassword newPlayerPassword) {
 		if (proxyPlayer == null)
 			return;
@@ -76,7 +75,7 @@ public class AuthCommand {
 	}
 
 	@Subcommand({ "reset", "resetaccount", "deleteaccount" })
-	public void resetAccount(CommandActor actor, @OtherPlayer ProxyPlayer proxyPlayer) {
+	public void resetAccount(CommandActor actor, ArgumentProxyPlayer proxyPlayer) {
 		if (proxyPlayer == null)
 			return;
 		String id = config.getActiveIdentifierType().getId(proxyPlayer);
