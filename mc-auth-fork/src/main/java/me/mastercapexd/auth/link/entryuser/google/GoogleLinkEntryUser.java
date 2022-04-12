@@ -11,4 +11,8 @@ public class GoogleLinkEntryUser extends AbstractLinkEntryUser {
 		super(GoogleLinkType.getInstance(), account, linkUserInfo);
 	}
 
+	public GoogleLinkEntryUser(Account account) {
+		this(account, account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get().getLinkUserInfo());
+	}
+
 }
