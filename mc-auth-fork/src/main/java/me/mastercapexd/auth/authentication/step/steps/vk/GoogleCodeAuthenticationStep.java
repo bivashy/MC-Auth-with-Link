@@ -8,10 +8,10 @@ import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
-import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
+import me.mastercapexd.auth.link.entryuser.google.GoogleLinkEntryUser;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
@@ -21,7 +21,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
 
 	public GoogleCodeAuthenticationStep(AuthenticationStepContext context) {
 		super(STEP_NAME, context);
-		entryUser = new VKLinkEntryUser(context.getAccount());
+		entryUser = new GoogleLinkEntryUser(context.getAccount());
 	}
 
 	@Override
@@ -32,19 +32,27 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
 	@Override
 	public boolean shouldSkip() {
 		Account account = authenticationStepContext.getAccount();
-		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
-			return true;
-		LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType() == GoogleLinkType.getInstance())
-				.orElse(null);
 
-		if (linkUser == null || linkUser.getLinkUserInfo() == null
-				|| linkUser.getLinkUserInfo().getIdentificator().asString() == AccountFactory.DEFAULT_GOOGLE_KEY
-				|| !PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled()
-				|| !linkUser.getLinkUserInfo().getConfirmationState().shouldSendConfirmation())
+		if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled()) // Ignore if google was disabled in configuration
 			return true;
 
-		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance()))
+		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance())) // Ignore if user already confirming 
 			return true;
+
+		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability())) // Ignore if player has active session
+			return true;
+
+		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+
+		if (linkUser == null) 
+			return true;
+
+		LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
+
+		if (linkUserInfo == null || linkUserInfo.getIdentificator().asString() == AccountFactory.DEFAULT_GOOGLE_KEY
+				|| !linkUserInfo.getConfirmationState().shouldSendConfirmation())
+			return true;
+
 		Auth.getLinkEntryAuth().addLinkUser(entryUser);
 		return false;
 	}

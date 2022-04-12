@@ -10,6 +10,7 @@ import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationS
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
@@ -31,17 +32,25 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 	@Override
 	public boolean shouldSkip() {
 		Account account = authenticationStepContext.getAccount();
-		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
+
+		if (!PLUGIN.getConfig().getVKSettings().isEnabled()) // Ignore if vk was disabled in configuration
 			return true;
+
+		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) // Ignore if user already confirming 
+			return true;
+
+		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability())) // Ignore if player has active session
+			return true;
+
 		LinkUser linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null);
 
-		if (linkUser == null || linkUser.getLinkUserInfo() == null
-				|| linkUser.getLinkUserInfo().getIdentificator().asNumber() == AccountFactory.DEFAULT_VK_ID
-				|| !PLUGIN.getConfig().getVKSettings().isEnabled()
-				|| !linkUser.getLinkUserInfo().getConfirmationState().shouldSendConfirmation())
+		if (linkUser == null)
 			return true;
 
-		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance()))
+		LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
+
+		if (linkUserInfo == null || linkUserInfo.getIdentificator().asNumber() == AccountFactory.DEFAULT_VK_ID
+				|| !linkUserInfo.getConfirmationState().shouldSendConfirmation())
 			return true;
 
 		Auth.getLinkEntryAuth().addLinkUser(entryUser);
