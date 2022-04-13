@@ -19,7 +19,6 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.messages.MessageContext;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-import me.mastercapexd.auth.utils.CollectionUtils;
 
 import static me.mastercapexd.auth.utils.CollectionUtils.newEntry;
 
@@ -39,15 +38,15 @@ public class VKMessageContext implements MessageContext {
 
 	@Override
 	public Map<String, String> getPlaceholders() {
-		LinkUserInfo vkLinkUserInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
-				.getLinkUserInfo();
+		LinkUserInfo vkLinkUserInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).get().getLinkUserInfo();
 
 		Map<String, String> accountPlaceholders = Stream
 				.of(newEntry("%name%", account.getName()), newEntry("%nick%", account.getName()),
+						newEntry("%vk_id%", vkLinkUserInfo.getIdentificator().asString()),
 						newEntry("%account_name%", account.getName()), newEntry("%account_nick%", account.getName()),
 						newEntry("%account_ip%", account.getLastIpAddress()),
 						newEntry("%account_last_ip%", account.getLastIpAddress()),
-						newEntry("%vk_id%", String.valueOf(vkLinkUserInfo.getIdentificator().asNumber())))
+						newEntry("%account_vk_id%", vkLinkUserInfo.getIdentificator().asString()))
 				.collect(Collectors.toMap((entry) -> IGNORE_CASE_REGEX + entry.getKey(), Entry::getValue));
 
 		Map<String, String> vkUserPlaceholders = new HashMap<>();
