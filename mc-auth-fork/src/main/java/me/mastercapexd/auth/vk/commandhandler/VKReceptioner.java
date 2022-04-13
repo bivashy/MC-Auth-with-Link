@@ -83,7 +83,7 @@ public class VKReceptioner {
 	private void registerCommands() {
 		VKCommandPaths mainCommands = config.getVKSettings().getCommandPaths();
 
-		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKEnterDeclineCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKChangePasswordCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKUnlinkCommand(this), mainCommands));
