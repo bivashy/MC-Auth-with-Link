@@ -8,6 +8,8 @@ import com.vk.api.sdk.objects.users.UserFull;
 
 import me.mastercapexd.auth.link.AbstractLinkCommandActorWrapper;
 import me.mastercapexd.auth.link.message.Message;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
+import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 
 public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseVkActor> implements VkActor {
 
@@ -21,8 +23,8 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 	}
 
 	@Override
-	public Integer userId() {
-		return actor.getAuthorId();
+	public LinkUserIdentificator userId() {
+		return new UserNumberIdentificator(actor.getAuthorId());
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 
 	@Override
 	public Integer getAuthorId() {
-		return userId();
+		return userId().asNumber();
 	}
 
 	@Override

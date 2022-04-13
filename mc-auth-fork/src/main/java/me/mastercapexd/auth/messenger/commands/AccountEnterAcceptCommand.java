@@ -24,12 +24,23 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 	private PluginConfig config;
 
 	@Default
-	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType) {
+	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
 		Predicate<LinkEntryUser> filter = entryUser -> {
-			return entryUser.getLinkUserInfo().getIdentificator().asNumber() == actorWrapper.userId()
-					&& entryUser.getLinkType().equals(linkType)
-					&& Duration.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS)
-							.getSeconds() <= config.getVKSettings().getEnterSettings().getEnterDelay();
+			if (!entryUser.getLinkType().equals(linkType)) 
+				return false;
+			
+			if (!entryUser.getLinkUserInfo().getIdentificator().equals(actorWrapper.userId()))
+				return false;
+			
+			Duration confirmationSecondsPassed = Duration
+					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
+			
+			if (confirmationSecondsPassed.getSeconds() <= config.getVKSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
+				return false;
+			
+			if(!acceptPlayerName.equals("all")) // If player not default value
+				return entryUser.getAccount().getName().equalsIgnoreCase(acceptPlayerName); // Check if entryUser name equals to accept player
+			return true;
 		};
 
 		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(filter);
@@ -42,7 +53,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 			Auth.getLinkEntryAuth().removeLinkUser(entryUser);
 		});
 
-		Account account = accounts.stream().findFirst().orElse(null).getAccount();
+		Account account = accounts.stream().findFirst().get().getAccount();
 		String stepName = config
 				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 		account.nextAuthenticationStep(

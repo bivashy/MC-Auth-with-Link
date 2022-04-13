@@ -21,8 +21,8 @@ public class LinkCodeCommand implements OrphanCommand {
 	public void onLink(LinkCommandActorWrapper actorWrapper, LinkType linkType, MessengerLinkContext linkContext) {
 		accountStorage.getAccount(linkContext.getConfirmationUser().getAccount().getId()).thenAccept(account -> {
 
-			account.findFirstLinkUser(linkUser -> linkUser.getLinkType().getLinkName().equals(linkType.getLinkName()))
-					.orElse(null).getLinkUserInfo().getIdentificator().setNumber(actorWrapper.userId());
+			account.findFirstLinkUser(linkUser -> linkUser.getLinkType().equals(linkType))
+					.get().getLinkUserInfo().setIdentificator(actorWrapper.userId());
 
 			accountStorage.saveOrUpdateAccount(account);
 
