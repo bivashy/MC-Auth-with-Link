@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config;
+package me.mastercapexd.auth.config.vk;
 
 import java.util.Map;
 
@@ -7,6 +7,7 @@ import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class VKButtonLabels implements ConfigurationHolder {

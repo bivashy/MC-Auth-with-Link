@@ -6,7 +6,6 @@ import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.VKButtonLabels;
 import me.mastercapexd.auth.config.messages.vk.VKMessages;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
