@@ -21,6 +21,8 @@ import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.utils.CollectionUtils;
 
+import static me.mastercapexd.auth.utils.CollectionUtils.newEntry;
+
 public class VKMessageContext implements MessageContext {
 	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
 	private static final VkApiClient CLIENT = VK_API_PROVIDER.getVkApiClient();
@@ -30,13 +32,9 @@ public class VKMessageContext implements MessageContext {
 	private final Integer userID;
 	private final Account account;
 
-	private VKMessageContext(Integer userId, Account account) {
+	public VKMessageContext(Integer userId, Account account) {
 		this.userID = userId;
 		this.account = account;
-	}
-
-	public static VKMessageContext newContext(Integer userId, Account account) {
-		return new VKMessageContext(userId, account);
 	}
 
 	@Override
@@ -45,13 +43,12 @@ public class VKMessageContext implements MessageContext {
 				.getLinkUserInfo();
 
 		Map<String, String> accountPlaceholders = Stream
-				.of(CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%name%", account.getName()),
-						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%nick%", account.getName()),
-						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_ip%", account.getLastIpAddress()),
-						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%account_last_ip%", account.getLastIpAddress()),
-						CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%vk_id%",
-								String.valueOf(vkLinkUserInfo.getIdentificator().asNumber())))
-				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+				.of(newEntry("%name%", account.getName()), newEntry("%nick%", account.getName()),
+						newEntry("%account_name%", account.getName()), newEntry("%account_nick%", account.getName()),
+						newEntry("%account_ip%", account.getLastIpAddress()),
+						newEntry("%account_last_ip%", account.getLastIpAddress()),
+						newEntry("%vk_id%", String.valueOf(vkLinkUserInfo.getIdentificator().asNumber())))
+				.collect(Collectors.toMap((entry) -> IGNORE_CASE_REGEX + entry.getKey(), Entry::getValue));
 
 		Map<String, String> vkUserPlaceholders = new HashMap<>();
 
@@ -59,19 +56,14 @@ public class VKMessageContext implements MessageContext {
 			List<GetResponse> userInfoResponses = CLIENT.users().get(ACTOR).userIds(String.valueOf(userID)).execute();
 			if (!userInfoResponses.isEmpty()) {
 				GetResponse userInfoResponse = userInfoResponses.get(0);
-				vkUserPlaceholders = Stream
-						.of(CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%user_screen_name%",
-								userInfoResponse.getScreenName()),
-								CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%user_first_name%",
-										userInfoResponse.getFirstName()),
-								CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%user_last_name%",
-										userInfoResponse.getLastName()),
-								CollectionUtils.newEntry(IGNORE_CASE_REGEX + "%user_id%", String.valueOf(userID)))
-						.map(entry -> {
+				vkUserPlaceholders = Stream.of(newEntry("%user_screen_name%", userInfoResponse.getScreenName()),
+						newEntry("%user_first_name%", userInfoResponse.getFirstName()),
+						newEntry("%user_last_name%", userInfoResponse.getLastName()),
+						newEntry("%user_id%", String.valueOf(userID))).map(entry -> {
 							if (entry.getValue() == null)
-								return CollectionUtils.newEntry(entry.getKey(), "");
+								return newEntry(entry.getKey(), "");
 							return entry;
-						}).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+						}).collect(Collectors.toMap((entry) -> IGNORE_CASE_REGEX + entry.getKey(), Entry::getValue));
 			}
 		} catch (ApiException | ClientException e) {
 			e.printStackTrace();

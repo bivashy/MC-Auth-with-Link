@@ -39,7 +39,7 @@ public class VKLinkedAccount {
 		this.userID = userID;
 		this.account = account;
 
-		this.messageContext = VKMessageContext.newContext(userID, account);
+		this.messageContext = new VKMessageContext(userID, account);
 	}
 
 	public void kick() {

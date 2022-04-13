@@ -45,7 +45,7 @@ public class VKChangePasswordCommand extends VKCommandExecutor {
 			}
 			account.setPasswordHash(newPassword);
 
-			VKMessageContext messageContext = VKMessageContext.newContext(e.getUserId(), account);
+			VKMessageContext messageContext = new VKMessageContext(e.getUserId(), account);
 			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
 					.getMessage("changepass-success", messageContext).replaceAll("(?i)%password%", args[1]));
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);

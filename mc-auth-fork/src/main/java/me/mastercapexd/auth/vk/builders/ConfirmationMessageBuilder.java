@@ -42,8 +42,7 @@ public class ConfirmationMessageBuilder extends MessageBuilder {
 		sendQuery.keyboard(createKeyboard());
 		IPInfoResponse ipInfoAnswer = geoUtils.getIPInfo(linkEntryUser.getAccount().getLastIpAddress());
 
-		VKMessageContext messageContext = VKMessageContext
-				.newContext(linkEntryUser.getLinkUserInfo().getIdentificator().asNumber(), linkEntryUser.getAccount());
+		VKMessageContext messageContext = new VKMessageContext(linkEntryUser.getLinkUserInfo().getIdentificator().asNumber(), linkEntryUser.getAccount());
 		sendQuery.message(ipInfoAnswer
 				.setInfo(config.getVKSettings().getVKMessages().getMessage("enter-message", messageContext)));
 		return sendQuery;

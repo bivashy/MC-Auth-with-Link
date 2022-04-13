@@ -58,7 +58,7 @@ public class VKEntryAccount {
 		Auth.getLinkEntryAuth().removeLinkUser(account.getId(), VKLinkType.getInstance());
 		ProxyPlayer proxyPlayer = account.getIdentifierType().getPlayer(account.getId());
 
-		VKMessageContext messageContext = VKMessageContext.newContext(vkId, account);
+		VKMessageContext messageContext = new VKMessageContext(vkId, account);
 		if (answer == VKEnterAnswer.DECLINE) {
 			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-kicked", messageContext));
 			account.kick(config.getProxyMessages().getSubMessages("vk").getStringMessage("enter-declined"));
