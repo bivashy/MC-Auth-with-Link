@@ -35,7 +35,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 			Duration confirmationSecondsPassed = Duration
 					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
 			
-			if (confirmationSecondsPassed.getSeconds() <= config.getVKSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
+			if (confirmationSecondsPassed.getSeconds() > config.getVKSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
 				return false;
 			
 			if(!acceptPlayerName.equals("all")) // If player not default value
