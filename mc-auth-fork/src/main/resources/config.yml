@@ -243,7 +243,11 @@ vk:
       regex: '^/(?!.*(помощь|принять|отклонить|отвязать|аккаунты|кик|восстановить|пароль|код|админ-панель|админпанель|админ|панель|admin-panel|adminpanel|admin|panel)).*$'
       answer: 'Команда не найдена! Доступные команды: /помощь'
       chat: false
-  # Текст на кнопках в ВК
+  keyboards: # Для создания JSON клавиатур советую использовать https://severecloud.github.io/vk-keyboard/. Учтывайте что полезная нагрузка должна иметь плейсхолдеры
+    # Клавиатура в виде JSON
+    confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/принять %name%\""},"color":"negative"}]],"inline":true}'
+      
+  # Кнопки в вк, могут быть представлены в виде текста, YAML, JSON.
   button-labels:
     kick: 'Кикнуть'
     restore: 'Восстановить'

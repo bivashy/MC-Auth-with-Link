@@ -2,7 +2,9 @@ package me.mastercapexd.auth.utils;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class CollectionUtils {
@@ -27,6 +29,15 @@ public class CollectionUtils {
 			}
 
 		return pageList;
+	}
+
+	public static Map<String, String> createStringMap(String... array) {
+		if (array.length % 2 != 0)
+			throw new IllegalArgumentException("Argument count must be even, but got " + array.length);
+		Map<String, String> map = new HashMap<>();
+		for (int i = 0; i < array.length; i += 2)
+			map.put(array[i], array[i + 1]);
+		return map;
 	}
 
 	public static int getMaxPages(int totalItemCount, int onePageLimit) {

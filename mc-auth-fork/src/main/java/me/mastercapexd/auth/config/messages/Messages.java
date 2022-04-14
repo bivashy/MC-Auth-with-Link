@@ -5,14 +5,16 @@ public interface Messages<T> {
 
 	T getMessage(String key, MessageContext context);
 
-	Messages<T> getSubMessages(String key);
-
-	String getStringMessage(String key);
-
 	String getStringMessage(String key, String defaultValue);
 
+	Messages<T> getSubMessages(String key);
+	
 	T fromText(String text);
 
+	default String getStringMessage(String key) {
+		return getStringMessage(key, null);
+	}
+	
 	default String formatString(String message) {
 		return message;
 	}

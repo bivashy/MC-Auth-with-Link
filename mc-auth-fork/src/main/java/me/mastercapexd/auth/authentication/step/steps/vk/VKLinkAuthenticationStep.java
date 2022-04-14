@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.authentication.step.steps.vk;
 
+import com.vk.api.sdk.objects.messages.Keyboard;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
@@ -7,8 +9,10 @@ import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
+import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
+import me.mastercapexd.auth.link.message.vk.VKKeyboard;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -36,7 +40,8 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 		if (!PLUGIN.getConfig().getVKSettings().isEnabled()) // Ignore if vk was disabled in configuration
 			return true;
 
-		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) // Ignore if user already confirming 
+		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())) // Ignore if user already
+																							// confirming
 			return true;
 
 		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability())) // Ignore if player has active session
@@ -54,6 +59,9 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 			return true;
 
 		Auth.getLinkEntryAuth().addLinkUser(entryUser);
+		
+		Keyboard keyboard = PLUGIN.getConfig().getVKSettings().getKeyboards().createKeyboard("confirmation", "%name%", account.getName());
+		VKLinkType.getInstance().newMessageBuilder().rawContent(PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("enter-message")).keyboard(new VKKeyboard(keyboard)).build().sendMessage(linkUser);
 		return false;
 	}
 

@@ -28,6 +28,8 @@ public class VKSettings implements ConfigurationHolder {
 	private VKMessages messages = null;
 	@ConfigField("button-labels")
 	private VKButtonLabels buttonLabels = null;
+	@ConfigField("keyboards")
+	private VKKeyboards keyboards = null;
 	@ConfigField("admin-accounts")
 	private List<Integer> adminAccounts = null;
 
@@ -78,5 +80,9 @@ public class VKSettings implements ConfigurationHolder {
 
 	public VKButtonLabels getVKButtonLabels() {
 		return buttonLabels;
+	}
+
+	public VKKeyboards getKeyboards() {
+		return keyboards;
 	}
 }
