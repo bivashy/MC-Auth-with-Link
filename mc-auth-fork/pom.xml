@@ -30,7 +30,7 @@
 		<zxing.library.version>3.3.0</zxing.library.version>
 		<configuration-library.version>2.0.3</configuration-library.version>
 		<lamp.command-library.version>3.0.2</lamp.command-library.version>
-		<vk.lamp.module.version>0.0.3</vk.lamp.module.version>
+		<vk.lamp.module.version>0.0.4</vk.lamp.module.version>
 
 		<!-- Maven plugins -->
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>

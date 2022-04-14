@@ -2,6 +2,7 @@ package me.mastercapexd.auth.link.vk;
 
 import com.ubivashka.lamp.commands.vk.VkActor;
 import com.ubivashka.lamp.commands.vk.core.BaseVkActor;
+import com.ubivashka.lamp.commands.vk.message.DispatchSource;
 import com.vk.api.sdk.objects.messages.Conversation;
 import com.vk.api.sdk.objects.messages.ConversationPeerType;
 import com.vk.api.sdk.objects.users.UserFull;
@@ -28,8 +29,8 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 	}
 
 	@Override
-	public com.vk.api.sdk.objects.messages.Message getMessage() {
-		return actor.getMessage();
+	public DispatchSource getDispatchSource() {
+		return actor.getDispatchSource();
 	}
 
 	@Override
@@ -48,8 +49,8 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 	}
 
 	@Override
-	public String getMessageText() {
-		return actor.getMessageText();
+	public String getText() {
+		return actor.getText();
 	}
 
 	@Override
@@ -58,13 +59,13 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 	}
 
 	@Override
-	public Integer getConversationMessageId() {
-		return actor.getConversationMessageId();
+	public Integer getConversationId() {
+		return actor.getConversationId();
 	}
 
 	@Override
 	public Integer getAuthorId() {
-		return userId().asNumber();
+		return actor.getAuthorId();
 	}
 
 	@Override
