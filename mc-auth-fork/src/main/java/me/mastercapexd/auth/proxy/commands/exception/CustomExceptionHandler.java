@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.commands.exception;
+package me.mastercapexd.auth.proxy.commands.exception;
 
 import me.mastercapexd.auth.config.messages.AbstractMessages;
 import me.mastercapexd.auth.config.messages.Messages;

@@ -1,14 +1,14 @@
 
-package me.mastercapexd.auth.bungee.commands;
+package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.bungee.commands.parameters.ArgumentProxyPlayer;
-import me.mastercapexd.auth.bungee.commands.parameters.NewPassword;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
+import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;

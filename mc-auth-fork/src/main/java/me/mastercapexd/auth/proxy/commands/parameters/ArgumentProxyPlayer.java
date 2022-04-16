@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.commands.parameters;
+package me.mastercapexd.auth.proxy.commands.parameters;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;

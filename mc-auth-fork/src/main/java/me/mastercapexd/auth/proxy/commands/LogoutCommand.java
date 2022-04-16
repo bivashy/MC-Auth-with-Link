@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.commands;
+package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeSendableException;

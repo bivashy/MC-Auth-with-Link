@@ -1,13 +1,13 @@
-package me.mastercapexd.auth.bungee.commands;
+package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.bungee.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;

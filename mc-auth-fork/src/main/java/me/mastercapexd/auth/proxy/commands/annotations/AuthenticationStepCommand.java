@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.commands.annotations;
+package me.mastercapexd.auth.proxy.commands.annotations;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

@@ -1,11 +1,10 @@
-package me.mastercapexd.auth.bungee.commands;
+package me.mastercapexd.auth.proxy.commands;
 
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.bungee.commands.annotations.VkUse;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeSendableException;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.Messages;
@@ -15,6 +14,7 @@ import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.commands.annotations.VkUse;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;

@@ -1,12 +1,12 @@
-package me.mastercapexd.auth.bungee.commands;
+package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep;
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationAccount;
-import me.mastercapexd.auth.bungee.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
+import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
@@ -26,7 +26,7 @@ public class RegisterCommand {
 	@Default
 	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
 	public void register(ProxyPlayer player, @AuthenticationAccount Account account,
-			me.mastercapexd.auth.bungee.commands.parameters.RegisterPassword password) {
+			me.mastercapexd.auth.proxy.commands.parameters.RegisterPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 		String stepName = plugin.getConfig()

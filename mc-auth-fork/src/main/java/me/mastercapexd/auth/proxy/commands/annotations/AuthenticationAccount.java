@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.commands.annotations;
+package me.mastercapexd.auth.proxy.commands.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
