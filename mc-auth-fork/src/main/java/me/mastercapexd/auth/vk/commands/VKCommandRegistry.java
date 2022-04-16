@@ -31,7 +31,7 @@ public class VKCommandRegistry {
 			VK_API_PROVIDER.getActor()).disableStackTraceSanitizing();
 
 	static {
-		ProxyPlugin.instance().getCore().registerListener(PLUGIN, new MessageListener());
+		ProxyPlugin.instance().getCore().registerListener(PLUGIN, new DispatchCommandListener());
 	}
 
 	public VKCommandRegistry() {

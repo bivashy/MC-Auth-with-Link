@@ -18,7 +18,7 @@ import net.md_5.bungee.event.EventHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
 
-public class MessageListener implements Listener {
+public class DispatchCommandListener implements Listener {
 	private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 	private static final Gson GSON = new Gson();
 
