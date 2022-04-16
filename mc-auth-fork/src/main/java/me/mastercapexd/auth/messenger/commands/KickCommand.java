@@ -7,7 +7,7 @@ import me.mastercapexd.auth.link.LinkType;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.orphan.OrphanCommand;
 
-public class KickComand implements OrphanCommand {
+public class KickCommand implements OrphanCommand {
 	@Default
 	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
 		actorWrapper.reply(linkType.getLinkMessages().getMessage("kick-starting"));
