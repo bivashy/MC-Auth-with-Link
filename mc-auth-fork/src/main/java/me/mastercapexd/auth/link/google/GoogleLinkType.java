@@ -3,6 +3,7 @@ package me.mastercapexd.auth.link.google;
 import com.google.common.base.Predicate;
 
 import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.AbstractLinkType;
 import me.mastercapexd.auth.link.message.Message.MessageBuilder;
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard.IKeyboardBuilder;
@@ -63,6 +64,11 @@ public class GoogleLinkType extends AbstractLinkType {
 
 	@Override
 	public Messages<String> getLinkMessages() {
+		throw new UnsupportedOperationException(UNSUPPORTED_ERROR);
+	}
+
+	@Override
+	public MessengerSettings getSettings() {
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR);
 	}
 

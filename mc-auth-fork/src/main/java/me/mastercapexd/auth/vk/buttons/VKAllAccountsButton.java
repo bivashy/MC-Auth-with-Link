@@ -16,7 +16,7 @@ public class VKAllAccountsButton implements VKButtonExecutor {
 
 	@Override
 	public void execute(VKCallbackButtonPressEvent e, String payload) {
-		if (!receptioner.getConfig().getVKSettings().isAdminUser(e.getButtonEvent().getUserID()))
+		if (!receptioner.getConfig().getVKSettings().isAdministrator(e.getButtonEvent().getUserID()))
 			return;
 		receptioner.getAccountStorage().getAllAccounts().thenAccept(accounts -> {
 			new AccountsMessageBuilder(e.getButtonEvent().getUserID(), 1, VKAccountsPageType.ALLACCOUNTSPAGE, accounts,

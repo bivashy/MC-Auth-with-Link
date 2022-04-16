@@ -4,9 +4,10 @@ import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.messenger.MessengerEnterSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKEnterSettings implements ConfigurationHolder {
+public class VKEnterSettings implements ConfigurationHolder,MessengerEnterSettings {
 	@ConfigField("enter-delay")
 	private Integer enterDelay = 60;
 	@ConfigField("can-toggle-enter")
@@ -16,10 +17,12 @@ public class VKEnterSettings implements ConfigurationHolder {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 
-	public Integer getEnterDelay() {
+	@Override
+	public int getEnterDelay() {
 		return enterDelay;
 	}
 
+	@Override
 	public boolean canToggleEnterConfirmation() {
 		return canToggleEnterConfirmation;
 	}

@@ -60,7 +60,7 @@ public class VKEntryAccount {
 
 		VKMessageContext messageContext = new VKMessageContext(vkId, account);
 		if (answer == VKEnterAnswer.DECLINE) {
-			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-kicked", messageContext));
+			sendMessage(vkId, config.getVKSettings().getMessages().getMessage("enter-kicked", messageContext));
 			account.kick(config.getProxyMessages().getSubMessages("vk").getStringMessage("enter-declined"));
 		}
 		if (answer == VKEnterAnswer.CONFIRM) {
@@ -71,7 +71,7 @@ public class VKEntryAccount {
 				return;
 			}
 			Auth.removeAccount(account.getId());
-			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-accepted", messageContext));
+			sendMessage(vkId, config.getVKSettings().getMessages().getMessage("enter-accepted", messageContext));
 			accountStorage.saveOrUpdateAccount(account);
 
 			account.getPlayer().ifPresent(proxyPlayer -> {

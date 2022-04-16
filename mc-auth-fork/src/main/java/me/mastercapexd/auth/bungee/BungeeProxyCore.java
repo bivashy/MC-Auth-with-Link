@@ -40,8 +40,8 @@ public enum BungeeProxyCore implements ProxyCore {
 	}
 
 	@Override
-	public ProxyPlayer getPlayer(String name) {
-		return BungeeProxyPlayerFactory.wrapPlayer(PROXY_SERVER.getPlayer(name));
+	public Optional<ProxyPlayer> getPlayer(String name) {
+		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(PROXY_SERVER.getPlayer(name)));
 	}
 
 	@Override

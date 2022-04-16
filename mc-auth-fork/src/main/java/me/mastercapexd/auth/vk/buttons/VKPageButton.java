@@ -24,7 +24,7 @@ public class VKPageButton implements VKButtonExecutor {
 				+ ((e.getButtonEvent().getPayload().startsWith("nextpage")) ? 1 : -1);
 		VKAccountsPageType pageType = VKAccountsPageType.valueOf(afterPayload.split("_")[1]);
 		if (pageType == VKAccountsPageType.ALLACCOUNTSPAGE || pageType == VKAccountsPageType.ALLLINKEDACCOUNTSPAGE)
-			if (!receptioner.getConfig().getVKSettings().isAdminUser(e.getButtonEvent().getUserID()))
+			if (!receptioner.getConfig().getVKSettings().isAdministrator(e.getButtonEvent().getUserID()))
 				return;
 		getAccountsByType(pageType, e.getButtonEvent().getUserID()).thenAccept(accounts -> {
 			new AccountsMessageBuilder(e.getButtonEvent().getUserID(), page, pageType, accounts, receptioner).execute();

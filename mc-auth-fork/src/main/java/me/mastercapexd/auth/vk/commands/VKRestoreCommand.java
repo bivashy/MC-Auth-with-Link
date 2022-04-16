@@ -19,7 +19,7 @@ public class VKRestoreCommand extends VKCommandExecutor {
 			return;
 		if (args.length < 1) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("restore-not-enough-arguments"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("restore-not-enough-arguments"));
 			return;
 		}
 		String playerName = args[0];

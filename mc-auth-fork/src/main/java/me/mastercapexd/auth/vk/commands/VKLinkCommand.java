@@ -27,7 +27,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 		if (isChat(e.getPeer()))
 			return;
 		if (args.length < 1) {
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 					.getMessage("confirmation-not-enough-arguments"));
 			return;
 		}
@@ -40,12 +40,12 @@ public class VKLinkCommand extends VKCommandExecutor {
 				.orElse(null);
 		if (confirmationUser == null) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-no-code"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("confirmation-no-code"));
 			return;
 		}
 		if (!confirmationUser.getConfirmationInfo().getConfirmationCode().equals(code)) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-error"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("confirmation-error"));
 			return;
 		}
 
@@ -54,7 +54,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 					.getLinkUserInfo();
 
 			if (vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
-				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 						.getMessage("confirmation-already-linked"));
 				return;
 			}
@@ -71,7 +71,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 							.getSubMessages("vk").getStringMessage("linked")));
 
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-success"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("confirmation-success"));
 			Auth.getLinkConfirmationAuth().removeLinkUsers(filter);
 		});
 

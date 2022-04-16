@@ -45,13 +45,13 @@ public class AccountsMessageBuilder extends MessageBuilder {
 		return (findedAccounts -> {
 			MessagesSendQuery sendQuery = CLIENT.messages().send(ACTOR).randomId(RANDOM.nextInt()).userId(userId);
 			if (findedAccounts.isEmpty()) {
-				sendQuery.message(config.getVKSettings().getVKMessages().getMessage(type.getNoAccountsPath()));
+				sendQuery.message(config.getVKSettings().getMessages().getMessage(type.getNoAccountsPath()));
 				return sendQuery;
 			}
 			List<Account> listAccounts = CollectionUtils.getListPage(sortAccounts(accounts), page, 5);
 			Keyboard keyboard = createKeyboard(listAccounts, findedAccounts);
 			sendQuery.keyboard(keyboard)
-					.message(config.getVKSettings().getVKMessages().getMessage(type.getAccountsPath()));
+					.message(config.getVKSettings().getMessages().getMessage(type.getAccountsPath()));
 			return sendQuery;
 		});
 	}

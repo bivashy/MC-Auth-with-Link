@@ -11,9 +11,10 @@ import com.ubivashka.configuration.annotations.ImportantField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.messenger.MessengerCommandPath;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKCommandPath implements ConfigurationHolder {
+public class VKCommandPath implements ConfigurationHolder, MessengerCommandPath {
 	@ImportantField
 	@ConfigField("main-command")
 	private String commandPath = null;
@@ -28,8 +29,8 @@ public class VKCommandPath implements ConfigurationHolder {
 		return commandPath;
 	}
 
-	public List<String> getAliases() {
-		return Collections.unmodifiableList(aliases);
+	public String[] getAliases() {
+		return aliases.toArray(new String[0]);
 	}
 
 	public String[] getCommandPaths() {

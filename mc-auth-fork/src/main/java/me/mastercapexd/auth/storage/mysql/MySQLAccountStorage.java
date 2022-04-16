@@ -15,6 +15,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private String password;
 	private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `auth` (`id` VARCHAR(64) PRIMARY KEY, `uuid` VARCHAR(64) NOT NULL, `name` VARCHAR(32) NOT NULL, `password` VARCHAR(255),`google_key` VARCHAR(64), `vkId` INT NOT NULL,`vk_confirm_enabled` VARCHAR(5), `last_quit` BIGINT, `last_ip` VARCHAR(64), `last_session_start` BIGINT, `id_type` VARCHAR(32) NOT NULL, `hash_type` VARCHAR(32) NOT NULL);";
 	private static final String SELECT_BY_ID = "SELECT * FROM `auth` WHERE `id` = ? LIMIT 1;";
+	private static final String SELECT_BY_NAME = "SELECT * FROM `auth` WHERE `name` = ? LIMIT 1;";
 	private static final String SELECT_BY_VKID = "SELECT * FROM `auth` WHERE `vkId` = ?;";
 	private static final String SELECT_BY_LAST_QUIT_ORDERED = "SELECT * FROM `auth` ORDER BY `last_quit` DESC LIMIT ?;";
 	private static final String SELECT_ALL = "SELECT * FROM `auth`;";
@@ -27,7 +28,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String DELETE = "DELETE FROM `auth` WHERE `id`=?;";
 
 	public MySQLAccountStorage(PluginConfig config, AccountFactory accountFactory) {
-		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID, SELECT_BY_VKID, SELECT_BY_LAST_QUIT_ORDERED,
+		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID,SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LAST_QUIT_ORDERED,
 				SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
 
 		StorageDataSettings dataSettings = config.getStorageDataSettings();

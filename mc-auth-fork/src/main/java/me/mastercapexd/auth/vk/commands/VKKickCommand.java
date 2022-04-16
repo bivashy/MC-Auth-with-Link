@@ -20,7 +20,7 @@ public class VKKickCommand extends VKCommandExecutor {
 			return;
 		if (args.length < 1) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("kick-not-enough-arguments"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("kick-not-enough-arguments"));
 			return;
 		}
 		String playerName = args[0];

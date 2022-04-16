@@ -15,7 +15,7 @@ public class VKAdminPanelCommand extends VKCommandExecutor {
 
 	@Override
 	public void execute(VKMessageEvent e, String[] args) {
-		if (!receptioner.getConfig().getVKSettings().isAdminUser(e.getUserId()))
+		if (!receptioner.getConfig().getVKSettings().isAdministrator(e.getUserId()))
 			return;
 		new AdminPanelBuilder(e.getUserId(), receptioner).execute();
 	}

@@ -5,9 +5,11 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
+import me.mastercapexd.auth.config.messenger.MessengerCommandPath;
+import me.mastercapexd.auth.config.messenger.MessengerCommandPaths;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKCommandPaths implements ConfigurationHolder {
+public class VKCommandPaths implements ConfigurationHolder, MessengerCommandPaths {
 
 	@ConfigField
 	private ConfigurationHolderMap<VKCommandPath> vkCommands = new ConfigurationHolderMap<>();
@@ -18,5 +20,10 @@ public class VKCommandPaths implements ConfigurationHolder {
 
 	public VKCommandPath getPath(String commandKey) {
 		return vkCommands.getOrDefault(commandKey, null);
+	}
+
+	@Override
+	public MessengerCommandPath getCommandPath(String commandPath) {
+		return getPath(commandPath);
 	}
 }

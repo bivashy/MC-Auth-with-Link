@@ -32,7 +32,7 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 			Map<String, String> myMap = new HashMap<String, String>();
 			myMap.put("type", "show_snackbar");
 			if (confirmationState.shouldSendConfirmation()) {
-				myMap.put("text", receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-enabled"));
+				myMap.put("text", receptioner.getConfig().getVKSettings().getMessages().getMessage("enter-enabled"));
 				String json = GSON.toJson(myMap);
 				try {
 					VK.messages().sendMessageEventAnswer(ACTOR, buttonEvent.getEventID(), buttonEvent.getUserID(),
@@ -41,7 +41,7 @@ public class VKToogleConfirmationButton implements VKButtonExecutor {
 					e1.printStackTrace();
 				}
 			} else {
-				myMap.put("text", receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-disabled"));
+				myMap.put("text", receptioner.getConfig().getVKSettings().getMessages().getMessage("enter-disabled"));
 				String json = GSON.toJson(myMap);
 				try {
 					VK.messages().sendMessageEventAnswer(ACTOR, buttonEvent.getEventID(), buttonEvent.getUserID(),

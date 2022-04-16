@@ -37,7 +37,7 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(filter);
 		if (accounts.isEmpty()) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("enter-no-accounts"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("enter-no-accounts"));
 			return;
 		}
 		Auth.getLinkEntryAuth().removeLinkUsers((entryUser) -> {

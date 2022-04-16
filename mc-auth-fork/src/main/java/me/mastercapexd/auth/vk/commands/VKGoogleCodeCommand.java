@@ -25,30 +25,30 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 	public void execute(VKMessageEvent e, String[] args) {
 		if (!receptioner.getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-disabled"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-disabled"));
 			return;
 		}
 		if (args.length < 2) {
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 					.getMessage("google-code-not-enough-arguments"));
 			return;
 		}
 		String playerName = args[0];
 		if (!isInteger(args[1]) || args[1].length() != 6) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-need-integer"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-need-integer"));
 			return;
 		}
 		Integer enteredCode = Integer.parseInt(args[1]);
 		receptioner.actionWithAccount(e.getUserId(), playerName, account -> {
 			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
-				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 						.getMessage("google-code-account-not-have-google"));
 				return;
 			}
 			if (!Auth.hasGoogleAuthAccount(account.getId())) {
-				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 						.getMessage("google-code-account-not-need-enter"));
 				return;
 			}
@@ -58,14 +58,14 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 				Auth.removeAccount(account.getId());
 				account.getPlayer().ifPresent(proxyPlayer -> {
 					sendMessage(e.getPeer(),
-							receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-code-valid"));
+							receptioner.getConfig().getVKSettings().getMessages().getMessage("google-code-valid"));
 					proxyPlayer.sendTo(receptioner.getConfig().findServerInfo(receptioner.getConfig().getGameServers())
 							.asProxyServer());
 				});
 				return;
 			}
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-code-not-valid"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-code-not-valid"));
 
 		});
 	}

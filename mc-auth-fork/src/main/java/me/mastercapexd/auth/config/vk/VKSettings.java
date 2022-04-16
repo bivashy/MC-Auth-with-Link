@@ -7,9 +7,12 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.messages.vk.VKMessages;
+import me.mastercapexd.auth.config.messenger.MessengerSettings;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
+import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKSettings implements ConfigurationHolder {
+public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	@ConfigField
 	private boolean enabled = false;
 	@ConfigField("confirmation")
@@ -40,10 +43,12 @@ public class VKSettings implements ConfigurationHolder {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	@Override
 	public VKConfirmationSettings getConfirmationSettings() {
 		return confirmationSettings;
 	}
@@ -52,29 +57,39 @@ public class VKSettings implements ConfigurationHolder {
 		return commands;
 	}
 
+	@Override
 	public VKEnterSettings getEnterSettings() {
 		return enterSettings;
 	}
 
-	public boolean isAdminUser(Integer userId) {
-		if (userId == null)
+	@Override
+	public boolean isAdministrator(LinkUserIdentificator identificator) {
+		if (identificator == null || !identificator.isNumber())
 			return false;
-		return adminAccounts.contains(userId);
+		return adminAccounts.contains(identificator.asNumber());
+	}
+	
+	public boolean isAdministrator(int userId) {
+		return isAdministrator(new UserNumberIdentificator(userId));
 	}
 
+	@Override
 	public VKRestoreSettings getRestoreSettings() {
 		return restoreSettings;
 	}
 
+	@Override
 	public VKCommandPaths getCommandPaths() {
 		return commandPaths;
 	}
 
+	@Override
 	public int getMaxLinkCount() {
 		return maxVkLinkCount;
 	}
 
-	public VKMessages getVKMessages() {
+	@Override
+	public VKMessages getMessages() {
 		return messages;
 	}
 
@@ -82,6 +97,7 @@ public class VKSettings implements ConfigurationHolder {
 		return buttonLabels;
 	}
 
+	@Override
 	public VKKeyboards getKeyboards() {
 		return keyboards;
 	}

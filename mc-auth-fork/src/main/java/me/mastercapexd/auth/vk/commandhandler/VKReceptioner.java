@@ -123,7 +123,7 @@ public class VKReceptioner {
 			if (findedAccount == null) {
 				try {
 					vk.messages().send(actor).randomId(random.nextInt()).userId(userId)
-							.message(config.getVKSettings().getVKMessages().getMessage("not-your-account")).execute();
+							.message(config.getVKSettings().getMessages().getMessage("not-your-account")).execute();
 				} catch (ApiException | ClientException e1) {
 					e1.printStackTrace();
 				}
@@ -131,7 +131,7 @@ public class VKReceptioner {
 			}
 			action.accept(findedAccount);
 		});
-		if (config.getVKSettings().isAdminUser(userId)) {
+		if (config.getVKSettings().isAdministrator(userId)) {
 			accountStorage.getAccount(config.getActiveIdentifierType().fromRawString(accountName))
 					.thenAccept(account -> {
 						accountsConsumer.accept(Arrays.asList(account));

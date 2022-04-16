@@ -1,16 +1,20 @@
 package me.mastercapexd.auth.vk.commands;
 
+import java.util.Optional;
+
 import com.ubivashka.lamp.commands.vk.VkActor;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.ubivashka.vk.api.providers.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 
 import me.mastercapexd.auth.Auth;
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -53,6 +57,26 @@ public class VKCommandRegistry {
 		commandHandler.registerContextResolver(VKCommandActorWrapper.class,
 				context -> new VKCommandActorWrapper(context.actor()));
 
+		commandHandler.registerValueResolver(Account.class, (context) -> {
+			String playerName = context.popForParameter();
+			Integer userId = context.actor().as(VkActor.class).getAuthorId();
+			Account account = PLUGIN.getAccountStorage().getAccountFromName(playerName).get();
+			if (account == null)
+				throw new SendMessageException(
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("kick-not-enough-arguments"));
+			
+			Optional<LinkUser> linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER);
+			if (!linkUser.isPresent())
+				throw new SendMessageException(
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
+
+			if (!(linkUser.get().getLinkUserInfo().getIdentificator().asNumber() == userId
+					|| PLUGIN.getConfig().getVKSettings().isAdministrator(userId)))
+				throw new SendMessageException(
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
+			return account;
+		});
+
 		commandHandler.registerValueResolver(MessengerLinkContext.class, (context) -> {
 			String code = context.popForParameter();
 			VkActor commandActor = context.actor().as(VkActor.class);
@@ -64,22 +88,22 @@ public class VKCommandRegistry {
 
 			if (confirmationUser == null)
 				throw new SendMessageException(
-						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-no-code"));
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("confirmation-no-code"));
 
 			if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
 				throw new SendMessageException(
-						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-timed-out"));
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("confirmation-timed-out"));
 
 			if (!confirmationUser.getConfirmationInfo().getConfirmationCode().equals(code))
 				throw new SendMessageException(
-						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-error"));
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("confirmation-error"));
 
 			LinkUserInfo vkLinkUserInfo = confirmationUser.getAccount().findFirstLinkUser(VKLinkType.LINK_USER_FILTER)
 					.orElse(null).getLinkUserInfo();
 
 			if (vkLinkUserInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID)
 				throw new SendMessageException(
-						PLUGIN.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-already-linked"));
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("confirmation-already-linked"));
 
 			return new MessengerLinkContext(code, confirmationUser);
 		});

@@ -44,34 +44,34 @@ public class VKLinkedAccount {
 
 	public void kick() {
 
-		if (!config.getVKSettings().isAdminUser(userID))
+		if (!config.getVKSettings().isAdministrator(userID))
 			if (account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo().getIdentificator()
 					.asNumber() != userID) {
 				sendMessage(userID,
-						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
+						config.getVKSettings().getMessages().getMessage("not-your-account", messageContext));
 				return;
 			}
-		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("kick-starting", messageContext));
+		sendMessage(userID, config.getVKSettings().getMessages().getMessage("kick-starting", messageContext));
 		KickResult result = account.kick(config.getProxyMessages().getSubMessages("vk").getStringMessage("kicked"));
 		if (result == KickResult.PLAYER_OFFLINE)
-			sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("player-offline", messageContext));
+			sendMessage(userID, config.getVKSettings().getMessages().getMessage("player-offline", messageContext));
 		if (result == KickResult.KICKED)
-			sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("kicked", messageContext));
+			sendMessage(userID, config.getVKSettings().getMessages().getMessage("kicked", messageContext));
 	}
 
 	public void unlink() {
-		if (!config.getVKSettings().isAdminUser(userID))
+		if (!config.getVKSettings().isAdministrator(userID))
 			if (account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo().getIdentificator()
 					.asNumber() != userID) {
 				sendMessage(userID,
-						config.getVKSettings().getVKMessages().getMessage("not-your-account", messageContext));
+						config.getVKSettings().getMessages().getMessage("not-your-account", messageContext));
 				return;
 			}
 		VKUnlinkEvent event = new VKUnlinkEvent(userID, account);
 		ProxyServer.getInstance().getPluginManager().callEvent(event);
 		if (event.isCancelled())
 			return;
-		sendMessage(userID, config.getVKSettings().getVKMessages().getMessage("unlinked", messageContext));
+		sendMessage(userID, config.getVKSettings().getMessages().getMessage("unlinked", messageContext));
 		account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo().getIdentificator()
 				.setNumber(AccountFactory.DEFAULT_VK_ID);
 		accountStorage.saveOrUpdateAccount(account);
@@ -121,7 +121,7 @@ public class VKLinkedAccount {
 		buttons.add(plugin.getVKUtils().buildCallbackButton("return", account, "return", KeyboardButtonColor.DEFAULT));
 		keyboard.setButtons(CollectionUtils.chopList(buttons, 3));
 		plugin.getVKUtils().sendMessage(userID,
-				config.getVKSettings().getVKMessages().getMessage("account-control", messageContext), keyboard);
+				config.getVKSettings().getMessages().getMessage("account-control", messageContext), keyboard);
 	}
 
 	private void sendMessage(Integer userID, String message) {

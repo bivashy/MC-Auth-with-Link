@@ -36,12 +36,12 @@ public class VKGoogleCommand extends VKCommandExecutor {
 	public void execute(VKMessageEvent e, String[] args) {
 		if (!receptioner.getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-disabled"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-disabled"));
 			return;
 		}
 		if (args.length == 0) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-not-enough-arguments"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-not-enough-arguments"));
 			return;
 		}
 		String playerName = args[0];
@@ -59,7 +59,7 @@ public class VKGoogleCommand extends VKCommandExecutor {
 			} catch (WriterException | ApiException | ClientException | IOException ex) {
 				ex.printStackTrace();
 				sendMessage(e.getPeer(),
-						receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-error"));
+						receptioner.getConfig().getVKSettings().getMessages().getMessage("google-error"));
 			}
 		});
 	}

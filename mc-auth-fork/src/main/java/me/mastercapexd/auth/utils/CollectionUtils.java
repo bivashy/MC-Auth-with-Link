@@ -2,6 +2,7 @@ package me.mastercapexd.auth.utils;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,12 @@ public class CollectionUtils {
 		for (int i = 0; i < array.length; i += 2)
 			map.put(array[i], array[i + 1]);
 		return map;
+	}
+	
+	public static <T> T[] addAll(T[] firstArray,T[] secondArray) {
+		T[] both = Arrays.copyOf(firstArray,firstArray.length + secondArray.length);
+		System.arraycopy(secondArray, 0, both, firstArray.length, secondArray.length);
+		return both;
 	}
 
 	public static int getMaxPages(int totalItemCount, int onePageLimit) {

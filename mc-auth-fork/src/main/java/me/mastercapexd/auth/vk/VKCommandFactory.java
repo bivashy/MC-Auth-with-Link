@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.vk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.mastercapexd.auth.config.vk.VKCommandPath;
@@ -24,7 +25,7 @@ public interface VKCommandFactory {
 	}
 
 	default VKCommand createCommand(VKCommandExecutor executor, VKCommandPath settings) {
-		return createCommand(settings.getCommandPath(), executor, settings.getAliases(), false);
+		return createCommand(settings.getCommandPath(), executor, Arrays.asList(settings.getAliases()), false);
 	}
 
 	default VKCommand createCommand(VKCommandExecutor executor, VKCommandPaths mainCommands) {

@@ -18,11 +18,11 @@ public class VKGoogleUnlinkCommand extends VKCommandExecutor {
 	public void execute(VKMessageEvent e, String[] args) {
 		if (!receptioner.getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-disabled"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-disabled"));
 			return;
 		}
 		if (args.length == 0) {
-			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+			sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 					.getMessage("google-unlink-not-enough-arguments"));
 			return;
 		}
@@ -30,14 +30,14 @@ public class VKGoogleUnlinkCommand extends VKCommandExecutor {
 		receptioner.actionWithAccount(e.getUserId(), playerName, account -> {
 			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
-				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getVKMessages()
+				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 						.getMessage("google-unlink-not-have-google"));
 				return;
 			}
 			linkUser.getLinkUserInfo().getIdentificator().setString(GoogleLinkType.NULL_KEY);
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			sendMessage(e.getPeer(),
-					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-unlinked"));
+					receptioner.getConfig().getVKSettings().getMessages().getMessage("google-unlinked"));
 		});
 	}
 
