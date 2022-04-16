@@ -74,7 +74,7 @@ public class VKEntryAccount {
 			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-accepted", messageContext));
 			accountStorage.saveOrUpdateAccount(account);
 
-			account.getIdentifierType().getPlayer(account.getId()).ifPresent(proxyPlayer -> {
+			account.getPlayer().ifPresent(proxyPlayer -> {
 				proxyPlayer.sendMessage(
 						config.getProxyMessages().getSubMessages("vk").getStringMessage("enter-confirmed"));
 				proxyPlayer.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());

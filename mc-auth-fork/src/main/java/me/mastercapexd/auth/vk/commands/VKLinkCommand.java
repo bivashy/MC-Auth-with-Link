@@ -66,7 +66,7 @@ public class VKLinkCommand extends VKCommandExecutor {
 					.setNumber(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
 			
-			receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId())
+			account.getPlayer()
 					.ifPresent(player -> player.sendMessage(receptioner.getConfig().getProxyMessages()
 							.getSubMessages("vk").getStringMessage("linked")));
 

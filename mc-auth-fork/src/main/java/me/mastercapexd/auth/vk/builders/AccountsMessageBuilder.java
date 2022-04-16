@@ -84,7 +84,7 @@ public class AccountsMessageBuilder extends MessageBuilder {
 
 	private KeyboardButton createSettingsButtonFromAccount(Account account) {
 		return vkUtils.buildCallbackButton("account", account, "account_" + account.getId(),
-				account.getIdentifierType().getPlayer(account.getId()).isPresent() ? KeyboardButtonColor.NEGATIVE
+				account.getPlayer().isPresent() ? KeyboardButtonColor.NEGATIVE
 						: KeyboardButtonColor.POSITIVE);
 	}
 

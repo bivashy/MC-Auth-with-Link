@@ -56,7 +56,7 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 					.authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
 				Auth.removeGoogleAuthAccount(account.getId());
 				Auth.removeAccount(account.getId());
-				account.getIdentifierType().getPlayer(account.getId()).ifPresent(proxyPlayer -> {
+				account.getPlayer().ifPresent(proxyPlayer -> {
 					sendMessage(e.getPeer(),
 							receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-code-valid"));
 					proxyPlayer.sendTo(receptioner.getConfig().findServerInfo(receptioner.getConfig().getGameServers())

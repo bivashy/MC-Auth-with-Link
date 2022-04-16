@@ -11,6 +11,7 @@ import me.mastercapexd.auth.KickResult;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public interface Account {
 
@@ -29,10 +30,6 @@ public interface Account {
 	String getPasswordHash();
 
 	void setPasswordHash(String passwordHash);
-
-	boolean isVKConfirmationEnabled();
-
-	void setVkConfirmationEnabled(boolean vkConfirmationEnabled);
 
 	/**
 	 * @return List of link users for example VK link user that holds vk id and etc.
@@ -70,12 +67,33 @@ public interface Account {
 
 	boolean nextAuthenticationStep(AuthenticationStepContext stepContext);
 
-	void logout(long sessionDurability);
+	default void logout(long sessionDurability) {
+		if (!isSessionActive(sessionDurability))
+			return;
+		setLastSessionStart(0);
+	}
 
-	boolean isSessionActive(long sessionDurability);
+	default boolean isSessionActive(long sessionDurability) {
+		Optional<ProxyPlayer> proxiedPlayer = getPlayer();
+		long sessionEndTime = getLastSessionStart() + sessionDurability;
+		if (proxiedPlayer == null)
+			return (sessionEndTime >= System.currentTimeMillis());
+		return proxiedPlayer.get().getRemoteAddress().getHostString().equals(getLastIpAddress())
+				&& (sessionEndTime >= System.currentTimeMillis());
+	}
 
-	KickResult kick(String reason);
+	default KickResult kick(String reason) {
+		Optional<ProxyPlayer> proxyPlayer = getPlayer();
+		if (proxyPlayer.isPresent())
+			return KickResult.PLAYER_OFFLINE;
+		proxyPlayer.get().disconnect(reason);
+		return KickResult.KICKED;
+	}
 
+	default Optional<ProxyPlayer> getPlayer(){
+		return getIdentifierType().getPlayer(getId());
+	}
+	
 	default boolean isRegistered() {
 		return getPasswordHash() != null;
 	}

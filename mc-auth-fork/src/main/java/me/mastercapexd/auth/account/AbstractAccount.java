@@ -9,14 +9,12 @@ import java.util.function.Predicate;
 
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
-import me.mastercapexd.auth.KickResult;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 
@@ -34,8 +32,6 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 
 	private String passwordHash, lastIpAddress;
 	private long lastQuitTime, lastSessionStart;
-
-	private boolean vkConfirmationEnabled = true;
 
 	private Integer currentConfigurationAuthenticationStepCreatorIndex = 0;
 
@@ -73,32 +69,6 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 					PLUGIN.getAuthenticationContextFactoryDealership().createContext(nextStepName, this));
 		}
 		return true;
-	}
-
-	@Override
-	public KickResult kick(String reason) {
-		Optional<ProxyPlayer> proxyPlayer = identifierType.getPlayer(getId());
-		if (proxyPlayer.isPresent())
-			return KickResult.PLAYER_OFFLINE;
-		proxyPlayer.get().disconnect(reason);
-		return KickResult.KICKED;
-	}
-
-	@Override
-	public void logout(long sessionDurability) {
-		if (!isSessionActive(sessionDurability))
-			return;
-		setLastSessionStart(0);
-	}
-
-	@Override
-	public boolean isSessionActive(long sessionDurability) {
-		Optional<ProxyPlayer> proxiedPlayer = identifierType.getPlayer(getId());
-		long sessionEndTime = getLastSessionStart() + sessionDurability;
-		if (proxiedPlayer == null)
-			return (sessionEndTime >= System.currentTimeMillis());
-		return proxiedPlayer.get().getRemoteAddress().getHostString().equals(getLastIpAddress())
-				&& (sessionEndTime >= System.currentTimeMillis());
 	}
 
 	@Override
@@ -174,16 +144,6 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 	@Override
 	public int compareTo(AbstractAccount o) {
 		return name.compareTo(o.getName());
-	}
-
-	@Override
-	public boolean isVKConfirmationEnabled() {
-		return vkConfirmationEnabled;
-	}
-
-	@Override
-	public void setVkConfirmationEnabled(boolean vkConfirmationEnabled) {
-		this.vkConfirmationEnabled = vkConfirmationEnabled;
 	}
 
 	@Override

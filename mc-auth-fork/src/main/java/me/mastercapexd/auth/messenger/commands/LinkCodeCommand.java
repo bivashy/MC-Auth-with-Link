@@ -25,7 +25,7 @@ public class LinkCodeCommand implements OrphanCommand {
 
 			accountStorage.saveOrUpdateAccount(account);
 
-			config.getActiveIdentifierType().getPlayer(linkContext.getConfirmationUser().getAccount().getId())
+			linkContext.getConfirmationUser().getAccount().getPlayer()
 					.ifPresent(player -> player.sendMessage(linkType.getProxyMessages().getStringMessage("linked")));
 
 			actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-success"));
