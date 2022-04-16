@@ -98,8 +98,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			LinkUserInfo googleLinkInfo = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
 					.orElse(new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY)).getLinkUserInfo();
 
-			statement.setString(1, account.getIdentifierType() == IdentifierType.NAME ? account.getId().toLowerCase()
-					: account.getId());
+			statement.setString(1, account.getIdentifierType().fromRawString(account.getId()));
 			statement.setString(2, account.getUniqueId().toString());
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
