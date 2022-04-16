@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
@@ -17,8 +16,6 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountEnterDeclineCommand implements OrphanCommand {
-	@Dependency
-	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
 
