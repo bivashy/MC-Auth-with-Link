@@ -6,6 +6,7 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.AuthCommand;
 import me.mastercapexd.auth.proxy.commands.ChangePasswordCommand;
 import me.mastercapexd.auth.proxy.commands.GoogleCodeCommand;
@@ -172,6 +173,7 @@ public class BungeeCommandsRegistry {
 	private void registerDependencies() {
 		BUNGEE_COMMAND_HANDLER.registerDependency(PluginConfig.class, PLUGIN.getConfig());
 		BUNGEE_COMMAND_HANDLER.registerDependency(AccountStorage.class, PLUGIN.getAccountStorage());
+		BUNGEE_COMMAND_HANDLER.registerDependency(ProxyPlugin.class, PLUGIN);
 	}
 
 	private void registerCommands() {
