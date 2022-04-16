@@ -4,8 +4,8 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -16,13 +16,12 @@ import revxrsal.commands.annotation.Dependency;
 @Command({ "login", "l" })
 public class LoginCommand {
 	@Dependency
-	private AuthPlugin plugin;
+	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
 	@Dependency
 	private AccountStorage accountStorage;
 
-	@SuppressWarnings("deprecation")
 	@Default
 	@AuthenticationStepCommand(stepName = LoginAuthenticationStep.STEP_NAME)
 	public void login(ProxyPlayer player, Account account, String password) {

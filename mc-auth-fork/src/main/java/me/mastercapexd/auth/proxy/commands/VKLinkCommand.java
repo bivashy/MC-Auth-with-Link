@@ -4,7 +4,6 @@ import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeSendableException;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.Messages;
@@ -20,7 +19,6 @@ import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
 import me.mastercapexd.auth.vk.utils.VKUtils;
-import net.md_5.bungee.api.ProxyServer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
@@ -28,9 +26,10 @@ import revxrsal.commands.annotation.Optional;
 
 @Command({ "addvk", "vkadd", "vklink", "linkvk" })
 public class VKLinkCommand {
-	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("vk");
+	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages()
+			.getSubMessages("vk");
 	@Dependency
-	private AuthPlugin plugin;
+	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
 	@Dependency
@@ -44,7 +43,7 @@ public class VKLinkCommand {
 
 		String accountId = config.getActiveIdentifierType().getId(player);
 
-		ProxyServer.getInstance().getScheduler().runAsync(plugin, () -> {
+		plugin.getCore().runAsync(() -> {
 			GetResponse user = VKUtils.fetchUserFromIdentificator(vkIdentificator).orElse(null);
 			if (user == null) {
 				player.sendMessage(VK_MESSAGES.getStringMessage("user-not-exists"));
@@ -81,8 +80,8 @@ public class VKLinkCommand {
 
 					Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account,
 							new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
-					player.sendMessage(VK_MESSAGES.getStringMessage("confirmation-sent")
-							.replaceAll("(?i)%code%", code));
+					player.sendMessage(
+							VK_MESSAGES.getStringMessage("confirmation-sent").replaceAll("(?i)%code%", code));
 				});
 			});
 

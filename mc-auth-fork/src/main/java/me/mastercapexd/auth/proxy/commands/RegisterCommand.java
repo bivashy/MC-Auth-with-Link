@@ -3,8 +3,8 @@ package me.mastercapexd.auth.proxy.commands;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -17,7 +17,7 @@ import revxrsal.commands.annotation.Dependency;
 public class RegisterCommand {
 
 	@Dependency
-	private AuthPlugin plugin;
+	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
 	@Dependency

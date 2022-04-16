@@ -5,8 +5,8 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -22,7 +22,7 @@ import revxrsal.commands.command.CommandActor;
 public class AuthCommand {
 
 	@Dependency
-	private AuthPlugin plugin;
+	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
 	@Dependency
@@ -36,7 +36,7 @@ public class AuthCommand {
 			commandActor.reply(config.getProxyMessages().getStringMessage("info-auth").replaceAll("%players%",
 					String.valueOf(Auth.getAccountIds().size())));
 			commandActor.reply(config.getProxyMessages().getStringMessage("info-version").replace("%version%",
-					plugin.getDescription().getVersion()));
+					plugin.getVersion()));
 		});
 	}
 

@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
@@ -20,7 +19,7 @@ public class GoogleCodeCommand {
 	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
 			.getProxyMessages().getSubMessages("google");
 	@Dependency
-	private AuthPlugin plugin;
+	private ProxyPlugin plugin;
 	@Dependency
 	private PluginConfig config;
 	@Dependency
