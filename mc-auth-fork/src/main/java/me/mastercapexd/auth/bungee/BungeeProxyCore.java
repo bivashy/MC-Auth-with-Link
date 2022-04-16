@@ -27,7 +27,7 @@ public enum BungeeProxyCore implements ProxyCore {
 	INSTANCE;
 
 	private static final ProxyServer PROXY_SERVER = ProxyServer.getInstance();
-	private static final ExecutorService EXECUTOR_SERVICE = Executors.newScheduledThreadPool(20);
+	private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
 	@Override
 	public <E> void callEvent(E event) {
