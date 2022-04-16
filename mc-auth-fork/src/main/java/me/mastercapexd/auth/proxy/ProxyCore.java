@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.proxy;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -14,9 +15,9 @@ import me.mastercapexd.auth.proxy.server.Server;
 public interface ProxyCore extends Castable<ProxyCore> {
 	<E> void callEvent(E event);
 
-	ProxyPlayer getPlayer(UUID uniqueId);
+	Optional<ProxyPlayer> getPlayer(UUID uniqueId);
 
-	ProxyPlayer getPlayer(String name);
+	Optional<ProxyPlayer> getPlayer(String name);
 
 	Logger getLogger();
 

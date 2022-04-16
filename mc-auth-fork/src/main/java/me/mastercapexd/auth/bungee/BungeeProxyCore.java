@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,8 +35,8 @@ public enum BungeeProxyCore implements ProxyCore {
 	}
 
 	@Override
-	public ProxyPlayer getPlayer(UUID uniqueId) {
-		return BungeeProxyPlayerFactory.wrapPlayer(PROXY_SERVER.getPlayer(uniqueId));
+	public Optional<ProxyPlayer> getPlayer(UUID uniqueId) {
+		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(PROXY_SERVER.getPlayer(uniqueId)));
 	}
 
 	@Override

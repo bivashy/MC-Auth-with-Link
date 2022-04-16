@@ -77,10 +77,10 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 
 	@Override
 	public KickResult kick(String reason) {
-		ProxyPlayer proxyPlayer = PLUGIN.getCore().getPlayer(getUniqueId());
-		if (proxyPlayer == null)
+		Optional<ProxyPlayer> proxyPlayer = identifierType.getPlayer(getId());
+		if (proxyPlayer.isPresent())
 			return KickResult.PLAYER_OFFLINE;
-		proxyPlayer.disconnect(reason);
+		proxyPlayer.get().disconnect(reason);
 		return KickResult.KICKED;
 	}
 
@@ -93,11 +93,12 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 
 	@Override
 	public boolean isSessionActive(long sessionDurability) {
-		ProxyPlayer proxiedPlayer = identifierType.getPlayer(getId());
+		Optional<ProxyPlayer> proxiedPlayer = identifierType.getPlayer(getId());
+		long sessionEndTime = getLastSessionStart() + sessionDurability;
 		if (proxiedPlayer == null)
-			return (getLastSessionStart() + sessionDurability >= System.currentTimeMillis());
-		return proxiedPlayer.getRemoteAddress().getHostString().equals(getLastIpAddress())
-				&& (getLastSessionStart() + sessionDurability >= System.currentTimeMillis());
+			return (sessionEndTime >= System.currentTimeMillis());
+		return proxiedPlayer.get().getRemoteAddress().getHostString().equals(getLastIpAddress())
+				&& (sessionEndTime >= System.currentTimeMillis());
 	}
 
 	@Override

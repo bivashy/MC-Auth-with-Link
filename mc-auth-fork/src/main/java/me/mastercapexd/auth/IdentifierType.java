@@ -1,5 +1,7 @@
 package me.mastercapexd.auth;
 
+import java.util.Optional;
+
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
@@ -10,7 +12,7 @@ public enum IdentifierType {
 			return player.getUniqueId().toString();
 		}
 
-		public ProxyPlayer getPlayer(String id) {
+		public Optional<ProxyPlayer> getPlayer(String id) {
 			return ProxyPlugin.instance().getCore().getPlayer(java.util.UUID.fromString(id));
 		}
 
@@ -23,7 +25,7 @@ public enum IdentifierType {
 			return player.getNickname().toLowerCase();
 		}
 
-		public ProxyPlayer getPlayer(String id) {
+		public Optional<ProxyPlayer> getPlayer(String id) {
 			return ProxyPlugin.instance().getCore().getPlayer(id);
 		}
 
@@ -34,7 +36,7 @@ public enum IdentifierType {
 
 	public abstract String getId(ProxyPlayer proxiedPlayer);
 
-	public abstract ProxyPlayer getPlayer(String id);
+	public abstract Optional<ProxyPlayer> getPlayer(String id);
 
 	public abstract String fromRawString(String id);
 }

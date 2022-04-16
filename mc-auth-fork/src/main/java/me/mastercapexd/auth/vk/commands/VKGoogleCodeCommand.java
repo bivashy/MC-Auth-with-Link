@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.vk.commands;
 
+import java.util.Optional;
+
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
 import me.mastercapexd.auth.Auth;
@@ -54,13 +56,12 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 					.authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
 				Auth.removeGoogleAuthAccount(account.getId());
 				Auth.removeAccount(account.getId());
-				ProxyPlayer proxyPlayer = account.getIdentifierType().getPlayer(account.getId());
-				if (proxyPlayer != null) {
+				account.getIdentifierType().getPlayer(account.getId()).ifPresent(proxyPlayer -> {
 					sendMessage(e.getPeer(),
 							receptioner.getConfig().getVKSettings().getVKMessages().getMessage("google-code-valid"));
 					proxyPlayer.sendTo(receptioner.getConfig().findServerInfo(receptioner.getConfig().getGameServers())
 							.asProxyServer());
-				}
+				});
 				return;
 			}
 			sendMessage(e.getPeer(),

@@ -65,9 +65,10 @@ public class VKLinkCommand extends VKCommandExecutor {
 			account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo().getIdentificator()
 					.setNumber(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
-			ProxyPlayer player = receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId());
-			if (player != null)
-				player.sendMessage(receptioner.getConfig().getProxyMessages().getSubMessages("vk").getStringMessage("linked"));
+			
+			receptioner.getConfig().getActiveIdentifierType().getPlayer(account.getId())
+					.ifPresent(player -> player.sendMessage(receptioner.getConfig().getProxyMessages()
+							.getSubMessages("vk").getStringMessage("linked")));
 
 			sendMessage(e.getPeer(),
 					receptioner.getConfig().getVKSettings().getVKMessages().getMessage("confirmation-success"));

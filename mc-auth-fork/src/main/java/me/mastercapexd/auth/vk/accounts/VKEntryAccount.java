@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.vk.accounts;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -56,7 +57,6 @@ public class VKEntryAccount {
 		if (entryConfirmationSelectEvent.isCancelled())
 			return;
 		Auth.getLinkEntryAuth().removeLinkUser(account.getId(), VKLinkType.getInstance());
-		ProxyPlayer proxyPlayer = account.getIdentifierType().getPlayer(account.getId());
 
 		VKMessageContext messageContext = new VKMessageContext(vkId, account);
 		if (answer == VKEnterAnswer.DECLINE) {
@@ -73,10 +73,12 @@ public class VKEntryAccount {
 			Auth.removeAccount(account.getId());
 			sendMessage(vkId, config.getVKSettings().getVKMessages().getMessage("enter-accepted", messageContext));
 			accountStorage.saveOrUpdateAccount(account);
-			if (proxyPlayer != null) {
-				proxyPlayer.sendMessage(config.getProxyMessages().getSubMessages("vk").getStringMessage("enter-confirmed"));
+
+			account.getIdentifierType().getPlayer(account.getId()).ifPresent(proxyPlayer -> {
+				proxyPlayer.sendMessage(
+						config.getProxyMessages().getSubMessages("vk").getStringMessage("enter-confirmed"));
 				proxyPlayer.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());
-			}
+			});
 		}
 	}
 

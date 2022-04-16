@@ -33,7 +33,7 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 	public void enterServer() {
 		Account account = authenticationStepContext.getAccount();
 		String accountId = account.getId();
-		ProxyPlayer player = account.getIdentifierType().getPlayer(accountId);
+		ProxyPlayer player = account.getIdentifierType().getPlayer(accountId).get();
 		LoginEvent loginEvent = new LoginEvent(account);
 		ProxyPlugin.instance().getCore().callEvent(loginEvent);
 

@@ -23,7 +23,7 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
 		boolean isCurrentAccountRegistered = authenticationStepContext.getAccount().isRegistered();
 		if (!isRegistered && isCurrentAccountRegistered) {
 			Account account = authenticationStepContext.getAccount();
-			ProxyPlayer player = account.getIdentifierType().getPlayer(account.getId());
+			ProxyPlayer player = account.getIdentifierType().getPlayer(account.getId()).get();
 
 			Auth.removeAccount(account.getId());
 			account.setLastIpAddress(player.getRemoteAddress().getHostString());
