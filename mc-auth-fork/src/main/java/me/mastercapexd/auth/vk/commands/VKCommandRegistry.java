@@ -20,7 +20,10 @@ import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsCommand;
+import me.mastercapexd.auth.messenger.commands.KickCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
+import me.mastercapexd.auth.messenger.commands.RestoreCommand;
+import me.mastercapexd.auth.messenger.commands.UnlinkCommand;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -64,7 +67,7 @@ public class VKCommandRegistry {
 			if (account == null)
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("kick-not-enough-arguments"));
-			
+
 			Optional<LinkUser> linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER);
 			if (!linkUser.isPresent())
 				throw new SendMessageException(
@@ -127,5 +130,14 @@ public class VKCommandRegistry {
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
 				.handler(new AccountEnterAcceptCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("kick").getCommandPaths())
+						.handler(new KickCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("restore").getCommandPaths())
+						.handler(new RestoreCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("unlink").getCommandPaths())
+						.handler(new UnlinkCommand()));
 	}
 }
