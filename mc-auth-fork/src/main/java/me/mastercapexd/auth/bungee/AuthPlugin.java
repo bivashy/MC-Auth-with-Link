@@ -164,14 +164,17 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		return geoUtils;
 	}
 
+	@Override
 	public BungeePluginConfig getConfig() {
 		return config;
 	}
 
+	@Override
 	public AccountFactory getAccountFactory() {
 		return accountFactory;
 	}
 
+	@Override
 	public AccountStorage getAccountStorage() {
 		return accountStorage;
 	}
@@ -184,18 +187,26 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		return vkButtonHandler;
 	}
 
+	@Override
 	public GoogleAuthenticator getGoogleAuthenticator() {
 		return googleAuthenticator;
 	}
 
+	@Override
 	public AuthenticationStepCreatorDealership getAuthenticationStepCreatorDealership() {
 		return authenticationStepCreatorDealership;
 	}
 
+	@Override
 	public AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership() {
 		return authenticationContextFactoryDealership;
 	}
 
+	@Override
+	public String getVersion() {
+		return getDescription().getVersion();
+	}
+	
 	@Override
 	public ProxyCore getCore() {
 		return BungeeProxyCore.INSTANCE;
@@ -205,4 +216,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 	public ConfigurationProcessor getConfigurationProcessor() {
 		return CONFIGURATION_PROCESSOR;
 	}
+
+	
 }
