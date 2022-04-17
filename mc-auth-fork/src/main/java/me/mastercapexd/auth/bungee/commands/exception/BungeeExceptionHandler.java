@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.proxy.commands.exception;
+package me.mastercapexd.auth.bungee.commands.exception;
 
 import me.mastercapexd.auth.config.messages.AbstractMessages;
 import me.mastercapexd.auth.config.messages.Messages;
@@ -25,10 +25,10 @@ import revxrsal.commands.exception.NumberNotInRangeException;
 import revxrsal.commands.exception.SendableException;
 import revxrsal.commands.exception.TooManyArgumentsException;
 
-public class CustomExceptionHandler extends BungeeExceptionAdapter {
+public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 	private final Messages<?> messages;
 
-	public CustomExceptionHandler(AbstractMessages<?> messagees) {
+	public BungeeExceptionHandler(AbstractMessages<?> messagees) {
 		this.messages = messagees;
 	}
 

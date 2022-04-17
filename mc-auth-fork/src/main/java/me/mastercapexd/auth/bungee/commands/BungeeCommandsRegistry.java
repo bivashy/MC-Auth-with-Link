@@ -3,6 +3,7 @@ package me.mastercapexd.auth.bungee.commands;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
@@ -20,7 +21,6 @@ import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.proxy.commands.annotations.VkUse;
-import me.mastercapexd.auth.proxy.commands.exception.CustomExceptionHandler;
 import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.proxy.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
@@ -44,7 +44,7 @@ public class BungeeCommandsRegistry {
 	}
 
 	private void register() {
-		BUNGEE_COMMAND_HANDLER.setExceptionHandler(new CustomExceptionHandler(PLUGIN.getConfig().getProxyMessages()));
+		BUNGEE_COMMAND_HANDLER.setExceptionHandler(new BungeeExceptionHandler(PLUGIN.getConfig().getProxyMessages()));
 
 		registerCommandContexts();
 		registerDependencies();
