@@ -21,7 +21,7 @@ public class GeoUtils {
 			return new IPInfoResponse();
 		JsonObject json;
 		try {
-			json = GSON.fromJson(getURLContent(API_SITE + ip),JsonObject.class);
+			json = GSON.fromJson(getURLContent(API_SITE + ip), JsonObject.class);
 		} catch (JsonSyntaxException | IOException e) {
 			e.printStackTrace();
 			return new IPInfoResponse();

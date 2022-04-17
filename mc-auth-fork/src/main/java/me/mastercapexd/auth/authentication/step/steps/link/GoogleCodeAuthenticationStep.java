@@ -33,10 +33,12 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
 	public boolean shouldSkip() {
 		Account account = authenticationStepContext.getAccount();
 
-		if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled()) // Ignore if google was disabled in configuration
+		if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled()) // Ignore if google was disabled in
+																				// configuration
 			return true;
 
-		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance())) // Ignore if user already confirming 
+		if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance())) // Ignore if user
+																								// already confirming
 			return true;
 
 		if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability())) // Ignore if player has active session
@@ -44,7 +46,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
 
 		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 
-		if (linkUser == null) 
+		if (linkUser == null)
 			return true;
 
 		LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();

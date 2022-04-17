@@ -24,8 +24,8 @@ public class SQLiteAccountStorage extends SQLAccountStorage {
 	private static final String DELETE = "DELETE FROM `auth` WHERE `id`=?;";
 
 	public SQLiteAccountStorage(PluginConfig config, AccountFactory accountFactory, File parent) {
-		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID,SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LAST_QUIT_ORDERED,
-				SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
+		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID,
+				SELECT_BY_LAST_QUIT_ORDERED, SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
 
 		File file = new File(parent + File.separator + "auth.db");
 		if (!file.exists())

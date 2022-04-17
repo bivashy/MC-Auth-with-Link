@@ -48,8 +48,7 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 		});
 
 		Account account = accounts.stream().findFirst().orElse(null).getAccount();
-		account.nextAuthenticationStep(
-				PLUGIN.getAuthenticationContextFactoryDealership().createContext(account));
+		account.nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryDealership().createContext(account));
 	}
 
 	@Override

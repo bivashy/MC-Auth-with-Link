@@ -173,9 +173,10 @@ public class BungeeCommandsRegistry {
 				throw new SendMessageException(config.getProxyMessages().getStringMessage("account-exists"));
 			return account;
 		});
-		
-		BUNGEE_COMMAND_HANDLER.registerAnnotationReplacer(Permission.class, (element,annotation) -> {
-			CommandPermission commandPermissionAnnotation = Annotations.create(CommandPermission.class,"value",annotation.value());
+
+		BUNGEE_COMMAND_HANDLER.registerAnnotationReplacer(Permission.class, (element, annotation) -> {
+			CommandPermission commandPermissionAnnotation = Annotations.create(CommandPermission.class, "value",
+					annotation.value());
 			return Arrays.asList(commandPermissionAnnotation);
 		});
 	}

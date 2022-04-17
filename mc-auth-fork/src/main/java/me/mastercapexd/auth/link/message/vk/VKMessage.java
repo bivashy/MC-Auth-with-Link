@@ -86,7 +86,5 @@ public class VKMessage extends AbstractMessage {
 		public VKMessage build() {
 			return VKMessage.this;
 		}
-
 	}
-
 }

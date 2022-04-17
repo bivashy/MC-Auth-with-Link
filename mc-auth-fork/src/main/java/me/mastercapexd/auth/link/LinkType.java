@@ -36,6 +36,6 @@ public interface LinkType {
 	ButtonColorBuilder newButtonColorBuilder();
 
 	ButtonActionBuilder newButtonActionBuilder();
-	
+
 	MessengerSettings getSettings();
 }

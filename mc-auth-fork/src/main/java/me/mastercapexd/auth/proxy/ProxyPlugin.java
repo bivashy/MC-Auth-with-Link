@@ -28,7 +28,7 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
 	ConfigurationProcessor getConfigurationProcessor();
 
 	String getVersion();
-	
+
 	static ProxyPlugin instance() {
 		return ProxyPluginProvider.getPluginInstance();
 	}

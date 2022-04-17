@@ -41,5 +41,5 @@ public class ArgumentProxyPlayer implements ProxyPlayer {
 	public <T> T getRealPlayer() {
 		return player.getRealPlayer();
 	}
-	
+
 }

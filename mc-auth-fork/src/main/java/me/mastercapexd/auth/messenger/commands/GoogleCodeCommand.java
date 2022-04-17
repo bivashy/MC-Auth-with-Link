@@ -21,16 +21,15 @@ public class GoogleCodeCommand implements OrphanCommand {
 
 	@GoogleUse
 	@Default
-	public void googleCode(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account,Integer code) {
-		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
-				.orElse(null);
+	public void googleCode(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account, Integer code) {
+		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 
 		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
 			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlink-not-have-google"));
 			return;
 		}
-		
+
 		actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlinked"));
 		linkUser.getLinkUserInfo().getIdentificator().setString(GoogleLinkType.NULL_KEY);
 		accountStorage.saveOrUpdateAccount(account);

@@ -10,7 +10,7 @@ public interface AccountStorage {
 	CompletableFuture<Account> getAccount(String id);
 
 	CompletableFuture<Account> getAccountFromName(String playerName);
-	
+
 	CompletableFuture<Collection<Account>> getAccountsByVKID(Integer id);
 
 	CompletableFuture<Collection<Account>> getAccounts(int limit);

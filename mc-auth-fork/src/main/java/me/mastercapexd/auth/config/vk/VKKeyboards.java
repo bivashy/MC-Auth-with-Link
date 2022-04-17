@@ -15,7 +15,7 @@ import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 import me.mastercapexd.auth.link.message.vk.VKKeyboard;
 import me.mastercapexd.auth.utils.CollectionUtils;
 
-public class VKKeyboards implements ConfigurationHolder,MessengerKeyboards {
+public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
 	private static final Gson GSON = new Gson();
 	private final Map<String, String> jsonKeyboards;
 

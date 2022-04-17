@@ -154,11 +154,11 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("unlink").getCommandPaths())
 						.handler(new UnlinkCommand()));
-		commandHandler.register(
-				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-remove").getCommandPaths())
-						.handler(new GoogleUnlinkCommand()));
-		commandHandler.register(
-				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-code").getCommandPaths())
-						.handler(new GoogleCodeCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-remove").getCommandPaths())
+				.handler(new GoogleUnlinkCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-code").getCommandPaths())
+				.handler(new GoogleCodeCommand()));
 	}
 }

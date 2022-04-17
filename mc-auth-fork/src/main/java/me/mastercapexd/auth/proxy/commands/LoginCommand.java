@@ -50,8 +50,7 @@ public class LoginCommand {
 		}
 
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
-		account.nextAuthenticationStep(
-				plugin.getAuthenticationContextFactoryDealership().createContext(account));
+		account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 		player.sendMessage(config.getProxyMessages().getStringMessage("login-success"));
 	}
 }

@@ -10,7 +10,6 @@ import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationS
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
-import me.mastercapexd.auth.link.message.vk.VKKeyboard;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -57,9 +56,12 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 			return true;
 
 		Auth.getLinkEntryAuth().addLinkUser(entryUser);
-		
-		IKeyboard keyboard = PLUGIN.getConfig().getVKSettings().getKeyboards().createKeyboard("confirmation", "%name%", account.getName());
-		VKLinkType.getInstance().newMessageBuilder().rawContent(PLUGIN.getConfig().getVKSettings().getMessages().getMessage("enter-message")).keyboard(keyboard).build().sendMessage(linkUser);
+
+		IKeyboard keyboard = PLUGIN.getConfig().getVKSettings().getKeyboards().createKeyboard("confirmation", "%name%",
+				account.getName());
+		VKLinkType.getInstance().newMessageBuilder()
+				.rawContent(PLUGIN.getConfig().getVKSettings().getMessages().getMessage("enter-message"))
+				.keyboard(keyboard).build().sendMessage(linkUser);
 		return false;
 	}
 

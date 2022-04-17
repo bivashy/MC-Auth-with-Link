@@ -71,7 +71,7 @@ public class BungeeAuthEngine implements AuthEngine {
 									VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
 							continue;
 						}
-						
+
 						if (GoogleCodeAuthenticationStep.STEP_NAME
 								.equals(account.getCurrentAuthenticationStep().getStepName())) {
 							player.sendMessage(GOOGLE_MESSAGES.getMessage("need-code-chat")
@@ -80,7 +80,7 @@ public class BungeeAuthEngine implements AuthEngine {
 									GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0, 120, 0);
 							continue;
 						}
-						
+
 						if (LoginAuthenticationStep.STEP_NAME
 								.equals(account.getCurrentAuthenticationStep().getStepName())) {
 							player.sendMessage(this.config.getProxyMessages().getMessage("login-chat")
@@ -89,7 +89,7 @@ public class BungeeAuthEngine implements AuthEngine {
 									this.config.getProxyMessages().getStringMessage("login-subtitle"), 0, 120, 0);
 							continue;
 						}
-						
+
 						if (RegisterAuthenticationStep.STEP_NAME
 								.equals(account.getCurrentAuthenticationStep().getStepName())) {
 							player.sendMessage(this.config.getProxyMessages().getMessage("register-chat")

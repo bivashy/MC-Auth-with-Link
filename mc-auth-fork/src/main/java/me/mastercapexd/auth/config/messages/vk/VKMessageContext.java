@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.config.messages.vk;
 
+import static me.mastercapexd.auth.utils.CollectionUtils.newEntry;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +21,6 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.messages.MessageContext;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-
-import static me.mastercapexd.auth.utils.CollectionUtils.newEntry;
 
 public class VKMessageContext implements MessageContext {
 	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();

@@ -10,7 +10,6 @@ import me.mastercapexd.auth.bungee.events.VKLinkEvent;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 import net.md_5.bungee.api.ProxyServer;
@@ -65,10 +64,9 @@ public class VKLinkCommand extends VKCommandExecutor {
 			account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null).getLinkUserInfo().getIdentificator()
 					.setNumber(e.getUserId());
 			receptioner.getAccountStorage().saveOrUpdateAccount(account);
-			
-			account.getPlayer()
-					.ifPresent(player -> player.sendMessage(receptioner.getConfig().getProxyMessages()
-							.getSubMessages("vk").getStringMessage("linked")));
+
+			account.getPlayer().ifPresent(player -> player.sendMessage(
+					receptioner.getConfig().getProxyMessages().getSubMessages("vk").getStringMessage("linked")));
 
 			sendMessage(e.getPeer(),
 					receptioner.getConfig().getVKSettings().getMessages().getMessage("confirmation-success"));

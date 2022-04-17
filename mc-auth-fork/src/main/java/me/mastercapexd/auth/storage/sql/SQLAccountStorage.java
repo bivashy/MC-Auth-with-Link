@@ -141,7 +141,6 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		return account;
 	}
 
-	
 	protected Account selectAccountFromName(String id) {
 		Account account = null;
 		try (Connection connection = this.getConnection()) {
@@ -165,7 +164,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		}
 		return account;
 	}
-	
+
 	protected Collection<Account> selectAccountByVKID(Integer id) {
 		Collection<Account> accounts = Sets.newHashSet();
 		try (Connection connection = this.getConnection()) {
@@ -202,8 +201,6 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	public CompletableFuture<Account> getAccount(String id) {
 		return CompletableFuture.supplyAsync(() -> selectAccount(id));
 	}
-	
-	
 
 	@Override
 	public CompletableFuture<Account> getAccountFromName(String playerName) {

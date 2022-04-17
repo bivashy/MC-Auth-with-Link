@@ -41,7 +41,7 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 						.getMessage("google-code-account-not-have-google"));
 				return;
 			}
-			if (!Auth.getLinkEntryAuth().hasLinkUser(account.getId(),GoogleLinkType.getInstance())) {
+			if (!Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance())) {
 				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 						.getMessage("google-code-account-not-need-enter"));
 				return;
@@ -49,7 +49,7 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 			if (receptioner.getPlugin().getGoogleAuthenticator()
 					.authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
 				Auth.getLinkEntryAuth().removeLinkUser(account.getId(), GoogleLinkType.getInstance());
-				
+
 				Auth.removeAccount(account.getId());
 				account.getPlayer().ifPresent(proxyPlayer -> {
 					sendMessage(e.getPeer(),

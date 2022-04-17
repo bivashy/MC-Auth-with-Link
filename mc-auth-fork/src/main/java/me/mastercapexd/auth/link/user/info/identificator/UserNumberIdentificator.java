@@ -42,6 +42,6 @@ public class UserNumberIdentificator implements LinkUserIdentificator {
 		if (getClass() != obj.getClass())
 			return false;
 		UserNumberIdentificator other = (UserNumberIdentificator) obj;
-		return userId==other.userId;
+		return userId == other.userId;
 	}
 }

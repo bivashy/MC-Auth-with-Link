@@ -23,22 +23,28 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 	private PluginConfig config;
 
 	@Default
-	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
+	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType,
+			@Default("all") String acceptPlayerName) {
 		Predicate<LinkEntryUser> filter = entryUser -> {
-			if (!entryUser.getLinkType().equals(linkType)) 
+			if (!entryUser.getLinkType().equals(linkType))
 				return false;
-			
+
 			if (!entryUser.getLinkUserInfo().getIdentificator().equals(actorWrapper.userId()))
 				return false;
-			
+
 			Duration confirmationSecondsPassed = Duration
 					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
-			
-			if (confirmationSecondsPassed.getSeconds() > config.getVKSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
+
+			if (confirmationSecondsPassed.getSeconds() > config.getVKSettings().getEnterSettings().getEnterDelay()) // If
+																													// enter
+																													// delay
+																													// was
+																													// passed
 				return false;
-			
-			if(!acceptPlayerName.equals("all")) // If player not default value
-				return entryUser.getAccount().getName().equalsIgnoreCase(acceptPlayerName); // Check if entryUser name equals to accept player
+
+			if (!acceptPlayerName.equals("all")) // If player not default value
+				return entryUser.getAccount().getName().equalsIgnoreCase(acceptPlayerName); // Check if entryUser name
+																							// equals to accept player
 			return true;
 		};
 
@@ -50,15 +56,15 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 		accounts.forEach((entryUser) -> {
 			entryUser.setConfirmed(true);
 			Account account = entryUser.getAccount();
-			account.getPlayer().ifPresent(player -> player.sendMessage(linkType.getLinkMessages().getMessage("enter-confirmed")));
+			account.getPlayer()
+					.ifPresent(player -> player.sendMessage(linkType.getLinkMessages().getMessage("enter-confirmed")));
 			Auth.getLinkEntryAuth().removeLinkUser(entryUser);
 		});
 
 		actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted"));
-		
+
 		Account account = accounts.stream().findFirst().get().getAccount();
-		account.nextAuthenticationStep(
-				plugin.getAuthenticationContextFactoryDealership().createContext(account));
+		account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 	}
 
 }

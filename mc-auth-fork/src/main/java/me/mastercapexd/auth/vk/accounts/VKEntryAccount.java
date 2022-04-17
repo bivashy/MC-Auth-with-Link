@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.vk.accounts;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -18,7 +17,6 @@ import me.mastercapexd.auth.config.messages.vk.VKMessageContext;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.ProxyServer;
 
@@ -67,7 +65,7 @@ public class VKEntryAccount {
 			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()
 					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
-				//Auth.addGoogleAuthAccount(account);
+				// Auth.addGoogleAuthAccount(account);
 				return;
 			}
 			Auth.removeAccount(account.getId());

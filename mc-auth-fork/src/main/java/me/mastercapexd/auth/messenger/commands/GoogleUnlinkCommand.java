@@ -22,8 +22,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
 	@GoogleUse
 	@Default
 	public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
-		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
-				.orElse(null);
+		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 
 		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {

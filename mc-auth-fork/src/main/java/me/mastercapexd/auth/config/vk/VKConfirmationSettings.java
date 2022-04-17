@@ -7,7 +7,7 @@ import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.messenger.MessengerConfirmationSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKConfirmationSettings implements ConfigurationHolder,MessengerConfirmationSettings {
+public class VKConfirmationSettings implements ConfigurationHolder, MessengerConfirmationSettings {
 	@ConfigField("remove-delay")
 	private int removeDelay = 120;
 	@ConfigField("code-length")

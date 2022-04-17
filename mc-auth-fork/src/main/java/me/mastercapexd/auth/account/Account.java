@@ -90,10 +90,10 @@ public interface Account {
 		return KickResult.KICKED;
 	}
 
-	default Optional<ProxyPlayer> getPlayer(){
+	default Optional<ProxyPlayer> getPlayer() {
 		return getIdentifierType().getPlayer(getId());
 	}
-	
+
 	default boolean isRegistered() {
 		return getPasswordHash() != null;
 	}

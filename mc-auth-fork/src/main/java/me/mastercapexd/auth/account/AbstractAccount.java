@@ -64,8 +64,7 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 		currentConfigurationAuthenticationStepCreatorIndex += 1;
 		if (currentAuthenticationStep.shouldSkip()) {
 			currentAuthenticationStep = new NullAuthenticationStep();
-			return nextAuthenticationStep(
-					PLUGIN.getAuthenticationContextFactoryDealership().createContext( this));
+			return nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryDealership().createContext(this));
 		}
 		return true;
 	}

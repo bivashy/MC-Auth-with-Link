@@ -16,7 +16,7 @@ public class VKButtonLabels implements ConfigurationHolder {
 
 	public VKButtonLabels(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
-		System.out.println("labels "+labels);
+		System.out.println("labels " + labels);
 	}
 
 	public String getButtonLabel(String key) {

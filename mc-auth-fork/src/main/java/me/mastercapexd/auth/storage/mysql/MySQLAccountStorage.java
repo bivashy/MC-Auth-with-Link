@@ -28,8 +28,8 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String DELETE = "DELETE FROM `auth` WHERE `id`=?;";
 
 	public MySQLAccountStorage(PluginConfig config, AccountFactory accountFactory) {
-		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID,SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LAST_QUIT_ORDERED,
-				SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
+		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID,
+				SELECT_BY_LAST_QUIT_ORDERED, SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
 
 		StorageDataSettings dataSettings = config.getStorageDataSettings();
 		String host = dataSettings.getHost();

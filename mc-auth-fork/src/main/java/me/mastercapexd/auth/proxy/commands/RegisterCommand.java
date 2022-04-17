@@ -36,8 +36,7 @@ public class RegisterCommand {
 
 		accountStorage.saveOrUpdateAccount(account);
 
-		account.nextAuthenticationStep(
-				plugin.getAuthenticationContextFactoryDealership().createContext(account));
+		account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 
 		player.sendMessage(config.getProxyMessages().getStringMessage("register-success"));
 	}

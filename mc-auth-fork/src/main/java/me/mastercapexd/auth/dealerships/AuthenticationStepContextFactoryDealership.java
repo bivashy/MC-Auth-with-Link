@@ -49,8 +49,12 @@ public class AuthenticationStepContextFactoryDealership
 	public AuthenticationStepContext createContext(Account account) {
 		List<String> stepNames = PLUGIN.getConfig().getAuthenticationSteps();
 		String stepName = stepNames.get(0); // Use first stepName by default
-		if (stepNames.size() > account.getCurrentConfigurationAuthenticationStepCreatorIndex()) // If current authentication step index not out of bounds stepNames size 
-			stepName = stepNames.get(account.getCurrentConfigurationAuthenticationStepCreatorIndex()); // use this step name
+		if (stepNames.size() > account.getCurrentConfigurationAuthenticationStepCreatorIndex()) // If current
+																								// authentication step
+																								// index not out of
+																								// bounds stepNames size
+			stepName = stepNames.get(account.getCurrentConfigurationAuthenticationStepCreatorIndex()); // use this step
+																										// name
 		return createContext(stepName, account);
 
 	}

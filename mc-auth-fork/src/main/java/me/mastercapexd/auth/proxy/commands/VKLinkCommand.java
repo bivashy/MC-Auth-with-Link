@@ -41,7 +41,7 @@ public class VKLinkCommand {
 			player.sendMessage(VK_MESSAGES.getStringMessage("usage"));
 			return;
 		}
-			
+
 		String accountId = config.getActiveIdentifierType().getId(player);
 
 		plugin.getCore().runAsync(() -> {

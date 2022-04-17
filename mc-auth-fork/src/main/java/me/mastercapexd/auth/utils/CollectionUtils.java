@@ -40,9 +40,9 @@ public class CollectionUtils {
 			map.put(array[i], array[i + 1]);
 		return map;
 	}
-	
-	public static <T> T[] addAll(T[] firstArray,T[] secondArray) {
-		T[] both = Arrays.copyOf(firstArray,firstArray.length + secondArray.length);
+
+	public static <T> T[] addAll(T[] firstArray, T[] secondArray) {
+		T[] both = Arrays.copyOf(firstArray, firstArray.length + secondArray.length);
 		System.arraycopy(secondArray, 0, both, firstArray.length, secondArray.length);
 		return both;
 	}

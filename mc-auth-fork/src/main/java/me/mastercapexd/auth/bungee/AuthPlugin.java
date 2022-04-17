@@ -206,7 +206,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 	public String getVersion() {
 		return getDescription().getVersion();
 	}
-	
+
 	@Override
 	public ProxyCore getCore() {
 		return BungeeProxyCore.INSTANCE;
@@ -217,5 +217,4 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		return CONFIGURATION_PROCESSOR;
 	}
 
-	
 }

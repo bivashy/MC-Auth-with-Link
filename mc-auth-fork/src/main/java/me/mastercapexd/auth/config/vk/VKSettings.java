@@ -68,7 +68,7 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 			return false;
 		return adminAccounts.contains(identificator.asNumber());
 	}
-	
+
 	public boolean isAdministrator(int userId) {
 		return isAdministrator(new UserNumberIdentificator(userId));
 	}

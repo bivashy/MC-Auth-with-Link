@@ -58,8 +58,7 @@ public class AuthCommand {
 	}
 
 	@Subcommand({ "changepassword", "changepass" })
-	public void changePassword(CommandActor actor, ArgumentProxyPlayer proxyPlayer,
-			NewPassword newPlayerPassword) {
+	public void changePassword(CommandActor actor, ArgumentProxyPlayer proxyPlayer, NewPassword newPlayerPassword) {
 		if (proxyPlayer == null)
 			return;
 		String id = config.getActiveIdentifierType().getId(proxyPlayer);

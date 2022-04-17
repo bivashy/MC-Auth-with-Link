@@ -84,8 +84,7 @@ public class AccountsMessageBuilder extends MessageBuilder {
 
 	private KeyboardButton createSettingsButtonFromAccount(Account account) {
 		return vkUtils.buildCallbackButton("account", account, "account_" + account.getId(),
-				account.getPlayer().isPresent() ? KeyboardButtonColor.NEGATIVE
-						: KeyboardButtonColor.POSITIVE);
+				account.getPlayer().isPresent() ? KeyboardButtonColor.NEGATIVE : KeyboardButtonColor.POSITIVE);
 	}
 
 	private List<KeyboardButton> createPageButtons(int size, int page, VKAccountsPageType type) {

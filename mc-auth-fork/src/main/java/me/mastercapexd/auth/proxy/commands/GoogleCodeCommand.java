@@ -44,7 +44,7 @@ public class GoogleCodeCommand {
 				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
 				return;
 			}
-			if (!Auth.getLinkEntryAuth().hasLinkUser(playerId,GoogleLinkType.getInstance())) {
+			if (!Auth.getLinkEntryAuth().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
 				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-need-enter"));
 				return;
 			}

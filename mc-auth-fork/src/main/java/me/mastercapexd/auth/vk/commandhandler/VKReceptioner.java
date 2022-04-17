@@ -32,17 +32,9 @@ import me.mastercapexd.auth.vk.buttons.VKToogleConfirmationButton;
 import me.mastercapexd.auth.vk.buttons.VKUnlinkButton;
 import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.buttonshandler.VKCallbackButton;
-import me.mastercapexd.auth.vk.commands.VKAccountsCommand;
 import me.mastercapexd.auth.vk.commands.VKAdminPanelCommand;
 import me.mastercapexd.auth.vk.commands.VKChangePasswordCommand;
-import me.mastercapexd.auth.vk.commands.VKEnterAcceptCommand;
-import me.mastercapexd.auth.vk.commands.VKEnterDeclineCommand;
-import me.mastercapexd.auth.vk.commands.VKGoogleCodeCommand;
 import me.mastercapexd.auth.vk.commands.VKGoogleCommand;
-import me.mastercapexd.auth.vk.commands.VKGoogleUnlinkCommand;
-import me.mastercapexd.auth.vk.commands.VKKickCommand;
-import me.mastercapexd.auth.vk.commands.VKRestoreCommand;
-import me.mastercapexd.auth.vk.commands.VKUnlinkCommand;
 
 public class VKReceptioner {
 	private static final VkApiClient vk = VKAPI.getInstance().getVK();
