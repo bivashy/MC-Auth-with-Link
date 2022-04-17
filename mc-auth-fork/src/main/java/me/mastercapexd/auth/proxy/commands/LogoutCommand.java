@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.bungee.commands.exception.BungeeSendableException;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -19,9 +18,10 @@ public class LogoutCommand {
 	@Default
 	public void logout(ProxyPlayer player) {
 		String id = config.getActiveIdentifierType().getId(player);
-		if (Auth.hasAccount(id))
-			throw new BungeeSendableException(config.getProxyMessages().getStringMessage("already-logged-out"));
-
+		if (Auth.hasAccount(id)) {
+			player.sendMessage(config.getProxyMessages().getStringMessage("already-logged-out"));
+			return;
+		}
 		accountStorage.getAccount(id).thenAccept(account -> {
 			account.logout(config.getSessionDurability());
 			accountStorage.saveOrUpdateAccount(account);

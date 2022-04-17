@@ -4,7 +4,6 @@ import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.bungee.commands.exception.BungeeSendableException;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.confirmation.info.DefaultConfirmationInfo;
@@ -38,9 +37,11 @@ public class VKLinkCommand {
 	@Default
 	@VkUse
 	public void vkLink(ProxyPlayer player, @Optional String vkIdentificator) {
-		if (vkIdentificator == null)
-			throw new BungeeSendableException(VK_MESSAGES.getStringMessage("usage"));
-
+		if (vkIdentificator == null) {
+			player.sendMessage(VK_MESSAGES.getStringMessage("usage"));
+			return;
+		}
+			
 		String accountId = config.getActiveIdentifierType().getId(player);
 
 		plugin.getCore().runAsync(() -> {

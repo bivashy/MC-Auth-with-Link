@@ -7,6 +7,7 @@ import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationSte
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.commands.annotations.Permission;
 import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -14,11 +15,10 @@ import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Subcommand;
-import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.command.CommandActor;
 
 @Command({ "auth", "authadmin", "adminauth" })
-@CommandPermission("auth.admin")
+@Permission("auth.admin")
 public class AuthCommand {
 
 	@Dependency

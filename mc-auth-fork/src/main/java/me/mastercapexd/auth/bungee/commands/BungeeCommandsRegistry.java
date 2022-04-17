@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.bungee.commands;
 
+import java.util.Arrays;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
@@ -20,6 +22,7 @@ import me.mastercapexd.auth.proxy.commands.VKLinkCommand;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.proxy.commands.annotations.Permission;
 import me.mastercapexd.auth.proxy.commands.annotations.VkUse;
 import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.proxy.commands.parameters.DoublePassword;
@@ -30,7 +33,9 @@ import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.CommandHandler;
+import revxrsal.commands.annotation.dynamic.Annotations;
 import revxrsal.commands.bungee.BungeeCommandActor;
+import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.core.BungeeHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.exception.SendMessageException;
@@ -167,6 +172,11 @@ public class BungeeCommandsRegistry {
 			if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))
 				throw new SendMessageException(config.getProxyMessages().getStringMessage("account-exists"));
 			return account;
+		});
+		
+		BUNGEE_COMMAND_HANDLER.registerAnnotationReplacer(Permission.class, (element,annotation) -> {
+			CommandPermission commandPermissionAnnotation = Annotations.create(CommandPermission.class,"value",annotation.value());
+			return Arrays.asList(commandPermissionAnnotation);
 		});
 	}
 
