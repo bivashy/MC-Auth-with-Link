@@ -64,9 +64,9 @@ public class VKCommandRegistry {
 			String playerName = context.popForParameter();
 			Integer userId = context.actor().as(VkActor.class).getAuthorId();
 			Account account = PLUGIN.getAccountStorage().getAccountFromName(playerName).get();
-			if (account == null)
+			if (account == null || !account.isRegistered())
 				throw new SendMessageException(
-						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("kick-not-enough-arguments"));
+						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("account-not-found"));
 
 			Optional<LinkUser> linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER);
 			if (!linkUser.isPresent())
