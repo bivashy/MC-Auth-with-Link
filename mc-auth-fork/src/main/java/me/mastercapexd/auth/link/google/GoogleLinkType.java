@@ -2,6 +2,7 @@ package me.mastercapexd.auth.link.google;
 
 import com.google.common.base.Predicate;
 
+import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.AbstractLinkType;
@@ -16,7 +17,7 @@ import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class GoogleLinkType extends AbstractLinkType {
 	public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
-	public static final String NULL_KEY = "";
+	public static final String NULL_KEY = AccountFactory.DEFAULT_GOOGLE_KEY;
 
 	private static final GoogleLinkType INSTANCE = new GoogleLinkType();
 	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
