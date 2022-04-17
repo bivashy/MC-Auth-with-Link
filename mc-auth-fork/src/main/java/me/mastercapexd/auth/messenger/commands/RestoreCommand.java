@@ -17,7 +17,7 @@ public class RestoreCommand implements OrphanCommand {
 	private AccountStorage accountStorage;
 
 	@Default
-	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
+	public void onRestore(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
 		String generatedPassword = RandomCodeFactory
 				.generateCode(linkType.getSettings().getRestoreSettings().getCodeLength());
 		player.setPasswordHash(player.getHashType().hash(generatedPassword));

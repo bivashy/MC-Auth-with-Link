@@ -14,7 +14,7 @@ public class UnlinkCommand implements OrphanCommand {
 	private AccountStorage accountStorage;
 
 	@Default
-	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
+	public void onUnlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
 		player.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo().getIdentificator()
 				.setNumber(AccountFactory.DEFAULT_VK_ID);
 		accountStorage.saveOrUpdateAccount(player);
