@@ -20,7 +20,6 @@ public class Auth {
 	private static final Map<String, Long> ACCOUNT_JOIN_TIMES = Maps.newConcurrentMap();
 	private static final Map<String, Integer> ATTEMPTS = Maps.newConcurrentMap();
 	private static final Map<String, ProxyBossbar> BARS = Maps.newConcurrentMap();
-	private static final Map<String, Account> googleAuthAccounts = Maps.newConcurrentMap();
 
 	private static final LinkAuth<LinkConfirmationUser> LINK_CONFIRMATION_AUTH = new LinkAuth<>();
 	private static final LinkAuth<LinkEntryUser> LINK_ENTRY_AUTH = new LinkAuth<>();
