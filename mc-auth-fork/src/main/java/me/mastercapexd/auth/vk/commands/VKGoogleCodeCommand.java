@@ -1,16 +1,10 @@
 package me.mastercapexd.auth.vk.commands;
 
-import java.util.Optional;
-
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
 import me.mastercapexd.auth.vk.commandhandler.VKReceptioner;
 
@@ -47,14 +41,15 @@ public class VKGoogleCodeCommand extends VKCommandExecutor {
 						.getMessage("google-code-account-not-have-google"));
 				return;
 			}
-			if (!Auth.hasGoogleAuthAccount(account.getId())) {
+			if (!Auth.getLinkEntryAuth().hasLinkUser(account.getId(),GoogleLinkType.getInstance())) {
 				sendMessage(e.getPeer(), receptioner.getConfig().getVKSettings().getMessages()
 						.getMessage("google-code-account-not-need-enter"));
 				return;
 			}
 			if (receptioner.getPlugin().getGoogleAuthenticator()
 					.authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), enteredCode)) {
-				Auth.removeGoogleAuthAccount(account.getId());
+				Auth.getLinkEntryAuth().removeLinkUser(account.getId(), GoogleLinkType.getInstance());
+				
 				Auth.removeAccount(account.getId());
 				account.getPlayer().ifPresent(proxyPlayer -> {
 					sendMessage(e.getPeer(),

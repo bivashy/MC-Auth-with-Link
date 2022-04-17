@@ -90,20 +90,4 @@ public class Auth {
 	public static synchronized void removeBar(String user) {
 		BARS.remove(user);
 	}
-
-	public static synchronized void addGoogleAuthAccount(Account account) {
-		googleAuthAccounts.put(account.getId(), account);
-	}
-
-	public static synchronized void removeGoogleAuthAccount(String id) {
-		googleAuthAccounts.remove(id);
-	}
-
-	public static synchronized boolean hasGoogleAuthAccount(String id) {
-		return googleAuthAccounts.containsKey(id);
-	}
-
-	public static synchronized Account getGoogleAuthAccount(String id) {
-		return googleAuthAccounts.getOrDefault(id, null);
-	}
 }

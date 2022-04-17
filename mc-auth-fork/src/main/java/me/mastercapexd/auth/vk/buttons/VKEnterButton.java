@@ -42,10 +42,8 @@ public class VKEnterButton implements VKButtonExecutor {
 				return filter.test(user);
 			});
 			Account account = entryAccount.getAccount();
-			String stepName = PLUGIN.getConfig()
-					.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 			account.nextAuthenticationStep(
-					PLUGIN.getAuthenticationContextFactoryDealership().createContext(stepName, account));
+					PLUGIN.getAuthenticationContextFactoryDealership().createContext(account));
 		}
 	}
 

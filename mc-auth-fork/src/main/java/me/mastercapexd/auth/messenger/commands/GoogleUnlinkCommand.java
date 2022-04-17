@@ -6,7 +6,6 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
-import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -24,7 +23,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
 	@Default
 	public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
 		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
-				.orElse(new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY));
+				.orElse(null);
 
 		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {

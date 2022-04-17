@@ -67,7 +67,7 @@ public class VKEntryAccount {
 			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
 			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()
 					&& AuthPlugin.getInstance().getConfig().getGoogleAuthenticatorSettings().isEnabled()) {
-				Auth.addGoogleAuthAccount(account);
+				//Auth.addGoogleAuthAccount(account);
 				return;
 			}
 			Auth.removeAccount(account.getId());
