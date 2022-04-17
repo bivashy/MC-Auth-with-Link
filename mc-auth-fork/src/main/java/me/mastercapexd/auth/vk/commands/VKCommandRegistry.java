@@ -26,6 +26,7 @@ import me.mastercapexd.auth.messenger.commands.RestoreCommand;
 import me.mastercapexd.auth.messenger.commands.UnlinkCommand;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
@@ -60,6 +61,14 @@ public class VKCommandRegistry {
 		commandHandler.registerContextResolver(VKCommandActorWrapper.class,
 				context -> new VKCommandActorWrapper(context.actor()));
 
+		commandHandler.registerCondition((actor, command, arguments) -> {
+			if (!command.hasAnnotation(GoogleUse.class))
+				return;
+			if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled())
+				throw new SendMessageException(
+						PLUGIN.getConfig().getProxyMessages().getSubMessages("google").getStringMessage("disabled"));
+		});
+		
 		commandHandler.registerValueResolver(Account.class, (context) -> {
 			String playerName = context.popForParameter();
 			Integer userId = context.actor().as(VkActor.class).getAuthorId();
