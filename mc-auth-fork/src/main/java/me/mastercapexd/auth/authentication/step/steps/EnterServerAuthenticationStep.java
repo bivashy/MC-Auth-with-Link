@@ -5,7 +5,6 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import me.mastercapexd.auth.bungee.events.LoginEvent;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
@@ -29,17 +28,10 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void enterServer() {
 		Account account = authenticationStepContext.getAccount();
 		String accountId = account.getId();
 		ProxyPlayer player = account.getPlayer().get();
-		LoginEvent loginEvent = new LoginEvent(account);
-		ProxyPlugin.instance().getCore().callEvent(loginEvent);
-
-		if (loginEvent.isCancelled())
-			return;
-
 		account.setLastIpAddress(player.getRemoteAddress().getHostString());
 		account.setLastSessionStart(System.currentTimeMillis());
 		PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
