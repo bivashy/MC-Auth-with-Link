@@ -5,19 +5,17 @@ import java.util.UUID;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.bungee.account.BungeeAccount;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 
-public class DefaultAccountFactory implements AccountFactory {
+public abstract class AbstractAccountFactory implements AccountFactory {
 
 	@Override
 	public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			String password, String googleKey, Integer vkId, boolean vkConfirmationEnabled, long lastQuit,
 			String lastIp, long lastSessionStart, long sessionTime) {
 
-		BungeeAccount account = new BungeeAccount(((identifierType == IdentifierType.NAME) ? id.toLowerCase() : id),
-				identifierType, uuid, name);
+		Account account = newAccount(identifierType.fromRawString(id), identifierType, uuid, name);
 
 		account.setHashType(hashType);
 		account.setPasswordHash(password);
@@ -29,4 +27,6 @@ public class DefaultAccountFactory implements AccountFactory {
 		account.addLinkUser(new GoogleLinkUser(account, googleKey));
 		return account;
 	}
+
+	protected abstract Account newAccount(String id, IdentifierType identifierType, UUID uniqueId, String name);
 }

@@ -27,7 +27,7 @@
 		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
 		<mysql.connector.version>6.0.6</mysql.connector.version>
 		<google.authenticator.version>1.4.0</google.authenticator.version>
-		<zxing.library.version>3.3.0</zxing.library.version>
+		<javase.library.version>2.6.0</javase.library.version>
 		<configuration-library.version>2.0.3</configuration-library.version>
 		<lamp.command-library.version>3.0.2</lamp.command-library.version>
 		<vk.lamp.module.version>0.0.4</vk.lamp.module.version>
@@ -121,12 +121,12 @@
 			<version>${google.authenticator.version}</version>
 		</dependency>
 
-		<!-- GoogleAuthenticator library -->
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-			<version>${zxing.library.version}</version>
-		</dependency>
+		<!-- Barcode, QRcode library -->
+		 <dependency>
+            <groupId>com.github.kenglxn.qrgen</groupId>
+            <artifactId>javase</artifactId>
+            <version>${javase.library.version}</version>
+        </dependency>
 
 		<!-- Configuration library for BungeeCord -->
 		<dependency>
