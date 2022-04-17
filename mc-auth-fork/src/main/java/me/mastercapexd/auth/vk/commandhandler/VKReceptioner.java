@@ -84,15 +84,15 @@ public class VKReceptioner {
 		VKCommandPaths mainCommands = config.getVKSettings().getCommandPaths();
 
 //		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKEnterDeclineCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKEnterDeclineCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKChangePasswordCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKUnlinkCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKAccountsCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKKickCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKRestoreCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKUnlinkCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKAccountsCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKKickCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKRestoreCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKGoogleCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKGoogleCodeCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKGoogleUnlinkCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKGoogleCodeCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKGoogleUnlinkCommand(this), mainCommands));
 		addCommand(commandFactory.createCommand(new VKAdminPanelCommand(this), mainCommands));
 	}
 

@@ -21,6 +21,8 @@ import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountEnterDeclineCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsCommand;
+import me.mastercapexd.auth.messenger.commands.GoogleCodeCommand;
+import me.mastercapexd.auth.messenger.commands.GoogleUnlinkCommand;
 import me.mastercapexd.auth.messenger.commands.KickCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
 import me.mastercapexd.auth.messenger.commands.RestoreCommand;
@@ -152,5 +154,11 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("unlink").getCommandPaths())
 						.handler(new UnlinkCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-remove").getCommandPaths())
+						.handler(new GoogleUnlinkCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-code").getCommandPaths())
+						.handler(new GoogleCodeCommand()));
 	}
 }
