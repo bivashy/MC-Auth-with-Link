@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.link.message;
 
-import java.util.Map;
-
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 import me.mastercapexd.auth.link.user.LinkUser;
@@ -29,11 +27,6 @@ public interface Message extends Castable<Message> {
 	 * @param keyboard that will be added to message
 	 */
 	void setKeyboard(IKeyboard keyboard);
-
-	/**
-	 * @return Additional info of message. For example payload or id
-	 */
-	Map<String, String> getAdditionalInfo();
 
 	/**
 	 * @param user User that will receive a message

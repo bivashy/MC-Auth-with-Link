@@ -1,13 +1,8 @@
 package me.mastercapexd.auth.link.message;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 
 public abstract class AbstractMessage implements Message {
-	protected final Map<String, String> additionalInfos = new HashMap<>();
 	protected String rawContent = "";
 	protected IKeyboard keyboard;
 
@@ -35,13 +30,4 @@ public abstract class AbstractMessage implements Message {
 	public void setKeyboard(IKeyboard keyboard) {
 		this.keyboard = keyboard;
 	}
-
-	/**
-	 * @return Unmodifable map of additional info
-	 */
-	@Override
-	public Map<String, String> getAdditionalInfo() {
-		return Collections.unmodifiableMap(additionalInfos);
-	}
-
 }
