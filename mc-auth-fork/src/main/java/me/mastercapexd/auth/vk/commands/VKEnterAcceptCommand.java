@@ -48,10 +48,8 @@ public class VKEnterAcceptCommand extends VKCommandExecutor {
 		});
 
 		Account account = accounts.stream().findFirst().orElse(null).getAccount();
-		String stepName = PLUGIN.getConfig()
-				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 		account.nextAuthenticationStep(
-				PLUGIN.getAuthenticationContextFactoryDealership().createContext(stepName, account));
+				PLUGIN.getAuthenticationContextFactoryDealership().createContext(account));
 	}
 
 	@Override

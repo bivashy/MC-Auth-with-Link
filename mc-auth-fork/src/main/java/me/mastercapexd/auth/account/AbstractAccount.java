@@ -12,6 +12,7 @@ import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -35,7 +36,7 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 
 	private Integer currentConfigurationAuthenticationStepCreatorIndex = 0;
 
-	private AuthenticationStep currentAuthenticationStep = null;
+	private AuthenticationStep currentAuthenticationStep = new NullAuthenticationStep();
 
 	public AbstractAccount(String id, IdentifierType identifierType, UUID uniqueId, String name) {
 		this.id = id;
@@ -62,11 +63,9 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 		currentAuthenticationStep = authenticationStepCreator.createNewAuthenticationStep(stepContext);
 		currentConfigurationAuthenticationStepCreatorIndex += 1;
 		if (currentAuthenticationStep.shouldSkip()) {
-			String nextStepName = PLUGIN.getConfig()
-					.getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
-			currentAuthenticationStep = null;
+			currentAuthenticationStep = new NullAuthenticationStep();
 			return nextAuthenticationStep(
-					PLUGIN.getAuthenticationContextFactoryDealership().createContext(nextStepName, this));
+					PLUGIN.getAuthenticationContextFactoryDealership().createContext( this));
 		}
 		return true;
 	}
@@ -191,17 +190,8 @@ public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 
 	@Override
 	public AuthenticationStep getCurrentAuthenticationStep() {
-		List<String> authenticationSteps = PLUGIN.getConfig().getAuthenticationSteps();
-		String nextStepName = PLUGIN.getConfig()
-				.getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
-		if (currentAuthenticationStep == null)
-			setCurrentConfigurationAuthenticationStepCreatorIndex(
-					currentConfigurationAuthenticationStepCreatorIndex - 1);
-
-		if (currentAuthenticationStep.shouldPassToNextStep()
-				&& currentConfigurationAuthenticationStepCreatorIndex != authenticationSteps.size() - 1)
-			nextAuthenticationStep(
-					PLUGIN.getAuthenticationContextFactoryDealership().createContext(nextStepName, this));
+		if (currentAuthenticationStep.shouldPassToNextStep())
+			nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryDealership().createContext(this));
 
 		return currentAuthenticationStep;
 	}

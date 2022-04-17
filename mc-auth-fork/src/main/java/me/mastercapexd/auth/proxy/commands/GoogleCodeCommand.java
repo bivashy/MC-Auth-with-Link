@@ -44,16 +44,16 @@ public class GoogleCodeCommand {
 				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
 				return;
 			}
-			if (!Auth.hasGoogleAuthAccount(playerId)) {
+			if (!Auth.getLinkEntryAuth().hasLinkUser(playerId,GoogleLinkType.getInstance())) {
 				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-need-enter"));
 				return;
 			}
 			if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(),
 					code)) {
 				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-entered"));
-				Auth.removeGoogleAuthAccount(playerId);
 				Auth.removeAccount(account.getId());
-				player.sendTo(config.findServerInfo(config.getGameServers()).asProxyServer());
+				account.nextAuthenticationStep(
+						plugin.getAuthenticationContextFactoryDealership().createContext(account));
 				return;
 			}
 			player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-wrong-code"));

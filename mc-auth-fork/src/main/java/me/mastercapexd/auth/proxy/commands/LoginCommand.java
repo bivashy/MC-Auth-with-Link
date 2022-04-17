@@ -50,10 +50,8 @@ public class LoginCommand {
 		}
 
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
-		String stepName = plugin.getConfig()
-				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 		account.nextAuthenticationStep(
-				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
+				plugin.getAuthenticationContextFactoryDealership().createContext(account));
 		player.sendMessage(config.getProxyMessages().getStringMessage("login-success"));
 	}
 }

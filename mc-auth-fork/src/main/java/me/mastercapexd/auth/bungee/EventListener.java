@@ -147,7 +147,7 @@ public class EventListener implements Listener {
 						AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
 
 				AuthenticationStepContext context = AuthPlugin.getInstance().getAuthenticationContextFactoryDealership()
-						.createContext(authenticationStepCreator.getAuthenticationStepName(), newAccount);
+						.createContext(newAccount);
 				newAccount.nextAuthenticationStep(context);
 
 				Auth.addAccount(newAccount);

@@ -29,8 +29,6 @@ public class RegisterCommand {
 			me.mastercapexd.auth.proxy.commands.parameters.RegisterPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
-		String stepName = plugin.getConfig()
-				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 
 		if (account.getHashType() != config.getActiveHashType())
 			account.setHashType(config.getActiveHashType());
@@ -39,7 +37,7 @@ public class RegisterCommand {
 		accountStorage.saveOrUpdateAccount(account);
 
 		account.nextAuthenticationStep(
-				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
+				plugin.getAuthenticationContextFactoryDealership().createContext(account));
 
 		player.sendMessage(config.getProxyMessages().getStringMessage("register-success"));
 	}

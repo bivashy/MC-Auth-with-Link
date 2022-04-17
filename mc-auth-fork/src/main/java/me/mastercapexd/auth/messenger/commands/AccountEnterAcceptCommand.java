@@ -57,10 +57,8 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 		actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted"));
 		
 		Account account = accounts.stream().findFirst().get().getAccount();
-		String stepName = config
-				.getAuthenticationStepName(account.getCurrentConfigurationAuthenticationStepCreatorIndex());
 		account.nextAuthenticationStep(
-				plugin.getAuthenticationContextFactoryDealership().createContext(stepName, account));
+				plugin.getAuthenticationContextFactoryDealership().createContext(account));
 	}
 
 }
