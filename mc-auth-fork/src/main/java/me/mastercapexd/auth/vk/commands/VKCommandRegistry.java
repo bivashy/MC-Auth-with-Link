@@ -19,11 +19,13 @@ import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
+import me.mastercapexd.auth.messenger.commands.AccountEnterDeclineCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsCommand;
 import me.mastercapexd.auth.messenger.commands.KickCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
 import me.mastercapexd.auth.messenger.commands.RestoreCommand;
 import me.mastercapexd.auth.messenger.commands.UnlinkCommand;
+import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
@@ -53,12 +55,11 @@ public class VKCommandRegistry {
 	}
 
 	private void registerContexts() {
+		commandHandler.setExceptionHandler(new MessengerExceptionHandler(VKLinkType.getInstance()));
+
 		commandHandler.registerContextValue(LinkType.class, VKLinkType.getInstance());
 
 		commandHandler.registerContextResolver(LinkCommandActorWrapper.class,
-				context -> new VKCommandActorWrapper(context.actor()));
-
-		commandHandler.registerContextResolver(VKCommandActorWrapper.class,
 				context -> new VKCommandActorWrapper(context.actor()));
 
 		commandHandler.registerCondition((actor, command, arguments) -> {
@@ -68,7 +69,7 @@ public class VKCommandRegistry {
 				throw new SendMessageException(
 						PLUGIN.getConfig().getProxyMessages().getSubMessages("google").getStringMessage("disabled"));
 		});
-		
+
 		commandHandler.registerValueResolver(Account.class, (context) -> {
 			String playerName = context.popForParameter();
 			Integer userId = context.actor().as(VkActor.class).getAuthorId();
@@ -139,6 +140,9 @@ public class VKCommandRegistry {
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
 				.handler(new AccountEnterAcceptCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-decline").getCommandPaths())
+				.handler(new AccountEnterDeclineCommand()));
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("kick").getCommandPaths())
 						.handler(new KickCommand()));

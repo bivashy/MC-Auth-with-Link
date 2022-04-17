@@ -16,7 +16,8 @@ import revxrsal.commands.annotation.Dependency;
 
 @Command("google")
 public class GoogleCommand {
-	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("google");
+	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
+			.getProxyMessages().getSubMessages("google");
 	@Dependency
 	private ProxyPlugin plugin;
 	@Dependency
@@ -37,14 +38,11 @@ public class GoogleCommand {
 			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
 					.orElse(new GoogleLinkUser(account, key));
 			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("generated")
-						.replaceAll("(?i)%google_key%", key));
-				linkUser.getLinkUserInfo().getIdentificator().setString(key);
+				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("generated").replaceAll("(?i)%google_key%", key));
 			} else {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("regenerated")
-						.replace("(?i)%google_key%", key));
-				linkUser.getLinkUserInfo().getIdentificator().setString(key);
+				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("regenerated").replace("(?i)%google_key%", key));
 			}
+			linkUser.getLinkUserInfo().getIdentificator().setString(key);
 			accountStorage.saveOrUpdateAccount(account);
 		});
 	}

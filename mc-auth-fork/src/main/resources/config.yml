@@ -317,11 +317,17 @@ vk:
     google-code-need-integer: 'Ошибка! Вы должны ввести 6 значную цифру!'
     # Гугл-Генерация
     google-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гугл [ник]'
+    google-generated: '&aВы успешно сгенерировали ключ Google-Authenticator: %google_key%'
+    google-regenerated: '&cВнимание! Вы заного сгенерировали ключ Google Authenticator: %google_key%'
     google-error: 'Произошла ошибка! Сообщите администратору!'
     # Гугл-Отвязка
     google-unlink-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гуглотвязать [ник]'
     google-unlink-not-have-google: 'Ошибка! У аккаунта нету гугл ключа'
     google-unlinked: 'Гугл успешно сброшен!'
+    
+    unresolved-argument: '&cВы не указали аргумент: %argument_name%'
+    unresolved-number: '&cОжидалось число, но вы указали %input%'
+    command-invocation: '&cПри вводе команды произошла ошибка, сообщите администрации'
 google-authenticator:
    # Включена ли привязка к Google Authenticator, если вы отключите привязку игроки не смогут подтверждать вход, привязывать аккаунты.
   enabled: false
@@ -421,4 +427,5 @@ messages:
   
   # Название аргумента указывается в виде arg1, arg2, arg3...
   unresolved-argument: '&cВы не указали аргумент: %argument_name%'
+  unresolved-number: '&cОжидалось число, но вы указали %input%'
   command-invocation: '&cПри вводе команды произошла ошибка, сообщите администрации'
