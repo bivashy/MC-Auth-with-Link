@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.ubivashka.configuration.BungeeConfigurationProcessor;
@@ -17,6 +19,7 @@ import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationS
 import me.mastercapexd.auth.bungee.account.BungeeAccountFactory;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
+import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
@@ -24,9 +27,11 @@ import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
+import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.ProxyPluginProvider;
+import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
@@ -61,6 +66,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 			}).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
 			.registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
 
+	private static final Map<Class<? extends PluginHook>,PluginHook> HOOKS = new HashMap<>();
+	
 	private GoogleAuthenticator googleAuthenticator;
 
 	private BungeePluginConfig config;
@@ -92,7 +99,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		initializeListener();
 		initializeCommand();
 		if (config.getVKSettings().isEnabled())
-			registerVK();
+			initializeVk();
 		if (config.getGoogleAuthenticatorSettings().isEnabled())
 			googleAuthenticator = new GoogleAuthenticator();
 
@@ -118,7 +125,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
 		this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
 		this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
-
 	}
 
 	private void initializeListener() {
@@ -130,7 +136,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		new BungeeCommandsRegistry();
 	}
 
-	private void registerVK() {
+	private void initializeVk() {
 		this.vkUtils = new VKUtils(config);
 		this.vkCommandHandler = new VKCommandHandler();
 		this.vkButtonHandler = new VKButtonHandler();
@@ -139,6 +145,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		this.getProxy().getPluginManager().registerListener(this, vkCommandHandler);
 		this.config.getVKSettings().getCommands().registerCommands(vkReceptioner);
 
+		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
+		
 		new VKCommandRegistry();
 	}
 
@@ -217,4 +225,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		return CONFIGURATION_PROCESSOR;
 	}
 
+	@Override
+	public <T extends PluginHook> T getHook(Class<T> clazz) {
+		return HOOKS.get(clazz).as(clazz);
+	}
 }
