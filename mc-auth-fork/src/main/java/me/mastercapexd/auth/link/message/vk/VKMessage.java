@@ -3,25 +3,25 @@ package me.mastercapexd.auth.link.message.vk;
 import java.util.Arrays;
 import java.util.Random;
 
-import com.ubivashka.vk.api.providers.VkApiProvider;
-import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
+import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.message.AbstractMessage;
 import me.mastercapexd.auth.link.message.LinkUserSendMessageResult;
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class VKMessage extends AbstractMessage {
 	private static final Integer[] DISABLED_MESSAGE_ERROR_CODES = { 900, 901, 902 };
 
-	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
-	private static final VkApiClient VK_API = VK_API_PROVIDER.getVkApiClient();
-	private static final GroupActor ACTOR = VK_API_PROVIDER.getActor();
+	private static final VkPluginHook VK_HOOK = ProxyPlugin.instance().getHook(VkPluginHook.class);
+	private static final VkApiClient VK_API = VK_HOOK.getClient();
+	private static final GroupActor ACTOR = VK_HOOK.getActor();
 	private static final Random RANDOM = new Random();
 
 	private VKMessage(String rawContent) {

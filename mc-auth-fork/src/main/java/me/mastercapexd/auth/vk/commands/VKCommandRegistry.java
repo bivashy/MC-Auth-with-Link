@@ -5,12 +5,12 @@ import java.util.Optional;
 import com.ubivashka.lamp.commands.vk.VkActor;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.ubivashka.vk.api.providers.VkApiProvider;
-import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
@@ -37,10 +37,10 @@ import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.Orphans;
 
 public class VKCommandRegistry {
-	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
+	private static final VkPluginHook VK_HOOK = ProxyPlugin.instance().getHook(VkPluginHook.class);
 	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
-	private final CommandHandler commandHandler = new VkHandler(VK_API_PROVIDER.getVkApiClient(),
-			VK_API_PROVIDER.getActor()).disableStackTraceSanitizing();
+	private final CommandHandler commandHandler = new VkHandler(VK_HOOK.getClient(), VK_HOOK.getActor())
+			.disableStackTraceSanitizing();
 
 	static {
 		ProxyPlugin.instance().getCore().registerListener(PLUGIN, new DispatchCommandListener());
