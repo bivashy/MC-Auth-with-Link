@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.ubivashka.lamp.commands.vk.VkActor;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
-import com.ubivashka.vk.api.providers.VkApiProvider;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
@@ -22,6 +21,7 @@ import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountEnterDeclineCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCodeCommand;
+import me.mastercapexd.auth.messenger.commands.GoogleCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleUnlinkCommand;
 import me.mastercapexd.auth.messenger.commands.KickCommand;
 import me.mastercapexd.auth.messenger.commands.LinkCodeCommand;
@@ -157,6 +157,9 @@ public class VKCommandRegistry {
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-remove").getCommandPaths())
 				.handler(new GoogleUnlinkCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google").getCommandPaths())
+				.handler(new GoogleCommand()));
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-code").getCommandPaths())
 				.handler(new GoogleCodeCommand()));
