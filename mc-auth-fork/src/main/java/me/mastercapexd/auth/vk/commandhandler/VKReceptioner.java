@@ -34,7 +34,6 @@ import me.mastercapexd.auth.vk.buttonshandler.VKButtonHandler;
 import me.mastercapexd.auth.vk.buttonshandler.VKCallbackButton;
 import me.mastercapexd.auth.vk.commands.VKAdminPanelCommand;
 import me.mastercapexd.auth.vk.commands.VKChangePasswordCommand;
-import me.mastercapexd.auth.vk.commands.VKGoogleCommand;
 
 public class VKReceptioner {
 	private static final VkApiClient vk = VKAPI.getInstance().getVK();
