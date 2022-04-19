@@ -2,6 +2,7 @@ package me.mastercapexd.auth.messenger.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.imageio.ImageIO;
 
@@ -10,6 +11,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
@@ -23,6 +25,8 @@ import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.storage.AccountStorage;
+import me.mastercapexd.auth.utils.GoogleAuthenticatorQRGenerator;
+import me.mastercapexd.auth.utils.RandomCodeFactory;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
@@ -38,7 +42,12 @@ public class GoogleCommand implements OrphanCommand {
 	@Default
 	@GoogleUse
 	public void linkGoogle(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
-		String key = plugin.getGoogleAuthenticator().createCredentials().getKey();
+		String rawKey = plugin.getGoogleAuthenticator().createCredentials().getKey();
+		String nickname = account.getName();
+		String randomCode = "MINECRAFT_"+RandomCodeFactory.generateCode(2);
+		
+		String totpKey = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL(nickname, randomCode, rawKey);
+		
 		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
 			GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY);
 			account.addLinkUser(googleLinkUser);
@@ -49,17 +58,17 @@ public class GoogleCommand implements OrphanCommand {
 
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
 			String rawContent = linkType.getLinkMessages().getStringMessage("google-generated")
-					.replaceAll("(?i)%google_key%", key);
-			Message googleQRMessage = buildGoogleQRMessage(key, rawContent, linkType);
+					.replaceAll("(?i)%google_key%", rawKey);
+			Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
 			actorWrapper.send(googleQRMessage);
 		} else {
 			String rawContent = linkType.getLinkMessages().getStringMessage("google-regenerated")
-					.replaceAll("(?i)%google_key%", key);
-			Message googleQRMessage = buildGoogleQRMessage(key, rawContent, linkType);
+					.replaceAll("(?i)%google_key%", rawKey);
+			Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
 			actorWrapper.send(googleQRMessage);
 		}
 
-		linkUser.getLinkUserInfo().getIdentificator().setString(key);
+		linkUser.getLinkUserInfo().getIdentificator().setString(totpKey);
 		accountStorage.saveOrUpdateAccount(account);
 	}
 
