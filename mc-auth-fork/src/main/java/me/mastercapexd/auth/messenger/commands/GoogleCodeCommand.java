@@ -35,7 +35,7 @@ public class GoogleCodeCommand implements OrphanCommand {
 
 		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlink-not-have-google"));
+			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-account-not-have-google"));
 			return;
 		}
 
