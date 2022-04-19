@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.proxy;
 
+import java.io.File;
+
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
@@ -31,6 +33,13 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
 	<T extends PluginHook> T getHook(Class<T> clazz);
 	
 	String getVersion();
+	
+	/**
+	 * Returns folder of plugin in plugins. For example: some/path/plugins/PluginName
+	 * 
+	 * @return Plugin folder.
+	 */
+	File getFolder();
 
 	static ProxyPlugin instance() {
 		return ProxyPluginProvider.getPluginInstance();

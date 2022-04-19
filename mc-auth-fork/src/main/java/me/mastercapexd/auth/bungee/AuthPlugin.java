@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.bungee;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -137,6 +138,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 	}
 
 	private void initializeVk() {
+		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
+		
 		this.vkUtils = new VKUtils(config);
 		this.vkCommandHandler = new VKCommandHandler();
 		this.vkButtonHandler = new VKButtonHandler();
@@ -144,8 +147,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		this.getProxy().getPluginManager().registerListener(this, vkButtonHandler);
 		this.getProxy().getPluginManager().registerListener(this, vkCommandHandler);
 		this.config.getVKSettings().getCommands().registerCommands(vkReceptioner);
-
-		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
 		
 		new VKCommandRegistry();
 	}
@@ -216,6 +217,11 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 	}
 
 	@Override
+	public File getFolder() {
+		return getDataFolder();
+	}
+	
+	@Override
 	public ProxyCore getCore() {
 		return BungeeProxyCore.INSTANCE;
 	}
@@ -229,4 +235,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 	public <T extends PluginHook> T getHook(Class<T> clazz) {
 		return HOOKS.get(clazz).as(clazz);
 	}
+
+	
 }
