@@ -1,7 +1,9 @@
 package me.mastercapexd.auth.link.message.vk;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -15,6 +17,7 @@ import me.mastercapexd.auth.link.message.LinkUserSendMessageResult;
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.vk.utils.VKUtils;
 
 public class VKMessage extends AbstractMessage {
 	private static final Integer[] DISABLED_MESSAGE_ERROR_CODES = { 900, 901, 902 };
@@ -48,6 +51,11 @@ public class VKMessage extends AbstractMessage {
 		if (keyboard != null)
 			messageSendQuery.keyboard(keyboard.as(VKKeyboard.class).buildKeyboard());
 
+		if (!photos.isEmpty()) {
+			String[] imageIdentificators = photos.stream().map(VKUtils::getPhotoAttachment).toArray(String[]::new);
+			messageSendQuery.attachment(String.join(",", imageIdentificators));
+		}
+
 		messageSendQuery.peerId(peerId);
 
 		try {
@@ -58,10 +66,8 @@ public class VKMessage extends AbstractMessage {
 			if (Arrays.stream(DISABLED_MESSAGE_ERROR_CODES).anyMatch(errorCode -> errorCode == e.getCode()))
 				return LinkUserSendMessageResult.USER_DISABLED_MESSAGES;
 
-			return LinkUserSendMessageResult.ERROR_OCCURED;
 		} catch (ClientException e) {
 			e.printStackTrace();
-			return LinkUserSendMessageResult.ERROR_OCCURED;
 		}
 
 		return LinkUserSendMessageResult.SENDED;
@@ -74,6 +80,12 @@ public class VKMessage extends AbstractMessage {
 		@Override
 		public MessageBuilder keyboard(IKeyboard keyboard) {
 			VKMessage.this.setKeyboard(keyboard);
+			return this;
+		}
+
+		@Override
+		public MessageBuilder uploadPhoto(File photo) {
+			VKMessage.this.uploadPhoto(photo);
 			return this;
 		}
 

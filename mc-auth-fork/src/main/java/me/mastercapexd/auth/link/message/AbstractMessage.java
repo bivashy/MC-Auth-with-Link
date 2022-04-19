@@ -1,8 +1,13 @@
 package me.mastercapexd.auth.link.message;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 
 public abstract class AbstractMessage implements Message {
+	protected final List<File> photos = new ArrayList<>();
 	protected String rawContent = "";
 	protected IKeyboard keyboard;
 
@@ -18,7 +23,11 @@ public abstract class AbstractMessage implements Message {
 	@Override
 	public void setRawContent(String rawContent) {
 		this.rawContent = rawContent;
-
+	}
+	
+	@Override
+	public void uploadPhoto(File photo) {
+		photos.add(photo);
 	}
 
 	@Override
