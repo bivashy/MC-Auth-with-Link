@@ -325,6 +325,8 @@ vk:
     google-unlink-not-have-google: 'Ошибка! У аккаунта нету гугл ключа'
     google-unlinked: 'Гугл успешно сброшен!'
     
+    not-enough-permission: 'Недостаточно прав для использования этой команды! Вы должны добавить себя в список админов!'
+    
     unresolved-argument: '&cВы не указали аргумент: %argument_name%'
     unresolved-number: '&cОжидалось число, но вы указали %input%'
     command-invocation: '&cПри вводе команды произошла ошибка, сообщите администрации'
