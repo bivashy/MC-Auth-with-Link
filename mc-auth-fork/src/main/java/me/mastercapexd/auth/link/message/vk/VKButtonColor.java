@@ -17,6 +17,11 @@ public class VKButtonColor implements ButtonColor {
 	public void apply(Button button) {
 		button.as(VKButton.class).setColor(currentColor);
 	}
+	
+	@Override
+	public String toText() {
+		return currentColor.toString().toLowerCase();
+	}
 
 	public static class VKButtonColorBuilder implements ButtonColorBuilder {
 		private static final VKButtonColorBuilder INSTANCE = new VKButtonColorBuilder();
