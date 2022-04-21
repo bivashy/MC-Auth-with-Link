@@ -18,9 +18,9 @@ public class CollectionUtils {
 		return parts;
 	}
 
-	public static <T> List<T> getListPage(List<T> source, int pageCount, int onePageSize) {
+	public static <T> List<T> getListPage(List<T> source, int page, int onePageSize) {
 		List<T> pageList = new ArrayList<>();
-		int to = (pageCount * onePageSize - 1);
+		int to = (page * onePageSize - 1);
 		int from = (to - onePageSize);
 		for (int i = to; i > from; i--)
 			try {
