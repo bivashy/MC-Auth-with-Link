@@ -273,7 +273,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			Collection<Account> accounts = Sets.newHashSet();
 			try (Connection connection = this.getConnection()) {
 				PreparedStatement statement = connection.prepareStatement(SELECT_ALL_LINKED);
-				statement.setInt(0, AccountFactory.DEFAULT_VK_ID);
+				statement.setInt(1, AccountFactory.DEFAULT_VK_ID);
 				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()) {
 					Account account = accountFactory.createAccount(resultSet.getString(ACCOUNT_ID_COLUMN_KEY),
