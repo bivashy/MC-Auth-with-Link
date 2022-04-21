@@ -7,6 +7,7 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
+import me.mastercapexd.auth.proxy.commands.parameters.RegisterPassword;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
@@ -26,7 +27,7 @@ public class RegisterCommand {
 	@Default
 	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
 	public void register(ProxyPlayer player, @AuthenticationAccount Account account,
-			me.mastercapexd.auth.proxy.commands.parameters.RegisterPassword password) {
+			RegisterPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 
