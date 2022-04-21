@@ -29,7 +29,7 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	private Integer maxVkLinkCount = 0;
 	@ConfigField("vk-messages")
 	private VKMessages messages = null;
-	@ConfigField("button-labels")
+	@ConfigField("buttons")
 	private VKButtonLabels buttonLabels = null;
 	@ConfigField("keyboards")
 	private VKKeyboards keyboards = null;

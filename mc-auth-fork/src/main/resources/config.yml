@@ -248,7 +248,7 @@ vk:
     confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/принять %name%\""},"color":"negative"}]],"inline":true}'
       
   # Кнопки в вк, могут быть представлены в виде текста, YAML, JSON.
-  button-labels:
+  buttons:
     kick: 'Кикнуть'
     restore: 'Восстановить'
     return: 'Назад'
