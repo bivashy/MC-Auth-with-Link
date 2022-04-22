@@ -11,27 +11,23 @@ import me.mastercapexd.auth.link.message.keyboard.button.Button;
 
 public class VKKeyboard extends AbstractKeyboard {
 	private boolean removeAfterClick;
-	private Keyboard wrappedKeyboard;
 
 	private VKKeyboard() {
 	}
 
 	public VKKeyboard(Keyboard keyboard) {
-		this.wrappedKeyboard = keyboard;
+		this.inline = keyboard.getInline() == null ? false : keyboard.getInline();
+		this.removeAfterClick = keyboard.getOneTime() == null ? false : keyboard.getOneTime();
+		this.buttons = keyboard.getButtons().stream().map(list -> list.stream()
+				.map(keyboardButton -> new VKButton(keyboardButton).as(Button.class)).collect(Collectors.toList()))
+				.collect(Collectors.toList());
 	}
 
 	public static VKKeyboardBuilder newBuilder() {
 		return new VKKeyboard().new VKKeyboardBuilder();
 	}
 
-	@Override
-	public VKButton[][] getButtons() {
-		return buttons.stream().map(list -> list.toArray(new VKButton[0])).toArray(VKButton[][]::new);
-	}
-
 	public Keyboard buildKeyboard() {
-		if (wrappedKeyboard != null)
-			return wrappedKeyboard;
 		List<List<KeyboardButton>> buildedButtons = buttons.stream().map(buttonList -> {
 			List<KeyboardButton> buttons = buttonList.stream().map(button -> button.as(VKButton.class))
 					.map(VKButton::getKeyboardButton).collect(Collectors.toList());

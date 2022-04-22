@@ -3,7 +3,6 @@ package me.mastercapexd.auth.link.message.vk;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;

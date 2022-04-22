@@ -20,8 +20,15 @@ public class VKButton extends AbstractButton {
 	private KeyboardButtonColor color = KeyboardButtonColor.DEFAULT;
 	private String payload;
 
-	public VKButton(String label) {
+	private VKButton(String label) {
 		super(label);
+	}
+	
+	public VKButton(KeyboardButton keyboardButton) {
+		super(keyboardButton.getAction().getLabel());
+		this.action = keyboardButton.getAction();
+		this.color = keyboardButton.getColor();
+		this.payload = keyboardButton.getAction().getPayload();
 	}
 
 	public static VKButtonBuilder newBuilder(String label) {
