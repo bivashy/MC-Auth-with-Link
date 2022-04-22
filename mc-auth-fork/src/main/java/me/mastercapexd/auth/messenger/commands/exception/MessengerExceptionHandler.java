@@ -106,7 +106,7 @@ public class MessengerExceptionHandler extends DefaultExceptionHandler {
 
 	@Override
 	public void onUnhandledException(CommandActor actor, Throwable throwable) {
-		actor.reply(linkType.getLinkMessages().getStringMessage("command-invocation"));
 		throwable.printStackTrace();
+		actor.reply(linkType.getLinkMessages().getStringMessage("command-invocation"));
 	}
 }
