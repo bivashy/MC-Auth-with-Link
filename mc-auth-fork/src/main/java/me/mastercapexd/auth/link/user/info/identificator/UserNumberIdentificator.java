@@ -14,7 +14,7 @@ public class UserNumberIdentificator implements LinkUserIdentificator {
 
 	@Override
 	public String asString() {
-		return String.valueOf(userId);
+		return Integer.toString(userId);
 	}
 
 	@Override
