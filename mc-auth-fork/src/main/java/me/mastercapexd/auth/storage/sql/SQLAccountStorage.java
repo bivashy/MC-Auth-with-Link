@@ -23,6 +23,7 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -45,20 +46,22 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	private final PluginConfig config;
 	private final AccountFactory accountFactory;
 
-	private final String CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LAST_QUIT_ORDERED,
-			SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE;
+	private final String CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LINK_ID,
+			SELECT_BY_LAST_QUIT_ORDERED, SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE;
 
 	private final List<StorageColumn> createColumns = new ArrayList<>();
 
 	protected SQLAccountStorage(PluginConfig config, AccountFactory accountFactory, String CREATE_TABLE,
-			String SELECT_BY_ID, String SELECT_BY_NAME, String SELECT_BY_VKID, String SELECT_BY_LAST_QUIT_ORDERED,
-			String SELECT_VKIDs, String SELECT_ALL, String SELECT_ALL_LINKED, String UPDATE_ID, String DELETE) {
+			String SELECT_BY_ID, String SELECT_BY_NAME, String SELECT_BY_VKID, String SELECT_BY_LINK_ID,
+			String SELECT_BY_LAST_QUIT_ORDERED, String SELECT_VKIDs, String SELECT_ALL, String SELECT_ALL_LINKED,
+			String UPDATE_ID, String DELETE) {
 		this.config = config;
 		this.accountFactory = accountFactory;
 		this.CREATE_TABLE = CREATE_TABLE;
 		this.SELECT_BY_ID = SELECT_BY_ID;
 		this.SELECT_BY_NAME = SELECT_BY_NAME;
 		this.SELECT_BY_VKID = SELECT_BY_VKID;
+		this.SELECT_BY_LINK_ID = SELECT_BY_LINK_ID;
 		this.SELECT_BY_LAST_QUIT_ORDERED = SELECT_BY_LAST_QUIT_ORDERED;
 		this.SELECT_VKIDs = SELECT_VKIDs;
 		this.SELECT_ALL = SELECT_ALL;
@@ -190,6 +193,35 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		return accounts;
 	}
 
+	protected Collection<Account> selectAccountFromLinkIdentificator(LinkUserIdentificator identificator){
+		Collection<Account> accounts = Sets.newHashSet();
+		try (Connection connection = this.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(SELECT_BY_LINK_ID);
+			if(identificator.isNumber()) {
+				statement.setInt(1, identificator.asNumber());
+			}else {
+				statement.setString(1, identificator.asString());
+			}
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Account account = accountFactory.createAccount(resultSet.getString(ACCOUNT_ID_COLUMN_KEY),
+						IdentifierType.valueOf(resultSet.getString(ID_TYPE_COLUMN_KEY)),
+						UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)),
+						resultSet.getString(NICKNAME_COLUMN_KEY),
+						HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)),
+						resultSet.getString(PASSWORD_COLUMN_KEY), resultSet.getString(GOOGLE_KEY_COLUMN_KEY),
+						resultSet.getInt(VK_ID_COLUMN_KEY),
+						Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)),
+						resultSet.getLong(LAST_QUIT_COLUMN_KEY), resultSet.getString(LAST_IP_COLUMN_KEY),
+						resultSet.getLong(LAST_SESSION_START_COLUMN_KEY), config.getSessionDurability());
+				accounts.add(account);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return accounts;
+	}
+	
 	@Override
 	public void saveOrUpdateAccount(Account account) {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -210,6 +242,12 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	@Override
 	public CompletableFuture<Collection<Account>> getAccountsByVKID(Integer id) {
 		return CompletableFuture.supplyAsync(() -> selectAccountByVKID(id));
+	}
+
+	@Override
+	public CompletableFuture<Collection<Account>> getAccountsFromLinkIdentificator(
+			LinkUserIdentificator identificator) {
+		return CompletableFuture.supplyAsync(() -> selectAccountFromLinkIdentificator(identificator));
 	}
 
 	@Override

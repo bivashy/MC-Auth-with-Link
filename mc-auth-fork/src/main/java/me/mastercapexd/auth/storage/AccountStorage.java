@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public interface AccountStorage {
 
@@ -12,6 +13,8 @@ public interface AccountStorage {
 	CompletableFuture<Account> getAccountFromName(String playerName);
 
 	CompletableFuture<Collection<Account>> getAccountsByVKID(Integer id);
+	
+	CompletableFuture<Collection<Account>> getAccountsFromLinkIdentificator(LinkUserIdentificator identificator);
 
 	CompletableFuture<Collection<Account>> getAccounts(int limit);
 

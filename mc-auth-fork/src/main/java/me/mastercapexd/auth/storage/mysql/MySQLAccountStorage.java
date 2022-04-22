@@ -17,6 +17,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String SELECT_BY_ID = "SELECT * FROM `auth` WHERE `id` = ? LIMIT 1;";
 	private static final String SELECT_BY_NAME = "SELECT * FROM `auth` WHERE `name` = ? LIMIT 1;";
 	private static final String SELECT_BY_VKID = "SELECT * FROM `auth` WHERE `vkId` = ?;";
+	private static final String SELECT_BY_LINK_ID = "SELECT * FROM `auth` WHERE ? IN(vkId);";
 	private static final String SELECT_BY_LAST_QUIT_ORDERED = "SELECT * FROM `auth` ORDER BY `last_quit` DESC LIMIT ?;";
 	private static final String SELECT_ALL = "SELECT * FROM `auth`;";
 	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE `vkId` NOT IN(?);";
@@ -28,7 +29,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String DELETE = "DELETE FROM `auth` WHERE `id`=?;";
 
 	public MySQLAccountStorage(PluginConfig config, AccountFactory accountFactory) {
-		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID,
+		super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LINK_ID,
 				SELECT_BY_LAST_QUIT_ORDERED, SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
 
 		StorageDataSettings dataSettings = config.getStorageDataSettings();
