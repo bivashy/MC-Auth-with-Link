@@ -62,7 +62,7 @@ public class VKLinkCommand {
 					player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
 					return;
 				}
-				LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).orElse(null)
+				LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).get()
 						.getLinkUserInfo();
 
 				if (vkLinkInfo.getIdentificator() != null
