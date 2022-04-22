@@ -76,7 +76,7 @@ public class VKReceptioner {
 
 //		addCommand(commandFactory.createCommand(new VKEnterAcceptCommand(this), mainCommands));
 //		addCommand(commandFactory.createCommand(new VKEnterDeclineCommand(this), mainCommands));
-		addCommand(commandFactory.createCommand(new VKChangePasswordCommand(this), mainCommands));
+//		addCommand(commandFactory.createCommand(new VKChangePasswordCommand(this), mainCommands));
 //		addCommand(commandFactory.createCommand(new VKUnlinkCommand(this), mainCommands));
 //		addCommand(commandFactory.createCommand(new VKAccountsCommand(this), mainCommands));
 //		addCommand(commandFactory.createCommand(new VKKickCommand(this), mainCommands));

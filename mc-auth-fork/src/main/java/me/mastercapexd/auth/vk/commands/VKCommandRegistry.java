@@ -20,6 +20,7 @@ import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountEnterDeclineCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsCommand;
+import me.mastercapexd.auth.messenger.commands.ChangePasswordCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCodeCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleUnlinkCommand;
@@ -31,6 +32,7 @@ import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandl
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
@@ -90,6 +92,16 @@ public class VKCommandRegistry {
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
 			return account;
+		});
+		
+		commandHandler.registerValueResolver(NewPassword.class, context -> {
+			String newRawPassword = context.pop();
+			if (newRawPassword.length() < PLUGIN.getConfig().getPasswordMinLength())
+				throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-short"));
+
+			if (newRawPassword.length() > PLUGIN.getConfig().getPasswordMaxLength())
+				throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-long"));
+			return new NewPassword(newRawPassword);
 		});
 
 		commandHandler.registerValueResolver(MessengerLinkContext.class, (context) -> {
@@ -154,6 +166,9 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("unlink").getCommandPaths())
 						.handler(new UnlinkCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("change-pass").getCommandPaths())
+						.handler(new ChangePasswordCommand()));
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-remove").getCommandPaths())
 				.handler(new GoogleUnlinkCommand()));
