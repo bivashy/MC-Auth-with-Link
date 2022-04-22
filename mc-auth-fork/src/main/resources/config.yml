@@ -146,7 +146,6 @@ vk:
   # 1. Отвязывать, менять ник, кикать используя обычные команды
   # 2. При вводе /adminpanel вам покажет админ панель
   admin-accounts:
-    #205639000
     - 123456789 #Сюда ваш id вк
     
   # Определяет максимальное количество привязок к одному и тому же vkId. Поставьте 0 чтобы отключить лимит
@@ -244,9 +243,82 @@ vk:
       answer: 'Команда не найдена! Доступные команды: /помощь'
       chat: false
   keyboards: # Для создания JSON клавиатур советую использовать https://severecloud.github.io/vk-keyboard/. Учтывайте что полезная нагрузка должна иметь плейсхолдеры
-    # Клавиатура в виде JSON
-    confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/принять %name%\""},"color":"negative"}]],"inline":true}'
-      
+      # Клавиатура в виде JSON
+      confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/принять %name%\""},"color":"negative"}]],"inline":true}'
+      accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
+            {                    
+            "buttons": [
+              [
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "%account_1%",
+                    "payload": "\"/account %account_1%\""
+                  },
+                  "color": "%account_1_color%"
+                }
+              ],
+              [
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "%account_2%",
+                    "payload": "\"/account %account_2%\""
+                  },
+                  "color": "%account_2_color%"
+                }
+              ],
+              [
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "%account_3%",
+                    "payload": "\"/account %account_3%\""
+                  },
+                  "color": "%account_3_color%"
+                }
+              ],
+              [
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "%account_4%",
+                    "payload": "\"/account %account_4%\""
+                  },
+                  "color": "%account_4_color%"
+                }
+              ],
+              [
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "%account_5%",
+                    "payload": "\"/account %account_5%\""
+                  },
+                  "color": "%account_5_color%"
+                }
+              ],
+              [
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "<-",
+                    "payload": "\"/accounts -page %previous_page% -pageSize %pageSize% -type %type%\""
+                  },
+                  "color": "primary"
+                },
+                {
+                  "action": {
+                    "type": "callback",
+                    "label": "->",
+                    "payload": "\"/accounts -page %next_page% -pageSize %pageSize% -type %type%\""
+                  },
+                  "color": "primary"
+                }
+              ]
+            ],
+            "inline": true
+            }
   # Кнопки в вк, могут быть представлены в виде текста, YAML, JSON.
   buttons:
     kick: 'Кикнуть'
@@ -327,9 +399,9 @@ vk:
     
     not-enough-permission: 'Недостаточно прав для использования этой команды! Вы должны добавить себя в список админов!'
     
-    unresolved-argument: '&cВы не указали аргумент: %argument_name%'
-    unresolved-number: '&cОжидалось число, но вы указали %input%'
-    command-invocation: '&cПри вводе команды произошла ошибка, сообщите администрации'
+    unresolved-argument: 'Вы не указали аргумент: %argument_name%'
+    unresolved-number: 'Ожидалось число, но вы указали %input%'
+    command-invocation: 'При вводе команды произошла ошибка, сообщите администрации'
 google-authenticator:
    # Включена ли привязка к Google Authenticator, если вы отключите привязку игроки не смогут подтверждать вход, привязывать аккаунты.
   enabled: false
