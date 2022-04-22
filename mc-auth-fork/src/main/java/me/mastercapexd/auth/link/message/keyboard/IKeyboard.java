@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.link.message.keyboard;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.link.message.Message;
 import me.mastercapexd.auth.link.message.keyboard.button.Button;
@@ -33,6 +36,10 @@ public interface IKeyboard extends Castable<IKeyboard> {
 	Button[][] getButtons();
 
 	void addButton(int row, Button button);
+
+	void removeIf(Predicate<Button> filter);
+
+	void replaceIf(Predicate<Button> filter, Function<Button, Button> replaceFunction);
 
 	public static interface IKeyboardBuilder extends Castable<IKeyboardBuilder> {
 		IKeyboardBuilder button(int row, Button button);
