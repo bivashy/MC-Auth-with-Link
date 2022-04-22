@@ -20,6 +20,7 @@ import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Listener;
 
@@ -36,12 +37,18 @@ public enum BungeeProxyCore implements ProxyCore {
 
 	@Override
 	public Optional<ProxyPlayer> getPlayer(UUID uniqueId) {
-		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(PROXY_SERVER.getPlayer(uniqueId)));
+		ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(uniqueId);
+		if (proxiedPlayer == null)
+			return Optional.empty();
+		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(proxiedPlayer));
 	}
 
 	@Override
 	public Optional<ProxyPlayer> getPlayer(String name) {
-		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(PROXY_SERVER.getPlayer(name)));
+		ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(name);
+		if (proxiedPlayer == null)
+			return Optional.empty();
+		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(proxiedPlayer));
 	}
 
 	@Override
