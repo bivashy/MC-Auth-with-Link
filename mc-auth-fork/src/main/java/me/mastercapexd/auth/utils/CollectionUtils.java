@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class CollectionUtils {
 	public static <T> List<List<T>> chopList(List<T> list, final int newListSize) {
@@ -18,18 +19,16 @@ public class CollectionUtils {
 		return parts;
 	}
 
+	/**
+	 * Returns paginated list of the provided list.
+	 * 
+	 * @param source.      List that need to be cut off
+	 * @param page.        List page (Starts from 1)
+	 * @param onePageSize. One page size
+	 * @return
+	 */
 	public static <T> List<T> getListPage(List<T> source, int page, int onePageSize) {
-		List<T> pageList = new ArrayList<>();
-		int to = (page * onePageSize - 1);
-		int from = (to - onePageSize);
-		for (int i = to; i > from; i--)
-			try {
-				pageList.add(source.get(i));
-			} catch (IndexOutOfBoundsException ignored) {
-				break;
-			}
-
-		return pageList;
+		return source.stream().skip((page - 1) * onePageSize).limit(onePageSize).collect(Collectors.toList());
 	}
 
 	public static Map<String, String> createStringMap(String... array) {
