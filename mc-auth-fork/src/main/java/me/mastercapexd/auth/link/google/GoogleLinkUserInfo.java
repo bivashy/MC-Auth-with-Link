@@ -31,8 +31,7 @@ public class GoogleLinkUserInfo extends AbstractLinkUserInfo {
 
 			@Override
 			public LinkUserConfirmationState setSendConfirmation(boolean sendConfirmation) {
-				// TODO Auto-generated method stub
-				return null;
+				throw new UnsupportedOperationException("Cannot set confirmation state for google link confirmation state");
 			}
 		};
 	}
