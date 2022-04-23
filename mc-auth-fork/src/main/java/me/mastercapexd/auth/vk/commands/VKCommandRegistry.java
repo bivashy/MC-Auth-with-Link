@@ -19,7 +19,7 @@ import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountEnterDeclineCommand;
-import me.mastercapexd.auth.messenger.commands.AccountsCommand;
+import me.mastercapexd.auth.messenger.commands.AccountsListCommand;
 import me.mastercapexd.auth.messenger.commands.ChangePasswordCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCodeCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCommand;
@@ -150,7 +150,7 @@ public class VKCommandRegistry {
 						.handler(new LinkCodeCommand()));
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("accounts").getCommandPaths())
-						.handler(new AccountsCommand()));
+						.handler(new AccountsListCommand()));
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
 				.handler(new AccountEnterAcceptCommand()));

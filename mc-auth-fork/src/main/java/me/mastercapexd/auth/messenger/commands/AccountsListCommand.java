@@ -19,7 +19,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.orphan.OrphanCommand;
 
-public class AccountsCommand implements OrphanCommand {
+public class AccountsListCommand implements OrphanCommand {
 	@Dependency
 	private AccountStorage accountStorage;
 
