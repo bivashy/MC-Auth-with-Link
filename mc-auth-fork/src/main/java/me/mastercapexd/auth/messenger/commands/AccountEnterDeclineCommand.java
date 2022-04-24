@@ -6,18 +6,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import revxrsal.commands.annotation.Default;
-import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountEnterDeclineCommand implements OrphanCommand {
-	@Dependency
-	private PluginConfig config;
-
 	@Default
 	public void onDecline(LinkCommandActorWrapper actorWrapper, LinkType linkType,
 			@Default("all") String acceptPlayerName) {
@@ -31,7 +26,7 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
 			Duration confirmationSecondsPassed = Duration
 					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
 
-			if (confirmationSecondsPassed.getSeconds() > config.getVKSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
+			if (confirmationSecondsPassed.getSeconds() > linkType.getSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
 				return false;
 
 			if (!acceptPlayerName.equals("all")) // If player not default value

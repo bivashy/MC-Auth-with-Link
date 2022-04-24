@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
@@ -19,8 +18,6 @@ import revxrsal.commands.orphan.OrphanCommand;
 public class AccountEnterAcceptCommand implements OrphanCommand {
 	@Dependency
 	private ProxyPlugin plugin;
-	@Dependency
-	private PluginConfig config;
 
 	@Default
 	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType,
@@ -35,7 +32,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 			Duration confirmationSecondsPassed = Duration
 					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
 
-			if (confirmationSecondsPassed.getSeconds() > config.getVKSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
+			if (confirmationSecondsPassed.getSeconds() > linkType.getSettings().getEnterSettings().getEnterDelay()) // If enter delay was passed
 				return false;
 
 			if (!acceptPlayerName.equals("all")) // If player not default value
