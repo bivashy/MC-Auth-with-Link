@@ -319,6 +319,72 @@ vk:
             ],
             "inline": true
             }
+      account: >
+        {
+          "buttons": [
+            [
+              {
+                "action": {
+                  "type": "callback",
+                  "label": "Восстановить",
+                  "payload": "\"/restore %account_name%\""
+                },
+                "color": "primary"
+              },
+              {
+                "action": {
+                  "type": "callback",
+                  "label": "Кикнуть",
+                  "payload": "\"/kick %account_name%\""
+                },
+                "color": "primary"
+              },
+              {
+                "action": {
+                  "type": "callback",
+                  "label": "Отвязать",
+                  "payload": "\"/unlink %account_name%\""
+                },
+                "color": "primary"
+              }
+            ]
+          ],
+          "inline": true
+        }
+      admin-panel: >
+        {
+          "buttons": [
+            [
+              {
+                "action": {
+                  "type": "callback",
+                  "label": "Все аккаунты",
+                  "payload": "\"/accounts -type all\""
+                },
+                "color": "primary"
+              },
+              {
+                "action": {
+                  "type": "callback",
+                  "label": "Все привязанные аккаунты",
+                  "payload": "\"/accounts -type linked\""
+                },
+                "color": "primary"
+              }
+            ],
+            [
+              {
+                "action": {
+                  "type": "callback",
+                  "label": "Мои аккаунты",
+                  "payload": "\"/accounts\""
+                },
+                "color": "primary"
+              }
+            ]
+          ],
+          "inline": true
+        }
   # Кнопки в вк, могут быть представлены в виде текста, YAML, JSON.
   buttons:
     kick: 'Кикнуть'
