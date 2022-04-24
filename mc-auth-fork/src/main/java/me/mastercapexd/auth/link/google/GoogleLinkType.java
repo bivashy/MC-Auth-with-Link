@@ -12,16 +12,18 @@ import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction.ButtonActionBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColorBuilder;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
+import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class GoogleLinkType extends AbstractLinkType {
 	public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
-	public static final String NULL_KEY = AccountFactory.DEFAULT_GOOGLE_KEY;
 
 	private static final GoogleLinkType INSTANCE = new GoogleLinkType();
 	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
-
+	private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserStringIdentificator(AccountFactory.DEFAULT_GOOGLE_KEY);
+	
 	private static final String CANNOT_CREATE_BUILDER_ERROR = "Can`t create builder with GoogleLinkType!";
 	private static final String UNSUPPORTED_ERROR = "This method don`t supported by google link type";
 
@@ -71,6 +73,11 @@ public class GoogleLinkType extends AbstractLinkType {
 	@Override
 	public MessengerSettings getSettings() {
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR);
+	}
+
+	@Override
+	public LinkUserIdentificator getDefaultIdentificator() {
+		return DEFAULT_IDENTIFICATOR;
 	}
 
 }

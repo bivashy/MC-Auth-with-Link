@@ -2,6 +2,7 @@ package me.mastercapexd.auth.link.vk;
 
 import com.google.common.base.Predicate;
 
+import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.AbstractLinkType;
@@ -16,6 +17,8 @@ import me.mastercapexd.auth.link.message.vk.VKButtonColor.VKButtonColorBuilder;
 import me.mastercapexd.auth.link.message.vk.VKKeyboard;
 import me.mastercapexd.auth.link.message.vk.VKMessage;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
+import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
@@ -23,6 +26,7 @@ public class VKLinkType extends AbstractLinkType {
 	public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
 	private static final VKLinkType INSTANCE = new VKLinkType();
 	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+	private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserNumberIdentificator(AccountFactory.DEFAULT_VK_ID);
 
 	private VKLinkType() {
 		super("VK");
@@ -70,6 +74,11 @@ public class VKLinkType extends AbstractLinkType {
 	@Override
 	public MessengerSettings getSettings() {
 		return PLUGIN.getConfig().getVKSettings();
+	}
+
+	@Override
+	public LinkUserIdentificator getDefaultIdentificator() {
+		return DEFAULT_IDENTIFICATOR;
 	}
 
 }

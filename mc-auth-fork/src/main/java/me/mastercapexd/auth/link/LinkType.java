@@ -7,6 +7,7 @@ import me.mastercapexd.auth.link.message.keyboard.IKeyboard.IKeyboardBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction.ButtonActionBuilder;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColorBuilder;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public interface LinkType {
@@ -38,4 +39,6 @@ public interface LinkType {
 	ButtonActionBuilder newButtonActionBuilder();
 
 	MessengerSettings getSettings();
+	
+	LinkUserIdentificator getDefaultIdentificator();
 }

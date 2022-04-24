@@ -38,7 +38,7 @@ public class GoogleUnlinkCommand {
 				return;
 			}
 			player.sendMessage(GOOGLE_MESSAGES.getStringMessage("unlinked"));
-			linkUser.getLinkUserInfo().getIdentificator().setString(GoogleLinkType.NULL_KEY);
+			linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
 			accountStorage.saveOrUpdateAccount(account);
 		});
 	}
