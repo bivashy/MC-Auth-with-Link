@@ -30,7 +30,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
 			return;
 		}
 		actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlinked"));
-		linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator())
+		linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
 		accountStorage.saveOrUpdateAccount(account);
 	}
 }
