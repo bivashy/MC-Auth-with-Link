@@ -26,8 +26,6 @@ public interface LinkType {
 	 */
 	Messages<String> getLinkMessages();
 
-	String getLinkName();
-
 	MessageBuilder newMessageBuilder();
 
 	IKeyboardBuilder newKeyboardBuilder();
