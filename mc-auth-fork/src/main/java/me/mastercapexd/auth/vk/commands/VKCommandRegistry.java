@@ -20,6 +20,7 @@ import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.AccountEnterAcceptCommand;
 import me.mastercapexd.auth.messenger.commands.AccountEnterDeclineCommand;
 import me.mastercapexd.auth.messenger.commands.AccountsListCommand;
+import me.mastercapexd.auth.messenger.commands.AdminPanelCommand;
 import me.mastercapexd.auth.messenger.commands.ChangePasswordCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCodeCommand;
 import me.mastercapexd.auth.messenger.commands.GoogleCommand;
@@ -178,5 +179,8 @@ public class VKCommandRegistry {
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-code").getCommandPaths())
 				.handler(new GoogleCodeCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("admin-panel").getCommandPaths())
+				.handler(new AdminPanelCommand()));
 	}
 }
