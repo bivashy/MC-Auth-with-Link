@@ -11,6 +11,6 @@ public class AccountCommand implements OrphanCommand {
 	@Default
 	public void accountMenu(LinkCommandActorWrapper actorWrapper,LinkType linkType,Account account) {
 		IKeyboard accountKeyboard = linkType.getSettings().getKeyboards().createKeyboard("account", "%account_name%",account.getName());
-		actorWrapper.send(linkType.newMessageBuilder().keyboard(accountKeyboard).rawContent(linkType.getLinkMessages().getMessage("account-control")).build());
+		actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("account-control")).keyboard(accountKeyboard).build());
 	}
 }

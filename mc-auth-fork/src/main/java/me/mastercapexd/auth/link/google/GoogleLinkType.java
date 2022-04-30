@@ -36,17 +36,17 @@ public class GoogleLinkType implements LinkType {
 	}
 
 	@Override
-	public MessageBuilder newMessageBuilder() {
+	public MessageBuilder newMessageBuilder(String text) {
+		throw new UnsupportedOperationException(CANNOT_CREATE_BUILDER_ERROR);
+	}
+
+	@Override
+	public ButtonBuilder newButtonBuilder(String label) {
 		throw new UnsupportedOperationException(CANNOT_CREATE_BUILDER_ERROR);
 	}
 
 	@Override
 	public IKeyboardBuilder newKeyboardBuilder() {
-		throw new UnsupportedOperationException(CANNOT_CREATE_BUILDER_ERROR);
-	}
-
-	@Override
-	public ButtonBuilder newButtonBuilder() {
 		throw new UnsupportedOperationException(CANNOT_CREATE_BUILDER_ERROR);
 	}
 

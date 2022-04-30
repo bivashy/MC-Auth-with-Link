@@ -73,7 +73,7 @@ public class AccountsListCommand implements OrphanCommand {
 					accountsPerPage);
 
 			IKeyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type, paginatedAccounts);
-			actorWrapper.send(linkType.newMessageBuilder().rawContent(linkType.getLinkMessages().getMessage("accounts"))
+			actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("accounts"))
 					.keyboard(keyboard).build());
 		});
 	}
@@ -92,7 +92,7 @@ public class AccountsListCommand implements OrphanCommand {
 			placeholdersList.add("%account_" + i + "_color%");
 			ButtonColor buttonColor = account.getPlayer().isPresent() ? linkType.newButtonColorBuilder().green()
 					: linkType.newButtonColorBuilder().red();
-			placeholdersList.add(buttonColor.toText());
+			placeholdersList.add(buttonColor.toString());
 		}
 		IKeyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts",
 				placeholdersList.toArray(new String[0]));

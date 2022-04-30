@@ -82,7 +82,7 @@ public class GoogleCommand implements OrphanCommand {
 			e.printStackTrace();
 			return null;
 		}
-		Message message = linkType.newMessageBuilder().rawContent(messageRawContent).uploadPhoto(temporaryImageFile)
+		Message message = linkType.newMessageBuilder(messageRawContent).uploadPhoto(temporaryImageFile)
 				.build();
 		
 		temporaryImageFile.deleteOnExit();

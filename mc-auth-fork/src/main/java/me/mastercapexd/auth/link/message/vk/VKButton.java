@@ -5,110 +5,61 @@ import com.vk.api.sdk.objects.messages.KeyboardButtonAction;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.objects.messages.TemplateActionTypeNames;
 
-import me.mastercapexd.auth.link.message.keyboard.button.AbstractButton;
+import me.mastercapexd.auth.link.message.keyboard.button.DefaultButton;
+import me.mastercapexd.auth.link.message.keyboard.button.Button;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor;
 
-public class VKButton extends AbstractButton {
+public class VKButton extends DefaultButton {
+	private static final VKButtonAction DEFAULT_ACTION = new VKButtonAction(TemplateActionTypeNames.TEXT);
+	private static final VKButtonColor DEFAULT_COLOR = new VKButtonColor(KeyboardButtonColor.DEFAULT);
 
-	public static final String COLOR_INFO_KEY = "color";
-	public static final String ACTION_INFO_KEY = "action";
-
-	private KeyboardButton keyboardButton = new KeyboardButton();
-
-	private KeyboardButtonAction action = new KeyboardButtonAction().setType(TemplateActionTypeNames.TEXT);
-	private KeyboardButtonColor color = KeyboardButtonColor.DEFAULT;
-	private String payload;
-
-	private VKButton(String label) {
+	public VKButton(String label) {
 		super(label);
 	}
-	
+
 	public VKButton(KeyboardButton keyboardButton) {
 		super(keyboardButton.getAction().getLabel());
-		this.action = keyboardButton.getAction();
-		this.color = keyboardButton.getColor();
-		this.payload = keyboardButton.getAction().getPayload();
+		this.action = new VKButtonAction(keyboardButton.getAction().getType());
+		this.color = new VKButtonColor(keyboardButton.getColor());
+		switch (keyboardButton.getAction().getType()) {
+		case CALLBACK:
+			this.actionData = keyboardButton.getAction().getPayload();
+			break;
+		case OPEN_LINK:
+			this.actionData = keyboardButton.getAction().getLink();
+			break;
+		default:
+			break;
+
+		}
 	}
 
-	public static VKButtonBuilder newBuilder(String label) {
-		return new VKButton(label).new VKButtonBuilder();
-	}
-
-	public KeyboardButton getKeyboardButton() {
-		if (payload != null)
-			action.setPayload(payload);
-		action.setLabel(label);
-		keyboardButton.setAction(action);
-		keyboardButton.setColor(color);
+	public KeyboardButton create() {
+		KeyboardButton keyboardButton = new KeyboardButton();
+		KeyboardButtonAction buttonAction = new KeyboardButtonAction();
+		TemplateActionTypeNames buttonType = action.safeAs(VKButtonAction.class, DEFAULT_ACTION).getButtonActionType();
+		buttonAction.setType(buttonType);
+		if (buttonType == TemplateActionTypeNames.CALLBACK)
+			buttonAction.setPayload("\"" + actionData + "\"");
+		if (buttonType == TemplateActionTypeNames.OPEN_LINK)
+			buttonAction.setLink(actionData);
+		buttonAction.setLabel(label);
+		keyboardButton.setAction(buttonAction);
+		keyboardButton.setColor(color.safeAs(VKButtonColor.class, DEFAULT_COLOR).getButtonColor());
 		return keyboardButton;
 	}
 
-	public KeyboardButtonAction getAction() {
-		return action;
-	}
-
-	public void setAction(KeyboardButtonAction action) {
-		this.action = action;
-	}
-
-	public KeyboardButtonColor getColor() {
-		return color;
-	}
-
-	public void setColor(KeyboardButtonColor color) {
-		this.color = color;
-	}
-
-	public class VKButtonBuilder implements ButtonBuilder {
-		private VKButtonBuilder() {
-		}
-
-		public VKButtonBuilder color(KeyboardButtonColor color) {
-			VKButton.this.color = color;
-			return this;
-		}
-
-		public VKButtonBuilder action(KeyboardButtonAction action) {
-			VKButton.this.action = action;
-			return this;
-		}
-
-		public VKButtonBuilder callbackPayload(String payload) {
-			action.setType(TemplateActionTypeNames.CALLBACK);
-			action.setPayload(payload);
-			return this;
-		}
-
+	public class VKButtonBuilder extends DefaultButtonBuilder {
 		@Override
-		public ButtonBuilder label(String label) {
-			VKButton.this.label = label;
-			return this;
-		}
-
-		@Override
-		public ButtonBuilder color(ButtonColor color) {
-			color.apply(VKButton.this);
-			return this;
-		}
-
-		@Override
-		public ButtonBuilder action(ButtonAction action) {
-			action.apply(VKButton.this);
-			return this;
-		}
-
-		@Override
-		public ButtonBuilder customId(String id) {
-			VKButton.this.payload = id;
-			return this;
-		}
-
-		@Override
-		public VKButton build() {
+		protected Button wrap(DefaultButton defaultButton) {
+			ButtonAction buttonAction = defaultButton.getAction() == null ? DEFAULT_ACTION : defaultButton.getAction();
+			ButtonColor buttonColor = defaultButton.getColor() == null ? DEFAULT_COLOR : defaultButton.getColor();
+			VKButton.this.action = buttonAction;
+			VKButton.this.color = buttonColor;
+			VKButton.this.actionData = defaultButton.getActionData();
+			VKButton.this.label = defaultButton.getLabel();
 			return VKButton.this;
 		}
-
 	}
-
 }

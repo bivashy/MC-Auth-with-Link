@@ -10,7 +10,7 @@ public class AdminPanelCommand implements OrphanCommand {
 	@Default
 	public void adminPanelMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType) {
 		IKeyboard adminPanelKeyboard = linkType.getSettings().getKeyboards().createKeyboard("admin-panel");
-		actorWrapper.send(linkType.newMessageBuilder().keyboard(adminPanelKeyboard)
-				.rawContent(linkType.getLinkMessages().getMessage("admin-panel")).build());
+		actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("admin-panel")).keyboard(adminPanelKeyboard)
+				.build());
 	}
 }

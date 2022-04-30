@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.link.message.keyboard;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import me.mastercapexd.auth.function.Castable;
-import me.mastercapexd.auth.link.message.Message;
 import me.mastercapexd.auth.link.message.keyboard.button.Button;
 
 /**
@@ -12,40 +12,57 @@ import me.mastercapexd.auth.link.message.keyboard.button.Button;
  */
 public interface IKeyboard extends Castable<IKeyboard> {
 	/**
-	 * Attach keyboard to message
+	 * Returns copied 2d list of buttons
 	 * 
-	 * @param message that will accept keyboard
+	 * @return 2d list of buttons.
 	 */
-	void attach(Message message);
+	List<List<Button>> getButtons();
 
-	/**
-	 * @return Is keyboard inline
-	 */
-	boolean isInline();
+	IKeyboard addRow(Button... buttons);
 
-	/**
-	 * Set inline state of keyboard
-	 * 
-	 * @param inline
-	 */
-	void setInline(boolean inline);
+	IKeyboard removeIf(Predicate<Button> buttonFilter);
 
-	/**
-	 * @return 2 dimensional array of buttons
-	 */
-	Button[][] getButtons();
+	IKeyboard ifThen(Predicate<Button> filter, Function<Button, Button> function);
 
-	void addButton(int row, Button button);
-
-	void removeIf(Predicate<Button> filter);
-
-	void replaceIf(Predicate<Button> filter, Function<Button, Button> replaceFunction);
-
-	public static interface IKeyboardBuilder extends Castable<IKeyboardBuilder> {
+	KeyboardType getType();
+	
+	public static interface IKeyboardBuilder {
 		IKeyboardBuilder button(int row, Button button);
 
-		IKeyboardBuilder inline(boolean inline);
+		IKeyboardBuilder buttons(List<List<Button>> buttons);
+
+		IKeyboardBuilder row(Button... buttons);
+
+		IKeyboardBuilder type(KeyboardType type);
 
 		IKeyboard build();
+	}
+	
+	public static interface KeyboardType extends Castable<KeyboardType> {
+		default boolean isInline() {
+			return false;
+		}
+
+		default boolean isReply() {
+			return false;
+		}
+
+		static KeyboardType inline() {
+			return new KeyboardType() {
+				@Override
+				public boolean isInline() {
+					return true;
+				}
+			};
+		}
+
+		static KeyboardType reply() {
+			return new KeyboardType() {
+				@Override
+				public boolean isReply() {
+					return true;
+				}
+			};
+		}
 	}
 }

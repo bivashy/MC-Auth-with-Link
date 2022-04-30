@@ -8,27 +8,16 @@ import me.mastercapexd.auth.link.user.LinkUser;
 
 public interface Message extends Castable<Message> {
 	/**
-	 * @return Raw content of message (Message content without button or any
-	 *         formatting)
+	 * Returns only message text.
+	 * 
+	 * @return message text.
 	 */
-	String getRawContent();
-
-	/**
-	 * @param rawContent that will be set as raw content of message.
-	 */
-	void setRawContent(String rawContent);
+	String getText();
 
 	/**
 	 * @return Keyboard that holds buttons
 	 */
 	IKeyboard getKeyboard();
-
-	/**
-	 * Changes message keyboard
-	 * 
-	 * @param keyboard that will be added to message
-	 */
-	void setKeyboard(IKeyboard keyboard);
 	
 	/**
 	 * Upload photo to the message.
@@ -39,22 +28,20 @@ public interface Message extends Castable<Message> {
 
 	/**
 	 * @param user User that will receive a message
-	 * @return Result of sending message
 	 */
-	LinkUserSendMessageResult sendMessage(LinkUser user);
+	void send(LinkUser user);
 
 	/**
 	 * @param peerId id that will receive a message
-	 * @return Result of sending message
 	 */
-	LinkUserSendMessageResult sendMessage(Integer peerId);
+	void send(Integer peerId);
 
 	public static interface MessageBuilder extends Castable<MessageBuilder> {
 		MessageBuilder keyboard(IKeyboard keyboard);
 		
 		MessageBuilder uploadPhoto(File photo);
 
-		MessageBuilder rawContent(String rawContent);
+		MessageBuilder text(String text);
 
 		Message build();
 	}

@@ -37,28 +37,28 @@ public class VKLinkType implements LinkType {
 	}
 
 	@Override
-	public MessageBuilder newMessageBuilder() {
-		return VKMessage.newBuilder("");
+	public MessageBuilder newMessageBuilder(String text) {
+		return new VKMessage(text).new VKMessageBuilder();
 	}
 
+	@Override
+	public ButtonBuilder newButtonBuilder(String label) {
+		return new VKButton(label).new VKButtonBuilder();
+	}
+	
 	@Override
 	public IKeyboardBuilder newKeyboardBuilder() {
-		return VKKeyboard.newBuilder();
-	}
-
-	@Override
-	public ButtonBuilder newButtonBuilder() {
-		return VKButton.newBuilder("");
-	}
-
-	@Override
-	public ButtonColorBuilder newButtonColorBuilder() {
-		return VKButtonColorBuilder.getInstance();
+		return new VKKeyboard().new VKKeyboardBuilder();
 	}
 
 	@Override
 	public ButtonActionBuilder newButtonActionBuilder() {
-		return VKButtonActionBuilder.getInstance();
+		return new VKButtonActionBuilder();
+	}
+
+	@Override
+	public ButtonColorBuilder newButtonColorBuilder() {
+		return new VKButtonColorBuilder();
 	}
 
 	@Override

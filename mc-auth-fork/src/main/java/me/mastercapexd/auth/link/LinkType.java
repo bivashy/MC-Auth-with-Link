@@ -26,11 +26,11 @@ public interface LinkType {
 	 */
 	Messages<String> getLinkMessages();
 
-	MessageBuilder newMessageBuilder();
+	MessageBuilder newMessageBuilder(String text);
 
+	ButtonBuilder newButtonBuilder(String label);
+	
 	IKeyboardBuilder newKeyboardBuilder();
-
-	ButtonBuilder newButtonBuilder();
 
 	ButtonColorBuilder newButtonColorBuilder();
 

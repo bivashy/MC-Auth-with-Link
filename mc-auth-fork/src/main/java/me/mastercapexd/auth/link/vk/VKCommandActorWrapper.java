@@ -20,7 +20,7 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 
 	@Override
 	public void send(Message message) {
-		message.sendMessage(actor.as(BaseVkActor.class).getPeerId());
+		message.send(actor.as(BaseVkActor.class).getPeerId());
 	}
 
 	@Override

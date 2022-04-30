@@ -2,33 +2,25 @@ package me.mastercapexd.auth.link.message.vk;
 
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 
-import me.mastercapexd.auth.link.message.keyboard.button.Button;
 import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor;
 
 public class VKButtonColor implements ButtonColor {
-
-	private final KeyboardButtonColor currentColor;
+	private final KeyboardButtonColor buttonColor;
 
 	public VKButtonColor(KeyboardButtonColor buttonColor) {
-		this.currentColor = buttonColor;
+		this.buttonColor = buttonColor;
 	}
 
-	@Override
-	public void apply(Button button) {
-		button.as(VKButton.class).setColor(currentColor);
+	public KeyboardButtonColor getButtonColor() {
+		return buttonColor;
 	}
 	
 	@Override
-	public String toText() {
-		return currentColor.toString().toLowerCase();
+	public String toString() {
+		return buttonColor.getValue();
 	}
 
 	public static class VKButtonColorBuilder implements ButtonColorBuilder {
-		private static final VKButtonColorBuilder INSTANCE = new VKButtonColorBuilder();
-
-		private VKButtonColorBuilder() {
-		}
-
 		@Override
 		public ButtonColor red() {
 			return new VKButtonColor(KeyboardButtonColor.NEGATIVE);
@@ -53,10 +45,5 @@ public class VKButtonColor implements ButtonColor {
 		public ButtonColor grey() {
 			return new VKButtonColor(KeyboardButtonColor.DEFAULT);
 		}
-
-		public static VKButtonColorBuilder getInstance() {
-			return INSTANCE;
-		}
-
 	}
 }
