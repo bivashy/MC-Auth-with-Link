@@ -76,7 +76,7 @@ public interface Account {
 	default boolean isSessionActive(long sessionDurability) {
 		Optional<ProxyPlayer> proxiedPlayer = getPlayer();
 		long sessionEndTime = getLastSessionStart() + sessionDurability;
-		if (proxiedPlayer == null)
+		if (!proxiedPlayer.isPresent())
 			return (sessionEndTime >= System.currentTimeMillis());
 		return proxiedPlayer.get().getRemoteAddress().getHostString().equals(getLastIpAddress())
 				&& (sessionEndTime >= System.currentTimeMillis());
