@@ -1,7 +1,7 @@
 name: mcAuth
 main: me.mastercapexd.auth.bungee.AuthPlugin
 version: ${project.version}
-softDepends: [VK-API-Bungee]
+softDepends: [VK-API]
 authors: 
   - Ubivashka
   - MasterCapeXD
