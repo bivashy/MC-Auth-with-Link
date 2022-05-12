@@ -36,7 +36,7 @@ public class VKUtils {
 		}
 		return Optional.empty();
 	}
-	
+
 	/**
 	 * Uploads photo to the vk api server, and retrieves as format:
 	 * photo{owner_id}_{media_id}

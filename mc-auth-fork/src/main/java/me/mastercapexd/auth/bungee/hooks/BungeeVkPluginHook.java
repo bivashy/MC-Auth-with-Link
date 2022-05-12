@@ -8,7 +8,7 @@ import com.vk.api.sdk.client.actors.GroupActor;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class BungeeVkPluginHook implements VkPluginHook{
+public class BungeeVkPluginHook implements VkPluginHook {
 	private static final VkApiProvider VK_API_PROVIDER = BungeeVkApiPlugin.getInstance().getVkApiProvider();
 
 	@Override

@@ -63,8 +63,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 			}).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
 			.registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
 
-	private static final Map<Class<? extends PluginHook>,PluginHook> HOOKS = new HashMap<>();
-	
+	private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
+
 	private GoogleAuthenticator googleAuthenticator;
 
 	private BungeePluginConfig config;
@@ -127,7 +127,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
 	private void initializeVk() {
 		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
-		
+
 		new VKCommandRegistry();
 	}
 
@@ -184,7 +184,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 	public File getFolder() {
 		return getDataFolder();
 	}
-	
+
 	@Override
 	public ProxyCore getCore() {
 		return BungeeProxyCore.INSTANCE;
@@ -200,5 +200,4 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		return HOOKS.get(clazz).as(clazz);
 	}
 
-	
 }

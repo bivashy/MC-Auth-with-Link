@@ -18,7 +18,7 @@ public interface Message extends Castable<Message> {
 	 * @return Keyboard that holds buttons
 	 */
 	IKeyboard getKeyboard();
-	
+
 	/**
 	 * Upload photo to the message.
 	 * 
@@ -38,7 +38,7 @@ public interface Message extends Castable<Message> {
 
 	public static interface MessageBuilder extends Castable<MessageBuilder> {
 		MessageBuilder keyboard(IKeyboard keyboard);
-		
+
 		MessageBuilder uploadPhoto(File photo);
 
 		MessageBuilder text(String text);

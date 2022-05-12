@@ -23,7 +23,7 @@ public class MessengerCustomConfigurationCommand implements MessengerCustomComma
 		answer = sectionHolder.getString("answer");
 		if (sectionHolder.contains("regex"))
 			matchCommand = Pattern.compile(sectionHolder.getString("regex"));
-		if(sectionHolder.contains("button-ignore"))
+		if (sectionHolder.contains("button-ignore"))
 			ignoreButtons = sectionHolder.getBoolean("button-ignore");
 	}
 

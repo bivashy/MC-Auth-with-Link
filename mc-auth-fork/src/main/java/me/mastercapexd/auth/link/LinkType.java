@@ -29,7 +29,7 @@ public interface LinkType {
 	MessageBuilder newMessageBuilder(String text);
 
 	ButtonBuilder newButtonBuilder(String label);
-	
+
 	IKeyboardBuilder newKeyboardBuilder();
 
 	ButtonColorBuilder newButtonColorBuilder();
@@ -37,6 +37,6 @@ public interface LinkType {
 	ButtonActionBuilder newButtonActionBuilder();
 
 	MessengerSettings getSettings();
-	
+
 	LinkUserIdentificator getDefaultIdentificator();
 }

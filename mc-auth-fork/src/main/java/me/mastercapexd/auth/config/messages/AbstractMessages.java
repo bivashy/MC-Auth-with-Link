@@ -30,7 +30,6 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 				addMessage(key, configurationSection.getString(key));
 				continue;
 			}
-
 		}
 	}
 

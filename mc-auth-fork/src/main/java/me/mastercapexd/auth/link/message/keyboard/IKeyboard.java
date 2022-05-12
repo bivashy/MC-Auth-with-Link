@@ -25,7 +25,7 @@ public interface IKeyboard extends Castable<IKeyboard> {
 	IKeyboard ifThen(Predicate<Button> filter, Function<Button, Button> function);
 
 	KeyboardType getType();
-	
+
 	public static interface IKeyboardBuilder {
 		IKeyboardBuilder button(int row, Button button);
 
@@ -37,7 +37,7 @@ public interface IKeyboard extends Castable<IKeyboard> {
 
 		IKeyboard build();
 	}
-	
+
 	public static interface KeyboardType extends Castable<KeyboardType> {
 		default boolean isInline() {
 			return false;

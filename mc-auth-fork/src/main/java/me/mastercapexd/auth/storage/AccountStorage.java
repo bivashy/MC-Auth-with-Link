@@ -13,7 +13,7 @@ public interface AccountStorage {
 	CompletableFuture<Account> getAccountFromName(String playerName);
 
 	CompletableFuture<Collection<Account>> getAccountsByVKID(Integer id);
-	
+
 	CompletableFuture<Collection<Account>> getAccountsFromLinkIdentificator(LinkUserIdentificator identificator);
 
 	CompletableFuture<Collection<Account>> getAccounts(int limit);

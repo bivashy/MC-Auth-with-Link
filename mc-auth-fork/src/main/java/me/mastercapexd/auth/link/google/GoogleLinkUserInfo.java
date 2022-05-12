@@ -31,7 +31,8 @@ public class GoogleLinkUserInfo extends AbstractLinkUserInfo {
 
 			@Override
 			public LinkUserConfirmationState setSendConfirmation(boolean sendConfirmation) {
-				throw new UnsupportedOperationException("Cannot set confirmation state for google link confirmation state");
+				throw new UnsupportedOperationException(
+						"Cannot set confirmation state for google link confirmation state");
 			}
 		};
 	}

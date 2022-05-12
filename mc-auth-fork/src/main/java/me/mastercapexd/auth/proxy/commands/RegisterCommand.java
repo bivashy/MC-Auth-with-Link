@@ -26,8 +26,7 @@ public class RegisterCommand {
 
 	@Default
 	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
-	public void register(ProxyPlayer player, @AuthenticationAccount Account account,
-			RegisterPassword password) {
+	public void register(ProxyPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {
 		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 

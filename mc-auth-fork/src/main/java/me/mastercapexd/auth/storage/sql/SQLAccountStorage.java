@@ -193,13 +193,13 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		return accounts;
 	}
 
-	protected Collection<Account> selectAccountFromLinkIdentificator(LinkUserIdentificator identificator){
+	protected Collection<Account> selectAccountFromLinkIdentificator(LinkUserIdentificator identificator) {
 		Collection<Account> accounts = Sets.newHashSet();
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_LINK_ID);
-			if(identificator.isNumber()) {
+			if (identificator.isNumber()) {
 				statement.setInt(1, identificator.asNumber());
-			}else {
+			} else {
 				statement.setString(1, identificator.asString());
 			}
 			ResultSet resultSet = statement.executeQuery();
@@ -221,7 +221,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		}
 		return accounts;
 	}
-	
+
 	@Override
 	public void saveOrUpdateAccount(Account account) {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();

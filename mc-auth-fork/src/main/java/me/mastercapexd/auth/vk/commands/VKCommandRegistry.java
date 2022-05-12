@@ -94,14 +94,16 @@ public class VKCommandRegistry {
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
 			return account;
 		});
-		
+
 		commandHandler.registerValueResolver(NewPassword.class, context -> {
 			String newRawPassword = context.pop();
 			if (newRawPassword.length() < PLUGIN.getConfig().getPasswordMinLength())
-				throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-short"));
+				throw new SendMessageException(
+						PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-short"));
 
 			if (newRawPassword.length() > PLUGIN.getConfig().getPasswordMaxLength())
-				throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-long"));
+				throw new SendMessageException(
+						PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-long"));
 			return new NewPassword(newRawPassword);
 		});
 
@@ -167,15 +169,15 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("unlink").getCommandPaths())
 						.handler(new UnlinkCommand()));
-		commandHandler.register(
-				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("change-pass").getCommandPaths())
-						.handler(new ChangePasswordCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("change-pass").getCommandPaths())
+				.handler(new ChangePasswordCommand()));
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-remove").getCommandPaths())
 				.handler(new GoogleUnlinkCommand()));
-		commandHandler.register(Orphans
-				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google").getCommandPaths())
-				.handler(new GoogleCommand()));
+		commandHandler.register(
+				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google").getCommandPaths())
+						.handler(new GoogleCommand()));
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("google-code").getCommandPaths())
 				.handler(new GoogleCodeCommand()));

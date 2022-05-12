@@ -42,10 +42,10 @@ public class GoogleCommand implements OrphanCommand {
 	public void linkGoogle(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
 		String rawKey = plugin.getGoogleAuthenticator().createCredentials().getKey();
 		String nickname = account.getName();
-		String randomCode = "MINECRAFT_"+RandomCodeFactory.generateCode(2);
-		
+		String randomCode = "MINECRAFT_" + RandomCodeFactory.generateCode(2);
+
 		String totpKey = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL(nickname, randomCode, rawKey);
-		
+
 		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
 			GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY);
 			account.addLinkUser(googleLinkUser);
@@ -82,9 +82,8 @@ public class GoogleCommand implements OrphanCommand {
 			e.printStackTrace();
 			return null;
 		}
-		Message message = linkType.newMessageBuilder(messageRawContent).uploadPhoto(temporaryImageFile)
-				.build();
-		
+		Message message = linkType.newMessageBuilder(messageRawContent).uploadPhoto(temporaryImageFile).build();
+
 		temporaryImageFile.deleteOnExit();
 		return message;
 	}

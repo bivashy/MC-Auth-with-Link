@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
@@ -122,7 +121,7 @@ public class EventListener implements Listener {
 				player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
 						.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", player.getName()));
 			}
-				
+
 			AuthenticationStepCreator authenticationStepCreator = AuthPlugin.getInstance()
 					.getAuthenticationStepCreatorDealership()
 					.findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(AuthPlugin

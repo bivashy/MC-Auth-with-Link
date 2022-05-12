@@ -14,7 +14,7 @@ public class VKButtonColor implements ButtonColor {
 	public KeyboardButtonColor getButtonColor() {
 		return buttonColor;
 	}
-	
+
 	@Override
 	public String toString() {
 		return buttonColor.getValue();

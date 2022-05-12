@@ -4,7 +4,8 @@ import org.apache.http.client.utils.URIBuilder;
 
 /**
  * 
- *  Source: https://github.com/wstrange/GoogleAuth/blob/master/src/main/java/com/warrenstrange/googleauth/GoogleAuthenticatorQRGenerator.java
+ * Source:
+ * https://github.com/wstrange/GoogleAuth/blob/master/src/main/java/com/warrenstrange/googleauth/GoogleAuthenticatorQRGenerator.java
  *
  */
 public final class GoogleAuthenticatorQRGenerator {
@@ -45,6 +46,7 @@ public final class GoogleAuthenticatorQRGenerator {
 
 		return sb.toString();
 	}
+
 	/**
 	 * Returns the basic otpauth TOTP URI. This URI might be sent to the user via
 	 * email, QR code or some other method. Use a secure transport since this URI

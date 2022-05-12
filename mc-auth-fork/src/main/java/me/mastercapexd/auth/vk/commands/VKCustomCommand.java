@@ -6,7 +6,7 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
-public class VKCustomCommand{
+public class VKCustomCommand {
 	private final String command, answer;
 	private boolean chat = false, isRegex = false;
 	private String chatAnswer = null;

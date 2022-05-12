@@ -45,7 +45,7 @@ public class VKLinkType implements LinkType {
 	public ButtonBuilder newButtonBuilder(String label) {
 		return new VKButton(label).new VKButtonBuilder();
 	}
-	
+
 	@Override
 	public IKeyboardBuilder newKeyboardBuilder() {
 		return new VKKeyboard().new VKKeyboardBuilder();

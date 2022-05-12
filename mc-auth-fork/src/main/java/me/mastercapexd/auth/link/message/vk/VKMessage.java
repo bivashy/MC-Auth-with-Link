@@ -32,8 +32,8 @@ public class VKMessage extends DefaultMessage {
 	public void send(Integer peerId) {
 		if (text == null)
 			throw new NullPointerException("Raw content of message cannot be null!");
-		MessagesSendQuery messageSendQuery = VK_API.messages().send(ACTOR).randomId(ThreadLocalRandom.current().nextInt()).message(text)
-				.peerId(peerId);
+		MessagesSendQuery messageSendQuery = VK_API.messages().send(ACTOR)
+				.randomId(ThreadLocalRandom.current().nextInt()).message(text).peerId(peerId);
 
 		if (keyboard != null && keyboard.safeAs(VKKeyboard.class).isPresent())
 			messageSendQuery.keyboard(keyboard.as(VKKeyboard.class).build());

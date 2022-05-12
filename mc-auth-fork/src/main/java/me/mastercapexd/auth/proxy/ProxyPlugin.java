@@ -31,11 +31,12 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
 	ConfigurationProcessor getConfigurationProcessor();
 
 	<T extends PluginHook> T getHook(Class<T> clazz);
-	
+
 	String getVersion();
-	
+
 	/**
-	 * Returns folder of plugin in plugins. For example: some/path/plugins/PluginName
+	 * Returns folder of plugin in plugins. For example:
+	 * some/path/plugins/PluginName
 	 * 
 	 * @return Plugin folder.
 	 */

@@ -43,8 +43,8 @@ public class AccountsListCommand implements OrphanCommand {
 	public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType,
 			@Flag("page") @Default("1") Integer page, @Flag("pageSize") @Default("5") Integer accountsPerPage,
 			@Flag("type") @Default("my") String type) {
-		if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && (type.equalsIgnoreCase("all")
-				|| type.equalsIgnoreCase("linked"))) {
+		if (!linkType.getSettings().isAdministrator(actorWrapper.userId())
+				&& (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("linked"))) {
 			actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
 			return;
 		}
@@ -81,7 +81,7 @@ public class AccountsListCommand implements OrphanCommand {
 	private IKeyboard createKeyboard(LinkType linkType, int currentPage, int accountsPerPage, String accountsType,
 			List<Account> accounts) {
 		List<String> placeholdersList = new ArrayList<>(Arrays.asList("%next_page%", Integer.toString(currentPage + 1),
-				"%previous_page%", Integer.toString(currentPage-1), "%pageSize%", Integer.toString(accountsPerPage),
+				"%previous_page%", Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage),
 				"%type%", accountsType));
 
 		for (int i = 1; i <= accounts.size(); i++) { // Create placeholders array

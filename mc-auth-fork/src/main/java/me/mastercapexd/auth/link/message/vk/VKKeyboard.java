@@ -22,10 +22,9 @@ public class VKKeyboard extends DefaultKeyboard {
 
 	public Keyboard build() {
 		Keyboard keyboard = new Keyboard();
-		keyboard.setButtons(
-				buttons.stream()
-						.map(listButtons -> listButtons.stream().map(button -> button.as(VKButton.class).create())
-								.collect(Collectors.toList())).collect(Collectors.toList()));
+		keyboard.setButtons(buttons.stream().map(listButtons -> listButtons.stream()
+				.map(button -> button.as(VKButton.class).create()).collect(Collectors.toList()))
+				.collect(Collectors.toList()));
 		keyboard.setInline(keyboardType.isInline());
 		return keyboard;
 	}
