@@ -6,9 +6,7 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
-import me.mastercapexd.auth.vk.commandhandler.VKCommandExecutor;
-
-public class VKCustomCommand extends VKCommandExecutor {
+public class VKCustomCommand{
 	private final String command, answer;
 	private boolean chat = false, isRegex = false;
 	private String chatAnswer = null;
@@ -71,38 +69,32 @@ public class VKCustomCommand extends VKCommandExecutor {
 		this.chatAnswer = chatAnswer;
 	}
 
-	@Override
 	public void execute(VKMessageEvent e, String[] args) {
-		if (isChat(e.getPeer())) {
-			if (!isChat() && chatAnswer != null && !chatAnswer.isEmpty())
-				sendMessage(e.getPeer(), getChatAnswer());
-
-			return;
-		}
-		sendMessage(e.getPeer(), getAnswer());
+//		if (isChat(e.getPeer())) {
+//			if (!isChat() && chatAnswer != null && !chatAnswer.isEmpty())
+//				sendMessage(e.getPeer(), getChatAnswer());
+//
+//			return;
+//		}
+//		sendMessage(e.getPeer(), getAnswer());
 	}
 
-	@Override
 	public boolean sendMessage(Integer peerId, String message) {
-		try {
-			MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt()).peerId(peerId)
-					.message(message);
-			if (jsonKeyboard != null)
-				sendQuery.unsafeParam("keyboard", jsonKeyboard);
-			sendQuery.execute();
-			return true;
-		} catch (ApiException | ClientException e) {
-			e.printStackTrace();
-			return false;
-		}
+//		try {
+//			MessagesSendQuery sendQuery = vk.messages().send(actor).randomId(random.nextInt()).peerId(peerId)
+//					.message(message);
+//			if (jsonKeyboard != null)
+//				sendQuery.unsafeParam("keyboard", jsonKeyboard);
+//			sendQuery.execute();
+//			return true;
+//		} catch (ApiException | ClientException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+		return false;
 	}
 
 	public boolean isRegex() {
 		return isRegex;
-	}
-
-	@Override
-	public String getKey() {
-		return "custom-command";
 	}
 }
