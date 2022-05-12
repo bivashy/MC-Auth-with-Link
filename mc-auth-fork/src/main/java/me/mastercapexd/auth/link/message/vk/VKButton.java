@@ -6,9 +6,6 @@ import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.objects.messages.TemplateActionTypeNames;
 
 import me.mastercapexd.auth.link.message.keyboard.button.DefaultButton;
-import me.mastercapexd.auth.link.message.keyboard.button.Button;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor;
 
 public class VKButton extends DefaultButton {
 	private static final VKButtonAction DEFAULT_ACTION = new VKButtonAction(TemplateActionTypeNames.TEXT);
@@ -41,7 +38,7 @@ public class VKButton extends DefaultButton {
 		TemplateActionTypeNames buttonType = action.safeAs(VKButtonAction.class, DEFAULT_ACTION).getButtonActionType();
 		buttonAction.setType(buttonType);
 		if (buttonType == TemplateActionTypeNames.CALLBACK)
-			buttonAction.setPayload("\"" + actionData + "\"");
+			buttonAction.setPayload(actionData);
 		if (buttonType == TemplateActionTypeNames.OPEN_LINK)
 			buttonAction.setLink(actionData);
 		buttonAction.setLabel(label);
@@ -51,15 +48,8 @@ public class VKButton extends DefaultButton {
 	}
 
 	public class VKButtonBuilder extends DefaultButtonBuilder {
-		@Override
-		protected Button wrap(DefaultButton defaultButton) {
-			ButtonAction buttonAction = defaultButton.getAction() == null ? DEFAULT_ACTION : defaultButton.getAction();
-			ButtonColor buttonColor = defaultButton.getColor() == null ? DEFAULT_COLOR : defaultButton.getColor();
-			VKButton.this.action = buttonAction;
-			VKButton.this.color = buttonColor;
-			VKButton.this.actionData = defaultButton.getActionData();
-			VKButton.this.label = defaultButton.getLabel();
-			return VKButton.this;
+		public VKButtonBuilder() {
+			super(VKButton.this);
 		}
 	}
 }

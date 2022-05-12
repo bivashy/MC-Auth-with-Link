@@ -34,30 +34,34 @@ public abstract class DefaultMessage implements Message {
 		return keyboard;
 	}
 
-	public abstract class DefaultMessageBuilder implements MessageBuilder {
+	public static abstract class DefaultMessageBuilder implements MessageBuilder {
+		private final DefaultMessage message;
+
+		public DefaultMessageBuilder(DefaultMessage message) {
+			this.message = message;
+		}
+
 		@Override
 		public MessageBuilder keyboard(IKeyboard keyboard) {
-			DefaultMessage.this.keyboard = keyboard;
+			message.keyboard = keyboard;
 			return this;
 		}
 
 		@Override
 		public MessageBuilder uploadPhoto(File photo) {
-			DefaultMessage.this.uploadPhoto(photo);
+			message.uploadPhoto(photo);
 			return this;
 		}
 
 		@Override
 		public MessageBuilder text(String text) {
-			DefaultMessage.this.text = text;
+			message.text = text;
 			return this;
 		}
 
 		@Override
 		public Message build() {
-			return wrap(DefaultMessage.this);
+			return message;
 		}
-
-		protected abstract Message wrap(DefaultMessage buildedMessage);
 	}
 }

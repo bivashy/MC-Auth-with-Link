@@ -28,37 +28,41 @@ public abstract class DefaultButton implements Button {
 	public ButtonAction getAction() {
 		return action;
 	}
-	
-	public abstract class DefaultButtonBuilder implements ButtonBuilder {
+
+	public static abstract class DefaultButtonBuilder implements ButtonBuilder {
+		private final DefaultButton button;
+
+		public DefaultButtonBuilder(DefaultButton button) {
+			this.button = button;
+		}
+
 		@Override
 		public ButtonBuilder action(ButtonAction action) {
-			DefaultButton.this.action = action;
+			button.action = action;
 			return this;
 		}
 
 		@Override
 		public ButtonBuilder actionData(String actionData) {
-			DefaultButton.this.actionData = actionData;
+			button.actionData = actionData;
 			return this;
 		}
 
 		@Override
 		public ButtonBuilder color(ButtonColor color) {
-			DefaultButton.this.color = color;
+			button.color = color;
 			return this;
 		}
 
 		@Override
 		public ButtonBuilder label(String label) {
-			DefaultButton.this.label = label;
+			button.label = label;
 			return this;
 		}
 
 		@Override
 		public Button build() {
-			return wrap(DefaultButton.this);
+			return button;
 		}
-
-		protected abstract Button wrap(DefaultButton buildedButton);
 	}
 }

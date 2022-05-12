@@ -27,6 +27,7 @@ public abstract class DefaultKeyboard implements IKeyboard {
 	@Override
 	public IKeyboard removeIf(Predicate<Button> buttonFilter) {
 		buttons.forEach(buttonsList -> buttonsList.removeIf(buttonFilter));
+		buttons.removeIf(List::isEmpty);
 		return this;
 	}
 
@@ -45,39 +46,43 @@ public abstract class DefaultKeyboard implements IKeyboard {
 		return keyboardType;
 	}
 
-	public abstract class DefaultKeyboardBuilder implements IKeyboardBuilder {
+	public static abstract class DefaultKeyboardBuilder implements IKeyboardBuilder {
+		private final DefaultKeyboard keyboard;
+
+		public DefaultKeyboardBuilder(DefaultKeyboard keyboard) {
+			this.keyboard = keyboard;
+		}
+
 		@Override
 		public IKeyboardBuilder button(int row, Button button) {
-			while (buttons.size() <= row)
-				buttons.add(new ArrayList<>());
+			while (keyboard.buttons.size() <= row)
+				keyboard.buttons.add(new ArrayList<>());
 
-			buttons.get(row).add(button);
+			keyboard.buttons.get(row).add(button);
 			return this;
 		}
 
 		@Override
 		public IKeyboardBuilder buttons(List<List<Button>> buttons) {
-			DefaultKeyboard.this.buttons = buttons;
+			keyboard.buttons = buttons;
 			return this;
 		}
 
 		@Override
 		public IKeyboardBuilder row(Button... buttons) {
-			DefaultKeyboard.this.addRow(buttons);
+			keyboard.addRow(buttons);
 			return this;
 		}
 
 		@Override
 		public IKeyboardBuilder type(KeyboardType type) {
-			DefaultKeyboard.this.keyboardType = type;
+			keyboard.keyboardType = type;
 			return this;
 		}
 
 		@Override
 		public IKeyboard build() {
-			return wrap(DefaultKeyboard.this);
+			return keyboard;
 		}
-
-		protected abstract IKeyboard wrap(DefaultKeyboard buildedKeyboard);
 	}
 }

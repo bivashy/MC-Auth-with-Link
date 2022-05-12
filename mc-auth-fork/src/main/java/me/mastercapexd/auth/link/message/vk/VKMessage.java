@@ -10,7 +10,6 @@ import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.message.DefaultMessage;
-import me.mastercapexd.auth.link.message.Message;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.vk.utils.VKUtils;
@@ -52,12 +51,9 @@ public class VKMessage extends DefaultMessage {
 	}
 
 	public class VKMessageBuilder extends DefaultMessageBuilder {
-		@Override
-		protected Message wrap(DefaultMessage buildedMessage) {
-			VKMessage.this.text = buildedMessage.getText();
-			VKMessage.this.photos = buildedMessage.getPhotos();
-			VKMessage.this.keyboard = buildedMessage.getKeyboard();
-			return VKMessage.this;
+
+		public VKMessageBuilder() {
+			super(VKMessage.this);
 		}
 	}
 }
