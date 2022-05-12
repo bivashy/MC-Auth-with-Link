@@ -28,9 +28,10 @@
 		<mysql.connector.version>6.0.6</mysql.connector.version>
 		<google.authenticator.version>1.4.0</google.authenticator.version>
 		<zxing.library.version>3.4.1</zxing.library.version>
-		<configuration-library.version>2.0.4</configuration-library.version>
-		<lamp.command-library.version>3.0.2</lamp.command-library.version>
-		<vk.lamp.module.version>0.0.4</vk.lamp.module.version>
+		<configuration-library.version>2.0.8</configuration-library.version>
+		<configurate.version>4.1.2</configurate.version>
+		<lamp.command-library.version>3.0.4</lamp.command-library.version>
+		<vk-lamp-module.version>0.0.5</vk-lamp-module.version>
 
 		<!-- Maven plugins -->
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -146,6 +147,27 @@
 			<artifactId>bungee</artifactId>
 			<version>${configuration-library.version}</version>
 		</dependency>
+		
+		<!-- Configuration library for Configurate -->
+		<dependency>
+			<groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+			<artifactId>configurate</artifactId>
+			<version>${configuration-library.version}</version>
+		</dependency>
+
+		<!-- SpongePowered Configurate core library -->
+		<dependency>
+			<groupId>org.spongepowered</groupId>
+			<artifactId>configurate-core</artifactId>
+			<version>${configurate.version}</version>
+		</dependency>
+
+		<!-- SpongePowered Configurate YAML library -->
+		<dependency>
+			<groupId>org.spongepowered</groupId>
+			<artifactId>configurate-yaml</artifactId>
+			<version>${configurate.version}</version>
+		</dependency>
 
 		<!-- Lamp Core Command Library -->
 		<dependency>
@@ -172,7 +194,7 @@
 		<dependency>
 			<groupId>com.github.U61vashka</groupId>
 			<artifactId>VkLampModule</artifactId>
-			<version>${vk.lamp.module.version}</version>
+			<version>${vk-lamp-module.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.vk.api</groupId>
