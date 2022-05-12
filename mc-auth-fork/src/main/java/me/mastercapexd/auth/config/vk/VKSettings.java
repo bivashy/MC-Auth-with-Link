@@ -7,6 +7,8 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.messages.vk.VKMessages;
+import me.mastercapexd.auth.config.messenger.DefaultMessengerCustomCommands;
+import me.mastercapexd.auth.config.messenger.MessengerCustomCommands;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
@@ -24,7 +26,7 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	@ConfigField("vk-commands")
 	private VKCommandPaths commandPaths = null;
 	@ConfigField("custom-commands")
-	private VKCommands commands = null;
+	private DefaultMessengerCustomCommands commands = null;
 	@ConfigField("max-vk-link")
 	private Integer maxVkLinkCount = 0;
 	@ConfigField("vk-messages")
@@ -53,7 +55,8 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 		return confirmationSettings;
 	}
 
-	public VKCommands getCommands() {
+	@Override
+	public MessengerCustomCommands getCustomCommands() {
 		return commands;
 	}
 

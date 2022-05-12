@@ -14,6 +14,8 @@ public interface MessengerSettings {
 
 	MessengerRestoreSettings getRestoreSettings();
 
+	MessengerCustomCommands getCustomCommands();
+
 	MessengerEnterSettings getEnterSettings();
 
 	MessengerCommandPaths getCommandPaths();
