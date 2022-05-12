@@ -84,7 +84,7 @@ public interface Account {
 
 	default KickResult kick(String reason) {
 		Optional<ProxyPlayer> proxyPlayer = getPlayer();
-		if (proxyPlayer.isPresent())
+		if (!proxyPlayer.isPresent())
 			return KickResult.PLAYER_OFFLINE;
 		proxyPlayer.get().disconnect(reason);
 		return KickResult.KICKED;
