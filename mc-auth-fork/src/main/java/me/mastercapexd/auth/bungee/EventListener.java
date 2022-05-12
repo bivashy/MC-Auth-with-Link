@@ -53,21 +53,6 @@ public class EventListener implements Listener {
 					.as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
-		if (!config.isNameCaseCheckEnabled())
-			return;
-
-		IdentifierType identifierType = config.getActiveIdentifierType();
-		String id = identifierType == IdentifierType.UUID ? String.valueOf(event.getPlayer().getUniqueId())
-				: name.toLowerCase();
-
-		accountStorage.getAccount(id).thenAccept(account -> {
-			if (account == null)
-				return;
-			if (account.getName().equals(name))
-				return;
-			event.getPlayer().disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
-					.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", name));
-		});
 	}
 
 	@EventHandler
@@ -131,7 +116,13 @@ public class EventListener implements Listener {
 	private void startLogin(ProxiedPlayer player) {
 		String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 		accountStorage.getAccount(id).thenAccept(account -> {
-
+			if (config.isNameCaseCheckEnabled()) {
+				if (account == null || account.getName().equals(player.getName()))
+					return;
+				player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
+						.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", player.getName()));
+			}
+				
 			AuthenticationStepCreator authenticationStepCreator = AuthPlugin.getInstance()
 					.getAuthenticationStepCreatorDealership()
 					.findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(AuthPlugin
