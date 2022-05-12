@@ -6,16 +6,16 @@ import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 
-import com.ubivashka.configuration.holders.BungeeConfigurationHolder;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+
+import com.ubivashka.configuration.configurate.holder.ConfigurationHolder;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.AbstractPluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeePluginConfig extends AbstractPluginConfig {
 
@@ -28,11 +28,11 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 	@Override
 	protected ConfigurationSectionHolder createConfiguration(ProxyPlugin proxyPlugin) {
 		Plugin plugin = proxyPlugin.as(AuthPlugin.class);
-		return new BungeeConfigurationHolder(loadConfiguration(plugin.getDataFolder(),
+		return new ConfigurationHolder(loadConfiguration(plugin.getDataFolder(),
 				plugin.getResourceAsStream(CONFIGURATION_NAME), CONFIGURATION_NAME));
 	}
 
-	private Configuration loadConfiguration(File folder, InputStream resourceAsStream, String configurationName) {
+	private ConfigurationNode loadConfiguration(File folder, InputStream resourceAsStream, String configurationName) {
 		try {
 			if (!folder.exists())
 				folder.mkdir();
@@ -40,8 +40,7 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 			File config = new File(folder + File.separator + configurationName);
 			if (!config.exists())
 				Files.copy(resourceAsStream, config.toPath(), new CopyOption[0]);
-			Configuration defaults = ConfigurationProvider.getProvider(YamlConfiguration.class).load(resourceAsStream);
-			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(config, defaults);
+			return YamlConfigurationLoader.builder().file(config).build().load();
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
