@@ -4,6 +4,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
+import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
 import revxrsal.commands.annotation.Default;
@@ -17,6 +18,7 @@ public class RestoreCommand implements OrphanCommand {
 	private AccountStorage accountStorage;
 
 	@Default
+	@ConfigurationArgumentError("restore-not-enough-arguments")
 	public void onRestore(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
 		String generatedPassword = RandomCodeFactory
 				.generateCode(linkType.getSettings().getRestoreSettings().getCodeLength());

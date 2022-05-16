@@ -4,6 +4,7 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
+import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Default;
@@ -17,6 +18,7 @@ public class LinkCodeCommand implements OrphanCommand {
 	private AccountStorage accountStorage;
 
 	@Default
+	@ConfigurationArgumentError("confirmation-not-enough-arguments")
 	public void onLink(LinkCommandActorWrapper actorWrapper, LinkType linkType, MessengerLinkContext linkContext) {
 		accountStorage.getAccount(linkContext.getConfirmationUser().getAccount().getId()).thenAccept(account -> {
 

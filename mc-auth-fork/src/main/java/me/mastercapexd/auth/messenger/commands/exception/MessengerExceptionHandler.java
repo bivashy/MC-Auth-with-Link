@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.messenger.commands.exception;
 
 import me.mastercapexd.auth.link.LinkType;
+import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.ArgumentParseException;
 import revxrsal.commands.exception.CommandInvocationException;
@@ -30,6 +31,11 @@ public class MessengerExceptionHandler extends DefaultExceptionHandler {
 
 	@Override
 	public void missingArgument(CommandActor actor, MissingArgumentException exception) {
+		if (exception.getCommand().hasAnnotation(ConfigurationArgumentError.class)) {
+			actor.reply(linkType.getLinkMessages()
+					.getStringMessage(exception.getCommand().getAnnotation(ConfigurationArgumentError.class).value()));
+			return;
+		}
 		actor.reply(linkType.getLinkMessages().getStringMessage("unresolved-argument").replaceAll("%argument_name%",
 				exception.getParameter().getName()));
 	}
