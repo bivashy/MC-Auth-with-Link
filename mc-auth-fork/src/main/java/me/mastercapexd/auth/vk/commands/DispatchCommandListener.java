@@ -12,8 +12,7 @@ import com.ubivashka.lamp.commands.vk.message.DispatchSource;
 import com.ubivashka.lamp.commands.vk.message.MessageDispatchSource;
 import com.ubivashka.lamp.commands.vk.objects.CallbackButton;
 import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
-import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
-import com.ubivashka.vk.bungee.events.VKMessageEvent;
+import com.ubivashka.vk.api.parsers.objects.CallbackButtonEvent;
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.message.Message;
 import com.ubivaska.messenger.common.message.Message.MessageBuilder;
@@ -24,45 +23,39 @@ import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
 import me.mastercapexd.auth.messenger.commands.custom.MessengerCustomCommand;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
 
-public class DispatchCommandListener implements Listener {
+public abstract class DispatchCommandListener {
 	private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 	private static final LinkType LINK_TYPE = VKLinkType.getInstance();
 	private static final Gson GSON = new Gson();
 
-	@EventHandler
-	public void onMessage(VKMessageEvent event) {
+	protected void onMessage(com.vk.api.sdk.objects.messages.Message vkMessage, int peerId) {
 		EXECUTOR_SERVICE.execute(() -> {
 			VkHandler.getInstances().forEach((commandHandler) -> {
-				handleCommand(commandHandler, new MessageDispatchSource(event.getMessage()));
+				handleCommand(commandHandler, new MessageDispatchSource(vkMessage));
 
 				LINK_TYPE.getSettings().getCustomCommands()
-						.execute(new CustomCommandExecuteContext(event.getMessage().getText()))
-						.forEach(customCommand -> {
+						.execute(new CustomCommandExecuteContext(vkMessage.getText())).forEach(customCommand -> {
 							Message message = createMessage(customCommand);
-							message.send(Identificator.of(event.getPeer()));
+							message.send(Identificator.of(peerId));
 						});
 			});
 		});
 	}
 
-	@EventHandler
-	public void onButtonClick(VKCallbackButtonPressEvent event) {
+	protected void onButtonClick(CallbackButtonEvent buttonEvent) {
 		EXECUTOR_SERVICE.execute(() -> {
 			VkHandler.getInstances().forEach((commandHandler) -> {
-				CallbackButton callbackButton = GSON.fromJson(GSON.toJson(event.getButtonEvent()),
-						CallbackButton.class);
+				CallbackButton callbackButton = GSON.fromJson(GSON.toJson(buttonEvent), CallbackButton.class);
 				handleCommand(commandHandler, new ButtonDispatchSource(callbackButton));
 
-				LINK_TYPE.getSettings().getCustomCommands().execute(
-						new CustomCommandExecuteContext(event.getButtonEvent().getPayload()).setButtonExecution(true))
+				LINK_TYPE.getSettings().getCustomCommands()
+						.execute(new CustomCommandExecuteContext(buttonEvent.getPayload()).setButtonExecution(true))
 						.forEach(customCommand -> {
 							Message message = createMessage(customCommand);
-							message.send(Identificator.of(event.getButtonEvent().getPeerID()));
+							message.send(Identificator.of(buttonEvent.getPeerID()));
 						});
 			});
 		});

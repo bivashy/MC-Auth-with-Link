@@ -24,6 +24,8 @@ import me.mastercapexd.auth.bungee.account.BungeeAccountFactory;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
+import me.mastercapexd.auth.bungee.listeners.EventListener;
+import me.mastercapexd.auth.bungee.listeners.VkDispatchListener;
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
@@ -128,12 +130,13 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		new BungeeCommandsRegistry();
 	}
 
-	private void initializeVk() {	
+	private void initializeVk() {
 		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
 
 		VkMessage.setDefaultApiProvider(VkApiProvider.of(BungeeVkApiPlugin.getInstance().getVkApiProvider().getActor(),
 				BungeeVkApiPlugin.getInstance().getVkApiProvider().getVkApiClient()));
 
+		getProxy().getPluginManager().registerListener(this, new VkDispatchListener());
 		new VKCommandRegistry();
 	}
 

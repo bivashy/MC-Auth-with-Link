@@ -46,10 +46,6 @@ public class VKCommandRegistry {
 	private final CommandHandler commandHandler = new VkHandler(VK_HOOK.getClient(), VK_HOOK.getActor())
 			.disableStackTraceSanitizing();
 
-	static {
-		ProxyPlugin.instance().getCore().registerListener(PLUGIN, new DispatchCommandListener());
-	}
-
 	public VKCommandRegistry() {
 		register();
 	}
@@ -155,9 +151,9 @@ public class VKCommandRegistry {
 		commandHandler.register(
 				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("accounts").getCommandPaths())
 						.handler(new AccountsListCommand()));
-		commandHandler.register(
-				Orphans.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("account-control").getCommandPaths())
-						.handler(new AccountCommand()));
+		commandHandler.register(Orphans
+				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("account-control").getCommandPaths())
+				.handler(new AccountCommand()));
 		commandHandler.register(Orphans
 				.path(PLUGIN.getConfig().getVKSettings().getCommandPaths().getPath("enter-accept").getCommandPaths())
 				.handler(new AccountEnterAcceptCommand()));

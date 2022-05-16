@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee;
+package me.mastercapexd.auth.bungee.listeners;
 
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -9,6 +9,7 @@ import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
+import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
