@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.authentication.step.steps.link;
 
+import com.ubivaska.messenger.common.identificator.Identificator;
+import com.ubivaska.messenger.common.keyboard.Keyboard;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
@@ -9,7 +12,6 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
-import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -57,11 +59,11 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 
 		Auth.getLinkEntryAuth().addLinkUser(entryUser);
 
-		IKeyboard keyboard = PLUGIN.getConfig().getVKSettings().getKeyboards().createKeyboard("confirmation", "%name%",
+		Keyboard keyboard = PLUGIN.getConfig().getVKSettings().getKeyboards().createKeyboard("confirmation", "%name%",
 				account.getName());
 		VKLinkType.getInstance()
 				.newMessageBuilder(PLUGIN.getConfig().getVKSettings().getMessages().getMessage("enter-message"))
-				.keyboard(keyboard).build().send(linkUser);
+				.keyboard(keyboard).build().send(Identificator.of(linkUser.getLinkUserInfo().getIdentificator().asNumber()));
 		return false;
 	}
 

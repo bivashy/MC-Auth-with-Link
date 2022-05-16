@@ -1,16 +1,16 @@
 package me.mastercapexd.auth.link.google;
 
 import com.google.common.base.Predicate;
+import com.ubivaska.messenger.common.button.Button.ButtonBuilder;
+import com.ubivaska.messenger.common.button.ButtonAction.ButtonActionBuilder;
+import com.ubivaska.messenger.common.button.ButtonColor.ButtonColorBuilder;
+import com.ubivaska.messenger.common.keyboard.Keyboard.KeyboardBuilder;
+import com.ubivaska.messenger.common.message.Message.MessageBuilder;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.message.Message.MessageBuilder;
-import me.mastercapexd.auth.link.message.keyboard.IKeyboard.IKeyboardBuilder;
-import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction.ButtonActionBuilder;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColorBuilder;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
@@ -46,7 +46,7 @@ public class GoogleLinkType implements LinkType {
 	}
 
 	@Override
-	public IKeyboardBuilder newKeyboardBuilder() {
+	public KeyboardBuilder newKeyboardBuilder() {
 		throw new UnsupportedOperationException(CANNOT_CREATE_BUILDER_ERROR);
 	}
 

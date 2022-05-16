@@ -7,11 +7,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import com.ubivaska.messenger.common.button.ButtonColor;
+import com.ubivaska.messenger.common.keyboard.Keyboard;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.CollectionUtils;
 import revxrsal.commands.annotation.Default;
@@ -72,13 +73,13 @@ public class AccountsListCommand implements OrphanCommand {
 			List<Account> paginatedAccounts = CollectionUtils.getListPage(new ArrayList<>(accounts), page,
 					accountsPerPage);
 
-			IKeyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type, paginatedAccounts);
+			Keyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type, paginatedAccounts);
 			actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("accounts"))
 					.keyboard(keyboard).build());
 		});
 	}
 
-	private IKeyboard createKeyboard(LinkType linkType, int currentPage, int accountsPerPage, String accountsType,
+	private Keyboard createKeyboard(LinkType linkType, int currentPage, int accountsPerPage, String accountsType,
 			List<Account> accounts) {
 		List<String> placeholdersList = new ArrayList<>(Arrays.asList("%next_page%", Integer.toString(currentPage + 1),
 				"%previous_page%", Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage),
@@ -94,7 +95,7 @@ public class AccountsListCommand implements OrphanCommand {
 					: linkType.newButtonColorBuilder().red();
 			placeholdersList.add(buttonColor.toString());
 		}
-		IKeyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts",
+		Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts",
 				placeholdersList.toArray(new String[0]));
 
 		keyboard.removeIf(button -> button.getLabel().contains("%account"));

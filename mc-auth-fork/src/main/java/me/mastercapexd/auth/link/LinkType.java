@@ -1,16 +1,13 @@
 package me.mastercapexd.auth.link;
 
+import com.ubivaska.messenger.common.Messenger;
+
 import me.mastercapexd.auth.config.messages.Messages;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
-import me.mastercapexd.auth.link.message.Message.MessageBuilder;
-import me.mastercapexd.auth.link.message.keyboard.IKeyboard.IKeyboardBuilder;
-import me.mastercapexd.auth.link.message.keyboard.button.Button.ButtonBuilder;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonAction.ButtonActionBuilder;
-import me.mastercapexd.auth.link.message.keyboard.button.ButtonColor.ButtonColorBuilder;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
-public interface LinkType {
+public interface LinkType extends Messenger {
 	/**
 	 * Returns section of messages in proxy messages
 	 * 
@@ -25,16 +22,6 @@ public interface LinkType {
 	 * @return
 	 */
 	Messages<String> getLinkMessages();
-
-	MessageBuilder newMessageBuilder(String text);
-
-	ButtonBuilder newButtonBuilder(String label);
-
-	IKeyboardBuilder newKeyboardBuilder();
-
-	ButtonColorBuilder newButtonColorBuilder();
-
-	ButtonActionBuilder newButtonActionBuilder();
 
 	MessengerSettings getSettings();
 

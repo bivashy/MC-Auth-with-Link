@@ -7,12 +7,11 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import com.vk.api.sdk.objects.messages.Keyboard;
+import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
+import com.ubivaska.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.messenger.MessengerKeyboards;
-import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
-import me.mastercapexd.auth.link.message.vk.VKKeyboard;
 import me.mastercapexd.auth.utils.CollectionUtils;
 
 public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
@@ -25,10 +24,10 @@ public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
 	}
 
 	@Override
-	public IKeyboard createKeyboard(String key, String... placeholders) {
+	public Keyboard createKeyboard(String key, String... placeholders) {
 		String rawJson = jsonKeyboards.get(key);
 		for (Entry<String, String> entry : CollectionUtils.createStringMap(placeholders).entrySet())
 			rawJson = rawJson.replaceAll(entry.getKey(), entry.getValue());
-		return new VKKeyboard(GSON.fromJson(rawJson, Keyboard.class));
+		return new VkKeyboard(GSON.fromJson(rawJson, com.vk.api.sdk.objects.messages.Keyboard.class));
 	}
 }

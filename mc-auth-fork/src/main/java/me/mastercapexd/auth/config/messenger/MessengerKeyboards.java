@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.config.messenger;
 
-import me.mastercapexd.auth.link.message.keyboard.IKeyboard;
+import com.ubivaska.messenger.common.keyboard.Keyboard;
 
 public interface MessengerKeyboards {
-	IKeyboard createKeyboard(String key, String... placeholders);
+	Keyboard createKeyboard(String key, String... placeholders);
 }

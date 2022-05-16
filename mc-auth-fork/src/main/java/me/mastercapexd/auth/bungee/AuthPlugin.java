@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 import com.ubivashka.configuration.BungeeConfigurationProcessor;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
+import com.ubivashka.messenger.vk.message.VkMessage;
+import com.ubivashka.messenger.vk.provider.VkApiProvider;
+import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.AuthEngine;
@@ -125,8 +128,11 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		new BungeeCommandsRegistry();
 	}
 
-	private void initializeVk() {
+	private void initializeVk() {	
 		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
+
+		VkMessage.setDefaultApiProvider(VkApiProvider.of(BungeeVkApiPlugin.getInstance().getVkApiProvider().getActor(),
+				BungeeVkApiPlugin.getInstance().getVkApiProvider().getVkApiClient()));
 
 		new VKCommandRegistry();
 	}

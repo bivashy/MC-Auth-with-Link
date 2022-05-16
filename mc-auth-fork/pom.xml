@@ -7,7 +7,6 @@
 	<version>1.6.0-SNAPSHOT</version>
 
 	<properties>
-
 		<!-- Manifest -->
 		<manifest.contact>https://vk.me/bbaty45/</manifest.contact>
 		<manifest.developer>Ubivashka</manifest.developer>
@@ -32,15 +31,14 @@
 		<configurate.version>4.1.2</configurate.version>
 		<lamp.command-library.version>3.0.4</lamp.command-library.version>
 		<vk-lamp-module.version>0.0.5</vk-lamp-module.version>
+		<multimessenger.version>0.0.4</multimessenger.version>
 
 		<!-- Maven plugins -->
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-		<maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
 		<maven.source.plugin.version>3.2.0</maven.source.plugin.version>
 	</properties>
 
 	<repositories>
-
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
@@ -55,11 +53,9 @@
 			<id>velocity</id>
 			<url>https://repo.velocitypowered.com/snapshots/</url>
 		</repository>
-
 	</repositories>
 
 	<dependencies>
-
 		<!-- BungeeCord API -->
 		<dependency>
 			<groupId>net.md-5</groupId>
@@ -147,7 +143,7 @@
 			<artifactId>bungee</artifactId>
 			<version>${configuration-library.version}</version>
 		</dependency>
-		
+
 		<!-- Configuration library for Configurate -->
 		<dependency>
 			<groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
@@ -201,6 +197,18 @@
 					<artifactId>sdk</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- MultiMessenger library -->
+		<dependency>
+			<groupId>com.github.U61vashka.MultiMessenger</groupId>
+			<artifactId>common</artifactId>
+			<version>${multimessenger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.U61vashka.MultiMessenger</groupId>
+			<artifactId>vk</artifactId>
+			<version>${multimessenger.version}</version>
 		</dependency>
 	</dependencies>
 

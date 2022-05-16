@@ -10,6 +10,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.ubivaska.messenger.common.file.MessengerFile;
+import com.ubivaska.messenger.common.message.Message;
 
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
@@ -18,7 +20,6 @@ import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.link.message.Message;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
@@ -82,7 +83,7 @@ public class GoogleCommand implements OrphanCommand {
 			e.printStackTrace();
 			return null;
 		}
-		Message message = linkType.newMessageBuilder(messageRawContent).uploadPhoto(temporaryImageFile).build();
+		Message message = linkType.newMessageBuilder(messageRawContent).attachFiles(MessengerFile.of(temporaryImageFile)).build();
 
 		temporaryImageFile.deleteOnExit();
 		return message;

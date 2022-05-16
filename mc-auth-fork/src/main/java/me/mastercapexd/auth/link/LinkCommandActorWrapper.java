@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.link;
 
-import me.mastercapexd.auth.link.message.Message;
+import com.ubivaska.messenger.common.message.Message;
+
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import revxrsal.commands.command.CommandActor;
 

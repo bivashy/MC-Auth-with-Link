@@ -11,14 +11,15 @@ import com.ubivashka.lamp.commands.vk.message.ButtonDispatchSource;
 import com.ubivashka.lamp.commands.vk.message.DispatchSource;
 import com.ubivashka.lamp.commands.vk.message.MessageDispatchSource;
 import com.ubivashka.lamp.commands.vk.objects.CallbackButton;
+import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
 import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
+import com.ubivaska.messenger.common.identificator.Identificator;
+import com.ubivaska.messenger.common.message.Message;
+import com.ubivaska.messenger.common.message.Message.MessageBuilder;
 import com.vk.api.sdk.objects.messages.Keyboard;
 
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.message.Message;
-import me.mastercapexd.auth.link.message.Message.MessageBuilder;
-import me.mastercapexd.auth.link.message.vk.VKKeyboard;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
@@ -43,7 +44,7 @@ public class DispatchCommandListener implements Listener {
 						.execute(new CustomCommandExecuteContext(event.getMessage().getText()))
 						.forEach(customCommand -> {
 							Message message = createMessage(customCommand);
-							message.send(event.getPeer());
+							message.send(Identificator.of(event.getPeer()));
 						});
 			});
 		});
@@ -61,7 +62,7 @@ public class DispatchCommandListener implements Listener {
 						new CustomCommandExecuteContext(event.getButtonEvent().getPayload()).setButtonExecution(true))
 						.forEach(customCommand -> {
 							Message message = createMessage(customCommand);
-							message.send(event.getButtonEvent().getPeerID());
+							message.send(Identificator.of(event.getButtonEvent().getPeerID()));
 						});
 			});
 		});
@@ -76,7 +77,7 @@ public class DispatchCommandListener implements Listener {
 	private Message createMessage(MessengerCustomCommand customCommand) {
 		MessageBuilder builder = LINK_TYPE.newMessageBuilder(customCommand.getAnswer());
 		if (customCommand.getSectionHolder().contains("keyboard"))
-			builder.keyboard(new VKKeyboard(
+			builder.keyboard(new VkKeyboard(
 					GSON.fromJson(customCommand.getSectionHolder().getString("keyboard"), Keyboard.class)));
 		return builder.build();
 	}
