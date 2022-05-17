@@ -122,33 +122,29 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	}
 
 	protected Account selectAccount(String id) {
-		Account account = null;
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setString(1, id);
 			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				account = createFromResult(resultSet);
-			}
+			if (resultSet.next()) 
+				return createFromResult(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return account;
+		return null;
 	}
 
 	protected Account selectAccountFromName(String id) {
-		Account account = null;
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_NAME);
 			statement.setString(1, id);
 			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				account = createFromResult(resultSet);
-			}
+			if (resultSet.next())
+				return createFromResult(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return account;
+		return null;
 	}
 
 	protected Collection<Account> selectAccountByVKID(Integer id) {
@@ -157,10 +153,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_VKID);
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				Account account = createFromResult(resultSet);
-				accounts.add(account);
-			}
+			while (resultSet.next())
+				accounts.add(createFromResult(resultSet));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -177,10 +171,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				statement.setString(1, identificator.asString());
 			}
 			ResultSet resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				Account account = createFromResult(resultSet);
-				accounts.add(account);
-			}
+			while (resultSet.next())
+				accounts.add(createFromResult(resultSet));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -223,10 +216,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				PreparedStatement statement = connection.prepareStatement(SELECT_BY_LAST_QUIT_ORDERED);
 				statement.setInt(1, limit);
 				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					Account account = createFromResult(resultSet);
-					accounts.add(account);
-				}
+				while (resultSet.next())
+					accounts.add(createFromResult(resultSet));
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -241,10 +232,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			try (Connection connection = this.getConnection()) {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-				while (resultSet.next()) {
-					Account account = createFromResult(resultSet);
-					accounts.add(account);
-				}
+				while (resultSet.next())
+					accounts.add(createFromResult(resultSet));
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -260,10 +250,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				PreparedStatement statement = connection.prepareStatement(SELECT_ALL_LINKED);
 				statement.setInt(1, AccountFactory.DEFAULT_VK_ID);
 				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					Account account = createFromResult(resultSet);
-					accounts.add(account);
-				}
+				while (resultSet.next())
+					accounts.add(createFromResult(resultSet));
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
