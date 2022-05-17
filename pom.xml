@@ -21,7 +21,6 @@
 		<!-- Dependencies -->
 		<bungeecord.version>1.17-R0.1-SNAPSHOT</bungeecord.version>
 		<velocity.version>3.0.1</velocity.version>
-		<vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
 		<jbcrypt.version>0.4</jbcrypt.version>
 		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
 		<mysql.connector.version>6.0.6</mysql.connector.version>
@@ -32,6 +31,8 @@
 		<lamp.command-library.version>3.0.4</lamp.command-library.version>
 		<vk-lamp-module.version>0.0.5</vk-lamp-module.version>
 		<multimessenger.version>0.0.4</multimessenger.version>
+		<vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
+		<java-telegram-bot-api.version>6.0.1</java-telegram-bot-api.version>
 
 		<!-- Maven plugins -->
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -79,14 +80,6 @@
 			<groupId>com.velocitypowered</groupId>
 			<artifactId>velocity-api</artifactId>
 			<version>${velocity.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- VK API For Spigot or BungeeCord -->
-		<dependency>
-			<groupId>com.github.U61vashka</groupId>
-			<artifactId>VK-API-Spigot-Bungee</artifactId>
-			<version>${vk-api-bungee.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -209,6 +202,26 @@
 			<groupId>com.github.U61vashka.MultiMessenger</groupId>
 			<artifactId>vk</artifactId>
 			<version>${multimessenger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.U61vashka.MultiMessenger</groupId>
+			<artifactId>telegram</artifactId>
+			<version>${multimessenger.version}</version>
+		</dependency>
+		
+		<!-- VK API -->
+		<dependency>
+			<groupId>com.github.U61vashka</groupId>
+			<artifactId>VK-API-Spigot-Bungee</artifactId>
+			<version>${vk-api-bungee.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Java telegram bot api -->
+		<dependency>
+			<groupId>com.github.pengrad</groupId>
+			<artifactId>java-telegram-bot-api</artifactId>
+			<version>${java-telegram-bot-api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -388,21 +388,6 @@ vk:
           ],
           "inline": true
         }
-  # Кнопки в вк, могут быть представлены в виде текста, YAML, JSON.
-  buttons:
-    kick: 'Кикнуть'
-    restore: 'Восстановить'
-    return: 'Назад'
-    next-page: '->'
-    previous-page: '<-'
-    account: '%name%'
-    unlink: 'Отвязать'
-    enter-confirm: 'Принять'
-    enter-decline: 'Отклонить'
-    admin-panel-all-accounts: 'Все аккаунты'
-    admin-panel-all-linked-accounts: 'Все привязанные аккаунты'
-    enable-confirmation: 'Включить подтверждение входа'
-    disable-confirmation: 'Выключить подтверждение входа'
   vk-messages: #Для переноса строк используйте "<br>" без кавычек.
     # Привязка ВК
     confirmation-error: 'Введен неправильный код! <br>Введите заного /addvk Ваш_Буквенный_Id и не постарайтесь не ошибится при вводе кода'

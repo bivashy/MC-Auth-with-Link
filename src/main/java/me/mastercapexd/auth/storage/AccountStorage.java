@@ -8,6 +8,13 @@ import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public interface AccountStorage {
 
+	/**
+	 * Returns configuration name of storage. For example: MYSQL, SQLITE
+	 * 
+	 * @return storage name in configuration.
+	 */
+	String getConfigurationName();
+	
 	CompletableFuture<Account> getAccount(String id);
 
 	CompletableFuture<Account> getAccountFromName(String playerName);

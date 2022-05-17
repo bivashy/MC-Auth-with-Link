@@ -31,8 +31,6 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	private Integer maxVkLinkCount = 0;
 	@ConfigField("vk-messages")
 	private VKMessages messages = null;
-	@ConfigField("buttons")
-	private VKButtonLabels buttonLabels = null;
 	@ConfigField("keyboards")
 	private VKKeyboards keyboards = null;
 	@ConfigField("admin-accounts")
@@ -94,10 +92,6 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	@Override
 	public VKMessages getMessages() {
 		return messages;
-	}
-
-	public VKButtonLabels getVKButtonLabels() {
-		return buttonLabels;
 	}
 
 	@Override

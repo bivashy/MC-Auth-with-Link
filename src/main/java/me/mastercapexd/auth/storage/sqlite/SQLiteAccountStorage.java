@@ -51,4 +51,9 @@ public class SQLiteAccountStorage extends SQLAccountStorage {
 	protected Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url);
 	}
+
+	@Override
+	public String getConfigurationName() {
+		return "SQLITE";
+	}
 }

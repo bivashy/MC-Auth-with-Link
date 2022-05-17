@@ -10,8 +10,6 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 public class VKEnterSettings implements ConfigurationHolder, MessengerEnterSettings {
 	@ConfigField("enter-delay")
 	private Integer enterDelay = 60;
-	@ConfigField("can-toggle-enter")
-	private boolean canToggleEnterConfirmation = false;
 
 	public VKEnterSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
@@ -20,10 +18,5 @@ public class VKEnterSettings implements ConfigurationHolder, MessengerEnterSetti
 	@Override
 	public int getEnterDelay() {
 		return enterDelay;
-	}
-
-	@Override
-	public boolean canToggleEnterConfirmation() {
-		return canToggleEnterConfirmation;
 	}
 }
