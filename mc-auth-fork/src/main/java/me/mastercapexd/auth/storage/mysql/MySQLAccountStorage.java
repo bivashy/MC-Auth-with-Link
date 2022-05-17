@@ -40,7 +40,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 		password = dataSettings.getPassword();
 		url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=false";
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
