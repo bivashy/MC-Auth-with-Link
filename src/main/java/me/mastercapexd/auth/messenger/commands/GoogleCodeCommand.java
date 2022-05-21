@@ -37,21 +37,25 @@ public class GoogleCodeCommand implements OrphanCommand {
 
 		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-account-not-have-google"));
+			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-account-not-have-google",
+					linkType.newMessageContext(account)));
 			return;
 		}
 
 		if (!Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance())) {
-			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("code-not-need-enter"));
+			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("code-not-need-enter",
+					linkType.newMessageContext(account)));
 			return;
 		}
 
 		if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
-			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-valid"));
+			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-valid",
+					linkType.newMessageContext(account)));
 			Auth.removeAccount(account.getId());
 			account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 			return;
 		}
-		actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-valid"));
+		actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-valid",
+				linkType.newMessageContext(account)));
 	}
 }

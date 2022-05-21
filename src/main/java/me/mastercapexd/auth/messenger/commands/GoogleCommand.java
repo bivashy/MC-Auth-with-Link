@@ -58,12 +58,14 @@ public class GoogleCommand implements OrphanCommand {
 		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 
 		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
-			String rawContent = linkType.getLinkMessages().getStringMessage("google-generated")
+			String rawContent = linkType.getLinkMessages()
+					.getStringMessage("google-generated", linkType.newMessageContext(account))
 					.replaceAll("(?i)%google_key%", rawKey);
 			Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
 			actorWrapper.send(googleQRMessage);
 		} else {
-			String rawContent = linkType.getLinkMessages().getStringMessage("google-regenerated")
+			String rawContent = linkType.getLinkMessages()
+					.getStringMessage("google-regenerated", linkType.newMessageContext(account))
 					.replaceAll("(?i)%google_key%", rawKey);
 			Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
 			actorWrapper.send(googleQRMessage);
@@ -85,7 +87,8 @@ public class GoogleCommand implements OrphanCommand {
 			e.printStackTrace();
 			return null;
 		}
-		Message message = linkType.newMessageBuilder(messageRawContent).attachFiles(MessengerFile.of(temporaryImageFile)).build();
+		Message message = linkType.newMessageBuilder(messageRawContent)
+				.attachFiles(MessengerFile.of(temporaryImageFile)).build();
 
 		temporaryImageFile.deleteOnExit();
 		return message;

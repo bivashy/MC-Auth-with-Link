@@ -19,14 +19,14 @@ public class RestoreCommand implements OrphanCommand {
 
 	@Default
 	@ConfigurationArgumentError("restore-not-enough-arguments")
-	public void onRestore(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
+	public void onRestore(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
 		String generatedPassword = RandomCodeFactory
 				.generateCode(linkType.getSettings().getRestoreSettings().getCodeLength());
-		player.setPasswordHash(player.getHashType().hash(generatedPassword));
-		player.logout(config.getSessionDurability());
-		player.kick(linkType.getProxyMessages().getStringMessage("kicked"));
-		actorWrapper.reply(
-				linkType.getLinkMessages().getMessage("restored").replaceAll("(?i)%password%", generatedPassword));
-		accountStorage.saveOrUpdateAccount(player);
+		account.setPasswordHash(account.getHashType().hash(generatedPassword));
+		account.logout(config.getSessionDurability());
+		account.kick(linkType.getProxyMessages().getStringMessage("kicked", linkType.newMessageContext(account)));
+		actorWrapper.reply(linkType.getLinkMessages().getMessage("restored", linkType.newMessageContext(account))
+				.replaceAll("(?i)%password%", generatedPassword));
+		accountStorage.saveOrUpdateAccount(account);
 	}
 }

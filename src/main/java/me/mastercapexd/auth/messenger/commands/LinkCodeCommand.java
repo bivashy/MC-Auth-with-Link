@@ -30,7 +30,8 @@ public class LinkCodeCommand implements OrphanCommand {
 			linkContext.getConfirmationUser().getAccount().getPlayer()
 					.ifPresent(player -> player.sendMessage(linkType.getProxyMessages().getStringMessage("linked")));
 
-			actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-success"));
+			actorWrapper.reply(
+					linkType.getLinkMessages().getMessage("confirmation-success", linkType.newMessageContext(account)));
 
 			Auth.getLinkConfirmationAuth().removeLinkUser(linkContext.getConfirmationUser());
 		});

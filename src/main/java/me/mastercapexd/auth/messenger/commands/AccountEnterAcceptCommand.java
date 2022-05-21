@@ -3,7 +3,6 @@ package me.mastercapexd.auth.messenger.commands;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.function.Predicate;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
@@ -22,7 +21,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 	@Default
 	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType,
 			@Default("all") String acceptPlayerName) {
-		Predicate<LinkEntryUser> filter = entryUser -> {
+		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(entryUser -> {
 			if (!entryUser.getLinkType().equals(linkType))
 				return false;
 
@@ -32,20 +31,14 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 			Duration confirmationSecondsPassed = Duration
 					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
 
-			if (confirmationSecondsPassed.getSeconds() > linkType.getSettings().getEnterSettings().getEnterDelay()) // If
-																													// enter
-																													// delay
-																													// was
-																													// passed
+			if (confirmationSecondsPassed.getSeconds() > linkType.getSettings().getEnterSettings().getEnterDelay())
 				return false;
 
 			if (!acceptPlayerName.equals("all")) // If player not default value
 				return entryUser.getAccount().getName().equalsIgnoreCase(acceptPlayerName); // Check if entryUser name
 																							// equals to accept player
 			return true;
-		};
-
-		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(filter);
+		});
 		if (accounts.isEmpty()) {
 			actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-no-accounts"));
 			return;
@@ -55,13 +48,12 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 			Account account = entryUser.getAccount();
 			account.getPlayer()
 					.ifPresent(player -> player.sendMessage(linkType.getLinkMessages().getMessage("enter-confirmed")));
+			account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 			Auth.getLinkEntryAuth().removeLinkUser(entryUser);
+
+			actorWrapper.reply(
+					linkType.getLinkMessages().getMessage("enter-accepted", linkType.newMessageContext(account)));
 		});
-
-		actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted"));
-
-		Account account = accounts.stream().findFirst().get().getAccount();
-		account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 	}
 
 }

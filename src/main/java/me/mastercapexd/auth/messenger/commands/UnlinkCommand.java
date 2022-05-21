@@ -15,9 +15,10 @@ public class UnlinkCommand implements OrphanCommand {
 
 	@Default
 	@ConfigurationArgumentError("unlink-not-enough-arguments")
-	public void onUnlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account player) {
-		player.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo()
+	public void onUnlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
+		account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo()
 				.setIdentificator(linkType.getDefaultIdentificator());
-		accountStorage.saveOrUpdateAccount(player);
+		accountStorage.saveOrUpdateAccount(account);
+		actorWrapper.reply(linkType.getLinkMessages().getMessage("unlinked", linkType.newMessageContext(account)));
 	}
 }
