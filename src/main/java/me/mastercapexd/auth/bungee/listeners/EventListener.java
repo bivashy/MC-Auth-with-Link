@@ -117,10 +117,10 @@ public class EventListener implements Listener {
 		String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (config.isNameCaseCheckEnabled()) {
-				if (account == null || account.getName().equals(player.getName()))
-					return;
-				player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
-						.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", player.getName()));
+				if (account != null && !account.getName().equals(player.getName()))
+					player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
+							.replaceAll("(?i)%correct%", account.getName())
+							.replaceAll("(?i)%failed%", player.getName()));
 			}
 
 			AuthenticationStepCreator authenticationStepCreator = AuthPlugin.getInstance()
