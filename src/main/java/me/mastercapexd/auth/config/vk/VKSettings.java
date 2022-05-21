@@ -6,7 +6,7 @@ import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.messages.vk.VKMessages;
+import me.mastercapexd.auth.config.message.vk.VKMessages;
 import me.mastercapexd.auth.config.messenger.DefaultMessengerCustomCommands;
 import me.mastercapexd.auth.config.messenger.MessengerCustomCommands;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;

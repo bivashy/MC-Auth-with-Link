@@ -2,7 +2,7 @@ package me.mastercapexd.auth.link;
 
 import com.ubivaska.messenger.common.Messenger;
 
-import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;

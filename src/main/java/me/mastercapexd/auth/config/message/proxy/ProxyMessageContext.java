@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config.messages.proxy;
+package me.mastercapexd.auth.config.message.proxy;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.messages.MessageContext;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.utils.CollectionUtils;

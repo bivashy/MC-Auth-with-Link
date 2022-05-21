@@ -15,7 +15,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
-import me.mastercapexd.auth.config.messages.proxy.ProxyMessages;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.FillType;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;

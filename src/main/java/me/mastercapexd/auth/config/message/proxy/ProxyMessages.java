@@ -1,10 +1,10 @@
-package me.mastercapexd.auth.config.messages.proxy;
+package me.mastercapexd.auth.config.message.proxy;
 
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.messages.AbstractMessages;
-import me.mastercapexd.auth.config.messages.MessageContext;
-import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.message.AbstractMessages;
+import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class ProxyMessages extends AbstractMessages<ProxyComponent> {

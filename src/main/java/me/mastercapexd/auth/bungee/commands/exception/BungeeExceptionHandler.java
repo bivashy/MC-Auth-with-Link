@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.bungee.commands.exception;
 
-import me.mastercapexd.auth.config.messages.AbstractMessages;
-import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.message.AbstractMessages;
+import me.mastercapexd.auth.config.message.Messages;
 import revxrsal.commands.bungee.exception.BungeeExceptionAdapter;
 import revxrsal.commands.bungee.exception.InvalidPlayerException;
 import revxrsal.commands.bungee.exception.SenderNotConsoleException;

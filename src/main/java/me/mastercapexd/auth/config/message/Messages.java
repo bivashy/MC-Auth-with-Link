@@ -1,4 +1,6 @@
-package me.mastercapexd.auth.config.messages;
+package me.mastercapexd.auth.config.message;
+
+import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public interface Messages<T> {
 	T getMessage(String key);

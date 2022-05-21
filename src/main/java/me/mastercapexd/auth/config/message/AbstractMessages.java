@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config.messages;
+package me.mastercapexd.auth.config.message;
 
 import java.util.Map;
 
@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationHolder {
 	private static final String MESSAGE_NOT_FOUND_ERROR = "Message with key %s not found!";

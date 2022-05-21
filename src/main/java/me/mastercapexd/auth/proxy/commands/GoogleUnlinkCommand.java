@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;

@@ -13,7 +13,7 @@ import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;

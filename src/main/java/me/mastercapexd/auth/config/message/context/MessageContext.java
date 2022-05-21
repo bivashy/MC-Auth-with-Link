@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config.messages;
+package me.mastercapexd.auth.config.message.context;
 
 import java.util.Map;
 import java.util.Map.Entry;

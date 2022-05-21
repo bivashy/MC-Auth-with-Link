@@ -5,7 +5,7 @@ import com.vk.api.sdk.objects.users.responses.GetResponse;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.messages.Messages;
+import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.link.confirmation.info.DefaultConfirmationInfo;
 import me.mastercapexd.auth.link.confirmation.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;

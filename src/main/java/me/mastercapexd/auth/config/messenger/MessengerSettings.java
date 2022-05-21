@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.config.messenger;
 
-import me.mastercapexd.auth.config.messages.messenger.MessengerMessages;
+import me.mastercapexd.auth.config.message.messenger.MessengerMessages;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public interface MessengerSettings {

@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config.messages.vk;
+package me.mastercapexd.auth.config.message.vk;
 
 import static me.mastercapexd.auth.utils.CollectionUtils.newEntry;
 
@@ -16,7 +16,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.messages.MessageContext;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
