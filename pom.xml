@@ -250,7 +250,6 @@
 					<compilerArgument>-proc:none</compilerArgument>
 				</configuration>
 			</plugin>
-
 			<!-- Maven assembly plugin -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -263,9 +262,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-
 				</configuration>
-
 				<executions>
 					<execution>
 						<id>make-assembly</id>
@@ -276,7 +273,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<!-- Maven source plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
