@@ -55,7 +55,7 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 
 	@Override
 	public T getMessage(String key, MessageContext context) {
-		return fromText(context.formatString(getStringMessage(key)));
+		return fromText(context.apply(getStringMessage(key)));
 	}
 
 	public void addMessage(String path, String message) {

@@ -21,7 +21,7 @@ public class MessengerMessages extends AbstractMessages<String> {
 
 	@Override
 	public String getMessage(String key, MessageContext context) {
-		return context.formatString(getMessage(key));
+		return context.apply(getMessage(key));
 	}
 
 	@Override

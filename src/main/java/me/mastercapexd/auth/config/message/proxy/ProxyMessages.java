@@ -20,7 +20,7 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 
 	@Override
 	public ProxyComponent getMessage(String key, MessageContext context) {
-		return ProxyComponent.fromString(context.formatString(getStringMessage(key)));
+		return ProxyComponent.fromString(context.apply(getStringMessage(key)));
 	}
 
 	@Override
