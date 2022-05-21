@@ -3,8 +3,11 @@ package me.mastercapexd.auth.link.vk;
 import com.google.common.base.Predicate;
 import com.ubivashka.messenger.vk.MessengerVk;
 
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholderContext;
+import me.mastercapexd.auth.config.message.vk.VKMessagePlaceholderContext;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
@@ -47,4 +50,8 @@ public class VKLinkType implements LinkType, MessengerVk {
 		return DEFAULT_IDENTIFICATOR;
 	}
 
+	@Override
+	public MessengerPlaceholderContext newMessageContext(Account account) {
+		return new VKMessagePlaceholderContext(account);
+	}
 }
