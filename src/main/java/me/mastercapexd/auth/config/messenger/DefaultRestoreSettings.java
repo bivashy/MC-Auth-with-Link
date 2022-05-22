@@ -1,17 +1,16 @@
-package me.mastercapexd.auth.config.vk;
+package me.mastercapexd.auth.config.messenger;
 
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.messenger.MessengerRestoreSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKRestoreSettings implements ConfigurationHolder, MessengerRestoreSettings {
+public class DefaultRestoreSettings implements ConfigurationHolder, MessengerRestoreSettings {
 	@ConfigField("code-length")
 	private int codeLength = 6;
 
-	public VKRestoreSettings(ConfigurationSectionHolder sectionHolder) {
+	public DefaultRestoreSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 

@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.config.vk;
+package me.mastercapexd.auth.config.messenger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,17 +10,16 @@ import com.ubivashka.configuration.annotations.ImportantField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.messenger.MessengerCommandPath;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKCommandPath implements ConfigurationHolder, MessengerCommandPath {
+public class DefaultCommandPath implements ConfigurationHolder, MessengerCommandPath {
 	@ImportantField
 	@ConfigField("main-command")
 	private String commandPath = null;
 	@ConfigField("aliases")
 	private List<String> aliases = new ArrayList<>();
 
-	public VKCommandPath(ConfigurationSectionHolder sectionHolder) {
+	public DefaultCommandPath(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 

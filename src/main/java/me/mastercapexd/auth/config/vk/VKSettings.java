@@ -10,6 +10,10 @@ import me.mastercapexd.auth.config.message.vk.VKMessages;
 import me.mastercapexd.auth.config.messenger.DefaultMessengerCustomCommands;
 import me.mastercapexd.auth.config.messenger.MessengerCustomCommands;
 import me.mastercapexd.auth.config.messenger.MessengerSettings;
+import me.mastercapexd.auth.config.messenger.DefaultEnterSettings;
+import me.mastercapexd.auth.config.messenger.DefaultRestoreSettings;
+import me.mastercapexd.auth.config.messenger.DefaultConfirmationSettings;
+import me.mastercapexd.auth.config.messenger.DefaultCommandPaths;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -18,13 +22,13 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	@ConfigField
 	private boolean enabled = false;
 	@ConfigField("confirmation")
-	private VKConfirmationSettings confirmationSettings = null;
+	private DefaultConfirmationSettings confirmationSettings = null;
 	@ConfigField("restore")
-	private VKRestoreSettings restoreSettings = null;
+	private DefaultRestoreSettings restoreSettings = null;
 	@ConfigField("enter")
-	private VKEnterSettings enterSettings = null;
+	private DefaultEnterSettings enterSettings = null;
 	@ConfigField("vk-commands")
-	private VKCommandPaths commandPaths = null;
+	private DefaultCommandPaths commandPaths = null;
 	@ConfigField("custom-commands")
 	private DefaultMessengerCustomCommands commands = null;
 	@ConfigField("max-vk-link")
@@ -49,7 +53,7 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	}
 
 	@Override
-	public VKConfirmationSettings getConfirmationSettings() {
+	public DefaultConfirmationSettings getConfirmationSettings() {
 		return confirmationSettings;
 	}
 
@@ -59,7 +63,7 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	}
 
 	@Override
-	public VKEnterSettings getEnterSettings() {
+	public DefaultEnterSettings getEnterSettings() {
 		return enterSettings;
 	}
 
@@ -75,12 +79,12 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	}
 
 	@Override
-	public VKRestoreSettings getRestoreSettings() {
+	public DefaultRestoreSettings getRestoreSettings() {
 		return restoreSettings;
 	}
 
 	@Override
-	public VKCommandPaths getCommandPaths() {
+	public DefaultCommandPaths getCommandPaths() {
 		return commandPaths;
 	}
 

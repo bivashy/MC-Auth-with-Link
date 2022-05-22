@@ -1,25 +1,23 @@
-package me.mastercapexd.auth.config.vk;
+package me.mastercapexd.auth.config.messenger;
 
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
-import me.mastercapexd.auth.config.messenger.MessengerCommandPath;
-import me.mastercapexd.auth.config.messenger.MessengerCommandPaths;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKCommandPaths implements ConfigurationHolder, MessengerCommandPaths {
+public class DefaultCommandPaths implements ConfigurationHolder, MessengerCommandPaths {
 
 	@ConfigField
-	private ConfigurationHolderMap<VKCommandPath> vkCommands = new ConfigurationHolderMap<>();
+	private ConfigurationHolderMap<DefaultCommandPath> defaultCommands = new ConfigurationHolderMap<>();
 
-	public VKCommandPaths(ConfigurationSectionHolder sectionHolder) {
+	public DefaultCommandPaths(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 
-	public VKCommandPath getPath(String commandKey) {
-		return vkCommands.getOrDefault(commandKey, null);
+	public DefaultCommandPath getPath(String commandKey) {
+		return defaultCommands.getOrDefault(commandKey, null);
 	}
 
 	@Override

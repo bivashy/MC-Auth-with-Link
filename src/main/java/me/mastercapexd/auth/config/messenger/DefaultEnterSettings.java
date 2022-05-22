@@ -1,17 +1,16 @@
-package me.mastercapexd.auth.config.vk;
+package me.mastercapexd.auth.config.messenger;
 
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.messenger.MessengerEnterSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKEnterSettings implements ConfigurationHolder, MessengerEnterSettings {
+public class DefaultEnterSettings implements ConfigurationHolder, MessengerEnterSettings {
 	@ConfigField("enter-delay")
-	private Integer enterDelay = 60;
+	private int enterDelay = 60;
 
-	public VKEnterSettings(ConfigurationSectionHolder sectionHolder) {
+	public DefaultEnterSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 

@@ -1,19 +1,18 @@
-package me.mastercapexd.auth.config.vk;
+package me.mastercapexd.auth.config.messenger;
 
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.messenger.MessengerConfirmationSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class VKConfirmationSettings implements ConfigurationHolder, MessengerConfirmationSettings {
+public class DefaultConfirmationSettings implements ConfigurationHolder, MessengerConfirmationSettings {
 	@ConfigField("remove-delay")
 	private int removeDelay = 120;
 	@ConfigField("code-length")
 	private int codeLength = 6;
 
-	public VKConfirmationSettings(ConfigurationSectionHolder sectionHolder) {
+	public DefaultConfirmationSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
 
