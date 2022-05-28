@@ -22,13 +22,18 @@ import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
+import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.link.telegram.TelegramLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.storage.StorageColumn;
+import me.mastercapexd.auth.storage.column.AlterColumnUpdate;
+import me.mastercapexd.auth.storage.column.DropColumnUpdate;
+import me.mastercapexd.auth.storage.column.ExecuteColumnStatementUpdate;
+import me.mastercapexd.auth.storage.column.StorageUpdate;
 
 public abstract class SQLAccountStorage implements AccountStorage {
 	private static final String ACCOUNT_ID_COLUMN_KEY = "id";
@@ -39,7 +44,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	private static final String PASSWORD_COLUMN_KEY = "password";
 	private static final String GOOGLE_KEY_COLUMN_KEY = "google_key";
 	private static final String VK_ID_COLUMN_KEY = "vkId";
-	private static final String VK_CONFIRMATION_ENABLED_COLUMN_KEY = "vk_confirm_enabled";
+	private static final String VK_CONFIRMATION_ENABLED_COLUMN_KEY = "vk_confirmation_enabled";
+	private static final String TELEGRAM_ID_COLUMN_KEY = "telegram_id";
+	private static final String TELEGRAM_CONFIRMATION_ENABLED_COLUMN_KEY = "telegram_confirmation_enabled";
 	private static final String LAST_QUIT_COLUMN_KEY = "last_quit";
 	private static final String LAST_IP_COLUMN_KEY = "last_ip";
 	private static final String LAST_SESSION_START_COLUMN_KEY = "last_session_start";
@@ -50,9 +57,14 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	private final String CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LINK_ID,
 			SELECT_BY_LAST_QUIT_ORDERED, SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE;
 
-	private final List<StorageColumn> createColumns = Arrays.asList(
-			new StorageColumn(GOOGLE_KEY_COLUMN_KEY, "VARCHAR(64)"),
-			new StorageColumn(VK_CONFIRMATION_ENABLED_COLUMN_KEY, "VARCHAR(5)"));
+	private final List<StorageUpdate> columnUpdates = Arrays.asList(
+			new AlterColumnUpdate(GOOGLE_KEY_COLUMN_KEY, "VARCHAR(64)"),
+			new AlterColumnUpdate(VK_CONFIRMATION_ENABLED_COLUMN_KEY, "BIT"),
+			new AlterColumnUpdate(TELEGRAM_ID_COLUMN_KEY, "BIGINT"),
+			new AlterColumnUpdate(TELEGRAM_CONFIRMATION_ENABLED_COLUMN_KEY, "BIT"),
+			new ExecuteColumnStatementUpdate("vk_confirm_enabled",
+					"UPDATE `auth` SET `vk_confirmation_enabled` = CASE WHEN `vk_confirm_enabled` = 'true' THEN '1' WHEN `vk_confirm_enabled` = 'false' THEN '0' ELSE 0 END;"),
+			new DropColumnUpdate("vk_confirm_enabled"));
 
 	protected SQLAccountStorage(PluginConfig config, AccountFactory accountFactory, String CREATE_TABLE,
 			String SELECT_BY_ID, String SELECT_BY_NAME, String SELECT_BY_VKID, String SELECT_BY_LINK_ID,
@@ -84,9 +96,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	}
 
 	protected void createColumns() {
-		createColumns.forEach(column -> {
+		columnUpdates.forEach(column -> {
 			try (Connection connection = this.getConnection()) {
-				column.tryToCreateColumn(connection);
+				column.apply(connection);
 				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -98,6 +110,8 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(UPDATE_ID);
 
+			LinkUserInfo telegramLinkInfo = account.findFirstLinkUser(TelegramLinkType.LINK_USER_FILTER)
+					.orElse(new TelegramLinkUser(account, AccountFactory.DEFAULT_TELEGRAM_ID)).getLinkUserInfo();
 			LinkUserInfo vkLinkInfo = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER)
 					.orElse(new VKLinkUser(account, AccountFactory.DEFAULT_VK_ID)).getLinkUserInfo();
 			LinkUserInfo googleLinkInfo = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER)
@@ -109,12 +123,14 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setString(4, account.getPasswordHash());
 			statement.setString(5, googleLinkInfo.getIdentificator().asString());
 			statement.setInt(6, (int) vkLinkInfo.getIdentificator().asNumber());
-			statement.setString(7, String.valueOf(vkLinkInfo.getConfirmationState().shouldSendConfirmation()));
-			statement.setLong(8, account.getLastQuitTime());
-			statement.setString(9, account.getLastIpAddress());
-			statement.setLong(10, account.getLastSessionStart());
-			statement.setString(11, account.getIdentifierType().name());
-			statement.setString(12, account.getHashType().name());
+			statement.setBoolean(7, vkLinkInfo.getConfirmationState().shouldSendConfirmation());
+			statement.setLong(8, telegramLinkInfo.getIdentificator().asNumber());
+			statement.setBoolean(9, telegramLinkInfo.getConfirmationState().shouldSendConfirmation());
+			statement.setLong(10, account.getLastQuitTime());
+			statement.setString(11, account.getLastIpAddress());
+			statement.setLong(12, account.getLastSessionStart());
+			statement.setString(13, account.getIdentifierType().name());
+			statement.setString(14, account.getHashType().name());
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -305,7 +321,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
 				resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
 				Boolean.valueOf(resultSet.getString(VK_CONFIRMATION_ENABLED_COLUMN_KEY)),
-				resultSet.getLong(LAST_QUIT_COLUMN_KEY), resultSet.getString(LAST_IP_COLUMN_KEY),
-				resultSet.getLong(LAST_SESSION_START_COLUMN_KEY), config.getSessionDurability());
+				resultSet.getLong(TELEGRAM_ID_COLUMN_KEY),
+				resultSet.getBoolean(TELEGRAM_CONFIRMATION_ENABLED_COLUMN_KEY), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
+				resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
+				config.getSessionDurability());
 	}
 }
