@@ -19,6 +19,7 @@ import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.FillType;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.storage.StorageType;
@@ -70,6 +71,8 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	private Integer maxLoginPerIP = 0;
 	@ConfigField("messages-delay")
 	private Integer messagesDelay = 5;
+	@ConfigField("telegram")
+	private TelegramSettings telegramSettings = new TelegramSettings();
 	@ConfigField("vk")
 	private VKSettings vkSettings = new VKSettings();
 	@ConfigField("google-authenticator")
@@ -210,6 +213,11 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	@Override
 	public ProxyMessages getProxyMessages() {
 		return (ProxyMessages) proxyMessages;
+	}
+
+	@Override
+	public TelegramSettings getTelegramSettings() {
+		return telegramSettings;
 	}
 
 	@Override

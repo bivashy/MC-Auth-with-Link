@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import com.ubivashka.configuration.BungeeConfigurationProcessor;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
+import com.ubivashka.messenger.telegram.message.TelegramMessage;
+import com.ubivashka.messenger.telegram.providers.TelegramApiProvider;
 import com.ubivashka.messenger.vk.message.VkMessage;
 import com.ubivashka.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
@@ -33,6 +35,8 @@ import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
+import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
+import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -94,6 +98,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		initializeCommand();
 		if (config.getVKSettings().isEnabled())
 			initializeVk();
+		if(config.getTelegramSettings().isEnabled())
+			initializeTelegram();
 		if (config.getGoogleAuthenticatorSettings().isEnabled())
 			googleAuthenticator = new GoogleAuthenticator();
 
@@ -128,6 +134,15 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
 	private void initializeCommand() {
 		new BungeeCommandsRegistry();
+	}
+
+	private void initializeTelegram() {
+		HOOKS.put(TelegramPluginHook.class, new DefaultTelegramPluginHook());
+
+		TelegramMessage
+				.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
+
+		// Telegram registry
 	}
 
 	private void initializeVk() {
@@ -206,7 +221,10 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
 	@Override
 	public <T extends PluginHook> T getHook(Class<T> clazz) {
-		return HOOKS.get(clazz).as(clazz);
+		PluginHook hook = HOOKS.get(clazz);
+		if (hook == null)
+			return null;
+		return hook.as(clazz);
 	}
 
 }

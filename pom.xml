@@ -30,6 +30,7 @@
 		<configurate.version>4.1.2</configurate.version>
 		<lamp.command-library.version>3.0.4</lamp.command-library.version>
 		<vk-lamp-module.version>0.0.5</vk-lamp-module.version>
+		<telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
 		<multimessenger.version>0.0.4</multimessenger.version>
 		<vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
 		<java-telegram-bot-api.version>6.0.1</java-telegram-bot-api.version>
@@ -179,7 +180,7 @@
 			<version>${lamp.command-library.version}</version>
 		</dependency>
 
-		<!-- Lamp Vk Module Command -->
+		<!-- Lamp Vk Module -->
 		<dependency>
 			<groupId>com.github.U61vashka</groupId>
 			<artifactId>VkLampModule</artifactId>
@@ -190,6 +191,12 @@
 					<artifactId>sdk</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- Lamp telegram module -->
+		<dependency>
+			<groupId>com.github.U61vashka</groupId>
+			<artifactId>TelegramLampModule</artifactId>
+			<version>${telegram-lamp-module.version}</version>
 		</dependency>
 
 		<!-- MultiMessenger library -->
@@ -207,8 +214,14 @@
 			<groupId>com.github.U61vashka.MultiMessenger</groupId>
 			<artifactId>telegram</artifactId>
 			<version>${multimessenger.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.github.pengrad</groupId>
+					<artifactId>java-telegram-bot-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
+
 		<!-- VK API -->
 		<dependency>
 			<groupId>com.github.U61vashka</groupId>
@@ -216,6 +229,7 @@
 			<version>${vk-api-bungee.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<!-- Java telegram bot api -->
 		<dependency>
 			<groupId>com.github.pengrad</groupId>

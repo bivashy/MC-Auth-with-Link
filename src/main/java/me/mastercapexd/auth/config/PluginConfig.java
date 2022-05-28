@@ -9,6 +9,7 @@ import me.mastercapexd.auth.config.bossbar.BossBarSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.storage.StorageType;
 
@@ -68,6 +69,8 @@ public interface PluginConfig {
 
 	GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
 
+	TelegramSettings getTelegramSettings();
+	
 	VKSettings getVKSettings();
 
 }
