@@ -22,23 +22,23 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	@ConfigField
 	private boolean enabled = false;
 	@ConfigField("confirmation")
-	private DefaultConfirmationSettings confirmationSettings = null;
+	private DefaultConfirmationSettings confirmationSettings;
 	@ConfigField("restore")
-	private DefaultRestoreSettings restoreSettings = null;
+	private DefaultRestoreSettings restoreSettings;
 	@ConfigField("enter")
-	private DefaultEnterSettings enterSettings = null;
+	private DefaultEnterSettings enterSettings;
 	@ConfigField("vk-commands")
-	private DefaultCommandPaths commandPaths = null;
+	private DefaultCommandPaths commandPaths;
 	@ConfigField("custom-commands")
-	private DefaultMessengerCustomCommands commands = null;
+	private DefaultMessengerCustomCommands commands;
 	@ConfigField("max-vk-link")
 	private Integer maxVkLinkCount = 0;
 	@ConfigField("vk-messages")
-	private VKMessages messages = null;
+	private VKMessages messages;
 	@ConfigField("keyboards")
-	private VKKeyboards keyboards = null;
+	private VKKeyboards keyboards;
 	@ConfigField("admin-accounts")
-	private List<Integer> adminAccounts = null;
+	private List<Integer> adminAccounts;
 
 	public VKSettings() {
 	}
@@ -71,7 +71,7 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
 	public boolean isAdministrator(LinkUserIdentificator identificator) {
 		if (identificator == null || !identificator.isNumber())
 			return false;
-		return adminAccounts.contains(identificator.asNumber());
+		return adminAccounts.contains((int) identificator.asNumber());
 	}
 
 	public boolean isAdministrator(int userId) {
