@@ -10,25 +10,10 @@ public class UserStringIdentificator implements LinkUserIdentificator {
 	}
 
 	@Override
-	public int asNumber() {
-		throw new UnsupportedOperationException("Cannot convert string to number");
-	}
-
-	@Override
 	public String asString() {
 		return userId;
 	}
-
-	@Override
-	public boolean isNumber() {
-		return false;
-	}
-
-	@Override
-	public LinkUserIdentificator setNumber(int number) {
-		throw new UnsupportedOperationException("Cannot set integer to string");
-	}
-
+	
 	@Override
 	public LinkUserIdentificator setString(String userId) {
 		this.userId = userId;

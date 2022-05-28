@@ -10,7 +10,9 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
 	 * 
 	 * @return Identificator as number
 	 */
-	int asNumber();
+	default long asNumber() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns identificator as string, if id stores as number, it will convert
@@ -19,7 +21,9 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
 	 * 
 	 * @return Identificator as string
 	 */
-	String asString();
+	default String asString() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns result of casting object to number. May throw
@@ -27,7 +31,9 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
 	 * 
 	 * @return Is identificator can be converted to number
 	 */
-	boolean isNumber();
+	default boolean isNumber() {
+		return false;
+	}
 
 	/**
 	 * Set identificator as number, may throw {@link UnsupportedOperationException}
@@ -36,7 +42,9 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
 	 * @param number. New identificator
 	 * @return this {@link LinkUserIdentificator}
 	 */
-	LinkUserIdentificator setNumber(int userId);
+	default LinkUserIdentificator setNumber(long userId) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Set identificator as string, may throw {@link UnsupportedOperationException}
@@ -45,5 +53,7 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
 	 * @param number. New identificator
 	 * @return this {@link LinkUserIdentificator}
 	 */
-	LinkUserIdentificator setString(String userId);
+	default LinkUserIdentificator setString(String userId) {
+		throw new UnsupportedOperationException();
+	}
 }

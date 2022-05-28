@@ -1,20 +1,20 @@
 package me.mastercapexd.auth.link.user.info.identificator;
 
 public class UserNumberIdentificator implements LinkUserIdentificator {
-	private int userId;
+	private long userId;
 
-	public UserNumberIdentificator(Integer userId) {
+	public UserNumberIdentificator(long userId) {
 		this.userId = userId;
 	}
 
 	@Override
-	public int asNumber() {
+	public long asNumber() {
 		return userId;
 	}
 
 	@Override
 	public String asString() {
-		return Integer.toString(userId);
+		return Long.toString(userId);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class UserNumberIdentificator implements LinkUserIdentificator {
 	}
 
 	@Override
-	public LinkUserIdentificator setNumber(int userId) {
+	public LinkUserIdentificator setNumber(long userId) {
 		this.userId = userId;
 		return this;
 	}
