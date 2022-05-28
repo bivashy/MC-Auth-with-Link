@@ -2,8 +2,14 @@ package me.mastercapexd.auth.link.user.info.identificator;
 
 public class UserNumberIdentificator implements LinkUserIdentificator {
 	private long userId;
+	private boolean isLong = false;
 
 	public UserNumberIdentificator(long userId) {
+		this.userId = userId;
+		isLong = true;
+	}
+
+	public UserNumberIdentificator(int userId) {
 		this.userId = userId;
 	}
 
@@ -31,6 +37,10 @@ public class UserNumberIdentificator implements LinkUserIdentificator {
 	@Override
 	public LinkUserIdentificator setString(String userId) {
 		throw new UnsupportedOperationException("Cannot set identificator as string");
+	}
+
+	public boolean isLong() {
+		return isLong;
 	}
 
 	@Override
