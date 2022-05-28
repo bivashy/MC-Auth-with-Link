@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +24,7 @@ import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
+import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -108,7 +108,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
 			statement.setString(5, googleLinkInfo.getIdentificator().asString());
-			statement.setInt(6, vkLinkInfo.getIdentificator().asNumber());
+			statement.setInt(6, (int) vkLinkInfo.getIdentificator().asNumber());
 			statement.setString(7, String.valueOf(vkLinkInfo.getConfirmationState().shouldSendConfirmation()));
 			statement.setLong(8, account.getLastQuitTime());
 			statement.setString(9, account.getLastIpAddress());
@@ -126,7 +126,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
 			statement.setString(1, id);
 			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next()) 
+			if (resultSet.next())
 				return createFromResult(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -166,7 +166,12 @@ public abstract class SQLAccountStorage implements AccountStorage {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(SELECT_BY_LINK_ID);
 			if (identificator.isNumber()) {
-				statement.setInt(1, identificator.asNumber());
+				UserNumberIdentificator numberIdentificator = identificator.safeAs(UserNumberIdentificator.class).get();
+				if (numberIdentificator.isLong()) {
+					statement.setLong(1, numberIdentificator.asNumber());
+				} else {
+					statement.setInt(1, (int) numberIdentificator.asNumber());
+				}
 			} else {
 				statement.setString(1, identificator.asString());
 			}
