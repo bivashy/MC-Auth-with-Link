@@ -10,7 +10,6 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.bungee.events.SessionEnterEvent;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
@@ -155,10 +154,6 @@ public class EventListener implements Listener {
 					.createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
 			if (account.isSessionActive(config.getSessionDurability())) {
-				SessionEnterEvent sessionEvent = new SessionEnterEvent(account);
-				ProxyServer.getInstance().getPluginManager().callEvent(sessionEvent);
-				if (sessionEvent.isCancelled())
-					return;
 				player.sendMessage(config.getProxyMessages().getMessage("autoconnect")
 						.as(BungeeMultiProxyComponent.class).components());
 				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
