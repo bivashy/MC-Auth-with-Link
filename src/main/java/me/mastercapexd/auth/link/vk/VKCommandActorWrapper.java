@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.link.vk;
 
 import com.ubivashka.lamp.commands.vk.VkActor;
-import com.ubivashka.lamp.commands.vk.core.BaseVkActor;
 import com.ubivashka.lamp.commands.vk.message.DispatchSource;
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.message.Message;
@@ -13,18 +12,14 @@ import me.mastercapexd.auth.link.AbstractLinkCommandActorWrapper;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 
-public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseVkActor> implements VkActor {
-
-	private final VkActor vkActor;
-
-	public VKCommandActorWrapper(BaseVkActor actor) {
+public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<VkActor> implements VkActor {
+	public VKCommandActorWrapper(VkActor actor) {
 		super(actor);
-		vkActor = actor.as(VkActor.class);
 	}
 
 	@Override
 	public void send(Message message) {
-		message.send(Identificator.of(vkActor.getPeerId()));
+		message.send(Identificator.of(actor.getPeerId()));
 	}
 
 	@Override
@@ -76,5 +71,4 @@ public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<BaseV
 	public Integer getPeerId() {
 		return actor.getPeerId();
 	}
-
 }
