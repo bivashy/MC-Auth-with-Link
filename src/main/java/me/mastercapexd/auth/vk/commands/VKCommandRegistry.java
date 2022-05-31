@@ -126,7 +126,7 @@ public class VKCommandRegistry {
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("confirmation-error"));
 
 			LinkUserInfo vkLinkUserInfo = confirmationUser.getAccount().findFirstLinkUser(VKLinkType.LINK_USER_FILTER)
-					.orElse(null).getLinkUserInfo();
+					.get().getLinkUserInfo();
 
 			if (vkLinkUserInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID)
 				throw new SendMessageException(
