@@ -46,6 +46,7 @@ import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
+import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
@@ -142,7 +143,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		TelegramMessage
 				.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
 
-		// Telegram registry
+		new TelegramCommandRegistry();
 	}
 
 	private void initializeVk() {

@@ -34,7 +34,7 @@ public abstract class DispatchCommandListener {
 	protected void onMessage(com.vk.api.sdk.objects.messages.Message vkMessage, int peerId) {
 		EXECUTOR_SERVICE.execute(() -> {
 			VkHandler.getInstances().forEach((commandHandler) -> {
-				handleCommand(commandHandler, new MessageDispatchSource(vkMessage));
+				handleCommandDispatch(commandHandler, new MessageDispatchSource(vkMessage));
 
 				LINK_TYPE.getSettings().getCustomCommands()
 						.execute(new CustomCommandExecuteContext(vkMessage.getText())).forEach(customCommand -> {
@@ -49,7 +49,7 @@ public abstract class DispatchCommandListener {
 		EXECUTOR_SERVICE.execute(() -> {
 			VkHandler.getInstances().forEach((commandHandler) -> {
 				CallbackButton callbackButton = GSON.fromJson(GSON.toJson(buttonEvent), CallbackButton.class);
-				handleCommand(commandHandler, new ButtonDispatchSource(callbackButton));
+				handleCommandDispatch(commandHandler, new ButtonDispatchSource(callbackButton));
 
 				LINK_TYPE.getSettings().getCustomCommands()
 						.execute(new CustomCommandExecuteContext(buttonEvent.getPayload()).setButtonExecution(true))
@@ -61,7 +61,7 @@ public abstract class DispatchCommandListener {
 		});
 	}
 
-	private void handleCommand(VkCommandHandler handler, DispatchSource source) {
+	private void handleCommandDispatch(VkCommandHandler handler, DispatchSource source) {
 		CommandActor commandActor = new VKCommandActorWrapper(new BaseVkActor(source, handler));
 		ArgumentStack argumentStack = source.getArgumentStack(handler);
 		handler.dispatch(commandActor, argumentStack);
