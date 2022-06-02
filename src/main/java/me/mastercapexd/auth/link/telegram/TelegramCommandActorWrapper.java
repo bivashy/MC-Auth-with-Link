@@ -2,6 +2,7 @@ package me.mastercapexd.auth.link.telegram;
 
 import com.ubivashka.lamp.telegram.TelegramActor;
 import com.ubivashka.lamp.telegram.dispatch.DispatchSource;
+import com.ubivashka.messenger.telegram.message.TelegramMessage;
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.message.Message;
 
@@ -18,7 +19,18 @@ public class TelegramCommandActorWrapper extends AbstractLinkCommandActorWrapper
 
 	@Override
 	public void send(Message message) {
-		message.send(Identificator.fromObject(actor.getDispatchSource().getSourceIdentificator().asObject()));
+		if (!message.safeAs(TelegramMessage.class).isPresent())
+			return;
+		message.as(TelegramMessage.class).send(
+				Identificator.fromObject(actor.getDispatchSource().getChatIdentficator().asObject()),
+				TelegramMessage.getDefaultApiProvider(), response -> {
+					if (!response.isOk())
+						TelegramLinkType.getInstance()
+								.newMessageBuilder("Error occured " + response.description() + ". Error code: "
+										+ response.errorCode())
+								.build().send(Identificator
+										.fromObject(actor.getDispatchSource().getChatIdentficator().asObject()));
+				});
 	}
 
 	@Override
