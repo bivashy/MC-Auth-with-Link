@@ -31,7 +31,7 @@
 		<lamp.command-library.version>3.0.4</lamp.command-library.version>
 		<vk-lamp-module.version>0.0.5</vk-lamp-module.version>
 		<telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
-		<multimessenger.version>0.0.4</multimessenger.version>
+		<multimessenger.version>0.0.6</multimessenger.version>
 		<vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
 		<java-telegram-bot-api.version>6.0.1</java-telegram-bot-api.version>
 
