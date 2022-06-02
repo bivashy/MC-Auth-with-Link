@@ -3,7 +3,6 @@ package me.mastercapexd.auth.config.telegram;
 import java.util.List;
 
 import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.ConfigurationHolder;

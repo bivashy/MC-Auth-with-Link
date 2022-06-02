@@ -2,8 +2,6 @@ package me.mastercapexd.auth.telegram.commands;
 
 import java.util.Optional;
 
-import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.Update;
 import com.ubivashka.lamp.telegram.TelegramActor;
 import com.ubivashka.lamp.telegram.core.TelegramHandler;
 
