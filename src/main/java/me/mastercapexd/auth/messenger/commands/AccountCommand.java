@@ -13,7 +13,7 @@ public class AccountCommand implements OrphanCommand {
 	public void accountMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
 		Keyboard accountKeyboard = linkType.getSettings().getKeyboards().createKeyboard("account", "%account_name%",
 				account.getName());
-		actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("account-control"))
+		actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("account-control", linkType.newMessageContext(account)))
 				.keyboard(accountKeyboard).build());
 	}
 }
