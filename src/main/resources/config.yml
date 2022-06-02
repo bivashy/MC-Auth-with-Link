@@ -250,8 +250,7 @@ telegram:
       regex: '^/(?!.*(помощь|принять|отклонить|отвязать|аккаунты|кик|восстановить|пароль|код|админ-панель|админпанель|админ|панель|admin-panel|adminpanel|admin|panel)).*$'
       answer: 'Команда не найдена! Доступные команды: /помощь'
       button-ignore: true
-  keyboards: # Для создания JSON клавиатур советую использовать https://severecloud.github.io/vk-keyboard/. Учтывайте что полезная нагрузка должна иметь плейсхолдеры
-      # Клавиатура в виде JSON
+  keyboards:
       confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"\"/принять %name%\""},{"text":"Отклонить","callback_data":"\"/отклонить %name%\""}]]}'
       accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
             {                    
@@ -296,8 +295,7 @@ telegram:
                   "callback_data": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
                 }
               ]
-            ]
-          }
+            ]}
       account: >
         {
           "inline_keyboard": [
