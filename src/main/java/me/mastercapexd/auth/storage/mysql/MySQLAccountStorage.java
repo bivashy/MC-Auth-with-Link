@@ -17,10 +17,10 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String SELECT_BY_ID = "SELECT * FROM `auth` WHERE `id` = ? LIMIT 1;";
 	private static final String SELECT_BY_NAME = "SELECT * FROM `auth` WHERE `name` = ? LIMIT 1;";
 	private static final String SELECT_BY_VKID = "SELECT * FROM `auth` WHERE `vkId` = ?;";
-	private static final String SELECT_BY_LINK_ID = "SELECT * FROM `auth` WHERE ? IN(vkId);";
+	private static final String SELECT_BY_LINK_ID = "SELECT * FROM `auth` WHERE ? IN(vkId,telegram_id);";
 	private static final String SELECT_BY_LAST_QUIT_ORDERED = "SELECT * FROM `auth` ORDER BY `last_quit` DESC LIMIT ?;";
 	private static final String SELECT_ALL = "SELECT * FROM `auth`;";
-	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE ? IN(vkId,telegram_id);";
+	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE NOT vkId = ? OR NOT telegram_id = ?;";
 	private static final String SELECT_VKIDs = "SELECT `vkId` FROM `auth`;";
 	private static final String UPDATE_ID = "INSERT INTO `auth` (`id`, `uuid`, `name`, `password`,`google_key`,`vkId`,`vk_confirm_enabled`, `last_quit`, `last_ip`, `last_session_start`, `id_type`, `hash_type`) VALUES "
 			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
