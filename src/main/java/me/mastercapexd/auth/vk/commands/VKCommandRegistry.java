@@ -59,7 +59,7 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
 			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
 					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(VKLinkType.getInstance())
 							&& linkUser.getLinkUserInfo().getIdentificator().asNumber() == commandActor.getAuthorId())
-					.stream().findFirst().get();
+					.stream().findFirst().orElse(null);
 
 			if (confirmationUser == null)
 				throw new SendMessageException(

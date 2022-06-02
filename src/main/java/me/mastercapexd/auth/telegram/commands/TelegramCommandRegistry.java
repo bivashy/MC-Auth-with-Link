@@ -58,7 +58,7 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
 			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
 					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(TelegramLinkType.getInstance())
 							&& linkUser.getLinkUserInfo().getIdentificator().asNumber() == commandActor.getId())
-					.stream().findFirst().get();
+					.stream().findFirst().orElse(null);
 
 			if (confirmationUser == null)
 				throw new SendMessageException(
@@ -82,7 +82,7 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
 			return new MessengerLinkContext(code, confirmationUser);
 		});
 		registerCommands();
-		
+
 		TELEGRAM_HOOK.getTelegramBot().setUpdatesListener(new TelegramCommandUpdatesListener());
 	}
 }
