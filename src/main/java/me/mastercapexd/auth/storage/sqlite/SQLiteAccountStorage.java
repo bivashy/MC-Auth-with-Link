@@ -19,7 +19,7 @@ public class SQLiteAccountStorage extends SQLAccountStorage {
 	private static final String SELECT_BY_LINK_ID = "SELECT * FROM `auth` WHERE ? IN(vkId);";
 	private static final String SELECT_BY_LAST_QUIT_ORDERED = "SELECT * FROM `auth` ORDER BY `last_quit` DESC LIMIT ?;";
 	private static final String SELECT_ALL = "SELECT * FROM `auth`;";
-	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE `vkId` NOT IN(?);";
+	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE ? IN(vkId,telegram_id);";
 	private static final String SELECT_VKIDs = "SELECT `vkId` FROM `auth`;";
 	private static final String UPDATE_ID = "REPLACE INTO `auth` (`id`, `uuid`, `name`, `password`,`google_key`, `vkId`,`vk_confirmation_enabled`,`telegram_id`,`telegram_confirmation_enabled`, `last_quit`,  `last_ip`, `last_session_start`, `id_type`, `hash_type`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);";
 	private static final String DELETE = "DELETE FROM `auth` WHERE `id`=?;";
