@@ -63,8 +63,8 @@ public class TelegramCommandUpdatesListener implements UpdatesListener {
 			LINK_TYPE.getSettings().getCustomCommands()
 					.execute(new CustomCommandExecuteContext(callbackQuery.data()).setButtonExecution(true))
 					.forEach(customCommand -> {
-						Message message = createMessageResponse(customCommand);
-						message.send(Identificator.of(callbackQuery.message().chat().id()));
+						Message customCommandMessageResponse = createMessageResponse(customCommand);
+						customCommandMessageResponse.send(Identificator.of(callbackQuery.message().chat().id()));
 					});
 		});
 	}
