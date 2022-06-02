@@ -47,7 +47,7 @@ public class TelegramSettings implements ConfigurationHolder, MessengerSettings 
 
 	public TelegramSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
-		if (token == null)
+		if (token == null && enabled)
 			System.err.println("Telegram bot token not found!");
 	}
 
