@@ -22,8 +22,8 @@ public class MySQLAccountStorage extends SQLAccountStorage {
 	private static final String SELECT_ALL = "SELECT * FROM `auth`;";
 	private static final String SELECT_ALL_LINKED = "SELECT * FROM `auth` WHERE NOT vkId = ? OR NOT telegram_id = ?;";
 	private static final String SELECT_VKIDs = "SELECT `vkId` FROM `auth`;";
-	private static final String UPDATE_ID = "INSERT INTO `auth` (`id`, `uuid`, `name`, `password`,`google_key`,`vkId`,`vk_confirm_enabled`, `last_quit`, `last_ip`, `last_session_start`, `id_type`, `hash_type`) VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
+	private static final String UPDATE_ID = "INSERT INTO `auth` (`id`, `uuid`, `name`, `password`,`google_key`,`vkId`,`vk_confirm_enabled`,`telegram_id`,`telegram_confirmation_enabled`, `last_quit`, `last_ip`, `last_session_start`, `id_type`, `hash_type`) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
 			+ "`id` = VALUES(`id`), `uuid` = VALUES(`uuid`), `name` = VALUES(`name`), "
 			+ "`password` = VALUES(`password`),`google_key` = VALUES(`google_key`),`vkId` = VALUES(`vkId`),`vk_confirmation_enabled` = VALUES(`vk_confirmation_enabled`),`telegram_id` = VALUES(`telegram_id`),`telegram_confirmation_enabled` = VALUES(`telegram_confirmation_enabled`), `last_quit` = VALUES(`last_quit`), `last_ip` = VALUES(`last_ip`), `last_session_start` = VALUES(`last_session_start`), `id_type` = VALUES(`id_type`), `hash_type` = VALUES(`hash_type`);";
 	private static final String DELETE = "DELETE FROM `auth` WHERE `id`=?;";
