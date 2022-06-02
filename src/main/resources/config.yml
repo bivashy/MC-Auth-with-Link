@@ -252,7 +252,7 @@ telegram:
       button-ignore: true
   keyboards: # Для создания JSON клавиатур советую использовать https://severecloud.github.io/vk-keyboard/. Учтывайте что полезная нагрузка должна иметь плейсхолдеры
       # Клавиатура в виде JSON
-      confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"\"/принять %name%\""},{"text":"Отклонить","callback_data":"\"/принять %name%\""}]]}'
+      confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"\"/принять %name%\""},{"text":"Отклонить","callback_data":"\"/отклонить %name%\""}]]}'
       accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
             {                    
             "inline_keyboard": [
@@ -516,7 +516,7 @@ vk:
       button-ignore: true
   keyboards: # Для создания JSON клавиатур советую использовать https://severecloud.github.io/vk-keyboard/. Учтывайте что полезная нагрузка должна иметь плейсхолдеры
       # Клавиатура в виде JSON
-      confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/принять %name%\""},"color":"negative"}]],"inline":true}'
+      confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/отклонить %name%\""},"color":"negative"}]],"inline":true}'
       accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
             {                    
             "buttons": [
