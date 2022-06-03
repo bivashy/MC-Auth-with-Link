@@ -1,11 +1,13 @@
 package me.mastercapexd.auth.bungee.config;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 
+import org.apache.commons.io.IOUtils;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -40,7 +42,19 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 			File config = new File(folder + File.separator + configurationName);
 			if (!config.exists())
 				Files.copy(resourceAsStream, config.toPath(), new CopyOption[0]);
-			return YamlConfigurationLoader.builder().file(config).build().load();
+			YamlConfigurationLoader configurationLoader = YamlConfigurationLoader.builder().indent(4).file(config)
+					.build();
+			ConfigurationNode configuration = configurationLoader.load();
+			File defaultConfigurationFile = File.createTempFile("config", ".yml");
+			FileOutputStream outputStream = new FileOutputStream(defaultConfigurationFile);
+			IOUtils.copy(resourceAsStream, outputStream);
+			ConfigurationNode defaultConfiguration = YamlConfigurationLoader.builder().file(defaultConfigurationFile)
+					.build().load();
+			configuration = configuration.mergeFrom(defaultConfiguration);
+			outputStream.close();
+			resourceAsStream.close();
+			defaultConfigurationFile.delete();
+			return configuration;
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
