@@ -64,18 +64,21 @@ public abstract class MessengerCommandRegistry {
 		commandHandler.register(
 				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths())
 						.handler(new LinkCodeCommand()));
+		commandHandler.register(Orphans
+				.path(linkType.getSettings().getCommandPaths().getCommandPath("confirmation-toggle").getCommandPaths())
+				.handler(new ConfirmationToggleCommand()));
 		commandHandler.register(
 				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("accounts").getCommandPaths())
 						.handler(new AccountsListCommand()));
 		commandHandler.register(Orphans
 				.path(linkType.getSettings().getCommandPaths().getCommandPath("account-control").getCommandPaths())
 				.handler(new AccountCommand()));
-		commandHandler.register(Orphans
-				.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-accept").getCommandPaths())
-				.handler(new AccountEnterAcceptCommand()));
-		commandHandler.register(Orphans
-				.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-decline").getCommandPaths())
-				.handler(new AccountEnterDeclineCommand()));
+		commandHandler.register(
+				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-accept").getCommandPaths())
+						.handler(new AccountEnterAcceptCommand()));
+		commandHandler.register(
+				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-decline").getCommandPaths())
+						.handler(new AccountEnterDeclineCommand()));
 		commandHandler.register(
 				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("kick").getCommandPaths())
 						.handler(new KickCommand()));
@@ -85,20 +88,20 @@ public abstract class MessengerCommandRegistry {
 		commandHandler.register(
 				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("unlink").getCommandPaths())
 						.handler(new UnlinkCommand()));
-		commandHandler.register(Orphans
-				.path(linkType.getSettings().getCommandPaths().getCommandPath("change-pass").getCommandPaths())
-				.handler(new ChangePasswordCommand()));
-		commandHandler.register(Orphans
-				.path(linkType.getSettings().getCommandPaths().getCommandPath("google-remove").getCommandPaths())
-				.handler(new GoogleUnlinkCommand()));
+		commandHandler.register(
+				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("change-pass").getCommandPaths())
+						.handler(new ChangePasswordCommand()));
+		commandHandler.register(
+				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-remove").getCommandPaths())
+						.handler(new GoogleUnlinkCommand()));
 		commandHandler.register(
 				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google").getCommandPaths())
 						.handler(new GoogleCommand()));
-		commandHandler.register(Orphans
-				.path(linkType.getSettings().getCommandPaths().getCommandPath("google-code").getCommandPaths())
-				.handler(new GoogleCodeCommand()));
-		commandHandler.register(Orphans
-				.path(linkType.getSettings().getCommandPaths().getCommandPath("admin-panel").getCommandPaths())
-				.handler(new AdminPanelCommand()));
+		commandHandler.register(
+				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-code").getCommandPaths())
+						.handler(new GoogleCodeCommand()));
+		commandHandler.register(
+				Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("admin-panel").getCommandPaths())
+						.handler(new AdminPanelCommand()));
 	}
 }
