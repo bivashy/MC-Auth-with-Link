@@ -47,8 +47,8 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
 
-			if (!(linkUser.get().getLinkUserInfo().getIdentificator().asNumber() == userId
-					|| PLUGIN.getConfig().getVKSettings().isAdministrator(userId)))
+			if (linkUser.get().getLinkUserInfo().getIdentificator().asNumber() != userId
+					|| !PLUGIN.getConfig().getVKSettings().isAdministrator(userId))
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
 			return account;

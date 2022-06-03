@@ -44,8 +44,8 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
 				throw new SendMessageException(
 						PLUGIN.getConfig().getTelegramSettings().getMessages().getMessage("not-your-account"));
 
-			if (!(linkUser.get().getLinkUserInfo().getIdentificator().asNumber() == userId
-					|| PLUGIN.getConfig().getTelegramSettings().isAdministrator(userId)))
+			if (linkUser.get().getLinkUserInfo().getIdentificator().asNumber() != userId
+					|| !PLUGIN.getConfig().getTelegramSettings().isAdministrator(userId))
 				throw new SendMessageException(
 						PLUGIN.getConfig().getTelegramSettings().getMessages().getMessage("not-your-account"));
 			return account;
