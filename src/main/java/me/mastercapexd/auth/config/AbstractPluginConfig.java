@@ -16,12 +16,13 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
+import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.config.server.FillType;
-import me.mastercapexd.auth.config.server.Server;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;
 import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.server.Server;
 import me.mastercapexd.auth.storage.StorageType;
 
 public abstract class AbstractPluginConfig implements PluginConfig {
@@ -54,14 +55,14 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	@ImportantField
 	@SingleObject
 	@ConfigField("auth-servers")
-	private List<Server> authServers = null;
+	private List<ConfigurationServer> authServers = null;
 	@SingleObject
 	@ImportantField
 	@ConfigField("game-servers")
-	private List<Server> gameServers = null;
+	private List<ConfigurationServer> gameServers = null;
 	@SingleObject
 	@ConfigField("blocked-servers")
-	private List<Server> blockedServers = new ArrayList<>();
+	private List<ConfigurationServer> blockedServers = new ArrayList<>();
 	@ConfigField("allowed-commands")
 	private List<String> allowedCommands = new ArrayList<>();
 	@ImportantField
@@ -104,11 +105,11 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	}
 
 	@Override
-	public Server findServerInfo(List<Server> servers) {
-		List<Server> filteredServers = fillType.shuffle(servers.stream().filter(server -> {
-			me.mastercapexd.auth.proxy.server.Server proxyServer = server.asProxyServer();
+	public ConfigurationServer findServerInfo(List<ConfigurationServer> servers) {
+		List<ConfigurationServer> filteredServers = fillType.shuffle(servers.stream().filter(server -> {
+			Server proxyServer = server.asProxyServer();
 			if (!proxyServer.isExists()) {
-				System.err.println("Server with name "+server.getId()+" doesn`t exists in your proxy!");
+				System.err.println("ConfigurationServer with name "+server.getId()+" doesn`t exists in your proxy!");
 				return false;
 			}
 			if (server.getMaxPlayers() != -1 && (proxyServer.getPlayersCount() >= server.getMaxPlayers()))
@@ -193,17 +194,17 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	}
 
 	@Override
-	public List<Server> getAuthServers() {
+	public List<ConfigurationServer> getAuthServers() {
 		return authServers;
 	}
 
 	@Override
-	public List<Server> getGameServers() {
+	public List<ConfigurationServer> getGameServers() {
 		return Collections.unmodifiableList(gameServers);
 	}
 
 	@Override
-	public List<Server> getBlockedServers() {
+	public List<ConfigurationServer> getBlockedServers() {
 		return Collections.unmodifiableList(blockedServers);
 	}
 

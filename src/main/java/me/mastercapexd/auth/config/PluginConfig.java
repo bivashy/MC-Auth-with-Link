@@ -7,7 +7,7 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
-import me.mastercapexd.auth.config.server.Server;
+import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;
 import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
@@ -29,11 +29,11 @@ public interface PluginConfig {
 
 	Pattern getPasswordPattern();
 
-	List<Server> getAuthServers();
+	List<ConfigurationServer> getAuthServers();
 
-	List<Server> getGameServers();
+	List<ConfigurationServer> getGameServers();
 
-	List<Server> getBlockedServers();
+	List<ConfigurationServer> getBlockedServers();
 
 	List<String> getAllowedCommands();
 
@@ -63,7 +63,7 @@ public interface PluginConfig {
 
 	BossBarSettings getBossBarSettings();
 
-	Server findServerInfo(List<Server> servers);
+	ConfigurationServer findServerInfo(List<ConfigurationServer> servers);
 
 	void reload();
 

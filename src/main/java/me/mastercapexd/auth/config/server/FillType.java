@@ -8,8 +8,8 @@ public enum FillType {
 	RANDOM {
 
 		@Override
-		public List<Server> shuffle(List<Server> servers) {
-			List<Server> modifableServers = new ArrayList<>(servers); // Method argument can pass unmodifable list
+		public List<ConfigurationServer> shuffle(List<ConfigurationServer> servers) {
+			List<ConfigurationServer> modifableServers = new ArrayList<>(servers); // Method argument can pass unmodifable list
 			Collections.shuffle(modifableServers);
 			return modifableServers;
 		}
@@ -18,11 +18,11 @@ public enum FillType {
 	GRADUALLY {
 
 		@Override
-		public List<Server> shuffle(List<Server> servers) {
+		public List<ConfigurationServer> shuffle(List<ConfigurationServer> servers) {
 			return servers;
 		}
 
 	};
 
-	public abstract List<Server> shuffle(List<Server> servers);
+	public abstract List<ConfigurationServer> shuffle(List<ConfigurationServer> servers);
 }

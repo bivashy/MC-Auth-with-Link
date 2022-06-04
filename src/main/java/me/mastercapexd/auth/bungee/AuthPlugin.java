@@ -33,7 +33,7 @@ import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
-import me.mastercapexd.auth.config.server.Server;
+import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
@@ -55,11 +55,11 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
 	public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor()
-			.registerFieldResolver(Server.class, (context) -> {
+			.registerFieldResolver(ConfigurationServer.class, (context) -> {
 				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
 				if (configurationValue == null)
 					return null;
-				return new Server(context.as(SingleObjectResolverContext.class).getConfigurationValue());
+				return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
 			}).registerFieldResolver(Long.class, (context) -> {
 				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
 				if (configurationValue == null)

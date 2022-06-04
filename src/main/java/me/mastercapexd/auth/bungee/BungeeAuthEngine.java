@@ -14,7 +14,7 @@ import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
-import me.mastercapexd.auth.config.server.Server;
+import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
@@ -54,7 +54,7 @@ public class BungeeAuthEngine implements AuthEngine {
 
 	private void startMessageTask() {
 		this.messageTask = ProxyServer.getInstance().getScheduler().schedule(this.plugin, () -> {
-			for (Server server : this.config.getAuthServers()) {
+			for (ConfigurationServer server : this.config.getAuthServers()) {
 				ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server.getId());
 				if (serverInfo == null)
 					continue;
@@ -106,7 +106,7 @@ public class BungeeAuthEngine implements AuthEngine {
 	private void startAuthTask() {
 		this.authTask = ProxyServer.getInstance().getScheduler().schedule(this.plugin, () -> {
 			long now = System.currentTimeMillis();
-			for (Server server : this.config.getAuthServers()) {
+			for (ConfigurationServer server : this.config.getAuthServers()) {
 				ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server.getId());
 				if (serverInfo == null)
 					continue;
