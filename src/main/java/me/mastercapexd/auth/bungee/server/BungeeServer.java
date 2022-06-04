@@ -38,4 +38,9 @@ public class BungeeServer implements Server {
 	public int getPlayersCount() {
 		return bungeeServerInfo.getPlayers().size();
 	}
+
+	@Override
+	public boolean isExists() {
+		return bungeeServerInfo != null;
+	}
 }
