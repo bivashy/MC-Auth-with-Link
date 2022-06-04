@@ -11,7 +11,9 @@ public class DefaultConfirmationSettings implements ConfigurationHolder, Messeng
 	private int removeDelay = 120;
 	@ConfigField("code-length")
 	private int codeLength = 6;
-
+	@ConfigField("can-toggle")
+	private boolean canToggleConfirmation = false;
+	
 	public DefaultConfirmationSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}
@@ -24,5 +26,10 @@ public class DefaultConfirmationSettings implements ConfigurationHolder, Messeng
 	@Override
 	public int getCodeLength() {
 		return codeLength;
+	}
+
+	@Override
+	public boolean canToggleConfirmation() {
+		return canToggleConfirmation;
 	}
 }

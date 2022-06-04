@@ -161,12 +161,13 @@ telegram:
     # За сколько времени игрок должен привязать аккаунт (В секундах)
     remove-delay: 120
     code-length: 6
+    # Может ли игрок включать/выключать подтверждение
+    can-toggle: false
     
   enter:
     # За сколько секунд игрок должен подтвердить вход в аккаунт
     enter-delay: 60
-    # Может ли игрок включать/выключать подтвердение
-    can-toggle-enter: false
+    
   # Настройка кода при восстановлении аккаунта
   restore:
     code-length: 7 # Длина кода
@@ -210,7 +211,7 @@ telegram:
       aliases:
         - '/code'
     confirmation-toggle:
-      main-command: '/подтвердение'
+      main-command: '/подтверждение'
       aliases:
         - '/entertoggle'
     google:
@@ -430,12 +431,13 @@ vk:
     # За сколько времени игрок должен привязать аккаунт (В секундах)
     remove-delay: 120
     code-length: 6
+    # Может ли игрок включать/выключать подтвердение
+    can-toggle: false
     
   enter:
     # За сколько секунд игрок должен подтвердить вход в аккаунт
     enter-delay: 60
-    # Может ли игрок включать/выключать подтвердение
-    can-toggle-enter: false
+    
   # Настройка кода при восстановлении аккаунта
   restore:
     code-length: 7 # Длина кода
@@ -479,7 +481,7 @@ vk:
       aliases:
         - '/code'
     confirmation-toggle:
-      main-command: '/подтвердение'
+      main-command: '/подтверждение'
       aliases:
         - '/entertoggle'
     google:
