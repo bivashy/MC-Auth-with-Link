@@ -92,7 +92,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	private Long joinDelay = 1000L;
 	@ConfigField("authentication-steps")
 	private List<String> authenticationSteps = new ArrayList<>(
-			Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
+			Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
 
 	protected final ProxyPlugin proxyPlugin;
 	protected ConfigurationSectionHolder configurationRoot;
