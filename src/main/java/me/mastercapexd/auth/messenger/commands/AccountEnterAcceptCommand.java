@@ -46,8 +46,8 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 		accounts.forEach((entryUser) -> {
 			entryUser.setConfirmed(true);
 			Account account = entryUser.getAccount();
-			account.getPlayer()
-					.ifPresent(player -> player.sendMessage(linkType.getLinkMessages().getMessage("enter-confirmed",linkType.newMessageContext(account))));
+			account.getPlayer().ifPresent(player -> player.sendMessage(
+					linkType.getLinkMessages().getMessage("enter-confirmed", linkType.newMessageContext(account))));
 			account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 			Auth.getLinkEntryAuth().removeLinkUser(entryUser);
 

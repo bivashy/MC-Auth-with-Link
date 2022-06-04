@@ -25,8 +25,9 @@ public class AlterColumnUpdate implements StorageUpdate {
 			return;
 		if (defaultValue == null) {
 			connection.createStatement().execute("ALTER TABLE `auth` ADD `" + columnName + "` " + columnType + ";");
-		}else {
-			connection.createStatement().execute("ALTER TABLE `auth` ADD `" + columnName + "` " + columnType + " DEFAULT "+defaultValue+";");
+		} else {
+			connection.createStatement().execute(
+					"ALTER TABLE `auth` ADD `" + columnName + "` " + columnType + " DEFAULT " + defaultValue + ";");
 		}
 	}
 }

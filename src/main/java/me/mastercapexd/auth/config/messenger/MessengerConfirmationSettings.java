@@ -4,6 +4,6 @@ public interface MessengerConfirmationSettings {
 	int getRemoveDelay();
 
 	int getCodeLength();
-	
+
 	boolean canToggleConfirmation();
 }

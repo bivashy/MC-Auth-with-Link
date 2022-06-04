@@ -63,7 +63,8 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 				account.getName());
 		VKLinkType.getInstance()
 				.newMessageBuilder(PLUGIN.getConfig().getVKSettings().getMessages().getMessage("enter-message"))
-				.keyboard(keyboard).build().send(Identificator.of(linkUser.getLinkUserInfo().getIdentificator().asNumber()));
+				.keyboard(keyboard).build()
+				.send(Identificator.of(linkUser.getLinkUserInfo().getIdentificator().asNumber()));
 		return false;
 	}
 

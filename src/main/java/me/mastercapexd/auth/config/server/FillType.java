@@ -9,7 +9,8 @@ public enum FillType {
 
 		@Override
 		public List<ConfigurationServer> shuffle(List<ConfigurationServer> servers) {
-			List<ConfigurationServer> modifableServers = new ArrayList<>(servers); // Method argument can pass unmodifable list
+			List<ConfigurationServer> modifableServers = new ArrayList<>(servers); // Method argument can pass
+																					// unmodifable list
 			Collections.shuffle(modifableServers);
 			return modifableServers;
 		}

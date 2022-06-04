@@ -90,7 +90,7 @@ public abstract class ProxyCommandsRegistry {
 				throw new SendMessageException(
 						config.getProxyMessages().getSubMessages("vk").getStringMessage("disabled"));
 		});
-		
+
 		commandHandler.registerCondition((actor, command, arguments) -> {
 			if (!command.hasAnnotation(TelegramUse.class))
 				return;

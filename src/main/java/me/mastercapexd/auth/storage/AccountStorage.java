@@ -14,7 +14,7 @@ public interface AccountStorage {
 	 * @return storage name in configuration.
 	 */
 	String getConfigurationName();
-	
+
 	CompletableFuture<Account> getAccount(String id);
 
 	CompletableFuture<Account> getAccountFromName(String playerName);

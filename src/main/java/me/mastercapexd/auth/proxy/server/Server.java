@@ -13,9 +13,10 @@ public interface Server extends Castable<Server> {
 	List<ProxyPlayer> getPlayers();
 
 	int getPlayersCount();
-	
+
 	/**
-	 * Validate if server exists, or not. By default just check if original server value is null.
+	 * Validate if server exists, or not. By default just check if original server
+	 * value is null.
 	 * 
 	 * @return is valid server.
 	 */

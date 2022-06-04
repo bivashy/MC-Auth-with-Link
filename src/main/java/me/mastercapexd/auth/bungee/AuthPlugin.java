@@ -100,7 +100,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 		initializeCommand();
 		if (config.getVKSettings().isEnabled())
 			initializeVk();
-		if(config.getTelegramSettings().isEnabled())
+		if (config.getTelegramSettings().isEnabled())
 			initializeTelegram();
 		if (config.getGoogleAuthenticatorSettings().isEnabled())
 			googleAuthenticator = new GoogleAuthenticator();

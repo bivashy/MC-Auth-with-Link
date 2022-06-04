@@ -38,7 +38,8 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
 			return;
 		}
 		accounts.forEach((entryUser) -> {
-			entryUser.getAccount().kick(linkType.getLinkMessages().getStringMessage("enter-declined",linkType.newMessageContext(entryUser.getAccount())));
+			entryUser.getAccount().kick(linkType.getLinkMessages().getStringMessage("enter-declined",
+					linkType.newMessageContext(entryUser.getAccount())));
 			actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-declined",
 					linkType.newMessageContext(entryUser.getAccount())));
 		});

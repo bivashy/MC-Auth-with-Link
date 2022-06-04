@@ -13,7 +13,7 @@ public class DefaultConfirmationSettings implements ConfigurationHolder, Messeng
 	private int codeLength = 6;
 	@ConfigField("can-toggle")
 	private boolean canToggleConfirmation = false;
-	
+
 	public DefaultConfirmationSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
 	}

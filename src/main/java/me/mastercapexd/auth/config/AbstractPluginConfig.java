@@ -109,7 +109,8 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 		List<ConfigurationServer> filteredServers = fillType.shuffle(servers.stream().filter(server -> {
 			Server proxyServer = server.asProxyServer();
 			if (!proxyServer.isExists()) {
-				System.err.println("ConfigurationServer with name "+server.getId()+" doesn`t exists in your proxy!");
+				System.err
+						.println("ConfigurationServer with name " + server.getId() + " doesn`t exists in your proxy!");
 				return false;
 			}
 			if (server.getMaxPlayers() != -1 && (proxyServer.getPlayersCount() >= server.getMaxPlayers()))

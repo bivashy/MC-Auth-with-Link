@@ -70,7 +70,7 @@ public interface PluginConfig {
 	GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
 
 	TelegramSettings getTelegramSettings();
-	
+
 	VKSettings getVKSettings();
 
 }

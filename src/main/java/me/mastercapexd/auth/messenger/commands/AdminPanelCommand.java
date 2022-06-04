@@ -10,7 +10,7 @@ import revxrsal.commands.orphan.OrphanCommand;
 public class AdminPanelCommand implements OrphanCommand {
 	@Default
 	public void adminPanelMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType) {
-		if(!linkType.getSettings().isAdministrator(actorWrapper.userId())) {
+		if (!linkType.getSettings().isAdministrator(actorWrapper.userId())) {
 			actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
 			return;
 		}

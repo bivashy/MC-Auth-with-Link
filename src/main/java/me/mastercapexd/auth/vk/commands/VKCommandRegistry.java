@@ -85,10 +85,12 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
 			return new MessengerLinkContext(code, confirmationUser);
 		});
 		registerCommands();
-		
+
 		try {
-			VK_HOOK.getClient().groups().setSettings(VK_HOOK.getActor(), VK_HOOK.getActor().getGroupId()).botsCapabilities(true).messages(true).execute();
-			VK_HOOK.getClient().groups().setLongPollSettings(VK_HOOK.getActor(), VK_HOOK.getActor().getGroupId()).enabled(true).messageEvent(true).messageNew(true).apiVersion("5.131").execute();
+			VK_HOOK.getClient().groups().setSettings(VK_HOOK.getActor(), VK_HOOK.getActor().getGroupId())
+					.botsCapabilities(true).messages(true).execute();
+			VK_HOOK.getClient().groups().setLongPollSettings(VK_HOOK.getActor(), VK_HOOK.getActor().getGroupId())
+					.enabled(true).messageEvent(true).messageNew(true).apiVersion("5.131").execute();
 		} catch (ApiException | ClientException e) {
 			e.printStackTrace();
 			System.err.println("Give all permissions to the vk api token for the automatically settings apply.");

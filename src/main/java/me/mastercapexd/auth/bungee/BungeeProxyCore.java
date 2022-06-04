@@ -38,7 +38,7 @@ public enum BungeeProxyCore implements ProxyCore {
 	@Override
 	public Optional<ProxyPlayer> getPlayer(UUID uniqueId) {
 		ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(uniqueId);
-		if(proxiedPlayer==null)
+		if (proxiedPlayer == null)
 			return Optional.empty();
 		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(proxiedPlayer));
 	}
@@ -46,7 +46,7 @@ public enum BungeeProxyCore implements ProxyCore {
 	@Override
 	public Optional<ProxyPlayer> getPlayer(String name) {
 		ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(name);
-		if(proxiedPlayer==null)
+		if (proxiedPlayer == null)
 			return Optional.empty();
 		return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(proxiedPlayer));
 	}

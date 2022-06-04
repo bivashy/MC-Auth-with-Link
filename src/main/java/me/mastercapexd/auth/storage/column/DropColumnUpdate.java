@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DropColumnUpdate implements StorageUpdate{
+public class DropColumnUpdate implements StorageUpdate {
 	private final String columnName;
 
 	public DropColumnUpdate(String columnName) {

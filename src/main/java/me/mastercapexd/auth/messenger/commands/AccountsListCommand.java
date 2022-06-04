@@ -82,8 +82,8 @@ public class AccountsListCommand implements OrphanCommand {
 	private Keyboard createKeyboard(LinkType linkType, int currentPage, int accountsPerPage, String accountsType,
 			List<Account> accounts) {
 		List<String> placeholdersList = new ArrayList<>(Arrays.asList("%next_page%", Integer.toString(currentPage + 1),
-				"%previous_page%", Integer.toString(currentPage - 1),"%prev_page%", Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage),
-				"%type%", accountsType));
+				"%previous_page%", Integer.toString(currentPage - 1), "%prev_page%", Integer.toString(currentPage - 1),
+				"%pageSize%", Integer.toString(accountsPerPage), "%type%", accountsType));
 
 		for (int i = 1; i <= accounts.size(); i++) { // Create placeholders array
 			Account account = accounts.get(i - 1);

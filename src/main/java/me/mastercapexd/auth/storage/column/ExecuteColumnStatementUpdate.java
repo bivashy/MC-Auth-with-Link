@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ExecuteColumnStatementUpdate implements StorageUpdate{
+public class ExecuteColumnStatementUpdate implements StorageUpdate {
 	private final String columnName, statement;
 
 	public ExecuteColumnStatementUpdate(String columnName, String statement) {

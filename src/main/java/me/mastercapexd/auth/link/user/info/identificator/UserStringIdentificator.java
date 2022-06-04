@@ -13,7 +13,7 @@ public class UserStringIdentificator implements LinkUserIdentificator {
 	public String asString() {
 		return userId;
 	}
-	
+
 	@Override
 	public LinkUserIdentificator setString(String userId) {
 		this.userId = userId;

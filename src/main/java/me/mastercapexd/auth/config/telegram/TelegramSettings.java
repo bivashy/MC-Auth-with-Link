@@ -2,7 +2,6 @@ package me.mastercapexd.auth.config.telegram;
 
 import java.util.List;
 
-import com.google.common.base.Equivalence;
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 
@@ -80,7 +79,7 @@ public class TelegramSettings implements ConfigurationHolder, MessengerSettings 
 	public boolean isAdministrator(LinkUserIdentificator identificator) {
 		if (identificator == null || !identificator.isNumber())
 			return false;
-		return adminAccounts.stream().anyMatch(number -> number.longValue()==identificator.asNumber());
+		return adminAccounts.stream().anyMatch(number -> number.longValue() == identificator.asNumber());
 	}
 
 	public boolean isAdministrator(long userId) {

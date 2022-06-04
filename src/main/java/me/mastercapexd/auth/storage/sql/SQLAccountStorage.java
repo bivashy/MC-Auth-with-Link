@@ -60,7 +60,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	private final List<StorageUpdate> columnUpdates = Arrays.asList(
 			new AlterColumnUpdate(GOOGLE_KEY_COLUMN_KEY, "VARCHAR(64)"),
 			new AlterColumnUpdate(VK_CONFIRMATION_ENABLED_COLUMN_KEY, "BIT"),
-			new AlterColumnUpdate(TELEGRAM_ID_COLUMN_KEY, "BIGINT",String.valueOf(AccountFactory.DEFAULT_TELEGRAM_ID)),
+			new AlterColumnUpdate(TELEGRAM_ID_COLUMN_KEY, "BIGINT", String.valueOf(AccountFactory.DEFAULT_TELEGRAM_ID)),
 			new AlterColumnUpdate(TELEGRAM_CONFIRMATION_ENABLED_COLUMN_KEY, "BIT"),
 			new ExecuteColumnStatementUpdate("vk_confirm_enabled",
 					"UPDATE `auth` SET `vk_confirmation_enabled` = CASE WHEN `vk_confirm_enabled` = 'true' THEN '1' WHEN `vk_confirm_enabled` = 'false' THEN '0' ELSE 0 END;"),
@@ -321,8 +321,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				UUID.fromString(resultSet.getString(UNIQUE_ID_COLUMN_KEY)), resultSet.getString(NICKNAME_COLUMN_KEY),
 				HashType.valueOf(resultSet.getString(HASH_TYPE_COLUMN_KEY)), resultSet.getString(PASSWORD_COLUMN_KEY),
 				resultSet.getString(GOOGLE_KEY_COLUMN_KEY), resultSet.getInt(VK_ID_COLUMN_KEY),
-				resultSet.getBoolean(VK_CONFIRMATION_ENABLED_COLUMN_KEY),
-				resultSet.getLong(TELEGRAM_ID_COLUMN_KEY),
+				resultSet.getBoolean(VK_CONFIRMATION_ENABLED_COLUMN_KEY), resultSet.getLong(TELEGRAM_ID_COLUMN_KEY),
 				resultSet.getBoolean(TELEGRAM_CONFIRMATION_ENABLED_COLUMN_KEY), resultSet.getLong(LAST_QUIT_COLUMN_KEY),
 				resultSet.getString(LAST_IP_COLUMN_KEY), resultSet.getLong(LAST_SESSION_START_COLUMN_KEY),
 				config.getSessionDurability());
