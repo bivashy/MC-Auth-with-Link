@@ -62,7 +62,7 @@ public class VKLinkAuthenticationStep extends AbstractAuthenticationStep {
 		Keyboard keyboard = PLUGIN.getConfig().getVKSettings().getKeyboards().createKeyboard("confirmation", "%name%",
 				account.getName());
 		VKLinkType.getInstance()
-				.newMessageBuilder(PLUGIN.getConfig().getVKSettings().getMessages().getMessage("enter-message"))
+				.newMessageBuilder(PLUGIN.getConfig().getVKSettings().getMessages().getMessage("enter-message", VKLinkType.getInstance().newMessageContext(account)))
 				.keyboard(keyboard).build()
 				.send(Identificator.of(linkUser.getLinkUserInfo().getIdentificator().asNumber()));
 		return false;
