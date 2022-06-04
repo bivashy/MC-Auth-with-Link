@@ -106,9 +106,11 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	@Override
 	public Server findServerInfo(List<Server> servers) {
 		List<Server> filteredServers = fillType.shuffle(servers.stream().filter(server -> {
-			me.mastercapexd.auth.proxy.server.Server proxyServer = proxyPlugin.getCore().serverFromName(server.getId());
-			if (proxyServer == null)
+			me.mastercapexd.auth.proxy.server.Server proxyServer = server.asProxyServer();
+			if (!proxyServer.isExists()) {
+				System.err.println("Server with name "+server.getId()+" doesn`t exists in your proxy!");
 				return false;
+			}
 			if (server.getMaxPlayers() != -1 && (proxyServer.getPlayersCount() >= server.getMaxPlayers()))
 				return false;
 			return true;
