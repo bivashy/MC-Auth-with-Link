@@ -59,8 +59,7 @@ public class TelegramLinkCommand {
 							player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("link-limit-reached"));
 							return;
 						}
-						String code = RandomCodeFactory
-								.generateCode(config.getTelegramSettings().getConfirmationSettings().getCodeLength());
+						String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
 
 						Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account,
 								new DefaultConfirmationInfo(new UserNumberIdentificator(telegramIdentificator), code)));

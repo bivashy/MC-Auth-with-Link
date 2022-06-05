@@ -76,8 +76,7 @@ public class VKLinkCommand {
 						player.sendMessage(VK_MESSAGES.getStringMessage("link-limit-reached"));
 						return;
 					}
-					String code = RandomCodeFactory
-							.generateCode(config.getVKSettings().getConfirmationSettings().getCodeLength());
+					String code = config.getVKSettings().getConfirmationSettings().generateCode();
 
 					Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account,
 							new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));

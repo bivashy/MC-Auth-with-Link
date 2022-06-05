@@ -13,6 +13,8 @@ public class DefaultConfirmationSettings implements ConfigurationHolder, Messeng
 	private int codeLength = 6;
 	@ConfigField("can-toggle")
 	private boolean canToggleConfirmation = false;
+	@ConfigField("code-characters")
+	private String codeCharacters = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public DefaultConfirmationSettings(ConfigurationSectionHolder sectionHolder) {
 		ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
@@ -31,5 +33,10 @@ public class DefaultConfirmationSettings implements ConfigurationHolder, Messeng
 	@Override
 	public boolean canToggleConfirmation() {
 		return canToggleConfirmation;
+	}
+
+	@Override
+	public String getCodeCharacters() {
+		return codeCharacters;
 	}
 }

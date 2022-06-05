@@ -161,6 +161,8 @@ telegram:
     # За сколько времени игрок должен привязать аккаунт (В секундах)
     remove-delay: 120
     code-length: 6
+    # Символы которые будут использованы в коде
+    code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     # Может ли игрок включать/выключать подтверждение
     can-toggle: false
     
@@ -171,6 +173,8 @@ telegram:
   # Настройка кода при восстановлении аккаунта
   restore:
     code-length: 7 # Длина кода
+    # Символы которые будут использованы в коде
+    code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   telegram-commands: # Основные команды 
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле
@@ -432,6 +436,8 @@ vk:
     # За сколько времени игрок должен привязать аккаунт (В секундах)
     remove-delay: 120
     code-length: 6
+    # Символы которые будут использованы в коде
+    code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     # Может ли игрок включать/выключать подтвердение
     can-toggle: false
     
@@ -442,6 +448,8 @@ vk:
   # Настройка кода при восстановлении аккаунта
   restore:
     code-length: 7 # Длина кода
+    # Символы которые будут использованы в коде
+    code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   vk-commands: # Основные команды 
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле

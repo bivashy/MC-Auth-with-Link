@@ -85,8 +85,8 @@ public abstract class MessengerCommandRegistry {
 					.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
 
 			if (!linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator()))
-				throw new SendMessageException(linkType.getSettings().getMessages()
-						.getMessage("confirmation-already-linked"));
+				throw new SendMessageException(
+						linkType.getSettings().getMessages().getMessage("confirmation-already-linked"));
 
 			return new MessengerLinkContext(code, confirmationUser);
 		});
