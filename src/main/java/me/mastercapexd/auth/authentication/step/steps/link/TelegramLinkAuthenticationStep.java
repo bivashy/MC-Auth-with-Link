@@ -63,7 +63,8 @@ public class TelegramLinkAuthenticationStep extends AbstractAuthenticationStep {
 		Keyboard keyboard = PLUGIN.getConfig().getTelegramSettings().getKeyboards().createKeyboard("confirmation",
 				"%name%", account.getName());
 		TelegramLinkType.getInstance()
-				.newMessageBuilder(PLUGIN.getConfig().getTelegramSettings().getMessages().getMessage("enter-message", TelegramLinkType.getInstance().newMessageContext(account)))
+				.newMessageBuilder(PLUGIN.getConfig().getTelegramSettings().getMessages().getMessage("enter-message",
+						TelegramLinkType.getInstance().newMessageContext(account)))
 				.keyboard(keyboard).build()
 				.send(Identificator.of(linkUser.getLinkUserInfo().getIdentificator().asNumber()));
 		return false;
