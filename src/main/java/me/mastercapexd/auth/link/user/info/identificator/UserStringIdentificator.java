@@ -26,9 +26,11 @@ public class UserStringIdentificator implements LinkUserIdentificator {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!LinkUserIdentificator.class.isAssignableFrom(obj.getClass()))
 			return false;
-		UserStringIdentificator other = (UserStringIdentificator) obj;
-		return Objects.equals(userId, other.userId);
+		LinkUserIdentificator other = (LinkUserIdentificator) obj;
+		if (other.isNumber())
+			return false;
+		return Objects.equals(userId, other.asString());
 	}
 }

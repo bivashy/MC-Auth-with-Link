@@ -49,9 +49,11 @@ public class UserNumberIdentificator implements LinkUserIdentificator {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!LinkUserIdentificator.class.isAssignableFrom(obj.getClass()))
 			return false;
-		UserNumberIdentificator other = (UserNumberIdentificator) obj;
-		return userId == other.userId;
+		LinkUserIdentificator other = (LinkUserIdentificator) obj;
+		if (!other.isNumber())
+			return false;
+		return userId == other.asNumber();
 	}
 }
