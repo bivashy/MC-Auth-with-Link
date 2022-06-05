@@ -1,8 +1,18 @@
 package me.mastercapexd.auth.messenger.commands;
 
+import java.util.Optional;
+
+import me.mastercapexd.auth.Auth;
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
+import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
+import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
+import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
@@ -50,6 +60,52 @@ public abstract class MessengerCommandRegistry {
 				throw new SendMessageException(
 						PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-long"));
 			return new NewPassword(newRawPassword);
+		});
+
+		commandHandler.registerValueResolver(MessengerLinkContext.class, (context) -> {
+			String code = context.popForParameter();
+			LinkCommandActorWrapper commandActor = context.actor().as(LinkCommandActorWrapper.class);
+
+			LinkConfirmationUser confirmationUser = Auth.getLinkConfirmationAuth()
+					.getLinkUsers(linkUser -> linkUser.getLinkType().equals(linkType)
+							&& linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId()))
+					.stream().findFirst().orElse(null);
+
+			if (confirmationUser == null)
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-no-code"));
+
+			if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
+				throw new SendMessageException(
+						linkType.getSettings().getMessages().getMessage("confirmation-timed-out"));
+
+			if (!confirmationUser.getConfirmationInfo().getConfirmationCode().equals(code))
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-error"));
+
+			LinkUserInfo linkUserInfo = confirmationUser.getAccount()
+					.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
+
+			if (!linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator()))
+				throw new SendMessageException(linkType.getSettings().getMessages()
+						.getMessage("confirmation-already-linked"));
+
+			return new MessengerLinkContext(code, confirmationUser);
+		});
+
+		commandHandler.registerValueResolver(Account.class, (context) -> {
+			String playerName = context.popForParameter();
+			LinkUserIdentificator userId = context.actor().as(LinkCommandActorWrapper.class).userId();
+			Account account = PLUGIN.getAccountStorage().getAccountFromName(playerName).get();
+			if (account == null || !account.isRegistered())
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
+
+			Optional<LinkUser> linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
+			if (!linkUser.isPresent())
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account"));
+
+			if (!linkUser.get().getLinkUserInfo().getIdentificator().equals(userId)
+					&& !linkType.getSettings().isAdministrator(userId))
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account"));
+			return account;
 		});
 	}
 
