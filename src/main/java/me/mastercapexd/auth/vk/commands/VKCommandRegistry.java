@@ -41,14 +41,14 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
 			if (account == null || !account.isRegistered())
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("account-not-found"));
-
+			
 			Optional<LinkUser> linkUser = account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER);
 			if (!linkUser.isPresent())
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
-
+			
 			if (linkUser.get().getLinkUserInfo().getIdentificator().asNumber() != userId
-					|| !PLUGIN.getConfig().getVKSettings().isAdministrator(userId))
+					&& !PLUGIN.getConfig().getVKSettings().isAdministrator(userId))
 				throw new SendMessageException(
 						PLUGIN.getConfig().getVKSettings().getMessages().getMessage("not-your-account"));
 			return account;
