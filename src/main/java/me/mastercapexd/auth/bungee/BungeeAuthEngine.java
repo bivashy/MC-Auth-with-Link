@@ -8,6 +8,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.link.GoogleCodeAuthenticationStep;
+import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
@@ -32,6 +33,8 @@ public class BungeeAuthEngine implements AuthEngine {
 
 	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
 			.getProxyMessages().getSubMessages("google");
+	private static final Messages<ProxyComponent> TELEGRAM_MESSAGES = ProxyPlugin.instance().getConfig()
+			.getProxyMessages().getSubMessages("telegram");
 	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages()
 			.getSubMessages("vk");
 
@@ -75,7 +78,15 @@ public class BungeeAuthEngine implements AuthEngine {
 								VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
 						continue;
 					}
-
+					if (TelegramLinkAuthenticationStep.STEP_NAME
+							.equals(account.getCurrentAuthenticationStep().getStepName())) {
+						player.sendMessage(
+								TELEGRAM_MESSAGES.getMessage("enter-confirm-need-chat", new ProxyMessageContext(account))
+										.as(BungeeMultiProxyComponent.class).components());
+						TitleBar.send(player, TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-title"),
+								TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
+						continue;
+					}
 					if (GoogleCodeAuthenticationStep.STEP_NAME
 							.equals(account.getCurrentAuthenticationStep().getStepName())) {
 						player.sendMessage(
