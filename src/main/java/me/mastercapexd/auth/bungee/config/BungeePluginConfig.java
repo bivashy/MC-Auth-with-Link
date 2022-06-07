@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.util.function.Predicate;
 
 import org.apache.commons.io.IOUtils;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -50,6 +51,8 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 			IOUtils.copy(resourceAsStream, outputStream);
 			ConfigurationNode defaultConfiguration = YamlConfigurationLoader.builder().file(defaultConfigurationFile)
 					.build().load();
+			removeIf(defaultConfiguration,
+					(node) -> node.key() instanceof String && ((String) node.key()).equals("not-linked"));
 			configuration = configuration.mergeFrom(defaultConfiguration);
 			outputStream.close();
 			resourceAsStream.close();
@@ -61,4 +64,13 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 		return null;
 	}
 
+
+	private ConfigurationNode removeIf(ConfigurationNode root, Predicate<ConfigurationNode> nodePredicate) {
+		root.childrenMap().entrySet().forEach(entry -> {
+			if (nodePredicate.test(entry.getValue()))
+				root.removeChild(entry.getKey());
+			removeIf(entry.getValue(), nodePredicate);
+		});
+		return root;
+	}
 }
