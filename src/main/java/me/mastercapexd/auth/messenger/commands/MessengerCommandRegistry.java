@@ -72,21 +72,22 @@ public abstract class MessengerCommandRegistry {
 					.stream().findFirst().orElse(null);
 
 			if (confirmationUser == null)
-				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-no-code"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessageNullable("confirmation-no-code"));
 
 			if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
-				throw new SendMessageException(
-						linkType.getSettings().getMessages().getMessage("confirmation-timed-out"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-timed-out",
+						linkType.newMessageContext(confirmationUser.getAccount())));
 
 			if (!confirmationUser.getConfirmationInfo().getConfirmationCode().equals(code))
-				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-error"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-error",
+						linkType.newMessageContext(confirmationUser.getAccount())));
 
 			LinkUserInfo linkUserInfo = confirmationUser.getAccount()
 					.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
 
 			if (!linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator()))
-				throw new SendMessageException(
-						linkType.getSettings().getMessages().getMessage("confirmation-already-linked"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage(
+						"confirmation-already-linked", linkType.newMessageContext(confirmationUser.getAccount())));
 
 			return new MessengerLinkContext(code, confirmationUser);
 		});
@@ -96,15 +97,17 @@ public abstract class MessengerCommandRegistry {
 			LinkUserIdentificator userId = context.actor().as(LinkCommandActorWrapper.class).userId();
 			Account account = PLUGIN.getAccountStorage().getAccountFromName(playerName).get();
 			if (account == null || !account.isRegistered())
-				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessageNullable("account-not-found"));
 
 			Optional<LinkUser> linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
 			if (!linkUser.isPresent())
-				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account",
+						linkType.newMessageContext(account)));
 
 			if (!linkUser.get().getLinkUserInfo().getIdentificator().equals(userId)
 					&& !linkType.getSettings().isAdministrator(userId))
-				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account"));
+				throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account",
+						linkType.newMessageContext(account)));
 			return account;
 		});
 	}

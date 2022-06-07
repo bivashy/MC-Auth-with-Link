@@ -40,14 +40,14 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 			return true;
 		});
 		if (accounts.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-no-accounts"));
+			actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("enter-no-accounts"));
 			return;
 		}
 		accounts.forEach((entryUser) -> {
 			entryUser.setConfirmed(true);
 			Account account = entryUser.getAccount();
 			account.getPlayer().ifPresent(player -> player.sendMessage(
-					linkType.getProxyMessages().getMessage("enter-confirmed", linkType.newMessageContext(account))));
+					linkType.getProxyMessages().getStringMessage("enter-confirmed", linkType.newMessageContext(account))));
 			account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 			Auth.getLinkEntryAuth().removeLinkUser(entryUser);
 

@@ -34,7 +34,7 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
 			return true;
 		});
 		if (accounts.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-no-accounts"));
+			actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("enter-no-accounts"));
 			return;
 		}
 		accounts.forEach((entryUser) -> {

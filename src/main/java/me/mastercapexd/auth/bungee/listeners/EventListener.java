@@ -13,9 +13,11 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -36,26 +38,20 @@ public class EventListener implements Listener {
 		this.accountStorage = accountStorage;
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onPostLogin(PostLoginEvent event) {
+	public void onServerConnected(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
 		if (!config.getNamePattern().matcher(name).matches()) {
-			event.getPlayer().disconnect(config.getProxyMessages().getMessage("illegal-name-chars")
+			event.getPlayer().disconnect(config.getProxyMessages().getMessageNullable("illegal-name-chars")
 					.as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
 		if (config.getMaxLoginPerIP() != 0
-				&& getOnlineExactIP(event.getPlayer().getAddress().getAddress().getHostAddress()) >= config
-						.getMaxLoginPerIP()) {
-			event.getPlayer().disconnect(config.getProxyMessages().getMessage("limit-ip-reached")
+				&& getOnlineExactIP(event.getPlayer().getSocketAddress().toString()) >= config.getMaxLoginPerIP()) {
+			event.getPlayer().disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached")
 					.as(BungeeMultiProxyComponent.class).components());
 			return;
 		}
-	}
-
-	@EventHandler
-	public void onServerConnected(PostLoginEvent event) {
 		ProxiedPlayer player = event.getPlayer();
 		startLogin(player);
 	}
@@ -105,21 +101,20 @@ public class EventListener implements Listener {
 		});
 	}
 
-	@SuppressWarnings("deprecation")
 	private long getOnlineExactIP(String address) {
-		return ProxyServer.getInstance().getPlayers().stream().filter(proxyPlayer -> proxyPlayer.getPendingConnection()
-				.getAddress().getAddress().getHostAddress().equals(address)).count();
+		return ProxyServer.getInstance().getPlayers().stream()
+				.filter(proxyPlayer -> proxyPlayer.getPendingConnection().getSocketAddress().toString().equals(address))
+				.count();
 	}
 
-	@SuppressWarnings("deprecation")
 	private void startLogin(ProxiedPlayer player) {
 		String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 		accountStorage.getAccount(id).thenAccept(account -> {
 			if (config.isNameCaseCheckEnabled()) {
 				if (account != null && !account.getName().equals(player.getName()))
-					player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
-							.replaceAll("(?i)%correct%", account.getName())
-							.replaceAll("(?i)%failed%", player.getName()));
+					player.disconnect(TextComponent.fromLegacyText(config.getProxyMessages()
+							.getStringMessage("check-name-case-failed").replaceAll("(?i)%correct%", account.getName())
+							.replaceAll("(?i)%failed%", player.getName())));
 			}
 
 			AuthenticationStepCreator authenticationStepCreator = AuthPlugin.getInstance()
@@ -133,7 +128,7 @@ public class EventListener implements Listener {
 						player.getUniqueId(), player.getName(), config.getActiveHashType(),
 						AccountFactory.DEFAULT_PASSWORD, AccountFactory.DEFAULT_GOOGLE_KEY,
 						AccountFactory.DEFAULT_VK_ID, AccountFactory.DEFAULT_VK_CONFIRMATION_STATE,
-						AccountFactory.DEFAULT_LAST_QUIT, player.getAddress().getHostString(),
+						AccountFactory.DEFAULT_LAST_QUIT, player.getSocketAddress().toString(),
 						AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
 
 				AuthenticationStepContext context = AuthPlugin.getInstance().getAuthenticationContextFactoryDealership()
@@ -145,8 +140,9 @@ public class EventListener implements Listener {
 			}
 
 			if (!account.getName().equals(player.getName())) {
-				player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed")
-						.replaceAll("(?i)%correct%", account.getName()).replaceAll("(?i)%failed%", player.getName()));
+				player.disconnect(TextComponent.fromLegacyText(config.getProxyMessages()
+						.getStringMessage("check-name-case-failed").replaceAll("(?i)%correct%", account.getName())
+						.replaceAll("(?i)%failed%", player.getName())));
 				return;
 			}
 
@@ -154,7 +150,7 @@ public class EventListener implements Listener {
 					.createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
 			if (account.isSessionActive(config.getSessionDurability())) {
-				player.sendMessage(config.getProxyMessages().getMessage("autoconnect")
+				player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account))
 						.as(BungeeMultiProxyComponent.class).components());
 				ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(),
 						() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);

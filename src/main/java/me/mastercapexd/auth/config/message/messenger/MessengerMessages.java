@@ -15,13 +15,13 @@ public class MessengerMessages extends AbstractMessages<String> {
 	}
 
 	@Override
-	public String getMessage(String key) {
+	public String getMessageNullable(String key) {
 		return getStringMessage(key);
 	}
 
 	@Override
 	public String getMessage(String key, MessageContext context) {
-		return context.apply(getMessage(key));
+		return context.apply(getMessageNullable(key));
 	}
 
 	@Override

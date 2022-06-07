@@ -14,7 +14,7 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 	}
 
 	@Override
-	public ProxyComponent getMessage(String key) {
+	public ProxyComponent getMessageNullable(String key) {
 		return ProxyComponent.fromString(getStringMessage(key));
 	}
 

@@ -14,6 +14,7 @@ import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -63,41 +64,45 @@ public class BungeeAuthEngine implements AuthEngine {
 					String id = this.config.getActiveIdentifierType()
 							.getId(BungeeProxyPlayerFactory.wrapPlayer(player));
 					Account account = Auth.getAccount(id);
-					if (account != null) {
-						if (VKLinkAuthenticationStep.STEP_NAME
-								.equals(account.getCurrentAuthenticationStep().getStepName())) {
-							player.sendMessage(VK_MESSAGES.getMessage("enter-confirm-need-chat")
-									.as(BungeeMultiProxyComponent.class).components());
-							TitleBar.send(player, VK_MESSAGES.getStringMessage("enter-confirm-need-title"),
-									VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
-							continue;
-						}
+					if (account == null)
+						continue;
+					if (VKLinkAuthenticationStep.STEP_NAME
+							.equals(account.getCurrentAuthenticationStep().getStepName())) {
+						player.sendMessage(
+								VK_MESSAGES.getMessage("enter-confirm-need-chat", new ProxyMessageContext(account))
+										.as(BungeeMultiProxyComponent.class).components());
+						TitleBar.send(player, VK_MESSAGES.getStringMessage("enter-confirm-need-title"),
+								VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
+						continue;
+					}
 
-						if (GoogleCodeAuthenticationStep.STEP_NAME
-								.equals(account.getCurrentAuthenticationStep().getStepName())) {
-							player.sendMessage(GOOGLE_MESSAGES.getMessage("need-code-chat")
-									.as(BungeeMultiProxyComponent.class).components());
-							TitleBar.send(player, GOOGLE_MESSAGES.getStringMessage("need-code-title"),
-									GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0, 120, 0);
-							continue;
-						}
+					if (GoogleCodeAuthenticationStep.STEP_NAME
+							.equals(account.getCurrentAuthenticationStep().getStepName())) {
+						player.sendMessage(
+								GOOGLE_MESSAGES.getMessage("need-code-chat", new ProxyMessageContext(account))
+										.as(BungeeMultiProxyComponent.class).components());
+						TitleBar.send(player, GOOGLE_MESSAGES.getStringMessage("need-code-title"),
+								GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0, 120, 0);
+						continue;
+					}
 
-						if (LoginAuthenticationStep.STEP_NAME
-								.equals(account.getCurrentAuthenticationStep().getStepName())) {
-							player.sendMessage(this.config.getProxyMessages().getMessage("login-chat")
-									.as(BungeeMultiProxyComponent.class).components());
-							TitleBar.send(player, this.config.getProxyMessages().getStringMessage("login-title"),
-									this.config.getProxyMessages().getStringMessage("login-subtitle"), 0, 120, 0);
-							continue;
-						}
+					if (LoginAuthenticationStep.STEP_NAME
+							.equals(account.getCurrentAuthenticationStep().getStepName())) {
+						player.sendMessage(this.config.getProxyMessages()
+								.getMessage("login-chat", new ProxyMessageContext(account))
+								.as(BungeeMultiProxyComponent.class).components());
+						TitleBar.send(player, this.config.getProxyMessages().getStringMessage("login-title"),
+								this.config.getProxyMessages().getStringMessage("login-subtitle"), 0, 120, 0);
+						continue;
+					}
 
-						if (RegisterAuthenticationStep.STEP_NAME
-								.equals(account.getCurrentAuthenticationStep().getStepName())) {
-							player.sendMessage(this.config.getProxyMessages().getMessage("register-chat")
-									.as(BungeeMultiProxyComponent.class).components());
-							TitleBar.send(player, this.config.getProxyMessages().getStringMessage("register-title"),
-									this.config.getProxyMessages().getStringMessage("register-subtitle"), 0, 120, 0);
-						}
+					if (RegisterAuthenticationStep.STEP_NAME
+							.equals(account.getCurrentAuthenticationStep().getStepName())) {
+						player.sendMessage(this.config.getProxyMessages()
+								.getMessage("register-chat", new ProxyMessageContext(account))
+								.as(BungeeMultiProxyComponent.class).components());
+						TitleBar.send(player, this.config.getProxyMessages().getStringMessage("register-title"),
+								this.config.getProxyMessages().getStringMessage("register-subtitle"), 0, 120, 0);
 					}
 				}
 			}
@@ -129,10 +134,11 @@ public class BungeeAuthEngine implements AuthEngine {
 							.getLinkUsers(user -> user.getAccount().getId().equals(account.getId())))
 						if (entryUser != null)
 							authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay() * 1000;
-					
+
 					if (onlineTime >= authTime) {
-						player.disconnect(this.config.getProxyMessages().getMessage("time-left")
-								.as(BungeeMultiProxyComponent.class).components());
+						player.disconnect(
+								this.config.getProxyMessages().getMessage("time-left", new ProxyMessageContext(account))
+										.as(BungeeMultiProxyComponent.class).components());
 						Auth.removeAccount(id);
 						continue;
 					}
