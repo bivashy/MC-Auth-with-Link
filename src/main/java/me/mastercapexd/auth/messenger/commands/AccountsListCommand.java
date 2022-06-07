@@ -98,7 +98,7 @@ public class AccountsListCommand implements OrphanCommand {
 		Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts",
 				placeholdersList.toArray(new String[0]));
 
-		keyboard.removeIf(button -> button.getLabel().contains("%account"));
+		keyboard.removeIf(button -> button.getActionData().contains("%account"));
 		return keyboard;
 	}
 }
