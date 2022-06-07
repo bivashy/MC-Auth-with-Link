@@ -258,7 +258,7 @@ telegram:
       answer: 'Команда не найдена! Доступные команды: /помощь'
       button-ignore: true
   keyboards:
-      confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"\"/принять %name%\""},{"text":"Отклонить","callback_data":"\"/отклонить %name%\""}]]}'
+      confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"/принять %name%"},{"text":"Отклонить","callback_data":"/отклонить %name%"}]]}'
       accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
             {                    
             "inline_keyboard": [
