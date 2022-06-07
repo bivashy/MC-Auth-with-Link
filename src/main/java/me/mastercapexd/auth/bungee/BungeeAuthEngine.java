@@ -15,6 +15,7 @@ import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFac
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
+import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
@@ -123,9 +124,12 @@ public class BungeeAuthEngine implements AuthEngine {
 					}
 					int onlineTime = (int) (now - Auth.getJoinTime(id)) / 1000;
 
-					long authTime = Auth.getLinkEntryAuth().hasLinkUser(account.getId(), VKLinkType.getInstance())
-							? (this.config.getAuthTime() * 2L)
-							: this.config.getAuthTime();
+					long authTime = this.config.getAuthTime();
+					for (LinkEntryUser entryUser : Auth.getLinkEntryAuth()
+							.getLinkUsers(user -> user.getAccount().getId().equals(account.getId())))
+						if (entryUser != null)
+							authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay() * 1000;
+					
 					if (onlineTime >= authTime) {
 						player.disconnect(this.config.getProxyMessages().getMessage("time-left")
 								.as(BungeeMultiProxyComponent.class).components());
