@@ -14,7 +14,6 @@ import revxrsal.commands.CommandHandler;
 
 public class VKCommandRegistry extends MessengerCommandRegistry {
 	private static final VkPluginHook VK_HOOK = ProxyPlugin.instance().getHook(VkPluginHook.class);
-	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 	private static final CommandHandler COMMAND_HANDLER = new VkHandler(VK_HOOK.getClient(), VK_HOOK.getActor())
 			.disableStackTraceSanitizing();
 
