@@ -6,6 +6,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
+import net.md_5.bungee.api.ChatColor;
 
 public class BossBarSettings implements ConfigurationHolder {
 	@ConfigField("use")
@@ -28,6 +29,6 @@ public class BossBarSettings implements ConfigurationHolder {
 	public ProxyBossbar createBossBar() {
 		if (!enabled)
 			return null;
-		return ProxyPlugin.instance().getCore().createBossbar(barText);
+		return ProxyPlugin.instance().getCore().createBossbar(ChatColor.translateAlternateColorCodes('&', barText));
 	}
 }
