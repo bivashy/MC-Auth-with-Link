@@ -5,6 +5,7 @@ import java.util.Arrays;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.proxy.commands.ProxyCommandsRegistry;
@@ -24,7 +25,9 @@ import revxrsal.commands.exception.SendMessageException;
 
 public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
 	private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
-	public static final CommandHandler BUNGEE_COMMAND_HANDLER = new BungeeHandler(PLUGIN).disableStackTraceSanitizing();
+	public static final CommandHandler BUNGEE_COMMAND_HANDLER = new BungeeHandler(PLUGIN)
+			.setExceptionHandler(new BungeeExceptionHandler(PLUGIN.getConfig().getProxyMessages()))
+			.disableStackTraceSanitizing();
 
 	public BungeeCommandsRegistry() {
 		super(BUNGEE_COMMAND_HANDLER);
