@@ -18,7 +18,6 @@ import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
-import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
@@ -80,9 +79,9 @@ public class BungeeAuthEngine implements AuthEngine {
 					}
 					if (TelegramLinkAuthenticationStep.STEP_NAME
 							.equals(account.getCurrentAuthenticationStep().getStepName())) {
-						player.sendMessage(
-								TELEGRAM_MESSAGES.getMessage("enter-confirm-need-chat", new ProxyMessageContext(account))
-										.as(BungeeMultiProxyComponent.class).components());
+						player.sendMessage(TELEGRAM_MESSAGES
+								.getMessage("enter-confirm-need-chat", new ProxyMessageContext(account))
+								.as(BungeeMultiProxyComponent.class).components());
 						TitleBar.send(player, TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-title"),
 								TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
 						continue;
@@ -144,7 +143,7 @@ public class BungeeAuthEngine implements AuthEngine {
 					for (LinkEntryUser entryUser : Auth.getLinkEntryAuth()
 							.getLinkUsers(user -> user.getAccount().getId().equals(account.getId())))
 						if (entryUser != null)
-							authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay() * 1000;
+							authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();
 
 					if (onlineTime >= authTime) {
 						player.disconnect(
@@ -162,6 +161,7 @@ public class BungeeAuthEngine implements AuthEngine {
 					}
 					ProxyBossbar bar = Auth.getBar(id);
 					bar.progress(1.0F - onlineTime / (float) authTime);
+					bar.update();
 				}
 			}
 		}, 0L, 1000L, TimeUnit.MILLISECONDS);
