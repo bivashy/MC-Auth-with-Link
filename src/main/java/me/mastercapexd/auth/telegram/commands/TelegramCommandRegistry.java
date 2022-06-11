@@ -21,6 +21,13 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
 				context -> new TelegramCommandActorWrapper(context.actor()));
 		registerCommands();
 
-		TELEGRAM_HOOK.getTelegramBot().setUpdatesListener(new TelegramCommandUpdatesListener());
+		TELEGRAM_HOOK.getTelegramBot().setUpdatesListener(new TelegramCommandUpdatesListener(), exception -> {
+			exception.printStackTrace();
+			if(exception.response().errorCode()==409) {// Multiple bot instances error.
+				TELEGRAM_HOOK.getTelegramBot().removeGetUpdatesListener();
+				System.err.println("Telegram bot disabled because you are already running another bot instance!");
+				System.err.println("Please use another token if you need to run multiple bot instances");
+			}
+		});
 	}
 }
