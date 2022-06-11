@@ -18,6 +18,8 @@ public interface ProxyCore extends Castable<ProxyCore> {
 	Optional<ProxyPlayer> getPlayer(UUID uniqueId);
 
 	Optional<ProxyPlayer> getPlayer(String name);
+	
+	Optional<ProxyPlayer> wrapPlayer(Object player);
 
 	Logger getLogger();
 

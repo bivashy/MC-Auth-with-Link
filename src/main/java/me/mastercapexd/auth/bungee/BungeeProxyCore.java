@@ -52,6 +52,17 @@ public enum BungeeProxyCore implements ProxyCore {
 	}
 
 	@Override
+	public Optional<ProxyPlayer> wrapPlayer(Object player) {
+		if (player == null)
+			return Optional.empty();
+		if (player instanceof ProxyPlayer)
+			return Optional.of((ProxyPlayer) player);
+		if (player instanceof ProxiedPlayer)
+			return Optional.of(BungeeProxyPlayerFactory.wrapPlayer((ProxiedPlayer) player));
+		return Optional.empty();
+	}
+
+	@Override
 	public Logger getLogger() {
 		return PROXY_SERVER.getLogger();
 	}
