@@ -18,6 +18,7 @@ import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
+import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
@@ -36,6 +37,7 @@ public class BungeeAuthEngine implements AuthEngine {
 			.getProxyMessages().getSubMessages("telegram");
 	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages()
 			.getSubMessages("vk");
+	private static final BungeeProxyCore PROXY_CORE = ProxyPlugin.instance().getCore();
 
 	private final Plugin plugin;
 
@@ -73,8 +75,9 @@ public class BungeeAuthEngine implements AuthEngine {
 						player.sendMessage(
 								VK_MESSAGES.getMessage("enter-confirm-need-chat", new ProxyMessageContext(account))
 										.as(BungeeMultiProxyComponent.class).components());
-						TitleBar.send(player, VK_MESSAGES.getStringMessage("enter-confirm-need-title"),
-								VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
+						PROXY_CORE.createTitle(VK_MESSAGES.getStringMessage("enter-confirm-need-title"))
+								.subtitle(VK_MESSAGES.getStringMessage("enter-confirm-need-subtitle")).stay(120)
+								.send(PROXY_CORE.wrapPlayer(player).get());
 						continue;
 					}
 					if (TelegramLinkAuthenticationStep.STEP_NAME
@@ -82,8 +85,9 @@ public class BungeeAuthEngine implements AuthEngine {
 						player.sendMessage(TELEGRAM_MESSAGES
 								.getMessage("enter-confirm-need-chat", new ProxyMessageContext(account))
 								.as(BungeeMultiProxyComponent.class).components());
-						TitleBar.send(player, TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-title"),
-								TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-subtitle"), 0, 120, 0);
+						PROXY_CORE.createTitle(TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-title"))
+								.subtitle(TELEGRAM_MESSAGES.getStringMessage("enter-confirm-need-subtitle")).stay(120)
+								.send(PROXY_CORE.wrapPlayer(player).get());
 						continue;
 					}
 					if (GoogleCodeAuthenticationStep.STEP_NAME
@@ -91,8 +95,9 @@ public class BungeeAuthEngine implements AuthEngine {
 						player.sendMessage(
 								GOOGLE_MESSAGES.getMessage("need-code-chat", new ProxyMessageContext(account))
 										.as(BungeeMultiProxyComponent.class).components());
-						TitleBar.send(player, GOOGLE_MESSAGES.getStringMessage("need-code-title"),
-								GOOGLE_MESSAGES.getStringMessage("need-code-subtitle"), 0, 120, 0);
+						PROXY_CORE.createTitle(GOOGLE_MESSAGES.getStringMessage("need-code-title"))
+								.subtitle(GOOGLE_MESSAGES.getStringMessage("need-code-subtitle")).stay(120)
+								.send(PROXY_CORE.wrapPlayer(player).get());
 						continue;
 					}
 
@@ -101,8 +106,9 @@ public class BungeeAuthEngine implements AuthEngine {
 						player.sendMessage(this.config.getProxyMessages()
 								.getMessage("login-chat", new ProxyMessageContext(account))
 								.as(BungeeMultiProxyComponent.class).components());
-						TitleBar.send(player, this.config.getProxyMessages().getStringMessage("login-title"),
-								this.config.getProxyMessages().getStringMessage("login-subtitle"), 0, 120, 0);
+						PROXY_CORE.createTitle(config.getProxyMessages().getStringMessage("login-title"))
+								.subtitle(config.getProxyMessages().getStringMessage("login-subtitle")).stay(120)
+								.send(PROXY_CORE.wrapPlayer(player).get());
 						continue;
 					}
 
@@ -111,8 +117,9 @@ public class BungeeAuthEngine implements AuthEngine {
 						player.sendMessage(this.config.getProxyMessages()
 								.getMessage("register-chat", new ProxyMessageContext(account))
 								.as(BungeeMultiProxyComponent.class).components());
-						TitleBar.send(player, this.config.getProxyMessages().getStringMessage("register-title"),
-								this.config.getProxyMessages().getStringMessage("register-subtitle"), 0, 120, 0);
+						PROXY_CORE.createTitle(config.getProxyMessages().getStringMessage("register-title"))
+								.subtitle(config.getProxyMessages().getStringMessage("register-subtitle")).stay(120)
+								.send(PROXY_CORE.wrapPlayer(player).get());
 					}
 				}
 			}
