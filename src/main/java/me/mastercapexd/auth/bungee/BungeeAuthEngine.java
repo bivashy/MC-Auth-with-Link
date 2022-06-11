@@ -22,7 +22,6 @@ import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
-import me.mastercapexd.auth.utils.TitleBar;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -37,7 +36,7 @@ public class BungeeAuthEngine implements AuthEngine {
 			.getProxyMessages().getSubMessages("telegram");
 	private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages()
 			.getSubMessages("vk");
-	private static final BungeeProxyCore PROXY_CORE = ProxyPlugin.instance().getCore();
+	private static final ProxyCore PROXY_CORE = ProxyPlugin.instance().getCore();
 
 	private final Plugin plugin;
 
