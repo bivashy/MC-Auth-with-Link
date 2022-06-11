@@ -1,14 +1,12 @@
 package me.mastercapexd.auth.bungee.config;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.util.function.Predicate;
 
-import org.apache.commons.io.IOUtils;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -18,6 +16,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.AbstractPluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.utils.IOUtils;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeePluginConfig extends AbstractPluginConfig {
@@ -47,14 +46,12 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 					.build();
 			ConfigurationNode configuration = configurationLoader.load();
 			File defaultConfigurationFile = File.createTempFile("config", ".yml");
-			FileOutputStream outputStream = new FileOutputStream(defaultConfigurationFile);
-			IOUtils.copy(resourceAsStream, outputStream);
+			IOUtils.streamToFile(resourceAsStream, defaultConfigurationFile);
 			ConfigurationNode defaultConfiguration = YamlConfigurationLoader.builder().file(defaultConfigurationFile)
 					.build().load();
 			removeIf(defaultConfiguration,
 					(node) -> node.key() instanceof String && ((String) node.key()).equals("not-linked"));
 			configuration = configuration.mergeFrom(defaultConfiguration);
-			outputStream.close();
 			resourceAsStream.close();
 			defaultConfigurationFile.delete();
 			return configuration;
@@ -63,7 +60,6 @@ public class BungeePluginConfig extends AbstractPluginConfig {
 		}
 		return null;
 	}
-
 
 	private ConfigurationNode removeIf(ConfigurationNode root, Predicate<ConfigurationNode> nodePredicate) {
 		root.childrenMap().entrySet().forEach(entry -> {
