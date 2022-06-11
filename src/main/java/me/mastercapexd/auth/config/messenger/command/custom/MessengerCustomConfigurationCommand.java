@@ -31,6 +31,8 @@ public class MessengerCustomConfigurationCommand implements MessengerCustomComma
 	public boolean shouldExecute(CustomCommandExecuteContext context) {
 		if (ignoreButtons && context.isButtonExecution())
 			return false;
+		if (context.getExecutionText() == null)
+			return false;
 		if (matchCommand == null) {
 			return key.equalsIgnoreCase(context.getExecutionText());
 		} else {
