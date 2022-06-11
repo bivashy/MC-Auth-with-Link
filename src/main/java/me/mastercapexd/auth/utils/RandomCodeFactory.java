@@ -6,9 +6,10 @@ import java.util.Random;
 public class RandomCodeFactory {
 	private static final String LETTERS = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 	private static final String NUMBERS = "1234567890";
+	private RandomCodeFactory() {}
 
 	public static int random(int min, int max) {
-		if (min >= max) 
+		if (min >= max)
 			return -1;
 		Random r = new Random();
 		return r.nextInt(max - min + 1) + min;
@@ -33,7 +34,7 @@ public class RandomCodeFactory {
 		if (length <= 0)
 			return "";
 		StringBuilder stringBuilder = new StringBuilder("");
-		for (int i = 0; i < length; i++) 
+		for (int i = 0; i < length; i++)
 			stringBuilder = stringBuilder.append(generateRandomCharacter());
 		return stringBuilder.toString();
 	}

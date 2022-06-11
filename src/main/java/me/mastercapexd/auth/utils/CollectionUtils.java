@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class CollectionUtils {
+	private CollectionUtils() {}
 	public static <T> List<List<T>> chopList(List<T> list, final int newListSize) {
 		List<List<T>> parts = new ArrayList<List<T>>();
 		final int oldListSize = list.size();

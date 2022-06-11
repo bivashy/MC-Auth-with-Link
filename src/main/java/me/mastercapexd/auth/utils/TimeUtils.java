@@ -3,7 +3,8 @@ package me.mastercapexd.auth.utils;
 import java.util.Calendar;
 
 public final class TimeUtils {
-
+	private TimeUtils() {}
+	
 	public static long parseTime(String timeString) {
 		Calendar calendar = Calendar.getInstance();
 		String[] splittedText = timeString.split("\\s+");

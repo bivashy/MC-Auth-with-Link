@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class TitleBar {
+	private TitleBar() {}
 
 	public static void send(ProxiedPlayer proxiedPlayer, String titleMessage, String subtitleMessage, int fadeIn,
 			int stay, int fadeOut) {
