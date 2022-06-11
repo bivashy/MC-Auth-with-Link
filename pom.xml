@@ -19,7 +19,7 @@
 		</project.mainclass>
 
 		<!-- Dependencies -->
-		<bungeecord.version>1.17-R0.1-SNAPSHOT</bungeecord.version>
+		<bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
 		<velocity.version>3.0.1</velocity.version>
 		<jbcrypt.version>0.4</jbcrypt.version>
 		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
