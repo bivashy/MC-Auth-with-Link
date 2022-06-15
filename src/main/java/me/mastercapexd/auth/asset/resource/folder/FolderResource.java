@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +29,12 @@ public class FolderResource extends DefaultResource {
 		URI folderUri = classLoader.getResource(getName()).toURI();
 		Path myPath;
 		if (folderUri.getScheme().equals("jar")) {
-			FileSystem fileSystem = FileSystems.newFileSystem(folderUri, Collections.emptyMap());
+			FileSystem fileSystem = null;
+			try {
+				fileSystem = FileSystems.newFileSystem(folderUri, Collections.emptyMap());
+			} catch (FileSystemAlreadyExistsException ignored) {
+				fileSystem = FileSystems.getFileSystem(folderUri);
+			}
 			myPath = fileSystem.getPath(getName());
 		} else {
 			myPath = Paths.get(folderUri);
