@@ -64,6 +64,8 @@ public abstract class DispatchCommandListener {
 	private void handleCommandDispatch(VkCommandHandler handler, DispatchSource source) {
 		CommandActor commandActor = new VKCommandActorWrapper(new BaseVkActor(source, handler));
 		ArgumentStack argumentStack = source.getArgumentStack(handler);
+		if (argumentStack.isEmpty())
+			return;
 		handler.dispatch(commandActor, argumentStack);
 	}
 

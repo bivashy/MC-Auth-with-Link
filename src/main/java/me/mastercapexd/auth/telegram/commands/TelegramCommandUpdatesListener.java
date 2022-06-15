@@ -72,6 +72,8 @@ public class TelegramCommandUpdatesListener implements UpdatesListener {
 	private void handleCommandDispatch(TelegramHandler handler, DispatchSource dispatchSource) {
 		TelegramActor actor = new TelegramCommandActorWrapper(TelegramActor.wrap(handler, dispatchSource));
 		ArgumentStack argumentStack = handler.parseArguments(dispatchSource.getExecutionText());
+		if (argumentStack.isEmpty())
+			return;
 		handler.dispatch(actor, argumentStack);
 	}
 
