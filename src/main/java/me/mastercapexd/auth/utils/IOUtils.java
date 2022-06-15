@@ -8,7 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class IOUtils {
-	private IOUtils() {}
+	private IOUtils() {
+	}
 
 	public static void streamToFile(InputStream stream, File file) throws IOException {
 		streamToFile(stream, file, false, 1024 * 8);
@@ -23,6 +24,8 @@ public class IOUtils {
 	}
 
 	public static void streamToFile(InputStream stream, File file, boolean reset, int bufferSize) throws IOException {
+		if (!file.exists())
+			file.createNewFile();
 		if (reset) {
 			if (!stream.markSupported())
 				stream = new BufferedInputStream(stream);
