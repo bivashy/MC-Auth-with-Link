@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
+import me.mastercapexd.auth.config.google.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;

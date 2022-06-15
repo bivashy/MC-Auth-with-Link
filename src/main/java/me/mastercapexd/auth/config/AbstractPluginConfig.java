@@ -15,6 +15,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
+import me.mastercapexd.auth.config.google.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.config.server.FillType;
@@ -101,7 +102,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 	public AbstractPluginConfig(ProxyPlugin proxyPlugin) {
 		this.proxyPlugin = proxyPlugin;
 		this.configurationRoot = createConfiguration(proxyPlugin);
-		ProxyPlugin.instance().getConfigurationProcessor().resolve(configurationRoot, this);
+		proxyPlugin.getConfigurationProcessor().resolve(configurationRoot, this);
 	}
 
 	@Override
