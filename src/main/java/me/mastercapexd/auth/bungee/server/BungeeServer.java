@@ -23,9 +23,13 @@ public class BungeeServer implements Server {
 
 	@Override
 	public void sendPlayer(ProxyPlayer... players) {
-		for (ProxyPlayer player : players)
-			player.<ProxiedPlayer>getRealPlayer().connect(bungeeServerInfo, (result, exception) -> {
+		for (ProxyPlayer player : players) {
+			ProxiedPlayer bungeePlayer = player.getRealPlayer();
+			if (bungeePlayer.getServer() != null && bungeePlayer.getServer().getInfo().equals(bungeeServerInfo))
+				continue;
+			bungeePlayer.connect(bungeeServerInfo, (result, exception) -> {
 			});
+		}
 	}
 
 	@Override
