@@ -69,7 +69,7 @@ public enum BungeeProxyCore implements ProxyCore {
 
 	@Override
 	public ProxyTitle createTitle(String title) {
-		return new BungeeProxyTitle();
+		return new BungeeProxyTitle().title(title);
 	}
 
 	@Override
