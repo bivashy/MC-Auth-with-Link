@@ -1,33 +1,33 @@
 package me.mastercapexd.auth.config.message;
 
-import java.util.Optional;
-
 import me.mastercapexd.auth.config.message.context.MessageContext;
 
+import java.util.Optional;
+
 public interface Messages<T> {
-	static final String NULL_STRING = null;
+    String NULL_STRING = null;
 
-	T getMessageNullable(String key);
+    T getMessageNullable(String key);
 
-	T getMessage(String key, MessageContext context);
+    T getMessage(String key, MessageContext context);
 
-	Optional<T> getMessage(String key);
+    Optional<T> getMessage(String key);
 
-	String getStringMessage(String key, String defaultValue);
+    String getStringMessage(String key, String defaultValue);
 
-	Messages<T> getSubMessages(String key);
+    Messages<T> getSubMessages(String key);
 
-	T fromText(String text);
+    T fromText(String text);
 
-	default String getStringMessage(String key) {
-		return getStringMessage(key, NULL_STRING); // We provide specific type because of ambiguous signature
-	}
+    default String getStringMessage(String key) {
+        return getStringMessage(key, NULL_STRING); // We provide specific type because of ambiguous signature
+    }
 
-	default String getStringMessage(String key, MessageContext context) {
-		return context.apply(getStringMessage(key));
-	}
+    default String getStringMessage(String key, MessageContext context) {
+        return context.apply(getStringMessage(key));
+    }
 
-	default String formatString(String message) {
-		return message;
-	}
+    default String formatString(String message) {
+        return message;
+    }
 }

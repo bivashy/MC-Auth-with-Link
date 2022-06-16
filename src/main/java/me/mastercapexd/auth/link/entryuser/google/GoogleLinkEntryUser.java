@@ -7,12 +7,12 @@ import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public class GoogleLinkEntryUser extends AbstractLinkEntryUser {
 
-	public GoogleLinkEntryUser(Account account, LinkUserInfo linkUserInfo) {
-		super(GoogleLinkType.getInstance(), account, linkUserInfo);
-	}
+    public GoogleLinkEntryUser(Account account, LinkUserInfo linkUserInfo) {
+        super(GoogleLinkType.getInstance(), account, linkUserInfo);
+    }
 
-	public GoogleLinkEntryUser(Account account) {
-		this(account, account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get().getLinkUserInfo());
-	}
+    public GoogleLinkEntryUser(Account account) {
+        this(account, account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get().getLinkUserInfo());
+    }
 
 }

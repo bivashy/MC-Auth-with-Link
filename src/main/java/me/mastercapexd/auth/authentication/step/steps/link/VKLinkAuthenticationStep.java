@@ -6,20 +6,20 @@ import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationS
 import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
 
 public class VKLinkAuthenticationStep extends MessengerAuthenticationStep {
-	public static final String STEP_NAME = "VK_LINK";
+    public static final String STEP_NAME = "VK_LINK";
 
-	public VKLinkAuthenticationStep(AuthenticationStepContext context) {
-		super(STEP_NAME, context, new VKLinkEntryUser(context.getAccount()));
-	}
+    public VKLinkAuthenticationStep(AuthenticationStepContext context) {
+        super(STEP_NAME, context, new VKLinkEntryUser(context.getAccount()));
+    }
 
-	public static class VKLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
-		public VKLinkAuthenticationStepCreator() {
-			super(STEP_NAME);
-		}
+    public static class VKLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
+        public VKLinkAuthenticationStepCreator() {
+            super(STEP_NAME);
+        }
 
-		@Override
-		public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
-			return new VKLinkAuthenticationStep(context);
-		}
-	}
+        @Override
+        public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
+            return new VKLinkAuthenticationStep(context);
+        }
+    }
 }

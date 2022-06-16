@@ -11,23 +11,20 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class ConfirmationToggleCommand implements OrphanCommand {
-	@Dependency
-	private AccountStorage accountStorage;
+    @Dependency
+    private AccountStorage accountStorage;
 
-	@Default
-	@ConfigurationArgumentError("confirmation-no-player")
-	public void onKick(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
-		if (!linkType.getSettings().getConfirmationSettings().canToggleConfirmation()) {
-			actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggle-disabled",
-					linkType.newMessageContext(account)));
-			return;
-		}
-		actorWrapper.reply(
-				linkType.getLinkMessages().getMessage("confirmation-toggled", linkType.newMessageContext(account)));
-		LinkUserConfirmationState confirmationState = account
-				.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo()
-				.getConfirmationState();
-		confirmationState.setSendConfirmation(!confirmationState.shouldSendConfirmation());
-		accountStorage.saveOrUpdateAccount(account);
-	}
+    @Default
+    @ConfigurationArgumentError("confirmation-no-player")
+    public void onKick(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
+        if (!linkType.getSettings().getConfirmationSettings().canToggleConfirmation()) {
+            actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggle-disabled", linkType.newMessageContext(account)));
+            return;
+        }
+        actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggled", linkType.newMessageContext(account)));
+        LinkUserConfirmationState confirmationState =
+                account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo().getConfirmationState();
+        confirmationState.setSendConfirmation(!confirmationState.shouldSendConfirmation());
+        accountStorage.saveOrUpdateAccount(account);
+    }
 }

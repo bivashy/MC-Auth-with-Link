@@ -6,19 +6,19 @@ import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public interface LinkUser {
 
-	/**
-	 * @return link type, for example link type of VK, link type of DISCORD,link
-	 *         type of TELEGRAM.
-	 */
-	LinkType getLinkType();
+    /**
+     * @return link type, for example link type of VK, link type of DISCORD,link
+     * type of TELEGRAM.
+     */
+    LinkType getLinkType();
 
-	/**
-	 * @return account that linked to VK or similar.
-	 */
-	Account getAccount();
+    /**
+     * @return account that linked to VK or similar.
+     */
+    Account getAccount();
 
-	/**
-	 * @return Instance of {@link LinkUserInfo}
-	 */
-	LinkUserInfo getLinkUserInfo();
+    /**
+     * @return Instance of {@link LinkUserInfo}
+     */
+    LinkUserInfo getLinkUserInfo();
 }

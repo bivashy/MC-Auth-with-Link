@@ -1,15 +1,15 @@
 package me.mastercapexd.auth;
 
 public enum KickResult {
-	KICKED("kicked"), PLAYER_OFFLINE("player-offline");
+    KICKED("kicked"), PLAYER_OFFLINE("player-offline");
 
-	private final String configurationPath;
+    private final String configurationPath;
 
-	KickResult(String configurationPath) {
-		this.configurationPath = configurationPath;
-	}
+    KickResult(String configurationPath) {
+        this.configurationPath = configurationPath;
+    }
 
-	public String getConfigurationPath() {
-		return configurationPath;
-	}
+    public String getConfigurationPath() {
+        return configurationPath;
+    }
 }

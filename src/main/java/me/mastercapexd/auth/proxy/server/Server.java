@@ -1,24 +1,24 @@
 package me.mastercapexd.auth.proxy.server;
 
-import java.util.List;
-
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
+import java.util.List;
+
 public interface Server extends Castable<Server> {
-	String getServerName();
+    String getServerName();
 
-	void sendPlayer(ProxyPlayer... players);
+    void sendPlayer(ProxyPlayer... players);
 
-	List<ProxyPlayer> getPlayers();
+    List<ProxyPlayer> getPlayers();
 
-	int getPlayersCount();
+    int getPlayersCount();
 
-	/**
-	 * Validate if server exists, or not. By default just check if original server
-	 * value is null.
-	 * 
-	 * @return is valid server.
-	 */
-	boolean isExists();
+    /**
+     * Validate if server exists, or not. By default just check if original server
+     * value is null.
+     *
+     * @return is valid server.
+     */
+    boolean isExists();
 }

@@ -6,20 +6,20 @@ import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationS
 import me.mastercapexd.auth.link.entryuser.telegram.TelegramLinkEntryUser;
 
 public class TelegramLinkAuthenticationStep extends MessengerAuthenticationStep {
-	public static final String STEP_NAME = "TELEGRAM_LINK";
+    public static final String STEP_NAME = "TELEGRAM_LINK";
 
-	public TelegramLinkAuthenticationStep(AuthenticationStepContext context) {
-		super(STEP_NAME, context, new TelegramLinkEntryUser(context.getAccount()));
-	}
+    public TelegramLinkAuthenticationStep(AuthenticationStepContext context) {
+        super(STEP_NAME, context, new TelegramLinkEntryUser(context.getAccount()));
+    }
 
-	public static class TelegramLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
-		public TelegramLinkAuthenticationStepCreator() {
-			super(STEP_NAME);
-		}
+    public static class TelegramLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
+        public TelegramLinkAuthenticationStepCreator() {
+            super(STEP_NAME);
+        }
 
-		@Override
-		public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
-			return new TelegramLinkAuthenticationStep(context);
-		}
-	}
+        @Override
+        public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
+            return new TelegramLinkAuthenticationStep(context);
+        }
+    }
 }

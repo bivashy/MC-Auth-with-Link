@@ -10,42 +10,42 @@ import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
 
-	public static final String STEP_NAME = "REGISTER";
-	private final boolean isRegistered;
+    public static final String STEP_NAME = "REGISTER";
+    private final boolean isRegistered;
 
-	public RegisterAuthenticationStep(AuthenticationStepContext context) {
-		super(STEP_NAME, context);
-		isRegistered = context.getAccount().isRegistered();
-	}
+    public RegisterAuthenticationStep(AuthenticationStepContext context) {
+        super(STEP_NAME, context);
+        isRegistered = context.getAccount().isRegistered();
+    }
 
-	@Override
-	public boolean shouldPassToNextStep() {
-		boolean isCurrentAccountRegistered = authenticationStepContext.getAccount().isRegistered();
-		if (!isRegistered && isCurrentAccountRegistered) {
-			Account account = authenticationStepContext.getAccount();
-			ProxyPlayer player = account.getPlayer().get();
+    @Override
+    public boolean shouldPassToNextStep() {
+        boolean isCurrentAccountRegistered = authenticationStepContext.getAccount().isRegistered();
+        if (!isRegistered && isCurrentAccountRegistered) {
+            Account account = authenticationStepContext.getAccount();
+            ProxyPlayer player = account.getPlayer().get();
 
-			Auth.removeAccount(account.getId());
-			account.setLastIpAddress(player.getRemoteAddress().getHostString());
-			account.setLastSessionStart(System.currentTimeMillis());
-		}
-		return isCurrentAccountRegistered;
-	}
+            Auth.removeAccount(account.getId());
+            account.setLastIpAddress(player.getRemoteAddress().getHostString());
+            account.setLastSessionStart(System.currentTimeMillis());
+        }
+        return isCurrentAccountRegistered;
+    }
 
-	@Override
-	public boolean shouldSkip() {
-		return authenticationStepContext.getAccount().isRegistered();
-	}
+    @Override
+    public boolean shouldSkip() {
+        return authenticationStepContext.getAccount().isRegistered();
+    }
 
-	public static class RegisterAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
-		public RegisterAuthenticationStepCreator() {
-			super(STEP_NAME);
-		}
+    public static class RegisterAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
+        public RegisterAuthenticationStepCreator() {
+            super(STEP_NAME);
+        }
 
-		@Override
-		public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
-			return new RegisterAuthenticationStep(context);
-		}
-	}
+        @Override
+        public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
+            return new RegisterAuthenticationStep(context);
+        }
+    }
 
 }

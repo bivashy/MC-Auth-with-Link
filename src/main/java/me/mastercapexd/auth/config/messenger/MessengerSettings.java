@@ -4,23 +4,23 @@ import me.mastercapexd.auth.config.message.messenger.MessengerMessages;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public interface MessengerSettings {
-	boolean isEnabled();
+    boolean isEnabled();
 
-	int getMaxLinkCount();
+    int getMaxLinkCount();
 
-	boolean isAdministrator(LinkUserIdentificator identificator);
+    boolean isAdministrator(LinkUserIdentificator identificator);
 
-	MessengerConfirmationSettings getConfirmationSettings();
+    MessengerConfirmationSettings getConfirmationSettings();
 
-	MessengerRestoreSettings getRestoreSettings();
+    MessengerRestoreSettings getRestoreSettings();
 
-	MessengerCustomCommands getCustomCommands();
+    MessengerCustomCommands getCustomCommands();
 
-	MessengerEnterSettings getEnterSettings();
+    MessengerEnterSettings getEnterSettings();
 
-	MessengerCommandPaths getCommandPaths();
+    MessengerCommandPaths getCommandPaths();
 
-	MessengerKeyboards getKeyboards();
+    MessengerKeyboards getKeyboards();
 
-	MessengerMessages getMessages();
+    MessengerMessages getMessages();
 }

@@ -6,9 +6,8 @@ import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholde
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 
 public class TelegramMessagePlaceholderContext extends MessengerPlaceholderContext {
-	public TelegramMessagePlaceholderContext(Account account) {
-		super(account, TelegramLinkType.getInstance(), "telegram");
-		registerPlaceholderProvider(PlaceholderProvider
-				.of(Long.toString(linkUser.getLinkUserInfo().getIdentificator().asNumber()), "%telegram_id%"));
-	}
+    public TelegramMessagePlaceholderContext(Account account) {
+        super(account, TelegramLinkType.getInstance(), "telegram");
+        registerPlaceholderProvider(PlaceholderProvider.of(Long.toString(linkUser.getLinkUserInfo().getIdentificator().asNumber()), "%telegram_id%"));
+    }
 }

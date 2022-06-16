@@ -14,30 +14,30 @@ import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 
-@Command({ "reg", "register" })
+@Command({"reg", "register"})
 public class RegisterCommand {
 
-	@Dependency
-	private ProxyPlugin plugin;
-	@Dependency
-	private PluginConfig config;
-	@Dependency
-	private AccountStorage accountStorage;
+    @Dependency
+    private ProxyPlugin plugin;
+    @Dependency
+    private PluginConfig config;
+    @Dependency
+    private AccountStorage accountStorage;
 
-	@Default
-	@AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
-	public void register(ProxyPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {
-		AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
-		currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
+    @Default
+    @AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
+    public void register(ProxyPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {
+        AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
+        currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 
-		if (account.getHashType() != config.getActiveHashType())
-			account.setHashType(config.getActiveHashType());
-		account.setPasswordHash(account.getHashType().hash(password.getPassword()));
+        if (account.getHashType() != config.getActiveHashType())
+            account.setHashType(config.getActiveHashType());
+        account.setPasswordHash(account.getHashType().hash(password.getPassword()));
 
-		accountStorage.saveOrUpdateAccount(account);
+        accountStorage.saveOrUpdateAccount(account);
 
-		account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
+        account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 
-		player.sendMessage(config.getProxyMessages().getStringMessage("register-success"));
-	}
+        player.sendMessage(config.getProxyMessages().getStringMessage("register-success"));
+    }
 }

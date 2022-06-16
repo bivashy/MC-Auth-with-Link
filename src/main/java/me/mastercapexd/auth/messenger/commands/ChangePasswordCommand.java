@@ -9,13 +9,11 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class ChangePasswordCommand implements OrphanCommand {
-	@Default
-	@ConfigurationArgumentError("changepass-not-enough-arguments")
-	public void onPasswordChange(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account,
-			NewPassword newPassword) {
-		account.setPasswordHash(account.getHashType().hash(newPassword.getNewPassword()));
-		actorWrapper.reply(
-				linkType.getLinkMessages().getStringMessage("changepass-success", linkType.newMessageContext(account))
-						.replaceAll("(?i)%password%", newPassword.getNewPassword()));
-	}
+    @Default
+    @ConfigurationArgumentError("changepass-not-enough-arguments")
+    public void onPasswordChange(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account, NewPassword newPassword) {
+        account.setPasswordHash(account.getHashType().hash(newPassword.getNewPassword()));
+        actorWrapper.reply(linkType.getLinkMessages().getStringMessage("changepass-success", linkType.newMessageContext(account)).replaceAll("(?i)%password%"
+                , newPassword.getNewPassword()));
+    }
 }

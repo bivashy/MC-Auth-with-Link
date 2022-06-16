@@ -8,11 +8,11 @@ vk:
   # 2. При вводе /adminpanel вам покажет админ панель
   admin-accounts:
     - 123456789 #Сюда ваш id вк
-    
+
   # Определяет максимальное количество привязок к одному и тому же vkId. Поставьте 0 чтобы отключить лимит
   max-vk-link: 0
   
-  confirmation: 
+  confirmation:
     # За сколько времени игрок должен привязать аккаунт (В секундах)
     remove-delay: 120
     code-length: 6
@@ -20,11 +20,11 @@ vk:
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     # Может ли игрок включать/выключать подтвердение
     can-toggle: false
-    
+
   enter:
     # За сколько секунд игрок должен подтвердить вход в аккаунт
     enter-delay: 60
-    
+
   # Настройка кода при восстановлении аккаунта
   restore:
     code-length: 7 # Длина кода
@@ -87,7 +87,7 @@ vk:
         - '/googleunlink'
     admin-panel:
       main-command: '/админ-панель' #/админ-панель,/админпанель,/админ,/панель,/admin-panel,/adminpanel,/admin,/panel
-      aliases: [admin,/adminpanel,/admin,/panel,/admin-panel,/панель,/админ,/админпанель]
+      aliases: [ admin,/adminpanel,/admin,/panel,/admin-panel,/панель,/админ,/админпанель ]
   # Создание комманд в вк, пригодится для создания таких команд как: /информация и так далее
   custom-commands:
     # Команда при вводе которой бот пишет определенное сообщение
@@ -96,7 +96,7 @@ vk:
     /test:
       answer: 'Бот работает!'
     /помощь:
-      answer: | 
+      answer: |
         /принять -> Подтверждение входа через ВК <br>
         /отклонить -> Отклонение входа через ВК <br>
         /отвязать [ник] -> для отвязки аккаунта <br>
@@ -115,148 +115,148 @@ vk:
       answer: 'Команда не найдена! Доступные команды: /помощь'
       button-ignore: true
   keyboards: # Для создания JSON клавиатур советую использовать https://severecloud.github.io/vk-keyboard/. Учтывайте что полезная нагрузка должна иметь плейсхолдеры
-      # Клавиатура в виде JSON
-      confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/отклонить %name%\""},"color":"negative"}]],"inline":true}'
-      accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
-            {                    
-            "buttons": [
-              [
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "%account_1%",
-                    "payload": "\"/control %account_1%\""
-                  },
-                  "color": "%account_1_color%"
-                }
-              ],
-              [
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "%account_2%",
-                    "payload": "\"/control %account_2%\""
-                  },
-                  "color": "%account_2_color%"
-                }
-              ],
-              [
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "%account_3%",
-                    "payload": "\"/control %account_3%\""
-                  },
-                  "color": "%account_3_color%"
-                }
-              ],
-              [
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "%account_4%",
-                    "payload": "\"/control %account_4%\""
-                  },
-                  "color": "%account_4_color%"
-                }
-              ],
-              [
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "%account_5%",
-                    "payload": "\"/control %account_5%\""
-                  },
-                  "color": "%account_5_color%"
-                }
-              ],
-              [
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "<-",
-                    "payload": "\"/accounts -page %previous_page% -pageSize %pageSize% -type %type%\""
-                  },
-                  "color": "primary"
-                },
-                {
-                  "action": {
-                    "type": "callback",
-                    "label": "->",
-                    "payload": "\"/accounts -page %next_page% -pageSize %pageSize% -type %type%\""
-                  },
-                  "color": "primary"
-                }
-              ]
-            ],
-            "inline": true
+    # Клавиатура в виде JSON
+    confirmation: '{"buttons":[[{"action":{"type":"callback","label":"Принять","payload":"\"/принять %name%\""},"color":"positive"},{"action":{"type":"text","label":"Отклонить","payload":"\"/отклонить %name%\""},"color":"negative"}]],"inline":true}'
+    accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
+      {                    
+      "buttons": [
+        [
+          {
+            "action": {
+              "type": "callback",
+              "label": "%account_1%",
+              "payload": "\"/control %account_1%\""
+            },
+            "color": "%account_1_color%"
+          }
+        ],
+        [
+          {
+            "action": {
+              "type": "callback",
+              "label": "%account_2%",
+              "payload": "\"/control %account_2%\""
+            },
+            "color": "%account_2_color%"
+          }
+        ],
+        [
+          {
+            "action": {
+              "type": "callback",
+              "label": "%account_3%",
+              "payload": "\"/control %account_3%\""
+            },
+            "color": "%account_3_color%"
+          }
+        ],
+        [
+          {
+            "action": {
+              "type": "callback",
+              "label": "%account_4%",
+              "payload": "\"/control %account_4%\""
+            },
+            "color": "%account_4_color%"
+          }
+        ],
+        [
+          {
+            "action": {
+              "type": "callback",
+              "label": "%account_5%",
+              "payload": "\"/control %account_5%\""
+            },
+            "color": "%account_5_color%"
+          }
+        ],
+        [
+          {
+            "action": {
+              "type": "callback",
+              "label": "<-",
+              "payload": "\"/accounts -page %previous_page% -pageSize %pageSize% -type %type%\""
+            },
+            "color": "primary"
+          },
+          {
+            "action": {
+              "type": "callback",
+              "label": "->",
+              "payload": "\"/accounts -page %next_page% -pageSize %pageSize% -type %type%\""
+            },
+            "color": "primary"
+          }
+        ]
+      ],
+      "inline": true
+      }
+    account: >
+      {
+        "buttons": [
+          [
+            {
+              "action": {
+                "type": "callback",
+                "label": "Восстановить",
+                "payload": "\"/restore %account_name%\""
+              },
+              "color": "primary"
+            },
+            {
+              "action": {
+                "type": "callback",
+                "label": "Кикнуть",
+                "payload": "\"/kick %account_name%\""
+              },
+              "color": "primary"
+            },
+            {
+              "action": {
+                "type": "callback",
+                "label": "Отвязать",
+                "payload": "\"/unlink %account_name%\""
+              },
+              "color": "primary"
             }
-      account: >
-        {
-          "buttons": [
-            [
-              {
-                "action": {
-                  "type": "callback",
-                  "label": "Восстановить",
-                  "payload": "\"/restore %account_name%\""
-                },
-                "color": "primary"
+          ]
+        ],
+        "inline": true
+      }
+    admin-panel: >
+      {
+        "buttons": [
+          [
+            {
+              "action": {
+                "type": "callback",
+                "label": "Все аккаунты",
+                "payload": "\"/accounts -type all\""
               },
-              {
-                "action": {
-                  "type": "callback",
-                  "label": "Кикнуть",
-                  "payload": "\"/kick %account_name%\""
-                },
-                "color": "primary"
+              "color": "primary"
+            },
+            {
+              "action": {
+                "type": "callback",
+                "label": "Все привязанные аккаунты",
+                "payload": "\"/accounts -type linked\""
               },
-              {
-                "action": {
-                  "type": "callback",
-                  "label": "Отвязать",
-                  "payload": "\"/unlink %account_name%\""
-                },
-                "color": "primary"
-              }
-            ]
+              "color": "primary"
+            }
           ],
-          "inline": true
-        }
-      admin-panel: >
-        {
-          "buttons": [
-            [
-              {
-                "action": {
-                  "type": "callback",
-                  "label": "Все аккаунты",
-                  "payload": "\"/accounts -type all\""
-                },
-                "color": "primary"
+          [
+            {
+              "action": {
+                "type": "callback",
+                "label": "Мои аккаунты",
+                "payload": "\"/accounts\""
               },
-              {
-                "action": {
-                  "type": "callback",
-                  "label": "Все привязанные аккаунты",
-                  "payload": "\"/accounts -type linked\""
-                },
-                "color": "primary"
-              }
-            ],
-            [
-              {
-                "action": {
-                  "type": "callback",
-                  "label": "Мои аккаунты",
-                  "payload": "\"/accounts\""
-                },
-                "color": "primary"
-              }
-            ]
-          ],
-          "inline": true
-        }
+              "color": "primary"
+            }
+          ]
+        ],
+        "inline": true
+      }
   vk-messages: #Для переноса строк используйте "<br>" без кавычек.
     # Привязка ВК
     confirmation-error: 'Введен неправильный код! <br>Введите заного /addvk Ваш_Буквенный_Id и не постарайтесь не ошибится при вводе кода'
@@ -291,7 +291,7 @@ vk:
     changepass-password-too-long: 'Новый пароль слишком длинный!'
     changepass-success: 'Успешно изменён пароль игрока %name% на %password%'
     # Подтверждение входа через ВК
-    enter-no-accounts: 'Вам не отправляли письмо для подтверждения входа 🤔' 
+    enter-no-accounts: 'Вам не отправляли письмо для подтверждения входа 🤔'
     enter-message: '⚠ Попытка авторизации на ваш аккаунт %nick% с IP адреса %account_ip%. Введите /принять или /отклонить, либо нажмите на кнопки'
     enter-declined: 'Вы отменили вход'
     enter-accepted: 'Вы успешно вошли в аккаунт!'

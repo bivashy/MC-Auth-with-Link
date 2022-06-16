@@ -5,13 +5,13 @@ import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.SendableException;
 
 public class BungeeSendableException extends SendableException {
-	public BungeeSendableException(String message) {
-		super(message);
+    public BungeeSendableException(String message) {
+        super(message);
 
-	}
+    }
 
-	@Override
-	public void sendTo(CommandActor actor) {
-		actor.as(BungeeCommandActor.class).reply(getMessage());
-	}
+    @Override
+    public void sendTo(CommandActor actor) {
+        actor.as(BungeeCommandActor.class).reply(getMessage());
+    }
 }

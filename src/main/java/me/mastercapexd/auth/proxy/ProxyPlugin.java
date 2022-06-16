@@ -1,10 +1,7 @@
 package me.mastercapexd.auth.proxy;
 
-import java.io.File;
-
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
-
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
@@ -13,36 +10,38 @@ import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
 
+import java.io.File;
+
 public interface ProxyPlugin extends Castable<ProxyPlugin> {
-	ProxyCore getCore();
+    static ProxyPlugin instance() {
+        return ProxyPluginProvider.getPluginInstance();
+    }
 
-	PluginConfig getConfig();
+    ProxyCore getCore();
 
-	AccountFactory getAccountFactory();
+    PluginConfig getConfig();
 
-	AccountStorage getAccountStorage();
+    AccountFactory getAccountFactory();
 
-	GoogleAuthenticator getGoogleAuthenticator();
+    AccountStorage getAccountStorage();
 
-	AuthenticationStepCreatorDealership getAuthenticationStepCreatorDealership();
+    GoogleAuthenticator getGoogleAuthenticator();
 
-	AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership();
+    AuthenticationStepCreatorDealership getAuthenticationStepCreatorDealership();
 
-	ConfigurationProcessor getConfigurationProcessor();
+    AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership();
 
-	<T extends PluginHook> T getHook(Class<T> clazz);
+    ConfigurationProcessor getConfigurationProcessor();
 
-	String getVersion();
+    <T extends PluginHook> T getHook(Class<T> clazz);
 
-	/**
-	 * Returns folder of plugin in plugins. For example:
-	 * some/path/plugins/PluginName
-	 * 
-	 * @return Plugin folder.
-	 */
-	File getFolder();
+    String getVersion();
 
-	static ProxyPlugin instance() {
-		return ProxyPluginProvider.getPluginInstance();
-	}
+    /**
+     * Returns folder of plugin in plugins. For example:
+     * some/path/plugins/PluginName
+     *
+     * @return Plugin folder.
+     */
+    File getFolder();
 }

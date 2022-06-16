@@ -10,24 +10,24 @@ import revxrsal.commands.annotation.Dependency;
 
 @Command("logout")
 public class LogoutCommand {
-	@Dependency
-	private PluginConfig config;
-	@Dependency
-	private AccountStorage accountStorage;
+    @Dependency
+    private PluginConfig config;
+    @Dependency
+    private AccountStorage accountStorage;
 
-	@Default
-	public void logout(ProxyPlayer player) {
-		String id = config.getActiveIdentifierType().getId(player);
-		if (Auth.hasAccount(id)) {
-			player.sendMessage(config.getProxyMessages().getStringMessage("already-logged-out"));
-			return;
-		}
-		accountStorage.getAccount(id).thenAccept(account -> {
-			account.logout(config.getSessionDurability());
-			accountStorage.saveOrUpdateAccount(account);
-			Auth.addAccount(account);
-			player.sendMessage(config.getProxyMessages().getStringMessage("logout-success"));
-			player.sendTo(config.findServerInfo(config.getAuthServers()).asProxyServer());
-		});
-	}
+    @Default
+    public void logout(ProxyPlayer player) {
+        String id = config.getActiveIdentifierType().getId(player);
+        if (Auth.hasAccount(id)) {
+            player.sendMessage(config.getProxyMessages().getStringMessage("already-logged-out"));
+            return;
+        }
+        accountStorage.getAccount(id).thenAccept(account -> {
+            account.logout(config.getSessionDurability());
+            accountStorage.saveOrUpdateAccount(account);
+            Auth.addAccount(account);
+            player.sendMessage(config.getProxyMessages().getStringMessage("logout-success"));
+            player.sendTo(config.findServerInfo(config.getAuthServers()).asProxyServer());
+        });
+    }
 }

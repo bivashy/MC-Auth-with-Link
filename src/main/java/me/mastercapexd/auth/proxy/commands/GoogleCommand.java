@@ -16,37 +16,36 @@ import revxrsal.commands.annotation.Dependency;
 
 @Command("google")
 public class GoogleCommand {
-	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
-			.getProxyMessages().getSubMessages("google");
-	@Dependency
-	private ProxyPlugin plugin;
-	@Dependency
-	private PluginConfig config;
-	@Dependency
-	private AccountStorage accountStorage;
+    private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("google");
+    @Dependency
+    private ProxyPlugin plugin;
+    @Dependency
+    private PluginConfig config;
+    @Dependency
+    private AccountStorage accountStorage;
 
-	@Default
-	@GoogleUse
-	public void linkGoogle(ProxyPlayer player) {
-		String id = config.getActiveIdentifierType().getId(player);
-		accountStorage.getAccount(id).thenAccept(account -> {
-			if (account == null || !account.isRegistered()) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
-				return;
-			}
-			String key = plugin.getGoogleAuthenticator().createCredentials().getKey();
-			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
-				GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, key);
-				account.addLinkUser(googleLinkUser);
-				return googleLinkUser;
-			});
-			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("generated").replaceAll("(?i)%google_key%", key));
-			} else {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("regenerated").replaceAll("(?i)%google_key%", key));
-			}
-			linkUser.getLinkUserInfo().getIdentificator().setString(key);
-			accountStorage.saveOrUpdateAccount(account);
-		});
-	}
+    @Default
+    @GoogleUse
+    public void linkGoogle(ProxyPlayer player) {
+        String id = config.getActiveIdentifierType().getId(player);
+        accountStorage.getAccount(id).thenAccept(account -> {
+            if (account == null || !account.isRegistered()) {
+                player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
+                return;
+            }
+            String key = plugin.getGoogleAuthenticator().createCredentials().getKey();
+            LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
+                GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, key);
+                account.addLinkUser(googleLinkUser);
+                return googleLinkUser;
+            });
+            if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
+                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("generated").replaceAll("(?i)%google_key%", key));
+            } else {
+                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("regenerated").replaceAll("(?i)%google_key%", key));
+            }
+            linkUser.getLinkUserInfo().getIdentificator().setString(key);
+            accountStorage.saveOrUpdateAccount(account);
+        });
+    }
 }

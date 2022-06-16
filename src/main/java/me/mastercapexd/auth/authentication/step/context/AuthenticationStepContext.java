@@ -3,9 +3,9 @@ package me.mastercapexd.auth.authentication.step.context;
 import me.mastercapexd.auth.account.Account;
 
 public interface AuthenticationStepContext {
-	Account getAccount();
+    Account getAccount();
 
-	boolean canPassToNextStep();
+    boolean canPassToNextStep();
 
-	void setCanPassToNextStep(boolean canPass);
+    void setCanPassToNextStep(boolean canPass);
 }

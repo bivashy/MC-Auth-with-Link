@@ -4,7 +4,7 @@ import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 
 public interface AuthenticationStepCreator {
-	String getAuthenticationStepName();
+    String getAuthenticationStepName();
 
-	AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context);
+    AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context);
 }

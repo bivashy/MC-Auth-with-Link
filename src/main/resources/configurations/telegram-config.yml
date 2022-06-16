@@ -10,11 +10,11 @@ telegram:
   # 2. При вводе /adminpanel вам покажет админ панель
   admin-accounts:
     - 123456789 #Сюда ваш id Telegram
-  
-   # Определяет максимальное количество привязок к одному и тому же телеграмму. Поставьте 0 чтобы отключить лимит
+
+    # Определяет максимальное количество привязок к одному и тому же телеграмму. Поставьте 0 чтобы отключить лимит
   max-telegram-link: 0
   
-  confirmation: 
+  confirmation:
     # За сколько времени игрок должен привязать аккаунт (В секундах)
     remove-delay: 120
     code-length: 6
@@ -22,11 +22,11 @@ telegram:
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     # Может ли игрок включать/выключать подтверждение
     can-toggle: false
-    
+
   enter:
     # За сколько секунд игрок должен подтвердить вход в аккаунт
     enter-delay: 60
-    
+
   # Настройка кода при восстановлении аккаунта
   restore:
     code-length: 7 # Длина кода
@@ -89,7 +89,7 @@ telegram:
         - '/googleunlink'
     admin-panel:
       main-command: '/админ-панель' #/админ-панель,/админпанель,/админ,/панель,/admin-panel,/adminpanel,/admin,/panel
-      aliases: [admin,/adminpanel,/admin,/panel,/admin-panel,/панель,/админ,/админпанель]
+      aliases: [ admin,/adminpanel,/admin,/panel,/admin-panel,/панель,/админ,/админпанель ]
   # Создание комманд в Telegram, пригодится для создания таких команд как: /информация и так далее
   custom-commands:
     # Команда при вводе которой бот пишет определенное сообщение
@@ -98,7 +98,7 @@ telegram:
     /test:
       answer: 'Бот работает!'
     /помощь:
-      answer: | 
+      answer: |
         /принять -> Подтверждение входа через Telegram <br>
         /отклонить -> Отклонение входа через Telegram <br>
         /отвязать [ник] -> для отвязки аккаунта <br>
@@ -117,91 +117,91 @@ telegram:
       answer: 'Команда не найдена! Доступные команды: /помощь'
       button-ignore: true
   keyboards:
-      confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"/принять %name%"},{"text":"Отклонить","callback_data":"/отклонить %name%"}]]}'
-      accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
-            {                    
-            "inline_keyboard": [
-              [
-                {
-                  "text": "%account_1%",
-                  "callback_data": "/control %account_1%"
-                }
-              ],
-              [
-                {
-                  "text": "%account_2%",
-                  "callback_data": "/control %account_2%"
-                }
-              ],
-              [
-                {
-                  "text": "%account_3%",
-                  "callback_data": "/control %account_3%"
-                }
-              ],
-              [
-                {
-                  "text": "%account_4%",
-                  "callback_data": "/control %account_4%"
-                }
-              ],
-              [
-                {
-                  "text": "%account_5%",
-                  "callback_data": "/control %account_5%"
-                }
-              ],
-              [
-                {
-                  "text": "<-",
-                  "callback_data": "/accounts -page %prev_page% -pageSize %pageSize% -type %type%"
-                },
-                {
-                  "text": "->",
-                  "callback_data": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
-                }
-              ]
-            ]}
-      account: >
-        {
-          "inline_keyboard": [
-            [
-              {
-                "text": "Восстановить",
-                "callback_data": "/restore %account_name%"
-              },
-              {
-                "text": "Кикнуть",
-                "callback_data": "/kick %account_name%"
-              },
-              {
-                "text": "Отвязать",
-                "callback_data": "/unlink %account_name%"
-              }
-            ]
+    confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"/принять %name%"},{"text":"Отклонить","callback_data":"/отклонить %name%"}]]}'
+    accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
+      {                    
+      "inline_keyboard": [
+        [
+          {
+            "text": "%account_1%",
+            "callback_data": "/control %account_1%"
+          }
+        ],
+        [
+          {
+            "text": "%account_2%",
+            "callback_data": "/control %account_2%"
+          }
+        ],
+        [
+          {
+            "text": "%account_3%",
+            "callback_data": "/control %account_3%"
+          }
+        ],
+        [
+          {
+            "text": "%account_4%",
+            "callback_data": "/control %account_4%"
+          }
+        ],
+        [
+          {
+            "text": "%account_5%",
+            "callback_data": "/control %account_5%"
+          }
+        ],
+        [
+          {
+            "text": "<-",
+            "callback_data": "/accounts -page %prev_page% -pageSize %pageSize% -type %type%"
+          },
+          {
+            "text": "->",
+            "callback_data": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
+          }
+        ]
+      ]}
+    account: >
+      {
+        "inline_keyboard": [
+          [
+            {
+              "text": "Восстановить",
+              "callback_data": "/restore %account_name%"
+            },
+            {
+              "text": "Кикнуть",
+              "callback_data": "/kick %account_name%"
+            },
+            {
+              "text": "Отвязать",
+              "callback_data": "/unlink %account_name%"
+            }
           ]
-        } 
-      admin-panel: >
-        {
-          "inline_keyboard": [
-            [
-              {
-                "text": "Все аккаунты",
-                "callback_data": "/accounts -type all"
-              },
-              {
-                "text": "Все привязанные аккаунты",
-                "callback_data": "/accounts -type linked"
-              }
-            ],
-            [
-              {
-                "text": "Мои аккаунты",
-                "callback_data": "/accounts"
-              }
-            ]
+        ]
+      }
+    admin-panel: >
+      {
+        "inline_keyboard": [
+          [
+            {
+              "text": "Все аккаунты",
+              "callback_data": "/accounts -type all"
+            },
+            {
+              "text": "Все привязанные аккаунты",
+              "callback_data": "/accounts -type linked"
+            }
+          ],
+          [
+            {
+              "text": "Мои аккаунты",
+              "callback_data": "/accounts"
+            }
           ]
-        }
+        ]
+      }
   telegram-messages: #Для переноса строк используйте "\n" без кавычек.
     # Привязка Telegram
     confirmation-error: 'Введен неправильный код! <br>Введите заного /addvk Ваш_Id и не постарайтесь не ошибится при вводе кода'
@@ -236,7 +236,7 @@ telegram:
     changepass-password-too-long: 'Новый пароль слишком длинный!'
     changepass-success: 'Успешно изменён пароль игрока %name% на %password%'
     # Подтверждение входа через Telegram
-    enter-no-accounts: 'Вам не отправляли письмо для подтверждения входа 🤔' 
+    enter-no-accounts: 'Вам не отправляли письмо для подтверждения входа 🤔'
     enter-message: '⚠ Попытка авторизации на ваш аккаунт %nick% с IP адреса %account_ip%. Введите /принять или /отклонить, либо нажмите на кнопки'
     enter-declined: 'Вы отменили вход'
     enter-accepted: 'Вы успешно вошли в аккаунт!'

@@ -15,26 +15,24 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class GoogleUnlinkCommand implements OrphanCommand {
-	@Dependency
-	private PluginConfig config;
-	@Dependency
-	private AccountStorage accountStorage;
+    @Dependency
+    private PluginConfig config;
+    @Dependency
+    private AccountStorage accountStorage;
 
-	@GoogleUse
-	@Default
-	@ConfigurationArgumentError("google-unlink-not-enough-arguments")
-	public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
-		LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get();
+    @GoogleUse
+    @Default
+    @ConfigurationArgumentError("google-unlink-not-enough-arguments")
+    public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
+        LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get();
 
-		String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
-		if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlink-not-have-google",
-					linkType.newMessageContext(account)));
-			return;
-		}
-		actorWrapper.reply(
-				linkType.getLinkMessages().getStringMessage("google-unlinked", linkType.newMessageContext(account)));
-		linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
-		accountStorage.saveOrUpdateAccount(account);
-	}
+        String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
+        if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
+            actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlink-not-have-google", linkType.newMessageContext(account)));
+            return;
+        }
+        actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlinked", linkType.newMessageContext(account)));
+        linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
+        accountStorage.saveOrUpdateAccount(account);
+    }
 }

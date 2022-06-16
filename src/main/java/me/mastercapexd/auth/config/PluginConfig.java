@@ -1,8 +1,5 @@
 package me.mastercapexd.auth.config;
 
-import java.util.List;
-import java.util.regex.Pattern;
-
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
@@ -14,64 +11,67 @@ import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.storage.StorageType;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 public interface PluginConfig {
 
-	StorageDataSettings getStorageDataSettings();
+    StorageDataSettings getStorageDataSettings();
 
-	IdentifierType getActiveIdentifierType();
+    IdentifierType getActiveIdentifierType();
 
-	boolean isNameCaseCheckEnabled();
+    boolean isNameCaseCheckEnabled();
 
-	HashType getActiveHashType();
+    HashType getActiveHashType();
 
-	StorageType getStorageType();
+    StorageType getStorageType();
 
-	Pattern getNamePattern();
+    Pattern getNamePattern();
 
-	Pattern getPasswordPattern();
+    Pattern getPasswordPattern();
 
-	List<ConfigurationServer> getAuthServers();
+    List<ConfigurationServer> getAuthServers();
 
-	List<ConfigurationServer> getGameServers();
+    List<ConfigurationServer> getGameServers();
 
-	List<ConfigurationServer> getBlockedServers();
+    List<ConfigurationServer> getBlockedServers();
 
-	List<String> getAllowedCommands();
+    List<String> getAllowedCommands();
 
-	List<String> getAuthenticationSteps();
+    List<String> getAuthenticationSteps();
 
-	String getAuthenticationStepName(int index);
+    String getAuthenticationStepName(int index);
 
-	boolean isPasswordConfirmationEnabled();
+    boolean isPasswordConfirmationEnabled();
 
-	int getPasswordMinLength();
+    int getPasswordMinLength();
 
-	int getPasswordMaxLength();
+    int getPasswordMaxLength();
 
-	int getPasswordAttempts();
+    int getPasswordAttempts();
 
-	int getMaxLoginPerIP();
+    int getMaxLoginPerIP();
 
-	int getMessagesDelay();
+    int getMessagesDelay();
 
-	long getSessionDurability();
+    long getSessionDurability();
 
-	long getJoinDelay();
+    long getJoinDelay();
 
-	long getAuthTime();
+    long getAuthTime();
 
-	ProxyMessages getProxyMessages();
+    ProxyMessages getProxyMessages();
 
-	BossBarSettings getBossBarSettings();
+    BossBarSettings getBossBarSettings();
 
-	ConfigurationServer findServerInfo(List<ConfigurationServer> servers);
+    ConfigurationServer findServerInfo(List<ConfigurationServer> servers);
 
-	void reload();
+    void reload();
 
-	GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
+    GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
 
-	TelegramSettings getTelegramSettings();
+    TelegramSettings getTelegramSettings();
 
-	VKSettings getVKSettings();
+    VKSettings getVKSettings();
 
 }

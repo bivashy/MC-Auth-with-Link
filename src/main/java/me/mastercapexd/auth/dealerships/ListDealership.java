@@ -6,15 +6,15 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public interface ListDealership<T> {
-	List<T> getList();
+    List<T> getList();
 
-	void add(T object);
+    void add(T object);
 
-	void remove(T object);
+    void remove(T object);
 
-	Iterator<T> iterator();
+    Iterator<T> iterator();
 
-	default Optional<T> findFirstByPredicate(Predicate<T> predicate) {
-		return getList().stream().filter(predicate).findFirst();
-	}
+    default Optional<T> findFirstByPredicate(Predicate<T> predicate) {
+        return getList().stream().filter(predicate).findFirst();
+    }
 }

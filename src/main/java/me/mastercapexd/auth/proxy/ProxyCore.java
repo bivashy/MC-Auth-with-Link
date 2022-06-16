@@ -1,10 +1,5 @@
 package me.mastercapexd.auth.proxy;
 
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
@@ -12,28 +7,33 @@ import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
 public interface ProxyCore extends Castable<ProxyCore> {
-	<E> void callEvent(E event);
+    <E> void callEvent(E event);
 
-	Optional<ProxyPlayer> getPlayer(UUID uniqueId);
+    Optional<ProxyPlayer> getPlayer(UUID uniqueId);
 
-	Optional<ProxyPlayer> getPlayer(String name);
-	
-	Optional<ProxyPlayer> wrapPlayer(Object player);
+    Optional<ProxyPlayer> getPlayer(String name);
 
-	Logger getLogger();
+    Optional<ProxyPlayer> wrapPlayer(Object player);
 
-	ProxyTitle createTitle(String title);
+    Logger getLogger();
 
-	ProxyBossbar createBossbar(String title);
+    ProxyTitle createTitle(String title);
 
-	ProxyComponent component(String text);
+    ProxyBossbar createBossbar(String title);
 
-	Server serverFromName(String serverName);
+    ProxyComponent component(String text);
 
-	void registerListener(ProxyPlugin plugin, Object listener);
+    Server serverFromName(String serverName);
 
-	void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
+    void registerListener(ProxyPlugin plugin, Object listener);
 
-	void runAsync(Runnable task);
+    void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
+
+    void runAsync(Runnable task);
 }

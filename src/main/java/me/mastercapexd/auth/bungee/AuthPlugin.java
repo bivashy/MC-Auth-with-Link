@@ -1,10 +1,5 @@
 package me.mastercapexd.auth.bungee;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import com.ubivashka.configuration.BungeeConfigurationProcessor;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
@@ -14,7 +9,6 @@ import com.ubivashka.messenger.vk.message.VkMessage;
 import com.ubivashka.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
-
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
@@ -48,186 +42,177 @@ import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
-import me.mastercapexd.auth.utils.GeoUtils;
 import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import net.md_5.bungee.api.plugin.Plugin;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 public class AuthPlugin extends Plugin implements ProxyPlugin {
-	public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor()
-			.registerFieldResolver(ConfigurationServer.class, (context) -> {
-				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-				if (configurationValue == null)
-					return null;
-				return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
-			}).registerFieldResolver(Long.class, (context) -> {
-				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-				if (configurationValue == null)
-					return null;
-				return TimeUtils.parseTime(String.valueOf(configurationValue));
-			}).registerFieldResolver(Pattern.class, (context) -> {
-				Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-				if (configurationValue == null)
-					return null;
-				return Pattern
-						.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
-			}).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
-			.registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
+    public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor().registerFieldResolver(ConfigurationServer.class,
+            (context) -> {
+        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+        if (configurationValue == null)
+            return null;
+        return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
+    }).registerFieldResolver(Long.class, (context) -> {
+        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+        if (configurationValue == null)
+            return null;
+        return TimeUtils.parseTime(String.valueOf(configurationValue));
+    }).registerFieldResolver(Pattern.class, (context) -> {
+        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+        if (configurationValue == null)
+            return null;
+        return Pattern.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
+    }).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory()).registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
 
-	private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
+    private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
+    private static AuthPlugin instance;
+    private GoogleAuthenticator googleAuthenticator;
+    private BungeePluginConfig config;
+    private AccountFactory accountFactory;
+    private AccountStorage accountStorage;
+    private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
+    private AuthenticationStepContextFactoryDealership authenticationContextFactoryDealership;
+    private AuthEngine authEngine;
+    private EventListener eventListener;
 
-	private GoogleAuthenticator googleAuthenticator;
+    public static AuthPlugin getInstance() {
+        if (instance == null)
+            throw new UnsupportedOperationException("Plugin not enabled!");
+        return instance;
+    }
 
-	private BungeePluginConfig config;
-	private AccountFactory accountFactory;
-	private AccountStorage accountStorage;
-	private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
-	private AuthenticationStepContextFactoryDealership authenticationContextFactoryDealership;
+    @Override
+    public void onEnable() {
+        ProxyPluginProvider.setPluginInstance(this);
+        instance = this;
+        initialize();
+        initializeListener();
+        initializeCommand();
+        if (config.getVKSettings().isEnabled())
+            initializeVk();
+        if (config.getTelegramSettings().isEnabled())
+            initializeTelegram();
+        if (config.getGoogleAuthenticatorSettings().isEnabled())
+            googleAuthenticator = new GoogleAuthenticator();
 
-	private AuthEngine authEngine;
-	private EventListener eventListener;
+    }
 
-	private GeoUtils geoUtils = new GeoUtils();
+    private void initialize() {
+        this.config = new BungeePluginConfig(this);
+        this.accountFactory = new BungeeAccountFactory();
+        this.accountStorage = loadAccountStorage(config.getStorageType());
+        this.authEngine = new BungeeAuthEngine(this, config);
+        this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
+        this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
+        this.authEngine.start();
 
-	private static AuthPlugin instance;
+        this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
+    }
 
-	@Override
-	public void onEnable() {
-		ProxyPluginProvider.setPluginInstance(this);
-		instance = this;
-		initialize();
-		initializeListener();
-		initializeCommand();
-		if (config.getVKSettings().isEnabled())
-			initializeVk();
-		if (config.getTelegramSettings().isEnabled())
-			initializeTelegram();
-		if (config.getGoogleAuthenticatorSettings().isEnabled())
-			googleAuthenticator = new GoogleAuthenticator();
+    private void initializeListener() {
+        this.eventListener = new EventListener(config, accountFactory, accountStorage);
+        this.getProxy().getPluginManager().registerListener(this, eventListener);
+    }
 
-	}
+    private void initializeCommand() {
+        new BungeeCommandsRegistry();
+    }
 
-	public static AuthPlugin getInstance() {
-		if (instance == null)
-			throw new UnsupportedOperationException("Plugin not enabled!");
-		return instance;
-	}
+    private void initializeTelegram() {
+        HOOKS.put(TelegramPluginHook.class, new DefaultTelegramPluginHook());
 
-	private void initialize() {
-		this.config = new BungeePluginConfig(this);
-		this.accountFactory = new BungeeAccountFactory();
-		this.accountStorage = loadAccountStorage(config.getStorageType());
-		this.authEngine = new BungeeAuthEngine(this, config);
-		this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
-		this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
-		this.authEngine.start();
+        TelegramMessage.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
 
-		this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
-		this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
-		this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
-		this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
-		this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
-		this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
-	}
+        new TelegramCommandRegistry();
+    }
 
-	private void initializeListener() {
-		this.eventListener = new EventListener(config, accountFactory, accountStorage);
-		this.getProxy().getPluginManager().registerListener(this, eventListener);
-	}
+    private void initializeVk() {
+        HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
 
-	private void initializeCommand() {
-		new BungeeCommandsRegistry();
-	}
+        VkMessage.setDefaultApiProvider(VkApiProvider.of(BungeeVkApiPlugin.getInstance().getVkApiProvider().getActor(),
+                BungeeVkApiPlugin.getInstance().getVkApiProvider().getVkApiClient()));
 
-	private void initializeTelegram() {
-		HOOKS.put(TelegramPluginHook.class, new DefaultTelegramPluginHook());
+        getProxy().getPluginManager().registerListener(this, new VkDispatchListener());
+        new VKCommandRegistry();
+    }
 
-		TelegramMessage
-				.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
+    private AccountStorage loadAccountStorage(StorageType storageType) {
+        switch (storageType) {
+            case SQLITE:
+                return new SQLiteAccountStorage(config, accountFactory, this.getDataFolder());
+            case MYSQL:
+                return new MySQLAccountStorage(config, accountFactory);
+        }
+        throw new NullPointerException("Wrong account storage!");
+    }
 
-		new TelegramCommandRegistry();
-	}
+    @Override
+    public BungeePluginConfig getConfig() {
+        return config;
+    }
 
-	private void initializeVk() {
-		HOOKS.put(VkPluginHook.class, new BungeeVkPluginHook());
+    @Override
+    public AccountFactory getAccountFactory() {
+        return accountFactory;
+    }
 
-		VkMessage.setDefaultApiProvider(VkApiProvider.of(BungeeVkApiPlugin.getInstance().getVkApiProvider().getActor(),
-				BungeeVkApiPlugin.getInstance().getVkApiProvider().getVkApiClient()));
+    @Override
+    public AccountStorage getAccountStorage() {
+        return accountStorage;
+    }
 
-		getProxy().getPluginManager().registerListener(this, new VkDispatchListener());
-		new VKCommandRegistry();
-	}
+    @Override
+    public GoogleAuthenticator getGoogleAuthenticator() {
+        return googleAuthenticator;
+    }
 
-	private AccountStorage loadAccountStorage(StorageType storageType) {
-		switch (storageType) {
-		case SQLITE:
-			return new SQLiteAccountStorage(config, accountFactory, this.getDataFolder());
-		case MYSQL:
-			return new MySQLAccountStorage(config, accountFactory);
-		}
-		throw new NullPointerException("Wrong account storage!");
-	}
+    @Override
+    public AuthenticationStepCreatorDealership getAuthenticationStepCreatorDealership() {
+        return authenticationStepCreatorDealership;
+    }
 
-	public GeoUtils getGeoUtils() {
-		return geoUtils;
-	}
+    @Override
+    public AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership() {
+        return authenticationContextFactoryDealership;
+    }
 
-	@Override
-	public BungeePluginConfig getConfig() {
-		return config;
-	}
+    @Override
+    public String getVersion() {
+        return getDescription().getVersion();
+    }
 
-	@Override
-	public AccountFactory getAccountFactory() {
-		return accountFactory;
-	}
+    @Override
+    public File getFolder() {
+        return getDataFolder();
+    }
 
-	@Override
-	public AccountStorage getAccountStorage() {
-		return accountStorage;
-	}
+    @Override
+    public ProxyCore getCore() {
+        return BungeeProxyCore.INSTANCE;
+    }
 
-	@Override
-	public GoogleAuthenticator getGoogleAuthenticator() {
-		return googleAuthenticator;
-	}
+    @Override
+    public ConfigurationProcessor getConfigurationProcessor() {
+        return CONFIGURATION_PROCESSOR;
+    }
 
-	@Override
-	public AuthenticationStepCreatorDealership getAuthenticationStepCreatorDealership() {
-		return authenticationStepCreatorDealership;
-	}
-
-	@Override
-	public AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership() {
-		return authenticationContextFactoryDealership;
-	}
-
-	@Override
-	public String getVersion() {
-		return getDescription().getVersion();
-	}
-
-	@Override
-	public File getFolder() {
-		return getDataFolder();
-	}
-
-	@Override
-	public ProxyCore getCore() {
-		return BungeeProxyCore.INSTANCE;
-	}
-
-	@Override
-	public ConfigurationProcessor getConfigurationProcessor() {
-		return CONFIGURATION_PROCESSOR;
-	}
-
-	@Override
-	public <T extends PluginHook> T getHook(Class<T> clazz) {
-		PluginHook hook = HOOKS.get(clazz);
-		if (hook == null)
-			return null;
-		return hook.as(clazz);
-	}
+    @Override
+    public <T extends PluginHook> T getHook(Class<T> clazz) {
+        PluginHook hook = HOOKS.get(clazz);
+        if (hook == null)
+            return null;
+        return hook.as(clazz);
+    }
 
 }

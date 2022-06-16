@@ -1,9 +1,5 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
@@ -14,46 +10,47 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 public class AccountEnterAcceptCommand implements OrphanCommand {
-	@Dependency
-	private ProxyPlugin plugin;
+    @Dependency
+    private ProxyPlugin plugin;
 
-	@Default
-	public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType,
-			@Default("all") String acceptPlayerName) {
-		List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(entryUser -> {
-			if (!entryUser.getLinkType().equals(linkType))
-				return false;
+    @Default
+    public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
+        List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(entryUser -> {
+            if (!entryUser.getLinkType().equals(linkType))
+                return false;
 
-			if (!entryUser.getLinkUserInfo().getIdentificator().equals(actorWrapper.userId()))
-				return false;
+            if (!entryUser.getLinkUserInfo().getIdentificator().equals(actorWrapper.userId()))
+                return false;
 
-			Duration confirmationSecondsPassed = Duration
-					.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
+            Duration confirmationSecondsPassed = Duration.of(System.currentTimeMillis() - entryUser.getConfirmationStartTime(), ChronoUnit.MILLIS);
 
-			if (confirmationSecondsPassed.getSeconds() > linkType.getSettings().getEnterSettings().getEnterDelay())
-				return false;
+            if (confirmationSecondsPassed.getSeconds() > linkType.getSettings().getEnterSettings().getEnterDelay())
+                return false;
 
-			if (!acceptPlayerName.equals("all")) // If player not default value
-				return entryUser.getAccount().getName().equalsIgnoreCase(acceptPlayerName); // Check if entryUser name
-																							// equals to accept player
-			return true;
-		});
-		if (accounts.isEmpty()) {
-			actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("enter-no-accounts"));
-			return;
-		}
-		accounts.forEach((entryUser) -> {
-			entryUser.setConfirmed(true);
-			Account account = entryUser.getAccount();
-			account.getPlayer().ifPresent(player -> player.sendMessage(
-					linkType.getProxyMessages().getStringMessage("enter-confirmed", linkType.newMessageContext(account))));
-			account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
-			Auth.getLinkEntryAuth().removeLinkUser(entryUser);
+            if (!acceptPlayerName.equals("all")) // If player not default value
+                return entryUser.getAccount().getName().equalsIgnoreCase(acceptPlayerName); // Check if entryUser name
+            // equals to accept player
+            return true;
+        });
+        if (accounts.isEmpty()) {
+            actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("enter-no-accounts"));
+            return;
+        }
+        accounts.forEach((entryUser) -> {
+            entryUser.setConfirmed(true);
+            Account account = entryUser.getAccount();
+            account.getPlayer().ifPresent(player -> player.sendMessage(linkType.getProxyMessages().getStringMessage("enter-confirmed",
+                    linkType.newMessageContext(account))));
+            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
+            Auth.getLinkEntryAuth().removeLinkUser(entryUser);
 
-			actorWrapper.reply(
-					linkType.getLinkMessages().getMessage("enter-accepted", linkType.newMessageContext(account)));
-		});
-	}
+            actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted", linkType.newMessageContext(account)));
+        });
+    }
 
 }

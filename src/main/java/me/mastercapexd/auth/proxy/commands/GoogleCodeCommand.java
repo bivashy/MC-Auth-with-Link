@@ -14,49 +14,46 @@ import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 
-@Command({ "googlecode", "gcode" })
+@Command({"googlecode", "gcode"})
 public class GoogleCodeCommand {
-	private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig()
-			.getProxyMessages().getSubMessages("google");
-	@Dependency
-	private ProxyPlugin plugin;
-	@Dependency
-	private PluginConfig config;
-	@Dependency
-	private AccountStorage accountStorage;
+    private static final Messages<ProxyComponent> GOOGLE_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("google");
+    @Dependency
+    private ProxyPlugin plugin;
+    @Dependency
+    private PluginConfig config;
+    @Dependency
+    private AccountStorage accountStorage;
 
-	@Default
-	public void defaultCommand(ProxyPlayer player) {
-		player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-enough-arguments"));
-	}
+    @Default
+    public void defaultCommand(ProxyPlayer player) {
+        player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-enough-arguments"));
+    }
 
-	@GoogleUse
-	@Command({ "googlecode", "gcode", "google code" })
-	public void googleCode(ProxyPlayer player, Integer code) {
-		String playerId = config.getActiveIdentifierType().getId(player);
-		accountStorage.getAccount(playerId).thenAccept(account -> {
-			if (account == null || !account.isRegistered()) {
-				player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
-				return;
-			}
-			LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
-			if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
-				return;
-			}
-			if (!Auth.getLinkEntryAuth().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-need-enter"));
-				return;
-			}
-			if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(),
-					code)) {
-				player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-entered"));
-				Auth.removeAccount(account.getId());
-				account.nextAuthenticationStep(
-						plugin.getAuthenticationContextFactoryDealership().createContext(account));
-				return;
-			}
-			player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-wrong-code"));
-		});
-	}
+    @GoogleUse
+    @Command({"googlecode", "gcode", "google code"})
+    public void googleCode(ProxyPlayer player, Integer code) {
+        String playerId = config.getActiveIdentifierType().getId(player);
+        accountStorage.getAccount(playerId).thenAccept(account -> {
+            if (account == null || !account.isRegistered()) {
+                player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
+                return;
+            }
+            LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+            if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
+                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
+                return;
+            }
+            if (!Auth.getLinkEntryAuth().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
+                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-need-enter"));
+                return;
+            }
+            if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
+                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-entered"));
+                Auth.removeAccount(account.getId());
+                account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
+                return;
+            }
+            player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-wrong-code"));
+        });
+    }
 }

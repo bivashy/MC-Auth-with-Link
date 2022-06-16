@@ -5,9 +5,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class BungeeTextColor extends TextColor {
 
-	@Override
-	protected String colorText(char colorCharacter, String text) {
-		return ChatColor.translateAlternateColorCodes(colorCharacter, text);
-	}
+    @Override
+    protected String colorText(char colorCharacter, String text) {
+        return ChatColor.translateAlternateColorCodes(colorCharacter, text);
+    }
 
 }

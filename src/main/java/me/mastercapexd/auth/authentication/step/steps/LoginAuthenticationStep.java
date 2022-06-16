@@ -8,33 +8,32 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class LoginAuthenticationStep extends AbstractAuthenticationStep {
 
-	private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
-	public static final String STEP_NAME = "LOGIN";
+    public static final String STEP_NAME = "LOGIN";
+    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 
-	public LoginAuthenticationStep(AuthenticationStepContext context) {
-		super(STEP_NAME, context);
-	}
+    public LoginAuthenticationStep(AuthenticationStepContext context) {
+        super(STEP_NAME, context);
+    }
 
-	@Override
-	public boolean shouldPassToNextStep() {
-		return authenticationStepContext.canPassToNextStep();
-	}
+    @Override
+    public boolean shouldPassToNextStep() {
+        return authenticationStepContext.canPassToNextStep();
+    }
 
-	@Override
-	public boolean shouldSkip() {
-		return !Auth.hasAccount(authenticationStepContext.getAccount().getId())
-				|| authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
-	}
+    @Override
+    public boolean shouldSkip() {
+        return !Auth.hasAccount(authenticationStepContext.getAccount().getId()) || authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
+    }
 
-	public static class LoginAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
-		public LoginAuthenticationStepCreator() {
-			super(STEP_NAME);
-		}
+    public static class LoginAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
+        public LoginAuthenticationStepCreator() {
+            super(STEP_NAME);
+        }
 
-		@Override
-		public LoginAuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
-			return new LoginAuthenticationStep(context);
-		}
-	}
+        @Override
+        public LoginAuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
+            return new LoginAuthenticationStep(context);
+        }
+    }
 
 }

@@ -8,18 +8,18 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class BungeeProxyTitle extends ProxyTitle {
 
-	private final Title bungeeTitle = ProxyServer.getInstance().createTitle();
+    private final Title bungeeTitle = ProxyServer.getInstance().createTitle();
 
-	@Override
-	public ProxyTitle send(ProxyPlayer... players) {
-		bungeeTitle.title(TextComponent.fromLegacyText(title));
-		bungeeTitle.subTitle(TextComponent.fromLegacyText(subtitle));
-		bungeeTitle.fadeIn(fadeIn);
-		bungeeTitle.stay(stay);
-		bungeeTitle.fadeOut(fadeOut);
-		for (ProxyPlayer player : players)
-			bungeeTitle.send(player.getRealPlayer());
-		return this;
-	}
+    @Override
+    public ProxyTitle send(ProxyPlayer... players) {
+        bungeeTitle.title(TextComponent.fromLegacyText(title));
+        bungeeTitle.subTitle(TextComponent.fromLegacyText(subtitle));
+        bungeeTitle.fadeIn(fadeIn);
+        bungeeTitle.stay(stay);
+        bungeeTitle.fadeOut(fadeOut);
+        for (ProxyPlayer player : players)
+            bungeeTitle.send(player.getRealPlayer());
+        return this;
+    }
 
 }

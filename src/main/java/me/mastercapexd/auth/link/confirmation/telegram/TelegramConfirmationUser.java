@@ -7,8 +7,8 @@ import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 
 public class TelegramConfirmationUser extends AbstractLinkConfirmationUser {
 
-	public TelegramConfirmationUser(Account account, LinkConfirmationInfo confirmationInfo) {
-		super(TelegramLinkType.getInstance(), account, confirmationInfo);
-	}
+    public TelegramConfirmationUser(Account account, LinkConfirmationInfo confirmationInfo) {
+        super(TelegramLinkType.getInstance(), account, confirmationInfo);
+    }
 
 }
