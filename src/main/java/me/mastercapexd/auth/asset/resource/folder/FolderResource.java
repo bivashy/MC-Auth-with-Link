@@ -11,6 +11,7 @@ import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FolderResource extends DefaultResource {
     private final ClassLoader classLoader;
@@ -24,7 +25,7 @@ public class FolderResource extends DefaultResource {
         URI folderUri = classLoader.getResource(getName()).toURI();
         Path myPath;
         if (folderUri.getScheme().equals("jar")) {
-            FileSystem fileSystem = null;
+            FileSystem fileSystem;
             try {
                 fileSystem = FileSystems.newFileSystem(folderUri, Collections.emptyMap());
             } catch(FileSystemAlreadyExistsException ignored) {
@@ -34,6 +35,8 @@ public class FolderResource extends DefaultResource {
         } else {
             myPath = Paths.get(folderUri);
         }
-        return Files.walk(myPath, 1).filter(path -> !path.toString().equals(getName())).map(path -> path.toString().substring(1)).map(resourcePath -> ResourceReader.defaultReader(classLoader, resourcePath).read()).collect(Collectors.toList());
+        try (Stream<Path> pathStream = Files.walk(myPath, 1)) {
+            return pathStream.filter(path -> !path.toString().equals(getName())).map(path -> path.toString().replaceFirst("\\/", "")).map(resourcePath -> ResourceReader.defaultReader(classLoader, resourcePath).read()).collect(Collectors.toList());
+        }
     }
 }
