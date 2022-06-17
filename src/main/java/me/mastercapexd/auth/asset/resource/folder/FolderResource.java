@@ -36,7 +36,7 @@ public class FolderResource extends DefaultResource {
             myPath = Paths.get(folderUri);
         }
         try (Stream<Path> pathStream = Files.walk(myPath, 1)) {
-            return pathStream.filter(path -> !path.toString().equals(getName())).map(path -> path.toString().replaceFirst("\\/", "")).map(resourcePath -> ResourceReader.defaultReader(classLoader, resourcePath).read()).collect(Collectors.toList());
+            return pathStream.filter(path -> !path.toString().equals(getName())).map(path -> path.toString().replaceFirst("[\\/\\\\]", "")).map(resourcePath -> ResourceReader.defaultReader(classLoader, resourcePath).read()).collect(Collectors.toList());
         }
     }
 }
