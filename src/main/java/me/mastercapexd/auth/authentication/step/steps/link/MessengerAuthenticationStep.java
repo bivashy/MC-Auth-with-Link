@@ -2,6 +2,7 @@ package me.mastercapexd.auth.authentication.step.steps.link;
 
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
@@ -44,14 +45,19 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep {
         LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).orElse(null);
 
         if (linkUser == null) {
-            linkType.getProxyMessages().getMessage("not-linked").ifPresent(component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.newMessageContext(account).apply(component.legacyText())));
+            linkType.getProxyMessages().getMessage("not-linked").ifPresent(
+                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.newMessageContext(account).apply(component.legacyText())));
             return true;
         }
 
         LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-        if (linkUserInfo == null || linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator()) || !linkUserInfo.getConfirmationState().shouldSendConfirmation()) {
-            linkType.getProxyMessages().getMessage("not-linked").ifPresent(component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.newMessageContext(account).apply(component.legacyText())));
+        if (linkUserInfo != null && !linkUserInfo.getConfirmationState().shouldSendConfirmation())
+            return true;
+
+        if (linkUserInfo == null || linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator())) {
+            linkType.getProxyMessages().getMessage("not-linked").ifPresent(
+                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.newMessageContext(account).apply(component.legacyText())));
             return true;
         }
 
@@ -60,7 +66,8 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep {
 
         Identificator userIdentificator = linkUserInfo.getIdentificator().isNumber() ? Identificator.of(linkUserInfo.getIdentificator().asNumber()) :
                 Identificator.of(linkUserInfo.getIdentificator().asString());
-        linkType.newMessageBuilder(linkType.getSettings().getMessages().getMessage("enter-message", linkType.newMessageContext(account))).keyboard(keyboard).build().send(userIdentificator);
+        linkType.newMessageBuilder(linkType.getSettings().getMessages().getMessage("enter-message", linkType.newMessageContext(account))).keyboard(keyboard)
+                .build().send(userIdentificator);
         return false;
     }
 
