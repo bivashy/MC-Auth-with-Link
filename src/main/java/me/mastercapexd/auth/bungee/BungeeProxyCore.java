@@ -1,5 +1,12 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
 import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
 import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
@@ -13,16 +20,10 @@ import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Listener;
-
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public enum BungeeProxyCore implements ProxyCore {
     INSTANCE;
@@ -83,8 +84,11 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public Server serverFromName(String serverName) {
-        return new BungeeServer(PROXY_SERVER.getServerInfo(serverName));
+    public Optional<Server> serverFromName(String serverName) {
+        ServerInfo serverInfo = PROXY_SERVER.getServerInfo(serverName);
+        if (serverInfo == null)
+            return Optional.empty();
+        return Optional.of(new BungeeServer(serverInfo));
     }
 
     @Override

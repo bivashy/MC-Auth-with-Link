@@ -19,7 +19,7 @@ public class ConfigurationServer {
     }
 
     public Server asProxyServer() {
-        return ProxyPlugin.instance().getCore().serverFromName(id);
+        return ProxyPlugin.instance().getCore().serverFromName(id).orElseThrow(() -> new NullPointerException("Server with name " + id + " not exists!"));
     }
 
     public String getId() {
