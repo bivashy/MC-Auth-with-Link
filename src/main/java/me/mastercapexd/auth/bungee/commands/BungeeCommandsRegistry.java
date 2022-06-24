@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.bungee.commands;
 
+import java.util.Collections;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
@@ -20,8 +22,6 @@ import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.core.BungeeHandler;
 import revxrsal.commands.exception.SendMessageException;
-
-import java.util.Collections;
 
 public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
     private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();

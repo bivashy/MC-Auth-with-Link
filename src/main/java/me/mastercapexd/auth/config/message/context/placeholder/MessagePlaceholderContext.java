@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.config.message.context.placeholder;
 
-import me.mastercapexd.auth.config.message.context.MessageContext;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public abstract class MessagePlaceholderContext implements MessageContext {
     private final List<PlaceholderProvider> placeholderProviders = new ArrayList<>();

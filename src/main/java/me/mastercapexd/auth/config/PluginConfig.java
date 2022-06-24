@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.config;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
@@ -10,9 +13,6 @@ import me.mastercapexd.auth.config.storage.StorageDataSettings;
 import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.storage.StorageType;
-
-import java.util.List;
-import java.util.regex.Pattern;
 
 public interface PluginConfig {
 

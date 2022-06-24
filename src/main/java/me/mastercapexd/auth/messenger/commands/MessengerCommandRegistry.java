@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.messenger.commands;
 
+import java.util.Optional;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
@@ -18,8 +20,6 @@ import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.Orphans;
-
-import java.util.Optional;
 
 public abstract class MessengerCommandRegistry {
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();

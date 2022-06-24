@@ -2,6 +2,7 @@ package me.mastercapexd.auth.link.vk;
 
 import com.google.common.base.Predicate;
 import com.ubivashka.messenger.vk.MessengerVk;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.message.Messages;

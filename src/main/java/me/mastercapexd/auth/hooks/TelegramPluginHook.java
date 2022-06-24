@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.hooks;
 
 import com.pengrad.telegrambot.TelegramBot;
+
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 

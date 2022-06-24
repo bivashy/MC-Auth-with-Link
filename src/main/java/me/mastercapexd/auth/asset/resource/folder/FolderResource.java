@@ -1,17 +1,22 @@
 package me.mastercapexd.auth.asset.resource.folder;
 
-import me.mastercapexd.auth.asset.resource.DefaultResource;
-import me.mastercapexd.auth.asset.resource.Resource;
-import me.mastercapexd.auth.asset.resource.ResourceReader;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import me.mastercapexd.auth.asset.resource.DefaultResource;
+import me.mastercapexd.auth.asset.resource.Resource;
+import me.mastercapexd.auth.asset.resource.ResourceReader;
 
 public class FolderResource extends DefaultResource {
     private final ClassLoader classLoader;

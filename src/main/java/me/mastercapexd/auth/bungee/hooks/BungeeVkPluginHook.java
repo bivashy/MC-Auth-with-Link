@@ -3,6 +3,7 @@ package me.mastercapexd.auth.bungee.hooks;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
+
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 

@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.concurrent.TimeUnit;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.Account;
@@ -25,8 +27,6 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
-
-import java.util.concurrent.TimeUnit;
 
 public class BungeeAuthEngine implements AuthEngine {
 

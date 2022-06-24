@@ -3,6 +3,7 @@ package me.mastercapexd.auth.vk.commands;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;

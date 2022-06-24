@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.bungee.player;
 
+import java.net.InetSocketAddress;
+import java.util.UUID;
+
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-
-import java.net.InetSocketAddress;
-import java.util.UUID;
 
 public class BungeeProxyPlayer implements ProxyPlayer {
     private final ProxiedPlayer player;

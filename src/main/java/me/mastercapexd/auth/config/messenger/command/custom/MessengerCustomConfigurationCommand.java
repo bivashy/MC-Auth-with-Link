@@ -1,11 +1,12 @@
 package me.mastercapexd.auth.config.messenger.command.custom;
 
+import java.util.regex.Pattern;
+
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
 import me.mastercapexd.auth.messenger.commands.custom.MessengerCustomCommand;
-
-import java.util.regex.Pattern;
 
 public class MessengerCustomConfigurationCommand implements MessengerCustomCommand, ConfigurationHolder {
 

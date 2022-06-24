@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.dealerships;
 
-import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 
 public class AuthenticationStepCreatorDealership implements ListDealership<AuthenticationStepCreator> {
 

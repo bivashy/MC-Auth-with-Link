@@ -1,5 +1,10 @@
 package me.mastercapexd.auth.bungee;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import com.ubivashka.configuration.BungeeConfigurationProcessor;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
@@ -9,6 +14,7 @@ import com.ubivashka.messenger.vk.message.VkMessage;
 import com.ubivashka.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
+
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
@@ -45,11 +51,6 @@ import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import net.md_5.bungee.api.plugin.Plugin;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
     public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor().registerFieldResolver(ConfigurationServer.class,

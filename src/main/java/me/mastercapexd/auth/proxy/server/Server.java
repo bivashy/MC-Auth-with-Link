@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.proxy.server;
 
+import java.util.List;
+
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-
-import java.util.List;
 
 public interface Server extends Castable<Server> {
     String getServerName();

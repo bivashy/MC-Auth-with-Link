@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.authentication.step.context.factory;
 
+import java.util.function.Supplier;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
-
-import java.util.function.Supplier;
 
 public interface AuthenticationStepContextFactory {
     static AuthenticationStepContextFactory of(Supplier<AuthenticationStepContext> supplier) {

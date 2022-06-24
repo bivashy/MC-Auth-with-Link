@@ -1,14 +1,14 @@
 package me.mastercapexd.auth;
 
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.LinkUser;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import me.mastercapexd.auth.link.LinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 
 public class LinkAuth<T extends LinkUser> {
     private final List<T> linkUsers = Collections.synchronizedList(new ArrayList<>());

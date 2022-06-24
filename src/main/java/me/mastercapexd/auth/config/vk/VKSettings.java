@@ -1,15 +1,22 @@
 package me.mastercapexd.auth.config.vk;
 
+import java.util.List;
+
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.message.vk.VKMessages;
-import me.mastercapexd.auth.config.messenger.*;
+import me.mastercapexd.auth.config.messenger.DefaultCommandPaths;
+import me.mastercapexd.auth.config.messenger.DefaultConfirmationSettings;
+import me.mastercapexd.auth.config.messenger.DefaultEnterSettings;
+import me.mastercapexd.auth.config.messenger.DefaultMessengerCustomCommands;
+import me.mastercapexd.auth.config.messenger.DefaultRestoreSettings;
+import me.mastercapexd.auth.config.messenger.MessengerCustomCommands;
+import me.mastercapexd.auth.config.messenger.MessengerSettings;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-
-import java.util.List;
 
 public class VKSettings implements ConfigurationHolder, MessengerSettings {
     @ConfigField

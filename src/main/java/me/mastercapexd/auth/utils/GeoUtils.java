@@ -1,15 +1,16 @@
 package me.mastercapexd.auth.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import me.mastercapexd.auth.objects.IPInfoResponse;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
+import me.mastercapexd.auth.objects.IPInfoResponse;
 
 public class GeoUtils {
     private static final Gson GSON = new Gson();

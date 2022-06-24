@@ -1,17 +1,18 @@
 package me.mastercapexd.auth.config.vk;
 
-import com.google.gson.Gson;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
-import com.ubivaska.messenger.common.keyboard.Keyboard;
-import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.messenger.MessengerKeyboards;
-import me.mastercapexd.auth.utils.CollectionUtils;
-
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
+import com.ubivaska.messenger.common.keyboard.Keyboard;
+
+import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.messenger.MessengerKeyboards;
+import me.mastercapexd.auth.utils.CollectionUtils;
 
 public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
     private static final Gson GSON = new Gson();

@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.proxy.player;
 
-import me.mastercapexd.auth.function.Castable;
-import me.mastercapexd.auth.proxy.server.Server;
-
 import java.net.InetSocketAddress;
 import java.util.UUID;
+
+import me.mastercapexd.auth.function.Castable;
+import me.mastercapexd.auth.proxy.server.Server;
 
 public interface ProxyPlayer extends Castable<ProxyPlayer> {
     void disconnect(String reason);

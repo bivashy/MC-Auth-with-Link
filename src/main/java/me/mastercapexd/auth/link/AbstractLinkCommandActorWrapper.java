@@ -1,10 +1,11 @@
 package me.mastercapexd.auth.link;
 
+import java.util.UUID;
+
 import org.jetbrains.annotations.NotNull;
+
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.CommandActor;
-
-import java.util.UUID;
 
 public abstract class AbstractLinkCommandActorWrapper<T extends CommandActor> implements LinkCommandActorWrapper {
 

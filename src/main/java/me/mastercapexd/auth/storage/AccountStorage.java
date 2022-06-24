@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.storage;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
-
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
+
+import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public interface AccountStorage {
 

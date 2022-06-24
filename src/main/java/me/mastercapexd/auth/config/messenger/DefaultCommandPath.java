@@ -1,15 +1,16 @@
 package me.mastercapexd.auth.config.messenger;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.configuration.annotations.ImportantField;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
+import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class DefaultCommandPath implements ConfigurationHolder, MessengerCommandPath {
     @ImportantField

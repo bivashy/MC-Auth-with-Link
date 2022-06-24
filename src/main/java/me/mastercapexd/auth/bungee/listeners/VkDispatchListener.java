@@ -2,6 +2,7 @@ package me.mastercapexd.auth.bungee.listeners;
 
 import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
 import com.ubivashka.vk.bungee.events.VKMessageEvent;
+
 import me.mastercapexd.auth.vk.commands.DispatchCommandListener;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;

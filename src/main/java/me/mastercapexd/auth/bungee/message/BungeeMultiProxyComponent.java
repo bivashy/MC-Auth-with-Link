@@ -1,16 +1,16 @@
 package me.mastercapexd.auth.bungee.message;
 
+import java.awt.*;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import me.mastercapexd.auth.proxy.message.MultiProxyComponent;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BungeeMultiProxyComponent implements MultiProxyComponent {
     private static final Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]){6}");

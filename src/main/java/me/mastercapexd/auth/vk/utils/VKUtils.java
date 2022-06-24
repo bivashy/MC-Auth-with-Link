@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.vk.utils;
 
+import java.io.File;
+import java.util.Optional;
+
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -7,11 +10,9 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.photos.responses.PhotoUploadResponse;
 import com.vk.api.sdk.objects.photos.responses.SaveMessagesPhotoResponse;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
+
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-
-import java.io.File;
-import java.util.Optional;
 
 public class VKUtils {
     private static final VkPluginHook VK_HOOK = ProxyPlugin.instance().getHook(VkPluginHook.class);

@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.proxy.commands.parameters;
 
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-
 import java.net.InetSocketAddress;
 import java.util.UUID;
+
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class ArgumentProxyPlayer implements ProxyPlayer {
     private final ProxyPlayer player;

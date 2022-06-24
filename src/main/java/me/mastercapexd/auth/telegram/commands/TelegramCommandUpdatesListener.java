@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.telegram.commands;
 
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -14,14 +16,13 @@ import com.ubivashka.messenger.telegram.message.keyboard.TelegramKeyboard;
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.message.Message;
 import com.ubivaska.messenger.common.message.Message.MessageBuilder;
+
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.telegram.TelegramCommandActorWrapper;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
 import me.mastercapexd.auth.messenger.commands.custom.MessengerCustomCommand;
 import revxrsal.commands.command.ArgumentStack;
-
-import java.util.List;
 
 public class TelegramCommandUpdatesListener implements UpdatesListener {
     private static final Gson GSON = new Gson();

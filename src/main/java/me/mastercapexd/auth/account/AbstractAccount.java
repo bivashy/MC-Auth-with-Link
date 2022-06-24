@@ -1,5 +1,12 @@
 package me.mastercapexd.auth.account;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
@@ -9,9 +16,6 @@ import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-
-import java.util.*;
-import java.util.function.Predicate;
 
 public class AbstractAccount implements Account, Comparable<AbstractAccount> {
 

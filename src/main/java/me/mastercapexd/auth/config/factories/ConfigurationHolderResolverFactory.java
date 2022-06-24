@@ -1,13 +1,14 @@
 package me.mastercapexd.auth.config.factories;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.ubivashka.configuration.contexts.ConfigurationFieldContext;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import com.ubivashka.configuration.resolvers.ConfigurationFieldResolver;
 import com.ubivashka.configuration.resolvers.ConfigurationFieldResolverFactory;
-import me.mastercapexd.auth.config.ConfigurationHolder;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import me.mastercapexd.auth.config.ConfigurationHolder;
 
 public class ConfigurationHolderResolverFactory implements ConfigurationFieldResolverFactory {
 

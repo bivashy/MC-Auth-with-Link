@@ -1,10 +1,13 @@
 package me.mastercapexd.auth.link.google;
 
+import java.util.function.Predicate;
+
 import com.ubivaska.messenger.common.button.Button.ButtonBuilder;
 import com.ubivaska.messenger.common.button.ButtonAction.ButtonActionBuilder;
 import com.ubivaska.messenger.common.button.ButtonColor.ButtonColorBuilder;
 import com.ubivaska.messenger.common.keyboard.Keyboard.KeyboardBuilder;
 import com.ubivaska.messenger.common.message.Message.MessageBuilder;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.message.Messages;
@@ -16,8 +19,6 @@ import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
-
-import java.util.function.Predicate;
 
 public class GoogleLinkType implements LinkType {
     private static final GoogleLinkType INSTANCE = new GoogleLinkType();

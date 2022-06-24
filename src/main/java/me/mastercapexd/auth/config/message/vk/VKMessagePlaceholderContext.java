@@ -1,18 +1,19 @@
 package me.mastercapexd.auth.config.message.vk;
 
+import java.util.List;
+
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.message.context.placeholder.PlaceholderProvider;
 import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholderContext;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-
-import java.util.List;
 
 public class VKMessagePlaceholderContext extends MessengerPlaceholderContext {
     private static final VkPluginHook VK_HOOK = ProxyPlugin.instance().getHook(VkPluginHook.class);

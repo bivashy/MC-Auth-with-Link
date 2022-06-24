@@ -1,13 +1,13 @@
 package me.mastercapexd.auth.storage.mysql;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.storage.StorageDataSettings;
 import me.mastercapexd.auth.storage.sql.SQLAccountStorage;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class MySQLAccountStorage extends SQLAccountStorage {
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `auth` (`id` VARCHAR(64) PRIMARY KEY, `uuid` VARCHAR(64) NOT NULL, `name` VARCHAR" +

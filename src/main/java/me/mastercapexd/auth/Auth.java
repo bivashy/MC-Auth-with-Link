@@ -1,14 +1,15 @@
 package me.mastercapexd.auth;
 
+import java.util.Collection;
+import java.util.Map;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-
-import java.util.Collection;
-import java.util.Map;
 
 public class Auth {
 

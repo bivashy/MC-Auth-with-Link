@@ -1,14 +1,14 @@
 package me.mastercapexd.auth.storage.sqlite;
 
-import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.storage.sql.SQLAccountStorage;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.storage.sql.SQLAccountStorage;
 
 public class SQLiteAccountStorage extends SQLAccountStorage {
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `auth` (`id` VARCHAR(50) PRIMARY KEY, `uuid` VARCHAR(64) NOT NULL, `name` VARCHAR" +

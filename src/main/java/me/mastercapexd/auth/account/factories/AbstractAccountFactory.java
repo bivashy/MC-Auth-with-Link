@@ -1,13 +1,13 @@
 package me.mastercapexd.auth.account.factories;
 
+import java.util.UUID;
+
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.telegram.TelegramLinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
-
-import java.util.UUID;
 
 public abstract class AbstractAccountFactory implements AccountFactory {
 

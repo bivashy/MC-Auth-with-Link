@@ -1,8 +1,9 @@
 package me.mastercapexd.auth;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-import org.mindrot.jbcrypt.BCrypt;
 
 public enum HashType {
 

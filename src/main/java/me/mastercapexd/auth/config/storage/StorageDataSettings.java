@@ -3,6 +3,7 @@ package me.mastercapexd.auth.config.storage;
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.annotations.ImportantField;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 

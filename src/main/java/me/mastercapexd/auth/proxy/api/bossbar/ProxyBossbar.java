@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.proxy.api.bossbar;
 
+import java.util.Collection;
+
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-
-import java.util.Collection;
 
 /**
  * Proxy bossbar for bukkit,bungee,velocity. This bossbar will not automatically

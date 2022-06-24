@@ -7,6 +7,7 @@ import com.ubivaska.messenger.common.message.Message;
 import com.vk.api.sdk.objects.messages.Conversation;
 import com.vk.api.sdk.objects.messages.ConversationPeerType;
 import com.vk.api.sdk.objects.users.UserFull;
+
 import me.mastercapexd.auth.link.AbstractLinkCommandActorWrapper;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;

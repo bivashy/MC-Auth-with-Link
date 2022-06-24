@@ -1,13 +1,14 @@
 package me.mastercapexd.auth.asset.resource;
 
-import com.ubivashka.functions.Castable;
-import me.mastercapexd.auth.utils.IOUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import com.ubivashka.functions.Castable;
+
+import me.mastercapexd.auth.utils.IOUtils;
 
 public interface Resource extends Castable<Resource> {
     String getName();

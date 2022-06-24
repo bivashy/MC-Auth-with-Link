@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.function;
 
+import static revxrsal.commands.util.Preconditions.notNull;
+
 import java.io.Serializable;
 import java.util.function.Supplier;
-
-import static revxrsal.commands.util.Preconditions.notNull;
 
 // legally stolen from guava
 public final class MemoizingSupplier<T> implements Supplier<T>, Serializable {

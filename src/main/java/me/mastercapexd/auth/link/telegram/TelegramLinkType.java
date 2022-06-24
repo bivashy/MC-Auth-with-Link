@@ -1,6 +1,9 @@
 package me.mastercapexd.auth.link.telegram;
 
+import java.util.function.Predicate;
+
 import com.ubivashka.messenger.telegram.MessengerTelegram;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholderContext;
@@ -12,8 +15,6 @@ import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
-
-import java.util.function.Predicate;
 
 public class TelegramLinkType implements LinkType, MessengerTelegram {
     private static final TelegramLinkType INSTANCE = new TelegramLinkType();

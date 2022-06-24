@@ -1,16 +1,16 @@
 package me.mastercapexd.auth.config.factories;
 
-import com.ubivashka.configuration.contexts.ConfigurationFieldContext;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import com.ubivashka.configuration.resolvers.ConfigurationFieldResolver;
-import com.ubivashka.configuration.resolvers.ConfigurationFieldResolverFactory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.ubivashka.configuration.contexts.ConfigurationFieldContext;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.resolvers.ConfigurationFieldResolver;
+import com.ubivashka.configuration.resolvers.ConfigurationFieldResolverFactory;
 
 public class ConfigurationHolderMapResolverFactory implements ConfigurationFieldResolverFactory {
 

@@ -1,14 +1,13 @@
 package me.mastercapexd.auth.bungee.config;
 
-import com.ubivashka.configuration.configurate.holder.ConfigurationHolder;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import me.mastercapexd.auth.asset.resource.Resource;
-import me.mastercapexd.auth.asset.resource.folder.FolderResource;
-import me.mastercapexd.auth.asset.resource.folder.FolderResourceReader;
-import me.mastercapexd.auth.bungee.AuthPlugin;
-import me.mastercapexd.auth.config.AbstractPluginConfig;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import net.md_5.bungee.api.plugin.Plugin;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
+
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -17,13 +16,16 @@ import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 import org.spongepowered.configurate.transformation.TransformAction;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Stream;
+import com.ubivashka.configuration.configurate.holder.ConfigurationHolder;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
+import me.mastercapexd.auth.asset.resource.Resource;
+import me.mastercapexd.auth.asset.resource.folder.FolderResource;
+import me.mastercapexd.auth.asset.resource.folder.FolderResourceReader;
+import me.mastercapexd.auth.bungee.AuthPlugin;
+import me.mastercapexd.auth.config.AbstractPluginConfig;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
+import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeePluginConfig extends AbstractPluginConfig {
 

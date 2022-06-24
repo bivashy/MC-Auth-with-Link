@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.account.factories;
 
+import java.util.UUID;
+
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
-
-import java.util.UUID;
 
 public interface AccountFactory {
 

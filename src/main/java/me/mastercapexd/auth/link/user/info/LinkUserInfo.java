@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.link.user.info;
 
 import com.ubivashka.function.CastableInterface;
+
 import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 

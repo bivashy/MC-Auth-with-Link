@@ -1,7 +1,15 @@
 package me.mastercapexd.auth.messenger.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import com.ubivaska.messenger.common.button.ButtonColor;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
@@ -11,9 +19,6 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.orphan.OrphanCommand;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class AccountsListCommand implements OrphanCommand {
     @Dependency

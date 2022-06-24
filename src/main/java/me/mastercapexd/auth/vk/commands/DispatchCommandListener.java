@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.vk.commands;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.google.gson.Gson;
 import com.ubivashka.lamp.commands.vk.VkCommandHandler;
 import com.ubivashka.lamp.commands.vk.core.BaseVkActor;
@@ -14,6 +17,7 @@ import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.message.Message;
 import com.ubivaska.messenger.common.message.Message.MessageBuilder;
 import com.vk.api.sdk.objects.messages.Keyboard;
+
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -21,9 +25,6 @@ import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContex
 import me.mastercapexd.auth.messenger.commands.custom.MessengerCustomCommand;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public abstract class DispatchCommandListener {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();

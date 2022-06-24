@@ -1,9 +1,17 @@
 package me.mastercapexd.auth.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import com.ubivashka.configuration.annotations.ConfigField;
 import com.ubivashka.configuration.annotations.ImportantField;
 import com.ubivashka.configuration.annotations.SingleObject;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
@@ -17,13 +25,6 @@ import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.server.Server;
 import me.mastercapexd.auth.storage.StorageType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public abstract class AbstractPluginConfig implements PluginConfig {
     protected final ProxyPlugin proxyPlugin;
@@ -109,9 +110,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
                 System.err.println("ConfigurationServer with name " + server.getId() + " doesn`t exists in your proxy!");
                 return false;
             }
-            if (server.getMaxPlayers() != -1 && (proxyServer.getPlayersCount() >= server.getMaxPlayers()))
-                return false;
-            return true;
+            return server.getMaxPlayers() == -1 || (proxyServer.getPlayersCount() < server.getMaxPlayers());
         }).collect(Collectors.toList()));
 
         if (filteredServers.isEmpty())

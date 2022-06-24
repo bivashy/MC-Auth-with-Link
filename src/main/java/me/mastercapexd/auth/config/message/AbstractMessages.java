@@ -1,12 +1,13 @@
 package me.mastercapexd.auth.config.message;
 
-import com.google.common.collect.Maps;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.message.context.MessageContext;
-
 import java.util.Map;
 import java.util.Optional;
+
+import com.google.common.collect.Maps;
+import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+
+import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationHolder {
     protected static final String DEFAULT_DELIMITER = "\n";

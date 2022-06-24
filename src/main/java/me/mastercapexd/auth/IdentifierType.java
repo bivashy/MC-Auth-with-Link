@@ -1,9 +1,9 @@
 package me.mastercapexd.auth;
 
+import java.util.Optional;
+
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-
-import java.util.Optional;
 
 public enum IdentifierType {
 

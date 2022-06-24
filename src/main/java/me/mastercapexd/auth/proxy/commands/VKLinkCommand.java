@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.proxy.commands;
 
 import com.vk.api.sdk.objects.users.responses.GetResponse;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;

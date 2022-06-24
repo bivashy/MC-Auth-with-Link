@@ -1,13 +1,5 @@
 package me.mastercapexd.auth.bungee.api.bossbar;
 
-import com.google.common.collect.Sets;
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
-import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.md_5.bungee.protocol.packet.BossBar;
-
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,6 +7,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.Sets;
+
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
+import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
+import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.md_5.bungee.protocol.packet.BossBar;
 
 public class BungeeProxyBossbar extends ProxyBossbar {
 

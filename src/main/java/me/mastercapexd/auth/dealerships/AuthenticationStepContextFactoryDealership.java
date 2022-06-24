@@ -1,15 +1,15 @@
 package me.mastercapexd.auth.dealerships;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.context.factory.AuthenticationStepContextFactory;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class AuthenticationStepContextFactoryDealership implements MapDealership<String, AuthenticationStepContextFactory> {
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();

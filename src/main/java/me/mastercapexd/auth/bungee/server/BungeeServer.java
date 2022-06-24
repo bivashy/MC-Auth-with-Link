@@ -1,13 +1,13 @@
 package me.mastercapexd.auth.bungee.server;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BungeeServer implements Server {
     private final ServerInfo bungeeServerInfo;

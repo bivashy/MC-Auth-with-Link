@@ -1,6 +1,20 @@
 package me.mastercapexd.auth.storage.sql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.google.common.collect.Sets;
+
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
@@ -20,15 +34,6 @@ import me.mastercapexd.auth.storage.column.AlterColumnUpdate;
 import me.mastercapexd.auth.storage.column.DropColumnUpdate;
 import me.mastercapexd.auth.storage.column.ExecuteColumnStatementUpdate;
 import me.mastercapexd.auth.storage.column.StorageUpdate;
-
-import java.sql.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public abstract class SQLAccountStorage implements AccountStorage {
     private static final String ACCOUNT_ID_COLUMN_KEY = "id";

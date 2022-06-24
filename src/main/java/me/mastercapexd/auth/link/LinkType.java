@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.link;
 
 import com.ubivaska.messenger.common.Messenger;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholderContext;
