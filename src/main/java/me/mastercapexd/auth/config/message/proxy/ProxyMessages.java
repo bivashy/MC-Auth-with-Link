@@ -15,17 +15,17 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 
     @Override
     public ProxyComponent getMessageNullable(String key) {
-        return ProxyComponent.fromString(getStringMessage(key));
+        return ProxyComponent.fromLegacy(getStringMessage(key));
     }
 
     @Override
     public ProxyComponent getMessage(String key, MessageContext context) {
-        return ProxyComponent.fromString(context.apply(getStringMessage(key)));
+        return ProxyComponent.fromLegacy(context.apply(getStringMessage(key)));
     }
 
     @Override
     public String formatString(String message) {
-        return ProxyComponent.fromString(message).legacyText();
+        return ProxyComponent.fromLegacy(message).legacyText();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 
     @Override
     public ProxyComponent fromText(String text) {
-        return ProxyComponent.fromString(text);
+        return ProxyComponent.fromLegacy(text);
     }
 
 }

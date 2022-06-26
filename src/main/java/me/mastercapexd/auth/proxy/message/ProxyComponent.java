@@ -4,8 +4,16 @@ import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public interface ProxyComponent extends Castable<ProxyComponent> {
-    static ProxyComponent fromString(String text) {
-        return ProxyPlugin.instance().getCore().component(text);
+    static ProxyComponent fromPlain(String text) {
+        return ProxyPlugin.instance().getCore().componentPlain(text);
+    }
+
+    static ProxyComponent fromJson(String text) {
+        return ProxyPlugin.instance().getCore().componentJson(text);
+    }
+
+    static ProxyComponent fromLegacy(String text) {
+        return ProxyPlugin.instance().getCore().componentLegacy(text);
     }
 
     /**

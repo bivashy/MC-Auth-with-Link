@@ -19,11 +19,13 @@ import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 public enum BungeeProxyCore implements ProxyCore {
     INSTANCE;
@@ -79,8 +81,18 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public ProxyComponent component(String text) {
-        return new BungeeMultiProxyComponent(text);
+    public ProxyComponent componentPlain(String plain) {
+        return new BungeeMultiProxyComponent(ChatColor.stripColor(plain));
+    }
+
+    @Override
+    public ProxyComponent componentJson(String json) {
+        return new BungeeMultiProxyComponent(ComponentSerializer.parse(json));
+    }
+
+    @Override
+    public ProxyComponent componentLegacy(String legacy) {
+        return new BungeeMultiProxyComponent(legacy);
     }
 
     @Override
