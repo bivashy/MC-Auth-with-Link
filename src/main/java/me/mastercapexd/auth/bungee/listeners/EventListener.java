@@ -84,14 +84,11 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerDisconnectEvent event) {
         String id = config.getActiveIdentifierType().getId(new BungeeProxyPlayer(event.getPlayer()));
+        Auth.getLinkEntryAuth().removeLinkUsers(entryUser -> entryUser.getAccount().getId().equals(id));
         if (Auth.hasAccount(id)) {
             Auth.removeAccount(id);
             return;
         }
-
-        if (Auth.getLinkEntryAuth().hasLinkUser(entryUser -> entryUser.getAccount().getId().equals(id)))
-            Auth.getLinkEntryAuth().removeLinkUsers(entryUser -> entryUser.getAccount().getId().equals(id));
-
         accountStorage.getAccount(id).thenAccept(account -> {
             account.setLastQuitTime(System.currentTimeMillis());
             accountStorage.saveOrUpdateAccount(account);
@@ -99,7 +96,8 @@ public class EventListener implements Listener {
     }
 
     private long getOnlineExactIP(String address) {
-        return ProxyServer.getInstance().getPlayers().stream().filter(proxyPlayer -> proxyPlayer.getPendingConnection().getSocketAddress().toString().equals(address)).count();
+        return ProxyServer.getInstance().getPlayers().stream()
+                .filter(proxyPlayer -> proxyPlayer.getPendingConnection().getSocketAddress().toString().equals(address)).count();
     }
 
     private void startLogin(ProxiedPlayer player) {
@@ -112,7 +110,10 @@ public class EventListener implements Listener {
             }
 
             AuthenticationStepCreator authenticationStepCreator =
-                    AuthPlugin.getInstance().getAuthenticationStepCreatorDealership().findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(AuthPlugin.getInstance().getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL"))).orElse(new NullAuthenticationStepCreator());
+                    AuthPlugin.getInstance().getAuthenticationStepCreatorDealership().findFirstByPredicate(
+                                    stepCreator -> stepCreator.getAuthenticationStepName()
+                                            .equals(AuthPlugin.getInstance().getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
+                            .orElse(new NullAuthenticationStepCreator());
 
             if (account == null) {
                 Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(), player.getUniqueId(), player.getName(),
@@ -128,8 +129,9 @@ public class EventListener implements Listener {
             }
 
             if (!account.getName().equals(player.getName())) {
-                player.disconnect(TextComponent.fromLegacyText(config.getProxyMessages().getStringMessage("check-name-case-failed").replaceAll("(?i)%correct" +
-                        "%", account.getName()).replaceAll("(?i)%failed%", player.getName())));
+                player.disconnect(TextComponent.fromLegacyText(
+                        config.getProxyMessages().getStringMessage("check-name-case-failed").replaceAll("(?i)%correct%", account.getName())
+                                .replaceAll("(?i)%failed%", player.getName())));
                 return;
             }
 
@@ -138,8 +140,10 @@ public class EventListener implements Listener {
                             account);
 
             if (account.isSessionActive(config.getSessionDurability())) {
-                player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)).as(BungeeMultiProxyComponent.class).components());
-                ProxyServer.getInstance().getScheduler().schedule(AuthPlugin.getInstance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+                player.sendMessage(
+                        config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)).as(BungeeMultiProxyComponent.class).components());
+                ProxyServer.getInstance().getScheduler()
+                        .schedule(AuthPlugin.getInstance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
                 return;
             }
 
