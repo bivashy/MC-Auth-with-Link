@@ -104,7 +104,8 @@ public abstract class ProxyCommandsRegistry {
     }
 
     protected void registerCommands() {
-        commandHandler.register(new AuthCommand(), new LoginCommand(), new RegisterCommand(), new ChangePasswordCommand(), new GoogleCodeCommand(), new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
+        commandHandler.register(new AuthCommand(), new LoginCommand(), new RegisterCommand(), new ChangePasswordCommand(), new GoogleCodeCommand(),
+                new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         if (plugin.getConfig().getVKSettings().isEnabled())
             commandHandler.register(new VKLinkCommand());

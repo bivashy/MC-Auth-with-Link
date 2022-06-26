@@ -28,8 +28,8 @@ import revxrsal.commands.exception.TooManyArgumentsException;
 public class BungeeExceptionHandler extends BungeeExceptionAdapter {
     private final Messages<?> messages;
 
-    public BungeeExceptionHandler(AbstractMessages<?> messagees) {
-        this.messages = messagees;
+    public BungeeExceptionHandler(AbstractMessages<?> messages) {
+        this.messages = messages;
     }
 
     @Override
