@@ -6,7 +6,7 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-import net.md_5.bungee.api.ChatColor;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class BossBarSettings implements ConfigurationHolder {
     @ConfigField("use")
@@ -16,7 +16,7 @@ public class BossBarSettings implements ConfigurationHolder {
     @ConfigField("bar-style")
     private ProxyBossbar.Style barStyle = null;
     @ConfigField("bar-text")
-    private String barText = null; // ProxyMessage implementation refactor
+    private ProxyComponent barText = null;
 
     public BossBarSettings(ConfigurationSectionHolder sectionHolder) {
         ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
