@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
 import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -41,7 +41,7 @@ public enum BungeeProxyCore implements ProxyCore {
         ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(uniqueId);
         if (proxiedPlayer == null)
             return Optional.empty();
-        return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(proxiedPlayer));
+        return Optional.of(new BungeeProxyPlayer(proxiedPlayer));
     }
 
     @Override
@@ -49,7 +49,7 @@ public enum BungeeProxyCore implements ProxyCore {
         ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(name);
         if (proxiedPlayer == null)
             return Optional.empty();
-        return Optional.of(BungeeProxyPlayerFactory.wrapPlayer(proxiedPlayer));
+        return Optional.of(new BungeeProxyPlayer(proxiedPlayer));
     }
 
     @Override
@@ -59,7 +59,7 @@ public enum BungeeProxyCore implements ProxyCore {
         if (player instanceof ProxyPlayer)
             return Optional.of((ProxyPlayer) player);
         if (player instanceof ProxiedPlayer)
-            return Optional.of(BungeeProxyPlayerFactory.wrapPlayer((ProxiedPlayer) player));
+            return Optional.of(new BungeeProxyPlayer((ProxiedPlayer) player));
         return Optional.empty();
     }
 

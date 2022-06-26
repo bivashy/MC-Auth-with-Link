@@ -7,7 +7,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.proxy.commands.ProxyCommandsRegistry;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
@@ -35,19 +35,19 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
             if (selfPlayer == null)
                 throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
-            return BungeeProxyPlayerFactory.wrapPlayer(selfPlayer);
+            return new BungeeProxyPlayer(selfPlayer);
         });
         commandHandler.registerValueResolver(ArgumentProxyPlayer.class, (context) -> {
             String value = context.pop();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
             if (player == null)
                 throw new SendMessageException(config.getProxyMessages().getStringMessage("player-offline"));
-            return new ArgumentProxyPlayer(BungeeProxyPlayerFactory.wrapPlayer(player));
+            return new ArgumentProxyPlayer(new BungeeProxyPlayer(player));
         });
         commandHandler.registerCondition((actor, command, arguments) -> {
             if (!actor.as(BungeeCommandActor.class).isPlayer())
                 return;
-            ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer(actor.as(BungeeCommandActor.class).asPlayer());
+            ProxyPlayer player = new BungeeProxyPlayer(actor.as(BungeeCommandActor.class).asPlayer());
             String accountId = config.getActiveIdentifierType().getId(player);
             if (!Auth.hasAccount(accountId))
                 return;
@@ -59,11 +59,12 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
             if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
                 return;
-            throw new SendMessageException(config.getProxyMessages().getSubMessages("authentication-step-usage").getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
+            throw new SendMessageException(config.getProxyMessages().getSubMessages("authentication-step-usage")
+                    .getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
         });
         commandHandler.registerContextResolver(Account.class, (context) -> {
-            ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
-            if (player == null)
+            ProxyPlayer player = new BungeeProxyPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
+            if (player.getRealPlayer() == null)
                 throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
             String id = config.getActiveIdentifierType().getId(player);
             if (!Auth.hasAccount(id))

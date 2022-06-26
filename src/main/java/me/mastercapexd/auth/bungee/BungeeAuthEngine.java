@@ -12,7 +12,6 @@ import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthentic
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
@@ -61,7 +60,7 @@ public class BungeeAuthEngine implements AuthEngine {
                 if (serverInfo == null)
                     continue;
                 for (ProxiedPlayer player : serverInfo.getPlayers()) {
-                    String id = this.config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
+                    String id = this.config.getActiveIdentifierType().getId(new BungeeProxyPlayer(player));
                     Account account = Auth.getAccount(id);
                     if (account == null)
                         continue;
@@ -107,7 +106,7 @@ public class BungeeAuthEngine implements AuthEngine {
                 if (serverInfo == null)
                     continue;
                 for (ProxiedPlayer player : serverInfo.getPlayers()) {
-                    String id = this.config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
+                    String id = this.config.getActiveIdentifierType().getId(new BungeeProxyPlayer(player));
                     Account account = Auth.getAccount(id);
                     if (account == null) {
                         if (Auth.getBar(id) != null) {

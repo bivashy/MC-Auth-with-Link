@@ -49,11 +49,4 @@ public class BungeeProxyPlayer implements ProxyPlayer {
     public ProxiedPlayer getBungeePlayer() {
         return player;
     }
-
-    public static class BungeeProxyPlayerFactory {
-        public static BungeeProxyPlayer wrapPlayer(ProxiedPlayer player) {
-            return new BungeeProxyPlayer(player);
-        }
-    }
-
 }

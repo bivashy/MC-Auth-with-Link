@@ -11,7 +11,7 @@ import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreat
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer.BungeeProxyPlayerFactory;
+import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -59,7 +59,7 @@ public class EventListener implements Listener {
             return;
         if (!(event.getSender() instanceof ProxiedPlayer))
             return;
-        ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer((ProxiedPlayer) event.getSender());
+        ProxyPlayer player = new BungeeProxyPlayer((ProxiedPlayer) event.getSender());
         if (!Auth.hasAccount(config.getActiveIdentifierType().getId(player)))
             return;
 
@@ -72,7 +72,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onBlockedServerConnect(ServerConnectEvent event) {
-        ProxyPlayer player = BungeeProxyPlayerFactory.wrapPlayer(event.getPlayer());
+        ProxyPlayer player = new BungeeProxyPlayer(event.getPlayer());
         String id = config.getActiveIdentifierType().getId(player);
         if (!(Auth.hasAccount(id)))
             return;
@@ -83,7 +83,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerDisconnectEvent event) {
-        String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(event.getPlayer()));
+        String id = config.getActiveIdentifierType().getId(new BungeeProxyPlayer(event.getPlayer()));
         if (Auth.hasAccount(id)) {
             Auth.removeAccount(id);
             return;
@@ -103,7 +103,7 @@ public class EventListener implements Listener {
     }
 
     private void startLogin(ProxiedPlayer player) {
-        String id = config.getActiveIdentifierType().getId(BungeeProxyPlayerFactory.wrapPlayer(player));
+        String id = config.getActiveIdentifierType().getId(new BungeeProxyPlayer(player));
         accountStorage.getAccount(id).thenAccept(account -> {
             if (config.isNameCaseCheckEnabled()) {
                 if (account != null && !account.getName().equals(player.getName()))
