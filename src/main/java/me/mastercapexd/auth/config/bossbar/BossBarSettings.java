@@ -29,6 +29,6 @@ public class BossBarSettings implements ConfigurationHolder {
     public ProxyBossbar createBossBar() {
         if (!enabled)
             return null;
-        return ProxyPlugin.instance().getCore().createBossbar(ChatColor.translateAlternateColorCodes('&', barText));
+        return ProxyPlugin.instance().getCore().createBossbar(barText.legacyText()).color(barColor).style(barStyle).update();
     }
 }
