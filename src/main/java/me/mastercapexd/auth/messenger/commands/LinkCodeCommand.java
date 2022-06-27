@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
@@ -30,8 +29,6 @@ public class LinkCodeCommand implements OrphanCommand {
                     "linked")));
 
             actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-success", linkType.newMessageContext(account)));
-
-            Auth.getLinkConfirmationAuth().removeLinkUser(linkContext.getConfirmationUser());
         });
     }
 }

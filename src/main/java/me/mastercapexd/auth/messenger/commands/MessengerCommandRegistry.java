@@ -69,6 +69,8 @@ public abstract class MessengerCommandRegistry {
             if (confirmationUser == null)
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessageNullable("confirmation-no-code"));
 
+            Auth.getLinkConfirmationAuth().removeLinkUser(confirmationUser);
+
             if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-timed-out",
                         linkType.newMessageContext(confirmationUser.getAccount())));
