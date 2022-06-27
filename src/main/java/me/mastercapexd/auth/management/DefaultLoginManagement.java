@@ -8,7 +8,6 @@ import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
@@ -18,12 +17,14 @@ import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 
 public class DefaultLoginManagement implements LoginManagement {
+    private final ProxyPlugin plugin;
     private final ProxyCore core;
     private final PluginConfig config;
     private final AccountFactory accountFactory;
     private final AccountStorage accountStorage;
 
     public DefaultLoginManagement(ProxyPlugin plugin) {
+        this.plugin = plugin;
         this.core = plugin.getCore();
         this.config = plugin.getConfig();
         this.accountFactory = plugin.getAccountFactory();
@@ -52,9 +53,9 @@ public class DefaultLoginManagement implements LoginManagement {
             }
 
             AuthenticationStepCreator authenticationStepCreator =
-                    AuthPlugin.getInstance().getAuthenticationStepCreatorDealership().findFirstByPredicate(
+                    plugin.getAuthenticationStepCreatorDealership().findFirstByPredicate(
                                     stepCreator -> stepCreator.getAuthenticationStepName()
-                                            .equals(AuthPlugin.getInstance().getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
+                                            .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
                             .orElse(new NullAuthenticationStep.NullAuthenticationStepCreator());
 
             if (account == null) {
@@ -63,7 +64,7 @@ public class DefaultLoginManagement implements LoginManagement {
                         AccountFactory.DEFAULT_VK_CONFIRMATION_STATE, AccountFactory.DEFAULT_LAST_QUIT, player.getPlayerIp(),
                         AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
 
-                AuthenticationStepContext context = AuthPlugin.getInstance().getAuthenticationContextFactoryDealership().createContext(newAccount);
+                AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership().createContext(newAccount);
                 newAccount.nextAuthenticationStep(context);
 
                 Auth.addAccount(newAccount);
@@ -78,7 +79,7 @@ public class DefaultLoginManagement implements LoginManagement {
             }
 
             AuthenticationStepContext context =
-                    AuthPlugin.getInstance().getAuthenticationContextFactoryDealership().createContext(authenticationStepCreator.getAuthenticationStepName(),
+                    plugin.getAuthenticationContextFactoryDealership().createContext(authenticationStepCreator.getAuthenticationStepName(),
                             account);
 
             if (account.isSessionActive(config.getSessionDurability())) {
