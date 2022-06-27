@@ -39,6 +39,8 @@ import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
+import me.mastercapexd.auth.management.DefaultLoginManagement;
+import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.ProxyPluginProvider;
@@ -50,6 +52,7 @@ import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
@@ -79,8 +82,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     private AccountStorage accountStorage;
     private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
     private AuthenticationStepContextFactoryDealership authenticationContextFactoryDealership;
-    private AuthEngine authEngine;
-    private EventListener eventListener;
+    private LoginManagement loginManagement;
 
     public static AuthPlugin getInstance() {
         if (instance == null)
@@ -111,7 +113,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.authEngine = new BungeeAuthEngine(this, config);
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
-        this.authEngine.start();
+        this.loginManagement = new DefaultLoginManagement(this);
+        new BungeeAuthEngine(this, config).start();
 
         this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
@@ -122,8 +125,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     }
 
     private void initializeListener() {
-        this.eventListener = new EventListener(config, accountFactory, accountStorage);
-        this.getProxy().getPluginManager().registerListener(this, eventListener);
+        this.getProxy().getPluginManager().registerListener(this, new EventListener(this, config));
     }
 
     private void initializeCommand() {
@@ -186,6 +188,17 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     @Override
     public AuthenticationStepContextFactoryDealership getAuthenticationContextFactoryDealership() {
         return authenticationContextFactoryDealership;
+    }
+
+    @Override
+    public LoginManagement getLoginManagement() {
+        return loginManagement;
+    }
+
+    @Override
+    public ProxyPlugin setLoginManagement(LoginManagement loginManagement) {
+        this.loginManagement = loginManagement;
+        return this;
     }
 
     @Override
