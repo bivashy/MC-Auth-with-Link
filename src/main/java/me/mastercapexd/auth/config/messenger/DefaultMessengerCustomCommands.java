@@ -13,7 +13,7 @@ import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContex
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class DefaultMessengerCustomCommands implements ConfigurationHolder, MessengerCustomCommands {
-    @ConfigField
+    @ConfigField("self")
     private ConfigurationHolderMap<MessengerCustomConfigurationCommand> customCommands;
 
     public DefaultMessengerCustomCommands(ConfigurationSectionHolder sectionHolder) {

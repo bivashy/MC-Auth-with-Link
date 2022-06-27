@@ -17,26 +17,30 @@ public class ConfigurationHolderMapResolverFactory implements ConfigurationField
     @Override
     public ConfigurationFieldResolver<?> createResolver(ConfigurationFieldContext factoryContext) {
         return (context) -> {
-            Map<String, Object> map = context.configuration().getKeys().stream().collect(Collectors.toMap(Function.identity(), (key) -> {
-                ConfigurationSectionHolder sectionHolder = context.configuration().getSection(key);
-                return newConfigurationHolder(context.getGeneric(0), sectionHolder);
-            }));
+            ConfigurationSectionHolder rootSectionHolder = context.path().equals("self") ? context.configuration() :
+                    context.configuration().getSection(context.path());
+            Map<String, Object> map =
+                    rootSectionHolder.getKeys().stream().collect(Collectors.toMap(Function.identity(), (key) -> {
+                        ConfigurationSectionHolder sectionHolder = rootSectionHolder.getSection(key);
+                        return newConfigurationHolder(context.getGeneric(0), key, sectionHolder);
+                    }));
             return new ConfigurationHolderMap<>(map);
         };
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> T newConfigurationHolder(Class<T> clazz, ConfigurationSectionHolder configurationSectionHolder) {
+    private Object newConfigurationHolder(Class<?> clazz, String key,
+                                          ConfigurationSectionHolder configurationSectionHolder) {
         try {
-            Constructor<?> constructor = clazz.getConstructor(ConfigurationSectionHolder.class);
-            try {
-                return (T) constructor.newInstance(configurationSectionHolder);
-            } catch(InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            return null;
+            for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+                if (ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[0]))
+                    return constructor.newInstance(configurationSectionHolder);
 
-        } catch(NoSuchMethodException | SecurityException e) {
+                if (constructor.getParameterCount() == 2 && String.class == constructor.getParameterTypes()[0] &&
+                        ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[1]))
+                    return constructor.newInstance(key, configurationSectionHolder);
+            }
+        } catch(InstantiationException | IllegalAccessException | IllegalArgumentException |
+                InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;

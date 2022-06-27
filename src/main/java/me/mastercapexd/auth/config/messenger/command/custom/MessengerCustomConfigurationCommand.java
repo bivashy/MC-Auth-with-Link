@@ -16,9 +16,9 @@ public class MessengerCustomConfigurationCommand implements MessengerCustomComma
     private Pattern matchCommand = null;
     private boolean ignoreButtons = false;
 
-    public MessengerCustomConfigurationCommand(ConfigurationSectionHolder sectionHolder) {
+    public MessengerCustomConfigurationCommand(String key, ConfigurationSectionHolder sectionHolder) {
+        this.key = key;
         this.sectionHolder = sectionHolder;
-        key = String.valueOf(sectionHolder.as(com.ubivashka.configuration.configurate.holder.ConfigurationHolder.class).getConfigurationNode().key());
         answer = sectionHolder.getString("answer");
         if (sectionHolder.contains("regex"))
             matchCommand = Pattern.compile(sectionHolder.getString("regex"));

@@ -9,7 +9,7 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class DefaultCommandPaths implements ConfigurationHolder, MessengerCommandPaths {
 
-    @ConfigField
+    @ConfigField("self")
     private ConfigurationHolderMap<DefaultCommandPath> defaultCommands = new ConfigurationHolderMap<>();
 
     public DefaultCommandPaths(ConfigurationSectionHolder sectionHolder) {
