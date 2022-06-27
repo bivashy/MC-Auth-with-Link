@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.authentication.step.steps;
 
+import java.util.Optional;
+
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
@@ -31,11 +33,14 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
     public void enterServer() {
         Account account = authenticationStepContext.getAccount();
         String accountId = account.getId();
-        ProxyPlayer player = account.getPlayer().get();
-        account.setLastIpAddress(player.getRemoteAddress().getHostString());
-        account.setLastSessionStart(System.currentTimeMillis());
-        PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
         Auth.removeAccount(accountId);
+        Optional<ProxyPlayer> playerOptional = account.getPlayer();
+        account.setLastSessionStart(System.currentTimeMillis());
+        playerOptional.map(player -> player.getRemoteAddress().getHostString()).ifPresent(account::setLastIpAddress);
+        PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
+        if (!playerOptional.isPresent())
+            return;
+        ProxyPlayer player = playerOptional.get();
         Server connectServer = PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getGameServers()).asProxyServer();
         player.sendTo(connectServer);
     }
