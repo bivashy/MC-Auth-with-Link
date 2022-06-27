@@ -36,7 +36,7 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
         Auth.removeAccount(accountId);
         Optional<ProxyPlayer> playerOptional = account.getPlayer();
         account.setLastSessionStart(System.currentTimeMillis());
-        playerOptional.map(player -> player.getRemoteAddress().getHostString()).ifPresent(account::setLastIpAddress);
+        playerOptional.map(ProxyPlayer::getPlayerIp).ifPresent(account::setLastIpAddress);
         PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
         if (!playerOptional.isPresent())
             return;

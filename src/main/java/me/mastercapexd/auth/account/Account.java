@@ -76,9 +76,8 @@ public interface Account {
     default boolean isSessionActive(long sessionDurability) {
         Optional<ProxyPlayer> proxiedPlayer = getPlayer();
         long sessionEndTime = getLastSessionStart() + sessionDurability;
-        if (!proxiedPlayer.isPresent())
-            return (sessionEndTime >= System.currentTimeMillis());
-        return proxiedPlayer.get().getRemoteAddress().getHostString().equals(getLastIpAddress()) && (sessionEndTime >= System.currentTimeMillis());
+        return proxiedPlayer.map(proxyPlayer -> proxyPlayer.getPlayerIp().equals(getLastIpAddress()) && (sessionEndTime >= System.currentTimeMillis()))
+                .orElseGet(() -> (sessionEndTime >= System.currentTimeMillis()));
     }
 
     default KickResult kick(String reason) {

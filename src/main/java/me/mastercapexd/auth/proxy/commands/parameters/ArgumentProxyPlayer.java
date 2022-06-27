@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.proxy.commands.parameters;
 
-import java.net.InetSocketAddress;
 import java.util.UUID;
 
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -33,8 +32,8 @@ public class ArgumentProxyPlayer implements ProxyPlayer {
     }
 
     @Override
-    public InetSocketAddress getRemoteAddress() {
-        return player.getRemoteAddress();
+    public String getPlayerIp() {
+        return player.getPlayerIp();
     }
 
     @Override

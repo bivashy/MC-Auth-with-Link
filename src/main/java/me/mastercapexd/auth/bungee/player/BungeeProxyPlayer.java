@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.bungee.player;
 
-import java.net.InetSocketAddress;
 import java.util.UUID;
 
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -34,10 +33,9 @@ public class BungeeProxyPlayer implements ProxyPlayer {
         return player.getUniqueId();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public InetSocketAddress getRemoteAddress() {
-        return player.getAddress();
+    public String getPlayerIp() {
+        return player.getSocketAddress().toString();
     }
 
     @SuppressWarnings("unchecked")

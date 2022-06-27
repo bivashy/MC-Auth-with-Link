@@ -26,7 +26,7 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
             ProxyPlayer player = account.getPlayer().get();
 
             Auth.removeAccount(account.getId());
-            account.setLastIpAddress(player.getRemoteAddress().getHostString());
+            account.setLastIpAddress(player.getPlayerIp());
             account.setLastSessionStart(System.currentTimeMillis());
         }
         return isCurrentAccountRegistered;
