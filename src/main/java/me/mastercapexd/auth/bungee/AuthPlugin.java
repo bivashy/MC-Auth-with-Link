@@ -17,13 +17,13 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.account.factories.DefaultAccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep.RegisterAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
-import me.mastercapexd.auth.bungee.account.BungeeAccountFactory;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
@@ -106,7 +106,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
     private void initialize() {
         this.config = new BungeePluginConfig(this);
-        this.accountFactory = new BungeeAccountFactory();
+        this.accountFactory = new DefaultAccountFactory();
         this.accountStorage = loadAccountStorage(config.getStorageType());
         this.authEngine = new BungeeAuthEngine(this, config);
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
