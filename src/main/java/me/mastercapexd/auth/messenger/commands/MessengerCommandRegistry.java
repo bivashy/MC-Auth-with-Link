@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.messenger.commands;
 
+import java.util.List;
 import java.util.Optional;
 
 import me.mastercapexd.auth.Auth;
@@ -63,21 +64,23 @@ public abstract class MessengerCommandRegistry {
             String code = context.popForParameter();
             LinkCommandActorWrapper commandActor = context.actor().as(LinkCommandActorWrapper.class);
 
-            LinkConfirmationUser confirmationUser =
-                    Auth.getLinkConfirmationAuth().getLinkUsers(linkUser -> linkUser.getLinkType().equals(linkType) && linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId())).stream().findFirst().orElse(null);
+            List<LinkConfirmationUser> confirmationUsers =
+                    Auth.getLinkConfirmationAuth().getLinkUsers(
+                            linkUser -> linkUser.getLinkType().equals(linkType) && linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId()));
 
-            if (confirmationUser == null)
+            if (confirmationUsers.isEmpty())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessageNullable("confirmation-no-code"));
 
-            Auth.getLinkConfirmationAuth().removeLinkUser(confirmationUser);
+            LinkConfirmationUser confirmationUser =
+                    confirmationUsers.stream().filter(user -> user.getConfirmationInfo().getConfirmationCode().equals(code)).findFirst().orElse(null);
+
+            if (confirmationUser == null)
+                throw new SendMessageException(linkType.getSettings().getMessages().getStringMessage("confirmation-error"));
 
             if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-timed-out",
                         linkType.newMessageContext(confirmationUser.getAccount())));
 
-            if (!confirmationUser.getConfirmationInfo().getConfirmationCode().equals(code))
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-error",
-                        linkType.newMessageContext(confirmationUser.getAccount())));
 
             LinkUserInfo linkUserInfo = confirmationUser.getAccount().findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
 
@@ -114,18 +117,28 @@ public abstract class MessengerCommandRegistry {
 
     protected void registerCommands() {
         commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths()).handler(new LinkCodeCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("confirmation-toggle").getCommandPaths()).handler(new ConfirmationToggleCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("accounts").getCommandPaths()).handler(new AccountsListCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("account-control").getCommandPaths()).handler(new AccountCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-accept").getCommandPaths()).handler(new AccountEnterAcceptCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-decline").getCommandPaths()).handler(new AccountEnterDeclineCommand()));
+        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("confirmation-toggle").getCommandPaths())
+                .handler(new ConfirmationToggleCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("accounts").getCommandPaths()).handler(new AccountsListCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("account-control").getCommandPaths()).handler(new AccountCommand()));
+        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-accept").getCommandPaths())
+                .handler(new AccountEnterAcceptCommand()));
+        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-decline").getCommandPaths())
+                .handler(new AccountEnterDeclineCommand()));
         commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("kick").getCommandPaths()).handler(new KickCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("restore").getCommandPaths()).handler(new RestoreCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("restore").getCommandPaths()).handler(new RestoreCommand()));
         commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("unlink").getCommandPaths()).handler(new UnlinkCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("change-pass").getCommandPaths()).handler(new ChangePasswordCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-remove").getCommandPaths()).handler(new GoogleUnlinkCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("change-pass").getCommandPaths()).handler(new ChangePasswordCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-remove").getCommandPaths()).handler(new GoogleUnlinkCommand()));
         commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google").getCommandPaths()).handler(new GoogleCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-code").getCommandPaths()).handler(new GoogleCodeCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("admin-panel").getCommandPaths()).handler(new AdminPanelCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-code").getCommandPaths()).handler(new GoogleCodeCommand()));
+        commandHandler.register(
+                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("admin-panel").getCommandPaths()).handler(new AdminPanelCommand()));
     }
 }

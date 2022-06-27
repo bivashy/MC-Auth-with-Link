@@ -54,9 +54,12 @@ public class TelegramLinkCommand {
                     return;
                 }
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
+                UserNumberIdentificator userIdentificator = new UserNumberIdentificator(telegramIdentificator);
 
+                Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getId().equals(accountId) &&
+                        linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
                 Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account,
-                        new DefaultConfirmationInfo(new UserNumberIdentificator(telegramIdentificator), code)));
+                        new DefaultConfirmationInfo(userIdentificator, code)));
                 player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("confirmation-sent").replaceAll("(?i)%code%", code));
             });
         });

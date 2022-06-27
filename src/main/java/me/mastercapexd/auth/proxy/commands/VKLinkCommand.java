@@ -72,8 +72,12 @@ public class VKLinkCommand {
                         return;
                     }
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
+                    UserNumberIdentificator userIdentificator = new UserNumberIdentificator(userId);
 
-                    Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(new UserNumberIdentificator(userId), code)));
+                    Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getId().equals(accountId) &&
+                            linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
+                    Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator,
+                            code)));
                     player.sendMessage(VK_MESSAGES.getStringMessage("confirmation-sent").replaceAll("(?i)%code%", code));
                 });
             });
