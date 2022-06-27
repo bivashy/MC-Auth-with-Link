@@ -1,306 +1,321 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>me.mastercapexd</groupId>
-	<artifactId>Auth</artifactId>
-	<version>1.6.0</version>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>me.mastercapexd</groupId>
+    <artifactId>Auth</artifactId>
+    <version>1.6.0</version>
 
-	<properties>
-		<!-- Manifest -->
-		<manifest.contact>https://vk.me/bbaty45/</manifest.contact>
-		<manifest.developer>Ubivashka</manifest.developer>
-		<manifest.version>${project.version}</manifest.version>
+    <properties>
+        <!-- Manifest -->
+        <manifest.contact>https://vk.me/bbaty45/</manifest.contact>
+        <manifest.developer>Ubivashka</manifest.developer>
+        <manifest.version>${project.version}</manifest.version>
 
-		<!-- Building -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>8</java.version>
-		<project.mainclass>me.mastercapexd.auth.bungee.AuthPlugin
-		</project.mainclass>
+        <!-- Building -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>8</java.version>
+        <project.mainclass>me.mastercapexd.auth.bungee.AuthPlugin
+        </project.mainclass>
 
-		<!-- Dependencies -->
-		<bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
-		<velocity.version>3.0.1</velocity.version>
-		<jbcrypt.version>0.4</jbcrypt.version>
-		<sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
-		<mysql.connector.version>6.0.6</mysql.connector.version>
-		<google.authenticator.version>1.4.0</google.authenticator.version>
-		<zxing.library.version>3.4.1</zxing.library.version>
-		<configuration-library.version>2.0.11</configuration-library.version>
-		<configurate.version>4.1.2</configurate.version>
-		<lamp.command-library.version>3.0.6</lamp.command-library.version>
-		<vk-lamp-module.version>0.0.5</vk-lamp-module.version>
-		<telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
-		<multimessenger.version>0.0.6</multimessenger.version>
-		<vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
-		<java-telegram-bot-api.version>6.0.1</java-telegram-bot-api.version>
+        <!-- Dependencies -->
+        <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
+        <velocity.version>3.0.1</velocity.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
+        <mysql.connector.version>6.0.6</mysql.connector.version>
+        <google.authenticator.version>1.4.0</google.authenticator.version>
+        <zxing.library.version>3.4.1</zxing.library.version>
+        <configuration-library.version>2.0.11</configuration-library.version>
+        <configurate.version>4.1.2</configurate.version>
+        <lamp.command-library.version>3.0.6</lamp.command-library.version>
+        <vk-lamp-module.version>0.0.5</vk-lamp-module.version>
+        <telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
+        <multimessenger.version>0.0.6</multimessenger.version>
+        <vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
+        <java-telegram-bot-api.version>6.0.1</java-telegram-bot-api.version>
+        <fastlogin.version>1.10</fastlogin.version>
 
-		<!-- Maven plugins -->
-		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-		<maven.source.plugin.version>3.2.0</maven.source.plugin.version>
-	</properties>
+        <!-- Maven plugins -->
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
+    </properties>
 
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
 
-		<repository>
-			<id>bungeecord-repo</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</repository>
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
 
-		<repository>
-			<id>velocity</id>
-			<url>https://repo.velocitypowered.com/snapshots/</url>
-		</repository>
-	</repositories>
+        <repository>
+            <id>velocity</id>
+            <url>https://repo.velocitypowered.com/snapshots/</url>
+        </repository>
+    </repositories>
 
-	<dependencies>
-		<!-- BungeeCord API -->
-		<dependency>
-			<groupId>net.md-5</groupId>
-			<artifactId>bungeecord-api</artifactId>
-			<version>${bungeecord.version}</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
+    <dependencies>
+        <!-- BungeeCord API -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>${bungeecord.version}</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- BungeeCord Javadoc API -->
-		<dependency>
-			<groupId>net.md-5</groupId>
-			<artifactId>bungeecord-api</artifactId>
-			<version>${bungeecord.version}</version>
-			<type>javadoc</type>
-			<scope>provided</scope>
-		</dependency>
+        <!-- BungeeCord Javadoc API -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>${bungeecord.version}</version>
+            <type>javadoc</type>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- Velocity API -->
-		<dependency>
-			<groupId>com.velocitypowered</groupId>
-			<artifactId>velocity-api</artifactId>
-			<version>${velocity.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- Velocity API -->
+        <dependency>
+            <groupId>com.velocitypowered</groupId>
+            <artifactId>velocity-api</artifactId>
+            <version>${velocity.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- BCrypt library -->
-		<dependency>
-			<groupId>org.mindrot</groupId>
-			<artifactId>jbcrypt</artifactId>
-			<version>${jbcrypt.version}</version>
-		</dependency>
+        <!-- FastLogin -->
+        <dependency>
+            <groupId>com.github.games647</groupId>
+            <artifactId>FastLogin</artifactId>
+            <version>${fastlogin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>BungeeAuth</artifactId>
+                    <groupId>me.vik1395</groupId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- SQLite library -->
-		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>${sqlite.jdbc.version}</version>
-		</dependency>
+        <!-- BCrypt library -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
 
-		<!-- MySQL library -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.connector.version}</version>
-		</dependency>
+        <!-- SQLite library -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>${sqlite.jdbc.version}</version>
+        </dependency>
 
-		<!-- GoogleAuthenticator library -->
-		<dependency>
-			<groupId>com.warrenstrange</groupId>
-			<artifactId>googleauth</artifactId>
-			<version>${google.authenticator.version}</version>
-		</dependency>
+        <!-- MySQL library -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.connector.version}</version>
+        </dependency>
 
-		<!-- Barcode, QRcode library -->
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>core</artifactId>
-			<version>${zxing.library.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-			<version>${zxing.library.version}</version>
-		</dependency>
+        <!-- GoogleAuthenticator library -->
+        <dependency>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+            <version>${google.authenticator.version}</version>
+        </dependency>
 
-		<!-- Configuration library core -->
-		<dependency>
-			<groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
-			<artifactId>core</artifactId>
-			<version>${configuration-library.version}</version>
-		</dependency>
+        <!-- Barcode, QRcode library -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${zxing.library.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>${zxing.library.version}</version>
+        </dependency>
 
-		<!-- Configuration library for BungeeCord -->
-		<dependency>
-			<groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
-			<artifactId>bungee</artifactId>
-			<version>${configuration-library.version}</version>
-		</dependency>
+        <!-- Configuration library core -->
+        <dependency>
+            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <artifactId>core</artifactId>
+            <version>${configuration-library.version}</version>
+        </dependency>
 
-		<!-- Configuration library for Configurate -->
-		<dependency>
-			<groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
-			<artifactId>configurate</artifactId>
-			<version>${configuration-library.version}</version>
-		</dependency>
+        <!-- Configuration library for BungeeCord -->
+        <dependency>
+            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <artifactId>bungee</artifactId>
+            <version>${configuration-library.version}</version>
+        </dependency>
 
-		<!-- SpongePowered Configurate core library -->
-		<dependency>
-			<groupId>org.spongepowered</groupId>
-			<artifactId>configurate-core</artifactId>
-			<version>${configurate.version}</version>
-		</dependency>
+        <!-- Configuration library for Configurate -->
+        <dependency>
+            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <artifactId>configurate</artifactId>
+            <version>${configuration-library.version}</version>
+        </dependency>
 
-		<!-- SpongePowered Configurate YAML library -->
-		<dependency>
-			<groupId>org.spongepowered</groupId>
-			<artifactId>configurate-yaml</artifactId>
-			<version>${configurate.version}</version>
-		</dependency>
+        <!-- SpongePowered Configurate core library -->
+        <dependency>
+            <groupId>org.spongepowered</groupId>
+            <artifactId>configurate-core</artifactId>
+            <version>${configurate.version}</version>
+        </dependency>
 
-		<!-- Lamp Core Command Library -->
-		<dependency>
-			<groupId>com.github.Revxrsal.Lamp</groupId>
-			<artifactId>common</artifactId>
-			<version>${lamp.command-library.version}</version>
-		</dependency>
+        <!-- SpongePowered Configurate YAML library -->
+        <dependency>
+            <groupId>org.spongepowered</groupId>
+            <artifactId>configurate-yaml</artifactId>
+            <version>${configurate.version}</version>
+        </dependency>
 
-		<!-- Lamp Bungee Module -->
-		<dependency>
-			<groupId>com.github.Revxrsal.Lamp</groupId>
-			<artifactId>bungee</artifactId>
-			<version>${lamp.command-library.version}</version>
-		</dependency>
+        <!-- Lamp Core Command Library -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>common</artifactId>
+            <version>${lamp.command-library.version}</version>
+        </dependency>
 
-		<!-- Lamp Velocity Module -->
-		<dependency>
-			<groupId>com.github.Revxrsal.Lamp</groupId>
-			<artifactId>velocity</artifactId>
-			<version>${lamp.command-library.version}</version>
-		</dependency>
+        <!-- Lamp Bungee Module -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>bungee</artifactId>
+            <version>${lamp.command-library.version}</version>
+        </dependency>
 
-		<!-- Lamp Vk Module -->
-		<dependency>
-			<groupId>com.github.U61vashka</groupId>
-			<artifactId>VkLampModule</artifactId>
-			<version>${vk-lamp-module.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.vk.api</groupId>
-					<artifactId>sdk</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- Lamp telegram module -->
-		<dependency>
-			<groupId>com.github.U61vashka</groupId>
-			<artifactId>TelegramLampModule</artifactId>
-			<version>${telegram-lamp-module.version}</version>
-		</dependency>
+        <!-- Lamp Velocity Module -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>velocity</artifactId>
+            <version>${lamp.command-library.version}</version>
+        </dependency>
 
-		<!-- MultiMessenger library -->
-		<dependency>
-			<groupId>com.github.U61vashka.MultiMessenger</groupId>
-			<artifactId>common</artifactId>
-			<version>${multimessenger.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.U61vashka.MultiMessenger</groupId>
-			<artifactId>vk</artifactId>
-			<version>${multimessenger.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.U61vashka.MultiMessenger</groupId>
-			<artifactId>telegram</artifactId>
-			<version>${multimessenger.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.github.pengrad</groupId>
-					<artifactId>java-telegram-bot-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <!-- Lamp Vk Module -->
+        <dependency>
+            <groupId>com.github.U61vashka</groupId>
+            <artifactId>VkLampModule</artifactId>
+            <version>${vk-lamp-module.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vk.api</groupId>
+                    <artifactId>sdk</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Lamp telegram module -->
+        <dependency>
+            <groupId>com.github.U61vashka</groupId>
+            <artifactId>TelegramLampModule</artifactId>
+            <version>${telegram-lamp-module.version}</version>
+        </dependency>
 
-		<!-- VK API -->
-		<dependency>
-			<groupId>com.github.U61vashka</groupId>
-			<artifactId>VK-API-Spigot-Bungee</artifactId>
-			<version>${vk-api-bungee.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- MultiMessenger library -->
+        <dependency>
+            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <artifactId>common</artifactId>
+            <version>${multimessenger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <artifactId>vk</artifactId>
+            <version>${multimessenger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <artifactId>telegram</artifactId>
+            <version>${multimessenger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.pengrad</groupId>
+                    <artifactId>java-telegram-bot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- Java telegram bot api -->
-		<dependency>
-			<groupId>com.github.pengrad</groupId>
-			<artifactId>java-telegram-bot-api</artifactId>
-			<version>${java-telegram-bot-api.version}</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+        <!-- VK API -->
+        <dependency>
+            <groupId>com.github.U61vashka</groupId>
+            <artifactId>VK-API-Spigot-Bungee</artifactId>
+            <version>${vk-api-bungee.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-	<build>
-		<finalName>${project.name}</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<!-- Maven compiler plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.plugin.version}</version>
-				<configuration>
-					<compilerArgs>
-						<arg>-Xlint:deprecation</arg>
-						<arg>-Xlint:unchecked</arg>
-					</compilerArgs>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<!-- Disable annotation processing for ourselves. -->
-					<compilerArgument>-proc:none</compilerArgument>
-				</configuration>
-			</plugin>
-			<!-- Maven assembly plugin -->
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>${project.mainclass}</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- Maven source plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven.source.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        <!-- Java telegram bot api -->
+        <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+            <version>${java-telegram-bot-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- Maven compiler plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:deprecation</arg>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- Disable annotation processing for ourselves. -->
+                    <compilerArgument>-proc:none</compilerArgument>
+                </configuration>
+            </plugin>
+            <!-- Maven assembly plugin -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${project.mainclass}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven source plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

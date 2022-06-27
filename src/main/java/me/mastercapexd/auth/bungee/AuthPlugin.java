@@ -26,6 +26,7 @@ import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthentic
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
+import me.mastercapexd.auth.bungee.hooks.BungeeFastLoginHook;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.bungee.listeners.EventListener;
 import me.mastercapexd.auth.bungee.listeners.VkDispatchListener;
@@ -58,22 +59,44 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
     public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor().registerFieldResolver(ConfigurationServer.class,
-            (context) -> {
-        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-        if (configurationValue == null)
-            return null;
-        return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
-    }).registerFieldResolver(Long.class, (context) -> {
-        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-        if (configurationValue == null)
-            return null;
-        return TimeUtils.parseTime(String.valueOf(configurationValue));
-    }).registerFieldResolver(Pattern.class, (context) -> {
-        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-        if (configurationValue == null)
-            return null;
-        return Pattern.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
-    }).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory()).registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory());
+                    (context) -> {
+                        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+                        if (configurationValue == null)
+                            return null;
+                        return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
+                    }).registerFieldResolver(Long.class, (context) -> {
+                Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+                if (configurationValue == null)
+                    return null;
+                return TimeUtils.parseTime(String.valueOf(configurationValue));
+            }).registerFieldResolver(Pattern.class, (context) -> {
+                Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
+                if (configurationValue == null)
+                    return null;
+                return Pattern.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
+            }).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
+            .registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory()).registerFieldResolver(
+                    ProxyComponent.class,
+                    context -> {
+                        ProxyPlugin proxyPlugin = AuthPlugin.getInstance();
+                        if (context.configuration().isConfigurationSection(context.path())) {
+                            ConfigurationSectionHolder sectionHolder = context.configuration().getSection(context.path());
+                            String componentType = sectionHolder.getString("type");
+                            switch (componentType) {
+                                case "json":
+                                    return proxyPlugin.getCore().componentJson(sectionHolder.getString("value"));
+                                case "legacy":
+                                    return proxyPlugin.getCore().componentLegacy(sectionHolder.getString("value"));
+                                case "plain":
+                                    return proxyPlugin.getCore().componentPlain(sectionHolder.getString("value"));
+                                default:
+                                    throw new IllegalArgumentException(
+                                            "Illegal component type in " + context.path() + ":" + componentType + ", available: json,legacy,plain");
+                            }
+                        }
+                        return proxyPlugin.getCore()
+                                .componentLegacy(context.configuration().getString(context.path()));
+                    });
 
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
     private static AuthPlugin instance;
@@ -104,6 +127,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
             initializeTelegram();
         if (config.getGoogleAuthenticatorSettings().isEnabled())
             googleAuthenticator = new GoogleAuthenticator();
+        if (ProxyServer.getInstance().getPluginManager().getPlugin("FastLogin") != null)
+            initializeFastLogin();
 
     }
 
@@ -111,7 +136,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.config = new BungeePluginConfig(this);
         this.accountFactory = new DefaultAccountFactory();
         this.accountStorage = loadAccountStorage(config.getStorageType());
-        this.authEngine = new BungeeAuthEngine(this, config);
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
@@ -149,6 +173,12 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
         getProxy().getPluginManager().registerListener(this, new VkDispatchListener());
         new VKCommandRegistry();
+    }
+
+    private void initializeFastLogin() {
+        com.github.games647.fastlogin.bungee.FastLoginBungee fastLoginBungee = (com.github.games647.fastlogin.bungee.FastLoginBungee) ProxyServer.getInstance()
+                .getPluginManager().getPlugin("FastLogin");
+        new BungeeFastLoginHook(this, fastLoginBungee);
     }
 
     private AccountStorage loadAccountStorage(StorageType storageType) {
