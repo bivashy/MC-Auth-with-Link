@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.proxy;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +15,8 @@ import me.mastercapexd.auth.proxy.server.Server;
 
 public interface ProxyCore extends Castable<ProxyCore> {
     <E> void callEvent(E event);
+
+    List<ProxyPlayer> getPlayers();
 
     Optional<ProxyPlayer> getPlayer(UUID uniqueId);
 
@@ -38,6 +41,8 @@ public interface ProxyCore extends Castable<ProxyCore> {
     void registerListener(ProxyPlugin plugin, Object listener);
 
     void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
+
+    void schedule(ProxyPlugin instance, Runnable task, long joinDelay, TimeUnit milliseconds);
 
     void runAsync(Runnable task);
 }

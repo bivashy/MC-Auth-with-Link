@@ -1,11 +1,13 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
 import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
@@ -36,6 +38,11 @@ public enum BungeeProxyCore implements ProxyCore {
     @Override
     public <E> void callEvent(E event) {
         PROXY_SERVER.getPluginManager().callEvent((Event) event);
+    }
+
+    @Override
+    public List<ProxyPlayer> getPlayers() {
+        return PROXY_SERVER.getPlayers().stream().map(BungeeProxyPlayer::new).collect(Collectors.toList());
     }
 
     @Override
@@ -112,6 +119,12 @@ public enum BungeeProxyCore implements ProxyCore {
     public void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
         PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, period, unit);
     }
+
+    @Override
+    public void schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
+        PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, unit);
+    }
+
 
     @Override
     public void runAsync(Runnable task) {
