@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.listeners;
+package me.mastercapexd.auth.bungee.listener;
 
 import com.ubivashka.vk.bungee.events.VKCallbackButtonPressEvent;
 import com.ubivashka.vk.bungee.events.VKMessageEvent;

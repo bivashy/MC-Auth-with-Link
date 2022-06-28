@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.bungee.listeners;
+package me.mastercapexd.auth.bungee.listener;
 
 import java.util.regex.Pattern;
 
@@ -15,12 +15,12 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class EventListener implements Listener {
+public class AuthenticationListener implements Listener {
 
     private final ProxyPlugin plugin;
     private final PluginConfig config;
 
-    public EventListener(ProxyPlugin plugin, PluginConfig config) {
+    public AuthenticationListener(ProxyPlugin plugin, PluginConfig config) {
         this.plugin = plugin;
         this.config = config;
     }

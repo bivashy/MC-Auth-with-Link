@@ -25,8 +25,8 @@ import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.hooks.BungeeFastLoginHook;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
-import me.mastercapexd.auth.bungee.listeners.EventListener;
-import me.mastercapexd.auth.bungee.listeners.VkDispatchListener;
+import me.mastercapexd.auth.bungee.listener.AuthenticationListener;
+import me.mastercapexd.auth.bungee.listener.VkDispatchListener;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
@@ -103,7 +103,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     }
 
     private void initializeListener() {
-        this.getProxy().getPluginManager().registerListener(this, new EventListener(this, config));
+        this.getProxy().getPluginManager().registerListener(this, new AuthenticationListener(this, config));
     }
 
     private void initializeCommand() {
