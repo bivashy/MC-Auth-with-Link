@@ -23,13 +23,15 @@ import me.mastercapexd.auth.authentication.step.steps.link.GoogleCodeAuthenticat
 import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
-import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.hooks.BungeeFastLoginHook;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.bungee.listener.AuthenticationListener;
 import me.mastercapexd.auth.bungee.listener.VkDispatchListener;
+import me.mastercapexd.auth.config.DefaultPluginConfig;
+import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
+import me.mastercapexd.auth.engine.DefaultAuthEngine;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
@@ -54,7 +56,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
     private static AuthPlugin instance;
     private GoogleAuthenticator googleAuthenticator;
-    private BungeePluginConfig config;
+    private PluginConfig config;
     private AccountFactory accountFactory;
     private AccountStorage accountStorage;
     private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
@@ -87,13 +89,13 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
     private void initialize() {
         initializeConfigurationProcessor();
-        this.config = new BungeePluginConfig(this);
+        this.config = new DefaultPluginConfig(this);
         this.accountFactory = new DefaultAccountFactory();
         this.accountStorage = loadAccountStorage(config.getStorageType());
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
-        new BungeeAuthEngine(this, config).start();
+        new DefaultAuthEngine().start();
 
         this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
@@ -147,7 +149,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     }
 
     @Override
-    public BungeePluginConfig getConfig() {
+    public PluginConfig getConfig() {
         return config;
     }
 
@@ -214,5 +216,4 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
             return null;
         return hook.as(clazz);
     }
-
 }

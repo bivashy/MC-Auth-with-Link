@@ -6,8 +6,8 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
-import me.mastercapexd.auth.bungee.config.BungeePluginConfig;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
+import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.commands.ProxyCommandsRegistry;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
@@ -30,7 +30,7 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
 
     public BungeeCommandsRegistry() {
         super(BUNGEE_COMMAND_HANDLER);
-        BungeePluginConfig config = PLUGIN.getConfig();
+        PluginConfig config = PLUGIN.getConfig();
         commandHandler.registerContextResolver(ProxyPlayer.class, (context) -> {
             ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
             if (selfPlayer == null)
