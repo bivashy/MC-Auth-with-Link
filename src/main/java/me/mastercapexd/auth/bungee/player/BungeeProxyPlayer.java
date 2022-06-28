@@ -20,6 +20,8 @@ public class BungeeProxyPlayer implements ProxyPlayer {
 
     @Override
     public void sendMessage(String message) {
+        if (message.isEmpty())
+            return;
         player.sendMessage(TextComponent.fromLegacyText(message));
     }
 
