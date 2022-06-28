@@ -19,6 +19,7 @@ import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationS
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep.RegisterAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
@@ -98,6 +99,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new GoogleLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
     }

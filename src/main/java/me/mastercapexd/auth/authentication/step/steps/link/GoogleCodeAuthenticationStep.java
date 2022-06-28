@@ -58,8 +58,8 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep {
         return false;
     }
 
-    public static class VKLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
-        public VKLinkAuthenticationStepCreator() {
+    public static class GoogleLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
+        public GoogleLinkAuthenticationStepCreator() {
             super(STEP_NAME);
         }
 
