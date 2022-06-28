@@ -20,7 +20,7 @@
 
         <!-- Dependencies -->
         <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
-        <velocity.version>3.0.1</velocity.version>
+        <velocity.version>3.1.1</velocity.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
         <mysql.connector.version>6.0.6</mysql.connector.version>
@@ -53,8 +53,8 @@
         </repository>
 
         <repository>
-            <id>velocity</id>
-            <url>https://repo.velocitypowered.com/snapshots/</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -275,8 +275,13 @@
                     </compilerArgs>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <!-- Disable annotation processing for ourselves. -->
-                    <compilerArgument>-proc:none</compilerArgument>
+                    <annotationProcessorPaths>
+                        <annotationProcessorPath>
+                            <groupId>com.velocitypowered</groupId>
+                            <artifactId>velocity-api</artifactId>
+                            <version>${velocity.version}</version>
+                        </annotationProcessorPath>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <!-- Maven assembly plugin -->

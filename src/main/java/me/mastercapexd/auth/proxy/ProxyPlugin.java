@@ -9,7 +9,6 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
@@ -51,7 +50,7 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
                 .registerFieldResolver(
                         ProxyComponent.class,
                         context -> {
-                            ProxyPlugin proxyPlugin = AuthPlugin.getInstance();
+                            ProxyPlugin proxyPlugin = ProxyPlugin.instance();
                             if (context.configuration().isConfigurationSection(context.path())) {
                                 ConfigurationSectionHolder sectionHolder = context.configuration().getSection(context.path());
                                 String componentType = sectionHolder.getString("type");
