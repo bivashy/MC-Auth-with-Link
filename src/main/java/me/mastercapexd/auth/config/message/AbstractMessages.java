@@ -11,9 +11,15 @@ import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationHolder {
     protected static final String DEFAULT_DELIMITER = "\n";
-    private static final String MESSAGE_NOT_FOUND_ERROR = "Message with key %s not found!";
+    private String nullMessage = "Message with key %s not found!";
+
     protected Map<String, String> messages = Maps.newHashMap();
     protected Map<String, Messages<T>> subMessages = Maps.newHashMap();
+
+    public AbstractMessages(ConfigurationSectionHolder configurationSectionHolder, CharSequence delimeter, String nullMessage) {
+        this(configurationSectionHolder, delimeter);
+        this.nullMessage = nullMessage;
+    }
 
     public AbstractMessages(ConfigurationSectionHolder configurationSection, CharSequence delimiter) {
         for (String key : configurationSection.getKeys()) {
@@ -29,7 +35,6 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 
             if (configurationSection.isString(key)) {
                 addMessage(key, configurationSection.getString(key));
-                continue;
             }
         }
     }
@@ -45,7 +50,7 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 
     @Override
     public String getStringMessage(String key) {
-        return getStringMessage(key, String.format(MESSAGE_NOT_FOUND_ERROR, key));
+        return getStringMessage(key, String.format(nullMessage, key));
     }
 
     @Override

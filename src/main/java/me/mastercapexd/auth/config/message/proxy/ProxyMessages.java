@@ -10,7 +10,7 @@ import me.mastercapexd.auth.proxy.message.ProxyComponent;
 public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 
     public ProxyMessages(ConfigurationSectionHolder configurationSection) {
-        super(configurationSection);
+        super(configurationSection, DEFAULT_DELIMITER, "");
     }
 
     @Override

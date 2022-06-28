@@ -66,7 +66,10 @@ public class AccountsListCommand implements OrphanCommand {
                 return;
             }
             List<Account> paginatedAccounts = CollectionUtils.getListPage(new ArrayList<>(accounts), page, accountsPerPage);
-
+            if(paginatedAccounts.isEmpty()){
+                actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("no-page-accounts"));
+                return;
+            }
             Keyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type, paginatedAccounts);
             actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessageNullable("accounts")).keyboard(keyboard).build());
         });
