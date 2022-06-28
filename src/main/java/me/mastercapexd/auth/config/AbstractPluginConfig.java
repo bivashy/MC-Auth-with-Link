@@ -93,13 +93,18 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     @SingleObject
     @ConfigField("join-delay")
     private Long joinDelay = 1000L;
+    @ConfigField("block-chat")
+    private boolean blockChat = true;
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = new ArrayList<>(Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
+
+    private final List<Pattern> allowedPatternCommands;
 
     public AbstractPluginConfig(ProxyPlugin proxyPlugin) {
         this.proxyPlugin = proxyPlugin;
         this.configurationRoot = createConfiguration(proxyPlugin);
         proxyPlugin.getConfigurationProcessor().resolve(configurationRoot, this);
+        this.allowedPatternCommands = allowedCommands.stream().map(Pattern::compile).collect(Collectors.toList());
     }
 
     @Override
@@ -190,6 +195,11 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     }
 
     @Override
+    public boolean shouldBlockChat() {
+        return blockChat;
+    }
+
+    @Override
     public List<ConfigurationServer> getAuthServers() {
         return authServers;
     }
@@ -211,7 +221,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 
     @Override
     public ProxyMessages getProxyMessages() {
-        return (ProxyMessages) proxyMessages;
+        return proxyMessages;
     }
 
     @Override
@@ -245,8 +255,8 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     }
 
     @Override
-    public List<String> getAllowedCommands() {
-        return Collections.unmodifiableList(allowedCommands);
+    public List<Pattern> getAllowedCommands() {
+        return Collections.unmodifiableList(allowedPatternCommands);
     }
 
     @Override

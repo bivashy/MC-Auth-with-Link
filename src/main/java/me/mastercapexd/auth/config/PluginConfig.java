@@ -36,7 +36,7 @@ public interface PluginConfig {
 
     List<ConfigurationServer> getBlockedServers();
 
-    List<String> getAllowedCommands();
+    List<Pattern> getAllowedCommands();
 
     List<String> getAuthenticationSteps();
 
@@ -59,6 +59,8 @@ public interface PluginConfig {
     long getJoinDelay();
 
     long getAuthTime();
+
+    boolean shouldBlockChat();
 
     ProxyMessages getProxyMessages();
 

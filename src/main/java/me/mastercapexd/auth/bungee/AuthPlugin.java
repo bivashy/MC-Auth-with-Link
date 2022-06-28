@@ -103,7 +103,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     }
 
     private void initializeListener() {
-        this.getProxy().getPluginManager().registerListener(this, new AuthenticationListener(this, config));
+        this.getProxy().getPluginManager().registerListener(this, new AuthenticationListener(this));
     }
 
     private void initializeCommand() {
