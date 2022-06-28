@@ -46,7 +46,7 @@ public class DefaultLoginManagement implements LoginManagement {
         }
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {
-            if (config.isNameCaseCheckEnabled() && account != null && account.getName().equals(nickname)) {
+            if (config.isNameCaseCheckEnabled() && account != null && !account.getName().equals(nickname)) {
                 player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed").replaceAll("(?i)%correct%", account.getName())
                         .replaceAll("(?i)%failed%", nickname));
                 return;
@@ -68,13 +68,6 @@ public class DefaultLoginManagement implements LoginManagement {
                 newAccount.nextAuthenticationStep(context);
 
                 Auth.addAccount(newAccount);
-                return;
-            }
-
-            if (!account.getName().equals(nickname)) {
-                player.disconnect(
-                        config.getProxyMessages().getStringMessage("check-name-case-failed").replaceAll("(?i)%correct%", account.getName())
-                                .replaceAll("(?i)%failed%", nickname));
                 return;
             }
 
