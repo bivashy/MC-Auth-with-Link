@@ -4,11 +4,15 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
+import me.mastercapexd.auth.authentication.step.MessageableAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
+import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
-public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
+public class RegisterAuthenticationStep extends AbstractAuthenticationStep implements MessageableAuthenticationStep {
 
     public static final String STEP_NAME = "REGISTER";
     private final boolean isRegistered;
@@ -35,6 +39,14 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep {
     @Override
     public boolean shouldSkip() {
         return authenticationStepContext.getAccount().isRegistered();
+    }
+
+    @Override
+    public void process(ProxyPlayer player) {
+        Account account = authenticationStepContext.getAccount();
+        PluginConfig config = ProxyPlugin.instance().getConfig();
+        player.sendMessage(config.getProxyMessages().getMessage("register-chat", new ProxyMessageContext(account)).legacyText());
+        ProxyPlugin.instance().getCore().createTitle(config.getProxyMessages().getStringMessage("register-title")).subtitle(config.getProxyMessages().getStringMessage("register-subtitle")).stay(120).send(player);
     }
 
     public static class RegisterAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
