@@ -85,7 +85,6 @@ public class AuthPlugin implements ProxyPlugin {
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
-        proxyServer.getEventManager().register(this, new AuthenticationListener(this));
         initialize();
         initializeListener();
         initializeCommand();
