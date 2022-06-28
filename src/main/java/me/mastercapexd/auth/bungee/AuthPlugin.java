@@ -3,12 +3,9 @@ package me.mastercapexd.auth.bungee;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import com.ubivashka.configuration.BungeeConfigurationProcessor;
 import com.ubivashka.configuration.ConfigurationProcessor;
-import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import com.ubivashka.messenger.telegram.message.TelegramMessage;
 import com.ubivashka.messenger.telegram.providers.TelegramApiProvider;
 import com.ubivashka.messenger.vk.message.VkMessage;
@@ -30,11 +27,6 @@ import me.mastercapexd.auth.bungee.hooks.BungeeFastLoginHook;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.bungee.listeners.EventListener;
 import me.mastercapexd.auth.bungee.listeners.VkDispatchListener;
-import me.mastercapexd.auth.config.ConfigurationHolder;
-import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
-import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
-import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
-import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
@@ -46,57 +38,17 @@ import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.ProxyPluginProvider;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
-import me.mastercapexd.auth.utils.TimeUtils;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
-    public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor().registerFieldResolver(ConfigurationServer.class,
-                    (context) -> {
-                        Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-                        if (configurationValue == null)
-                            return null;
-                        return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
-                    }).registerFieldResolver(Long.class, (context) -> {
-                Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-                if (configurationValue == null)
-                    return null;
-                return TimeUtils.parseTime(String.valueOf(configurationValue));
-            }).registerFieldResolver(Pattern.class, (context) -> {
-                Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-                if (configurationValue == null)
-                    return null;
-                return Pattern.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
-            }).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
-            .registerFieldResolverFactory(ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory()).registerFieldResolver(
-                    ProxyComponent.class,
-                    context -> {
-                        ProxyPlugin proxyPlugin = AuthPlugin.getInstance();
-                        if (context.configuration().isConfigurationSection(context.path())) {
-                            ConfigurationSectionHolder sectionHolder = context.configuration().getSection(context.path());
-                            String componentType = sectionHolder.getString("type");
-                            switch (componentType) {
-                                case "json":
-                                    return proxyPlugin.getCore().componentJson(sectionHolder.getString("value"));
-                                case "legacy":
-                                    return proxyPlugin.getCore().componentLegacy(sectionHolder.getString("value"));
-                                case "plain":
-                                    return proxyPlugin.getCore().componentPlain(sectionHolder.getString("value"));
-                                default:
-                                    throw new IllegalArgumentException(
-                                            "Illegal component type in " + context.path() + ":" + componentType + ", available: json,legacy,plain");
-                            }
-                        }
-                        return proxyPlugin.getCore()
-                                .componentLegacy(context.configuration().getString(context.path()));
-                    });
+    public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BungeeConfigurationProcessor();
 
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
     private static AuthPlugin instance;
@@ -133,6 +85,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     }
 
     private void initialize() {
+        initializeConfigurationProcessor();
         this.config = new BungeePluginConfig(this);
         this.accountFactory = new DefaultAccountFactory();
         this.accountStorage = loadAccountStorage(config.getStorageType());
