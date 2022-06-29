@@ -50,8 +50,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
         LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).orElse(null);
 
         if (linkUser == null) {
-            linkType.getProxyMessages().getMessage("not-linked").ifPresent(
-                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(component));
+            linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.getProxyMessages().getMessage("not-linked"));
             return true;
         }
 
@@ -61,8 +60,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
             return true;
 
         if (linkUserInfo == null || linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator())) {
-            linkType.getProxyMessages().getMessage("not-linked").ifPresent(
-                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(component));
+            linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.getProxyMessages().getMessage("not-linked"));
             return true;
         }
 

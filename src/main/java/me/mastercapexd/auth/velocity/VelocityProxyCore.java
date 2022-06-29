@@ -24,6 +24,7 @@ import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
 import me.mastercapexd.auth.velocity.server.VelocityServer;
 import me.mastercapexd.auth.velocity.title.VelocityProxyTitle;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class VelocityProxyCore implements ProxyCore {
@@ -124,5 +125,10 @@ public class VelocityProxyCore implements ProxyCore {
     @Override
     public void runAsync(Runnable task) {
         server.getScheduler().buildTask(AuthPlugin.getInstance(), task).schedule();
+    }
+
+    @Override
+    public String colorize(String text) {
+        return LegacyComponentSerializer.legacySection().serialize(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(text));
     }
 }

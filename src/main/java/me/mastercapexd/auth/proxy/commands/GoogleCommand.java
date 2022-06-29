@@ -39,7 +39,7 @@ public class GoogleCommand {
                 account.addLinkUser(googleLinkUser);
                 return googleLinkUser;
             });
-            if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
+            if (linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
                 player.sendMessage(GOOGLE_MESSAGES.getStringMessage("generated").replaceAll("(?i)%google_key%", key));
             } else {
                 player.sendMessage(GOOGLE_MESSAGES.getStringMessage("regenerated").replaceAll("(?i)%google_key%", key));

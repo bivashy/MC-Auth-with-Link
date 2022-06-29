@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.config.message;
 
 import java.util.Map;
-import java.util.Optional;
 
 import com.google.common.collect.Maps;
 import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
@@ -64,11 +63,9 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
     }
 
     @Override
-    public Optional<T> getMessage(String key) {
+    public T getMessage(String key) {
         String message = getStringMessage(key, Messages.NULL_STRING);
-        if (message == Messages.NULL_STRING)
-            return Optional.empty();
-        return Optional.of(fromText(message));
+        return fromText(message);
     }
 
     public void addMessage(String path, String message) {

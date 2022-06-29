@@ -27,7 +27,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
         LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get();
 
         String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
-        if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
+        if (linkUserKey == AccountFactory.DEFAULT_GOOGLE_KEY || linkUserKey.isEmpty()) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlink-not-have-google", linkType.newMessageContext(account)));
             return;
         }

@@ -47,4 +47,6 @@ public interface ProxyCore extends Castable<ProxyCore> {
     void schedule(ProxyPlugin instance, Runnable task, long joinDelay, TimeUnit milliseconds);
 
     void runAsync(Runnable task);
+
+    String colorize(String text);
 }

@@ -2,10 +2,10 @@ package me.mastercapexd.auth.bungee.player;
 
 import java.util.UUID;
 
+import me.mastercapexd.auth.bungee.BungeeProxyCore;
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeProxyPlayer implements ProxyPlayer {
@@ -17,11 +17,11 @@ public class BungeeProxyPlayer implements ProxyPlayer {
 
     @Override
     public void disconnect(String reason) {
-        player.disconnect(TextComponent.fromLegacyText(reason));
+        disconnect(BungeeProxyCore.INSTANCE.componentLegacy(reason));
     }
 
     @Override
-    public void disconnect(ProxyComponent component){
+    public void disconnect(ProxyComponent component) {
         player.disconnect(component.as(BungeeComponent.class).components());
     }
 
@@ -29,7 +29,7 @@ public class BungeeProxyPlayer implements ProxyPlayer {
     public void sendMessage(String message) {
         if (message.isEmpty())
             return;
-        player.sendMessage(TextComponent.fromLegacyText(message));
+        player.sendMessage(message);
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
 import me.mastercapexd.auth.config.message.AbstractMessages;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.context.MessageContext;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class ProxyMessages extends AbstractMessages<ProxyComponent> {
+    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 
     public ProxyMessages(ConfigurationSectionHolder configurationSection) {
         super(configurationSection, DEFAULT_DELIMITER, "");
@@ -15,22 +17,29 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 
     @Override
     public ProxyComponent getMessageNullable(String key) {
-        return ProxyComponent.fromLegacy(getStringMessage(key));
+        String message = getStringMessage(key, (String) null);
+        if (message == null)
+            return null;
+        return fromText(message);
     }
 
     @Override
     public ProxyComponent getMessage(String key, MessageContext context) {
-        return ProxyComponent.fromLegacy(context.apply(getStringMessage(key)));
+        return fromText(context.apply(getStringMessage(key)));
+    }
+
+    @Override
+    public ProxyComponent fromText(String text) {
+        return PLUGIN.getCore().componentLegacy(text);
+    }
+
+    @Override
+    public String formatString(String message) {
+        return PLUGIN.getCore().colorize(message);
     }
 
     @Override
     protected Messages<ProxyComponent> createMessages(ConfigurationSectionHolder configurationSection) {
         return new ProxyMessages(configurationSection);
     }
-
-    @Override
-    public ProxyComponent fromText(String text) {
-        return ProxyComponent.fromLegacy(text);
-    }
-
 }

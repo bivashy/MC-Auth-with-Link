@@ -137,4 +137,8 @@ public enum BungeeProxyCore implements ProxyCore {
         EXECUTOR_SERVICE.execute(task);
     }
 
+    @Override
+    public String colorize(String text) {
+        return BungeeComponent.colorText(text);
+    }
 }

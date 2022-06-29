@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.config.message;
 
-import java.util.Optional;
-
 import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public interface Messages<T> {
@@ -11,7 +9,7 @@ public interface Messages<T> {
 
     T getMessage(String key, MessageContext context);
 
-    Optional<T> getMessage(String key);
+    T getMessage(String key);
 
     String getStringMessage(String key, String defaultValue);
 
