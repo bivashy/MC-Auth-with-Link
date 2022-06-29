@@ -40,7 +40,7 @@ public class AuthenticationListener {
         ProxyPlayer player = plugin.getCore().wrapPlayer(event.getPlayer()).get();
         if (!Auth.hasAccount(config.getActiveIdentifierType().getId(player)))
             return;
-        if (!config.shouldBlockChat())
+        if (!config.shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
             return;
         player.sendMessage(config.getProxyMessages().getStringMessage("disabled-chat"));
         event.setResult(PlayerChatEvent.ChatResult.denied());
@@ -56,9 +56,10 @@ public class AuthenticationListener {
         ProxyPlayer player = proxyPlayerOptional.get();
         if (!Auth.hasAccount(config.getActiveIdentifierType().getId(player)))
             return;
-        if (config.getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(event.getCommand()).find()))
+        String command = "/" + event.getCommand();
+        if (config.getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(command).find()))
             return;
-        player.sendMessage(config.getProxyMessages().getStringMessage("disabled-chat"));
+        player.sendMessage(config.getProxyMessages().getStringMessage("disabled-command"));
         event.setResult(CommandExecuteEvent.CommandResult.denied());
     }
 
