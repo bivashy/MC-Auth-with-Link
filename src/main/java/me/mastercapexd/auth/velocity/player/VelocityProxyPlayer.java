@@ -7,7 +7,6 @@ import com.velocitypowered.api.proxy.Player;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.velocity.component.VelocityComponent;
-import net.kyori.adventure.text.Component;
 
 public class VelocityProxyPlayer implements ProxyPlayer {
     private final Player player;
@@ -18,7 +17,7 @@ public class VelocityProxyPlayer implements ProxyPlayer {
 
     @Override
     public void disconnect(String reason) {
-        player.disconnect(Component.text(reason));
+        player.disconnect(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(reason));
     }
 
     @Override
@@ -30,7 +29,7 @@ public class VelocityProxyPlayer implements ProxyPlayer {
     public void sendMessage(String message) {
         if (message.isEmpty())
             return;
-        player.sendMessage(Component.text(message));
+        player.sendMessage(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(message));
     }
 
     @Override

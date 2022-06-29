@@ -7,6 +7,7 @@ import java.util.List;
 
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.velocity.component.VelocityComponent;
 import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -18,9 +19,10 @@ public class VelocityProxyBossbar extends ProxyBossbar {
 
 
     public VelocityProxyBossbar(String title) {
+        title(title);
         BossBar.Color bossBarColor = BossBar.Color.values()[color.ordinal()];
         BossBar.Overlay bossBarOverlay = BossBar.Overlay.values()[segmentStyle.ordinal()];
-        bossBar = BossBar.bossBar(LegacyComponentSerializer.legacyAmpersand().deserialize(title), progress, bossBarColor, bossBarOverlay);
+        bossBar = BossBar.bossBar(LegacyComponentSerializer.legacyAmpersand().deserialize(title), progress, bossBarColor, bossBarOverlay).progress(progress);
     }
 
     public VelocityProxyBossbar(Component component) {
@@ -47,10 +49,10 @@ public class VelocityProxyBossbar extends ProxyBossbar {
 
     @Override
     public ProxyBossbar update() {
-        Component bossBarTitle = LegacyComponentSerializer.legacyAmpersand().deserialize(title);
+        Component bossBarTitle = VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(title);
         BossBar.Color bossBarColor = BossBar.Color.values()[color.ordinal()];
         BossBar.Overlay bossBarOverlay = BossBar.Overlay.values()[segmentStyle.ordinal()];
-        bossBar.name(bossBarTitle).color(bossBarColor).overlay(bossBarOverlay);
+        bossBar.name(bossBarTitle).color(bossBarColor).overlay(bossBarOverlay).progress(progress);
         return this;
     }
 
