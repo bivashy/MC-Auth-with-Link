@@ -57,19 +57,17 @@ public class GoogleCommand implements OrphanCommand {
 
         String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 
-        if (linkUserKey == null || linkUserKey.equals(AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
-            String rawContent = linkType.getLinkMessages().getStringMessage("google-generated", linkType.newMessageContext(account)).replaceAll("(?i)" +
-                    "%google_key%", rawKey);
+        if (linkUserKey == AccountFactory.DEFAULT_GOOGLE_KEY || linkUserKey.isEmpty()) {
+            String rawContent = linkType.getLinkMessages().getStringMessage("google-generated", linkType.newMessageContext(account)).replaceAll("(?i)%google_key%", rawKey);
             Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
             actorWrapper.send(googleQRMessage);
         } else {
-            String rawContent = linkType.getLinkMessages().getStringMessage("google-regenerated", linkType.newMessageContext(account)).replaceAll("(?i)" +
-                    "%google_key%", rawKey);
+            String rawContent = linkType.getLinkMessages().getStringMessage("google-regenerated", linkType.newMessageContext(account)).replaceAll("(?i)%google_key%", rawKey);
             Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
             actorWrapper.send(googleQRMessage);
         }
 
-        linkUser.getLinkUserInfo().getIdentificator().setString(totpKey);
+        linkUser.getLinkUserInfo().getIdentificator().setString(rawKey);
         accountStorage.saveOrUpdateAccount(account);
     }
 
