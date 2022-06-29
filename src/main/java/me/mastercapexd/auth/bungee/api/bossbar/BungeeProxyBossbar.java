@@ -26,15 +26,11 @@ public class BungeeProxyBossbar extends ProxyBossbar {
     public BungeeProxyBossbar(String title) {
         this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
         this.title(ComponentSerializer.toString(new TextComponent(this.title)));
-        color(Color.BLUE);
-        style(Style.SOLID);
     }
 
     public BungeeProxyBossbar(BaseComponent[] titleComponent) {
         this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
         this.title(ComponentSerializer.toString(titleComponent));
-        color(Color.BLUE);
-        style(Style.SOLID);
     }
 
     @Override
