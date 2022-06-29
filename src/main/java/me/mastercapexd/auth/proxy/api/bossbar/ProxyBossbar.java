@@ -12,8 +12,8 @@ import me.mastercapexd.auth.proxy.player.ProxyPlayer;
  */
 public abstract class ProxyBossbar implements Castable<ProxyBossbar> {
 
-    protected ProxyBossbar.Style segmentStyle;
-    protected ProxyBossbar.Color color;
+    protected ProxyBossbar.Style segmentStyle = Style.SOLID;
+    protected ProxyBossbar.Color color = Color.BLUE;
     protected float progress;
     protected String title;
 
