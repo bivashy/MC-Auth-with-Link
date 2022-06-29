@@ -12,7 +12,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-public class BungeeMultiProxyComponent implements MultiProxyComponent {
+public class BungeeMultiProxyComponent implements MultiProxyComponent, BungeeComponent {
     private static final Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]){6}");
     private BaseComponent[] components;
 
@@ -27,7 +27,7 @@ public class BungeeMultiProxyComponent implements MultiProxyComponent {
     private static String colorText(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         while(matcher.find()) {
-            final ChatColor hexColor = ChatColor.of(Color.decode(matcher.group().substring(0, matcher.group().length())));
+            final ChatColor hexColor = ChatColor.of(Color.decode(matcher.group()));
             final String before = message.substring(0, matcher.start());
             final String after = message.substring(matcher.end());
             message = before + hexColor + after;
@@ -53,9 +53,10 @@ public class BungeeMultiProxyComponent implements MultiProxyComponent {
 
     @Override
     public ProxyComponent[] getComponents() {
-        return Arrays.stream(components).map(baseComponent -> new BungeeProxyComponent(baseComponent)).toArray(ProxyComponent[]::new);
+        return Arrays.stream(components).map(BungeeProxyComponent::new).toArray(ProxyComponent[]::new);
     }
 
+    @Override
     public BaseComponent[] components() {
         return components;
     }

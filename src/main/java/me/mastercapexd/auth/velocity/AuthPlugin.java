@@ -24,13 +24,13 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.account.factories.DefaultAccountFactory;
-import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
-import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep;
-import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
-import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep;
+import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep.RegisterAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepCreator;
-import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep;
-import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep;
+import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator;
+import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.config.DefaultPluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
@@ -107,13 +107,13 @@ public class AuthPlugin implements ProxyPlugin {
         this.loginManagement = new DefaultLoginManagement(this);
         new DefaultAuthEngine().start();
 
-        this.authenticationStepCreatorDealership.add(new NullAuthenticationStep.NullAuthenticationStepCreator());
-        this.authenticationStepCreatorDealership.add(new LoginAuthenticationStep.LoginAuthenticationStepCreator());
-        this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStep.RegisterAuthenticationStepCreator());
-        this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new RegisterAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new VKLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new GoogleLinkAuthenticationStepCreator());
-        this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator());
-        this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
     }
 
     private void initializeListener() {

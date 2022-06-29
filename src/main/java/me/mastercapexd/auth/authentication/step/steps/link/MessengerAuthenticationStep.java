@@ -51,7 +51,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
 
         if (linkUser == null) {
             linkType.getProxyMessages().getMessage("not-linked").ifPresent(
-                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.newMessageContext(account).apply(component.legacyText())));
+                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(component));
             return true;
         }
 
@@ -62,7 +62,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
 
         if (linkUserInfo == null || linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator())) {
             linkType.getProxyMessages().getMessage("not-linked").ifPresent(
-                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(linkType.newMessageContext(account).apply(component.legacyText())));
+                    component -> linkEntryUser.getAccount().getPlayer().get().sendMessage(component));
             return true;
         }
 
@@ -79,7 +79,8 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
     @Override
     public void process(ProxyPlayer player) {
         Messages<ProxyComponent> messages = linkEntryUser.getLinkType().getProxyMessages();
-        player.sendMessage(messages.getMessage("enter-confirm-need-chat", new ProxyMessageContext(linkEntryUser.getAccount())).legacyText());
-        PLUGIN.getCore().createTitle(messages.getStringMessage("enter-confirm-need-title")).subtitle(messages.getStringMessage("enter-confirm-need-subtitle")).stay(120).send(player);
+        player.sendMessage(messages.getMessage("enter-confirm-need-chat", new ProxyMessageContext(linkEntryUser.getAccount())));
+        PLUGIN.getCore().createTitle(messages.getStringMessage("enter-confirm-need-title")).subtitle(messages.getStringMessage("enter-confirm-need-subtitle"))
+                .stay(120).send(player);
     }
 }

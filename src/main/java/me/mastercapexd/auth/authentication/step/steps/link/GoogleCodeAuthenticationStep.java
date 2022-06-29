@@ -70,7 +70,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = ProxyPlugin.instance().getConfig();
         Messages<ProxyComponent> googleMessages = config.getProxyMessages().getSubMessages("google");
-        player.sendMessage(googleMessages.getMessage("need-code-chat", new ProxyMessageContext(account)).legacyText());
+        player.sendMessage(googleMessages.getMessage("need-code-chat", new ProxyMessageContext(account)));
         ProxyPlugin.instance().getCore().createTitle(googleMessages.getStringMessage("need-code-title")).subtitle(googleMessages.getStringMessage("need-code-subtitle")).stay(120).send(player);
     }
 

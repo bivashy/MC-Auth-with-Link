@@ -34,7 +34,7 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep implemen
     public void process(ProxyPlayer player) {
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = ProxyPlugin.instance().getConfig();
-        player.sendMessage(config.getProxyMessages().getMessage("login-chat", new ProxyMessageContext(account)).legacyText());
+        player.sendMessage(config.getProxyMessages().getMessage("login-chat", new ProxyMessageContext(account)));
         ProxyPlugin.instance().getCore().createTitle(config.getProxyMessages().getStringMessage("login-title")).subtitle(config.getProxyMessages().getStringMessage("login-subtitle")).stay(120).send(player);
     }
 

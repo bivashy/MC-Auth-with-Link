@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
 import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
+import me.mastercapexd.auth.bungee.message.BungeeComponent;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
@@ -85,6 +86,11 @@ public enum BungeeProxyCore implements ProxyCore {
     @Override
     public ProxyBossbar createBossbar(String title) {
         return new BungeeProxyBossbar(title);
+    }
+
+    @Override
+    public ProxyBossbar createBossbar(ProxyComponent component) {
+        return new BungeeProxyBossbar(component.as(BungeeComponent.class).components());
     }
 
     @Override

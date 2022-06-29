@@ -35,13 +35,13 @@ public class DefaultLoginManagement implements LoginManagement {
     public void onLogin(ProxyPlayer player) {
         String nickname = player.getNickname();
         if (!config.getNamePattern().matcher(nickname).matches()) {
-            player.disconnect(config.getProxyMessages().getMessageNullable("illegal-name-chars").as(BungeeMultiProxyComponent.class).legacyText());
+            player.disconnect(config.getProxyMessages().getMessageNullable("illegal-name-chars").as(BungeeMultiProxyComponent.class));
             return;
         }
         if (config.getMaxLoginPerIP() != 0 &&
                 core.getPlayers().stream().filter(onlinePlayer -> onlinePlayer.getPlayerIp().equals(player.getPlayerIp())).count() >=
                         config.getMaxLoginPerIP()) {
-            player.disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached").as(BungeeMultiProxyComponent.class).legacyText());
+            player.disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached").as(BungeeMultiProxyComponent.class));
             return;
         }
         String id = config.getActiveIdentifierType().getId(player);
@@ -76,8 +76,7 @@ public class DefaultLoginManagement implements LoginManagement {
                             account);
 
             if (account.isSessionActive(config.getSessionDurability())) {
-                player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)).as(BungeeMultiProxyComponent.class)
-                        .legacyText());
+                player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
                 core.schedule(ProxyPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
                 return;
             }

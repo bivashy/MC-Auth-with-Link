@@ -30,6 +30,8 @@ public interface ProxyCore extends Castable<ProxyCore> {
 
     ProxyBossbar createBossbar(String title);
 
+    ProxyBossbar createBossbar(ProxyComponent barText);
+
     ProxyComponent componentPlain(String plain);
 
     ProxyComponent componentJson(String json);

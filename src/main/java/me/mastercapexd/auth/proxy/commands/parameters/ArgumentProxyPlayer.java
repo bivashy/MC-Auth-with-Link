@@ -2,6 +2,7 @@ package me.mastercapexd.auth.proxy.commands.parameters;
 
 import java.util.UUID;
 
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class ArgumentProxyPlayer implements ProxyPlayer {
@@ -17,8 +18,18 @@ public class ArgumentProxyPlayer implements ProxyPlayer {
     }
 
     @Override
+    public void disconnect(ProxyComponent component) {
+        player.disconnect(component);
+    }
+
+    @Override
     public void sendMessage(String message) {
         player.sendMessage(message);
+    }
+
+    @Override
+    public void sendMessage(ProxyComponent component) {
+        player.sendMessage(component);
     }
 
     @Override

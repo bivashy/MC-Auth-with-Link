@@ -29,4 +29,8 @@ public class VelocityComponent implements ProxyComponent {
     public String plainText() {
         return PlainTextComponentSerializer.plainText().serialize(component);
     }
+
+    public Component component() {
+        return component;
+    }
 }

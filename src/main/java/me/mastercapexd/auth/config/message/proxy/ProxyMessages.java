@@ -24,11 +24,6 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
     }
 
     @Override
-    public String formatString(String message) {
-        return ProxyComponent.fromLegacy(message).legacyText();
-    }
-
-    @Override
     protected Messages<ProxyComponent> createMessages(ConfigurationSectionHolder configurationSection) {
         return new ProxyMessages(configurationSection);
     }

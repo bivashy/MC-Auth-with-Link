@@ -23,6 +23,10 @@ public class VelocityProxyBossbar extends ProxyBossbar {
         bossBar = BossBar.bossBar(LegacyComponentSerializer.legacyAmpersand().deserialize(title), progress, bossBarColor, bossBarOverlay);
     }
 
+    public VelocityProxyBossbar(Component component) {
+        this(LegacyComponentSerializer.legacySection().serialize(component));
+    }
+
     @Override
     public ProxyBossbar send(ProxyPlayer... viewers) {
         for (ProxyPlayer player : viewers) {

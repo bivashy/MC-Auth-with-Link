@@ -59,7 +59,7 @@ public class DefaultAuthEngine implements AuthEngine {
                         authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();
 
                 if (onlineTime >= authTime) {
-                    player.disconnect(PLUGIN_CONFIG.getProxyMessages().getMessage("time-left", new ProxyMessageContext(account)).legacyText());
+                    player.disconnect(PLUGIN_CONFIG.getProxyMessages().getMessage("time-left", new ProxyMessageContext(account)));
                     Auth.removeAccount(id);
                     continue;
                 }

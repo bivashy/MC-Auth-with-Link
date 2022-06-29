@@ -1,11 +1,10 @@
 package me.mastercapexd.auth.bungee.message;
 
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-public class BungeeProxyComponent implements ProxyComponent {
+public class BungeeProxyComponent implements BungeeComponent {
     protected BaseComponent component;
 
     protected BungeeProxyComponent() {
@@ -30,7 +29,8 @@ public class BungeeProxyComponent implements ProxyComponent {
         return component.toPlainText();
     }
 
-    public BaseComponent component() {
-        return component;
+    @Override
+    public BaseComponent[] components() {
+        return new BaseComponent[]{component};
     }
 }

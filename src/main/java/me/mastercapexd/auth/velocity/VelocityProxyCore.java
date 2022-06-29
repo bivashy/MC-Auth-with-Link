@@ -81,6 +81,11 @@ public class VelocityProxyCore implements ProxyCore {
     }
 
     @Override
+    public ProxyBossbar createBossbar(ProxyComponent component) {
+        return new VelocityProxyBossbar(component.as(VelocityComponent.class).component());
+    }
+
+    @Override
     public ProxyComponent componentPlain(String plain) {
         return new VelocityComponent(PlainTextComponentSerializer.plainText().deserialize(plain));
     }

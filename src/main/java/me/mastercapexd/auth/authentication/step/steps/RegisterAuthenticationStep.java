@@ -45,7 +45,7 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
     public void process(ProxyPlayer player) {
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = ProxyPlugin.instance().getConfig();
-        player.sendMessage(config.getProxyMessages().getMessage("register-chat", new ProxyMessageContext(account)).legacyText());
+        player.sendMessage(config.getProxyMessages().getMessage("register-chat", new ProxyMessageContext(account)));
         ProxyPlugin.instance().getCore().createTitle(config.getProxyMessages().getStringMessage("register-title")).subtitle(config.getProxyMessages().getStringMessage("register-subtitle")).stay(120).send(player);
     }
 
