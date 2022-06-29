@@ -56,7 +56,10 @@ public class DefaultAuthEngine implements AuthEngine {
                 long authTime = PLUGIN_CONFIG.getAuthTime();
                 for (LinkEntryUser entryUser : Auth.getLinkEntryAuth().getLinkUsers(user -> user.getAccount().getId().equals(account.getId())))
                     if (entryUser != null)
-                        authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();
+                        try {
+                            authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();
+                        }catch(UnsupportedOperationException ignored){ // If link type has no settings support
+                        }
 
                 if (onlineTime >= authTime) {
                     player.disconnect(PLUGIN_CONFIG.getProxyMessages().getMessage("time-left", new ProxyMessageContext(account)));

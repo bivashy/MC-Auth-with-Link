@@ -81,7 +81,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
 
         @Override
         public AuthenticationStep createNewAuthenticationStep(AuthenticationStepContext context) {
-            return new VKLinkAuthenticationStep(context);
+            return new GoogleCodeAuthenticationStep(context);
         }
     }
 }
