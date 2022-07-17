@@ -8,7 +8,6 @@ import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
-import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.ProxyCore;
@@ -35,13 +34,13 @@ public class DefaultLoginManagement implements LoginManagement {
     public void onLogin(ProxyPlayer player) {
         String nickname = player.getNickname();
         if (!config.getNamePattern().matcher(nickname).matches()) {
-            player.disconnect(config.getProxyMessages().getMessageNullable("illegal-name-chars").as(BungeeMultiProxyComponent.class));
+            player.disconnect(config.getProxyMessages().getMessageNullable("illegal-name-chars"));
             return;
         }
         if (config.getMaxLoginPerIP() != 0 &&
                 core.getPlayers().stream().filter(onlinePlayer -> onlinePlayer.getPlayerIp().equals(player.getPlayerIp())).count() >=
                         config.getMaxLoginPerIP()) {
-            player.disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached").as(BungeeMultiProxyComponent.class));
+            player.disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached"));
             return;
         }
         String id = config.getActiveIdentifierType().getId(player);
