@@ -38,7 +38,7 @@ public class DefaultLoginManagement implements LoginManagement {
             return;
         }
         if (config.getMaxLoginPerIP() != 0 &&
-                core.getPlayers().stream().filter(onlinePlayer -> onlinePlayer.getPlayerIp().equals(player.getPlayerIp())).count() >=
+                core.getPlayers().stream().filter(onlinePlayer -> onlinePlayer.getPlayerIp().equals(player.getPlayerIp())).count() >
                         config.getMaxLoginPerIP()) {
             player.disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached"));
             return;
