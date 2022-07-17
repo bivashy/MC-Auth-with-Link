@@ -28,7 +28,7 @@
         <zxing.library.version>3.4.1</zxing.library.version>
         <configuration-library.version>2.0.11</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
-        <lamp.command-library.version>3.0.6</lamp.command-library.version>
+        <lamp.command-library.version>3.0.71</lamp.command-library.version>
         <vk-lamp-module.version>0.0.5</vk-lamp-module.version>
         <telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
         <multimessenger.version>0.0.6</multimessenger.version>
