@@ -1,11 +1,10 @@
 package me.mastercapexd.auth.link.user.info;
 
-import com.ubivashka.function.CastableInterface;
-
+import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
-public interface LinkUserInfo extends CastableInterface<LinkUserInfo> {
+public interface LinkUserInfo extends Castable<LinkUserInfo> {
     /**
      * Returns used identificator as {@link LinkUserIdentificator}. It uses
      * interface because identificator can be anything (string, integer, UUID,

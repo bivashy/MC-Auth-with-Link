@@ -9,11 +9,12 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public abstract class AbstractLinkConfirmationUser extends AbstractLinkUser implements LinkConfirmationUser {
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
-    private final Long linkTimeoutMillis = System.currentTimeMillis() + PLUGIN.getConfig().getVKSettings().getConfirmationSettings().getRemoveDelay() * 1000;
+    private final long linkTimeoutMillis;
     private final LinkConfirmationInfo confirmationInfo;
 
     public AbstractLinkConfirmationUser(LinkType linkType, Account account, LinkConfirmationInfo confirmationInfo) {
         super(linkType, account);
+        this.linkTimeoutMillis = System.currentTimeMillis() + linkType.getSettings().getConfirmationSettings().getRemoveDelay().getMillis();
         this.confirmationInfo = confirmationInfo;
     }
 
@@ -28,7 +29,7 @@ public abstract class AbstractLinkConfirmationUser extends AbstractLinkUser impl
     }
 
     @Override
-    public Long getLinkTimeoutMillis() {
+    public long getLinkTimeoutMillis() {
         return linkTimeoutMillis;
     }
 }
