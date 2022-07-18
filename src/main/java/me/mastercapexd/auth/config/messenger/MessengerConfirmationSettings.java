@@ -1,11 +1,12 @@
 package me.mastercapexd.auth.config.messenger;
 
+import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.utils.RandomCodeFactory;
 
 public interface MessengerConfirmationSettings {
     boolean canToggleConfirmation();
 
-    int getRemoveDelay();
+    ConfigurationDuration getRemoveDelay();
 
     int getCodeLength();
 

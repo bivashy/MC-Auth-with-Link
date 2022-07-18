@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.config.messenger;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class DefaultEnterSettings implements ConfigurationHolder, MessengerEnterSettings {

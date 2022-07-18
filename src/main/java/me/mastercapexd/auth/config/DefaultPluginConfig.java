@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.config;
 
 import com.ubivashka.configuration.configurate.holder.ConfigurationNodeHolder;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.asset.resource.folder.FolderResourceReader;
 import me.mastercapexd.auth.proxy.ProxyPlugin;

@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
-import com.ubivashka.configuration.annotations.SingleObject;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.annotation.ImportantField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.config.bossbar.BossBarSettings;
+import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.config.google.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
@@ -39,10 +39,8 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     private HashType activeHashType = HashType.SHA256;
     @ConfigField("storage-type")
     private StorageType storageType = StorageType.SQLITE;
-    @SingleObject
     @ConfigField("name-regex-pattern")
     private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
-    @SingleObject
     @ConfigField("password-regex-pattern")
     private Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9_$#@^-]*");
     @ConfigField("password-min-length")
@@ -51,18 +49,14 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     private Integer passwordMaxLength = 20;
     @ConfigField("password-attempts")
     private Integer passwordAttempts = 3;
-    @SingleObject
     @ConfigField("auth-time")
-    private Long authTime = 60L;
+    private ConfigurationDuration authTime = new ConfigurationDuration(60);
     @ImportantField
-    @SingleObject
     @ConfigField("auth-servers")
     private List<ConfigurationServer> authServers = null;
-    @SingleObject
     @ImportantField
     @ConfigField("game-servers")
     private List<ConfigurationServer> gameServers = null;
-    @SingleObject
     @ConfigField("blocked-servers")
     private List<ConfigurationServer> blockedServers = new ArrayList<>();
     @ConfigField("allowed-commands")
@@ -87,12 +81,10 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     private BossBarSettings barSettings = null;
     @ConfigField("fill-type")
     private FillType fillType;
-    @SingleObject
     @ConfigField("session-durability")
-    private Long sessionDurability = 14400L;
-    @SingleObject
+    private ConfigurationDuration sessionDurability = new ConfigurationDuration(14400L);
     @ConfigField("join-delay")
-    private Long joinDelay = 1000L;
+    private ConfigurationDuration joinDelay = new ConfigurationDuration(1000L);
     @ConfigField("block-chat")
     private boolean blockChat = true;
     @ConfigField("authentication-steps")
@@ -181,17 +173,17 @@ public abstract class AbstractPluginConfig implements PluginConfig {
 
     @Override
     public long getSessionDurability() {
-        return sessionDurability;
+        return sessionDurability.getMillis();
     }
 
     @Override
     public long getJoinDelay() {
-        return joinDelay;
+        return joinDelay.getMillis();
     }
 
     @Override
     public long getAuthTime() {
-        return authTime;
+        return authTime.getMillis();
     }
 
     @Override

@@ -1,13 +1,13 @@
 package me.mastercapexd.auth.config.google;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class GoogleAuthenticatorSettings implements ConfigurationHolder {
-    @ConfigField
+    @ConfigField("enabled")
     private boolean enabled = false;
 
     public GoogleAuthenticatorSettings(ConfigurationSectionHolder sectionHolder) {

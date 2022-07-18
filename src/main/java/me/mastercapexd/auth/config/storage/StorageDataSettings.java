@@ -1,28 +1,28 @@
 package me.mastercapexd.auth.config.storage;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.annotation.ImportantField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class StorageDataSettings implements ConfigurationHolder {
 
     @ImportantField
-    @ConfigField
+    @ConfigField("host")
     private String host = null;
     @ImportantField
-    @ConfigField
+    @ConfigField("database")
     private String database = null;
     @ImportantField
     @ConfigField("username")
     private String user = null;
     @ImportantField
-    @ConfigField
+    @ConfigField("password")
     private String password = null;
     @ImportantField
-    @ConfigField
+    @ConfigField("port")
     private int port = 0;
 
     public StorageDataSettings(ConfigurationSectionHolder configurationSection) {

@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.velocity.config;
 
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.SpongeConfiguratePluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;

@@ -7,21 +7,20 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.ubivashka.configuration.contexts.ConfigurationFieldContext;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
-import com.ubivashka.configuration.resolvers.ConfigurationFieldResolver;
-import com.ubivashka.configuration.resolvers.ConfigurationFieldResolverFactory;
+import com.ubivashka.configuration.context.ConfigurationFieldFactoryContext;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolver;
+import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolverFactory;
 
 public class ConfigurationHolderMapResolverFactory implements ConfigurationFieldResolverFactory {
 
     @Override
-    public ConfigurationFieldResolver<?> createResolver(ConfigurationFieldContext factoryContext) {
+    public ConfigurationFieldResolver<?> createResolver(ConfigurationFieldFactoryContext factoryContext) {
         return (context) -> {
-            ConfigurationSectionHolder rootSectionHolder = context.path().equals("self") ? context.configuration() :
-                    context.configuration().getSection(context.path());
+            ConfigurationSectionHolder rootSectionHolder = context.path()[0].equals("self") ? context.configuration() : context.getSection();
             Map<String, Object> map =
-                    rootSectionHolder.getKeys().stream().collect(Collectors.toMap(Function.identity(), (key) -> {
-                        ConfigurationSectionHolder sectionHolder = rootSectionHolder.getSection(key);
+                    rootSectionHolder.keys().stream().collect(Collectors.toMap(Function.identity(), (key) -> {
+                        ConfigurationSectionHolder sectionHolder = rootSectionHolder.section(key);
                         return newConfigurationHolder(context.getGeneric(0), key, sectionHolder);
                     }));
             return new ConfigurationHolderMap<>(map);
@@ -43,7 +42,7 @@ public class ConfigurationHolderMapResolverFactory implements ConfigurationField
                 InvocationTargetException e) {
             e.printStackTrace();
         }
-        return null;
+        throw new IllegalArgumentException("Cannot create class " + clazz.getSimpleName() + " because it doesn`t have valid constructor");
     }
 
     public static class ConfigurationHolderMap<V> extends HashMap<String, V> {

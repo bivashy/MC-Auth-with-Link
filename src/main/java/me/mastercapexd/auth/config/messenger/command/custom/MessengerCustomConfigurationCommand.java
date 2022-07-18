@@ -2,9 +2,9 @@ package me.mastercapexd.auth.config.messenger.command.custom;
 
 import java.util.regex.Pattern;
 
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
 import me.mastercapexd.auth.messenger.commands.custom.MessengerCustomCommand;
 

@@ -1,18 +1,16 @@
 package me.mastercapexd.auth.proxy;
 
 import java.io.File;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 import com.ubivashka.configuration.ConfigurationProcessor;
-import com.ubivashka.configuration.contexts.defaults.SingleObjectResolverContext;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
-import me.mastercapexd.auth.config.factories.ConfigurationHolderResolverFactory;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
@@ -30,29 +28,15 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
 
     default void initializeConfigurationProcessor() {
         getConfigurationProcessor().registerFieldResolver(ConfigurationServer.class,
-                        (context) -> {
-                            Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-                            if (configurationValue == null)
-                                return null;
-                            return new ConfigurationServer(context.as(SingleObjectResolverContext.class).getConfigurationValue());
-                        }).registerFieldResolver(Long.class, (context) -> {
-                    Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-                    if (configurationValue == null)
-                        return null;
-                    return TimeUtils.parseTime(String.valueOf(configurationValue));
-                }).registerFieldResolver(Pattern.class, (context) -> {
-                    Object configurationValue = context.as(SingleObjectResolverContext.class).getConfigurationValue();
-                    if (configurationValue == null)
-                        return null;
-                    return Pattern.compile(context.as(SingleObjectResolverContext.class).getConfigurationValue().toString());
-                }).registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory())
+                        (context) -> new ConfigurationServer(context.getString())).registerFieldResolver(ConfigurationDuration.class,
+                        (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
                 .registerFieldResolver(
                         ProxyComponent.class,
                         context -> {
                             ProxyPlugin proxyPlugin = ProxyPlugin.instance();
-                            if (context.configuration().isConfigurationSection(context.path())) {
-                                ConfigurationSectionHolder sectionHolder = context.configuration().getSection(context.path());
+                            if (context.isSection()) {
+                                ConfigurationSectionHolder sectionHolder = context.getSection();
                                 String componentType = sectionHolder.getString("type");
                                 switch (componentType) {
                                     case "json":
@@ -63,11 +47,11 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
                                         return proxyPlugin.getCore().componentPlain(sectionHolder.getString("value"));
                                     default:
                                         throw new IllegalArgumentException(
-                                                "Illegal component type in " + context.path() + ":" + componentType + ", available: json,legacy,plain");
+                                                "Illegal component type in " + Arrays.toString(context.path()) + ":" + componentType + ", available: json,legacy,plain");
                                 }
                             }
                             return proxyPlugin.getCore()
-                                    .componentLegacy(context.configuration().getString(context.path()));
+                                    .componentLegacy(context.getString());
                         });
     }
 

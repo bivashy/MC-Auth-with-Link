@@ -2,10 +2,10 @@ package me.mastercapexd.auth.config.telegram;
 
 import java.util.List;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.message.telegram.TelegramMessages;
 import me.mastercapexd.auth.config.messenger.DefaultCommandPaths;
 import me.mastercapexd.auth.config.messenger.DefaultConfirmationSettings;
@@ -19,9 +19,9 @@ import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class TelegramSettings implements ConfigurationHolder, MessengerSettings {
-    @ConfigField
+    @ConfigField("enabled")
     private boolean enabled = false;
-    @ConfigField
+    @ConfigField("token")
     private String token;
     @ConfigField("confirmation")
     private DefaultConfirmationSettings confirmationSettings;

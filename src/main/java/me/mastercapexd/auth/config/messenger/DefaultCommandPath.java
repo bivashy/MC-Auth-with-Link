@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.annotation.ImportantField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class DefaultCommandPath implements ConfigurationHolder, MessengerCommandPath {

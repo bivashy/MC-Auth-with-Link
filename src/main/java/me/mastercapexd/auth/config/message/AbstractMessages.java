@@ -3,9 +3,9 @@ package me.mastercapexd.auth.config.message;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
 import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationHolder {
@@ -21,20 +21,18 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
     }
 
     public AbstractMessages(ConfigurationSectionHolder configurationSection, CharSequence delimiter) {
-        for (String key : configurationSection.getKeys()) {
-            if (configurationSection.isCollection(key)) {
+        for (String key : configurationSection.keys()) {
+            if (configurationSection.isList(key)) {
                 addMessage(key, String.join(delimiter, configurationSection.getList(key).toArray(new String[0])));
                 continue;
             }
 
-            if (configurationSection.isConfigurationSection(key)) {
-                subMessages.put(key, createMessages(configurationSection.getSection(key)));
+            if (configurationSection.isSection(key)) {
+                subMessages.put(key, createMessages(configurationSection.section(key)));
                 continue;
             }
 
-            if (configurationSection.isString(key)) {
-                addMessage(key, configurationSection.getString(key));
-            }
+            addMessage(key, configurationSection.getString(key));
         }
     }
 

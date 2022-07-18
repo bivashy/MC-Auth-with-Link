@@ -1,14 +1,15 @@
 package me.mastercapexd.auth.config.messenger;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.ConfigurationHolder;
+import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class DefaultConfirmationSettings implements ConfigurationHolder, MessengerConfirmationSettings {
     @ConfigField("remove-delay")
-    private int removeDelay = 120;
+    private ConfigurationDuration removeDelay = new ConfigurationDuration(120 * 1000);
     @ConfigField("code-length")
     private int codeLength = 6;
     @ConfigField("can-toggle")
@@ -21,7 +22,7 @@ public class DefaultConfirmationSettings implements ConfigurationHolder, Messeng
     }
 
     @Override
-    public int getRemoveDelay() {
+    public ConfigurationDuration getRemoveDelay() {
         return removeDelay;
     }
 

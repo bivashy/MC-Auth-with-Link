@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.config.message.proxy;
 
-import com.ubivashka.configuration.holders.ConfigurationSectionHolder;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.message.AbstractMessages;
 import me.mastercapexd.auth.config.message.Messages;

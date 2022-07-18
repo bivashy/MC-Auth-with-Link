@@ -33,7 +33,7 @@ public class DefaultAuthEngine implements AuthEngine {
                 if (account == null)
                     continue;
                 if (account.getCurrentAuthenticationStep() instanceof MessageableAuthenticationStep)
-                    ((MessageableAuthenticationStep) account.getCurrentAuthenticationStep()).process(PROXY_CORE.wrapPlayer(player).get());
+                    ((MessageableAuthenticationStep) account.getCurrentAuthenticationStep()).process(player);
             }
         }, 0L, PLUGIN_CONFIG.getMessagesDelay(), TimeUnit.SECONDS);
     }
@@ -51,7 +51,7 @@ public class DefaultAuthEngine implements AuthEngine {
                     }
                     continue;
                 }
-                int onlineTime = (int) (now - Auth.getJoinTime(id)) / 1000;
+                int onlineTime = (int) (now - Auth.getJoinTime(id));
 
                 long authTime = PLUGIN_CONFIG.getAuthTime();
                 for (LinkEntryUser entryUser : Auth.getLinkEntryAuth().getLinkUsers(user -> user.getAccount().getId().equals(account.getId())))
