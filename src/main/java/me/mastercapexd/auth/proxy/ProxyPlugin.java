@@ -1,16 +1,15 @@
 package me.mastercapexd.auth.proxy;
 
 import java.io.File;
-import java.util.Arrays;
 
 import com.ubivashka.configuration.ConfigurationProcessor;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
+import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
@@ -33,26 +32,7 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
                 .registerFieldResolver(
                         ProxyComponent.class,
-                        context -> {
-                            ProxyPlugin proxyPlugin = ProxyPlugin.instance();
-                            if (context.isSection()) {
-                                ConfigurationSectionHolder sectionHolder = context.getSection();
-                                String componentType = sectionHolder.getString("type");
-                                switch (componentType) {
-                                    case "json":
-                                        return proxyPlugin.getCore().componentJson(sectionHolder.getString("value"));
-                                    case "legacy":
-                                        return proxyPlugin.getCore().componentLegacy(sectionHolder.getString("value"));
-                                    case "plain":
-                                        return proxyPlugin.getCore().componentPlain(sectionHolder.getString("value"));
-                                    default:
-                                        throw new IllegalArgumentException(
-                                                "Illegal component type in " + Arrays.toString(context.path()) + ":" + componentType + ", available: json,legacy,plain");
-                                }
-                            }
-                            return proxyPlugin.getCore()
-                                    .componentLegacy(context.getString());
-                        });
+                        new ProxyComponentFieldResolver());
     }
 
     ProxyCore getCore();
