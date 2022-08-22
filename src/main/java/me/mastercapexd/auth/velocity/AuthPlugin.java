@@ -50,11 +50,13 @@ import me.mastercapexd.auth.storage.StorageType;
 import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
+import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
 import me.mastercapexd.auth.velocity.hooks.VelocityVkPluginHook;
 import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
+import net.kyori.adventure.platform.AudienceProvider;
 
 @Plugin(id = "mcauth", name = "McAuth", version = "1.6.0", authors = {"Ubivashka"},
         dependencies = {@Dependency(id = "vk-api", optional = true),
@@ -66,6 +68,7 @@ public class AuthPlugin implements ProxyPlugin {
     private final ProxyServer proxyServer;
     private final ProxyCore core;
     private final File dataFolder;
+    private final VelocityAudienceProvider audienceProvider;
 
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
@@ -80,6 +83,7 @@ public class AuthPlugin implements ProxyPlugin {
         ProxyPluginProvider.setPluginInstance(this);
         instance = this;
         this.proxyServer = proxyServer;
+        this.audienceProvider = new VelocityAudienceProvider(proxyServer);
         this.core = new VelocityProxyCore(proxyServer);
         this.dataFolder = dataDirectory.toFile();
     }
@@ -158,6 +162,11 @@ public class AuthPlugin implements ProxyPlugin {
 
     public static AuthPlugin getInstance() {
         return instance;
+    }
+
+    @Override
+    public AudienceProvider getAudienceProvider() {
+        return audienceProvider;
     }
 
     @Override

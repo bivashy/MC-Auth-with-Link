@@ -47,6 +47,8 @@ import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
 import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
+import net.kyori.adventure.platform.AudienceProvider;
+import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -61,6 +63,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     private AccountStorage accountStorage;
     private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
     private AuthenticationStepContextFactoryDealership authenticationContextFactoryDealership;
+    private BungeeAudiences bungeeAudiences;
     private LoginManagement loginManagement;
 
     public static AuthPlugin getInstance() {
@@ -84,11 +87,17 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
             googleAuthenticator = new GoogleAuthenticator();
         if (ProxyServer.getInstance().getPluginManager().getPlugin("FastLogin") != null)
             initializeFastLogin();
+    }
 
+    @Override
+    public void onDisable() {
+        if (bungeeAudiences != null)
+            bungeeAudiences.close();
     }
 
     private void initialize() {
-        initializeConfigurationProcessor();
+        this.initializeConfigurationProcessor();
+        this.bungeeAudiences = BungeeAudiences.create(this);
         this.config = new DefaultPluginConfig(this);
         this.accountFactory = new DefaultAccountFactory();
         this.accountStorage = loadAccountStorage(config.getStorageType());
@@ -146,6 +155,11 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
                 return new MySQLAccountStorage(config, accountFactory);
         }
         throw new NullPointerException("Wrong account storage!");
+    }
+
+    @Override
+    public AudienceProvider getAudienceProvider() {
+        return bungeeAudiences;
     }
 
     @Override

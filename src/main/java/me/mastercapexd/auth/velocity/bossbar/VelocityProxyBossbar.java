@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.velocity.component.VelocityComponent;
 import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -49,7 +49,7 @@ public class VelocityProxyBossbar extends ProxyBossbar {
 
     @Override
     public ProxyBossbar update() {
-        Component bossBarTitle = VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(title);
+        Component bossBarTitle = ProxyPlugin.instance().getConfig().getProxyMessages().getDeserializer().deserialize(title);
         BossBar.Color bossBarColor = BossBar.Color.values()[color.ordinal()];
         BossBar.Overlay bossBarOverlay = BossBar.Overlay.values()[segmentStyle.ordinal()];
         bossBar.name(bossBarTitle).color(bossBarColor).overlay(bossBarOverlay).progress(progress);

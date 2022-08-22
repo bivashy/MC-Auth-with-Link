@@ -15,6 +15,7 @@ import me.mastercapexd.auth.bungee.message.BungeeComponent;
 import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
+import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
@@ -35,6 +36,7 @@ public enum BungeeProxyCore implements ProxyCore {
 
     private static final ProxyServer PROXY_SERVER = ProxyServer.getInstance();
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+    private static final LimboHook LIMBO_HOOK = ProxyPlugin.instance().getHook(LimboHook.class);
 
     @Override
     public <E> void callEvent(E event) {
@@ -111,8 +113,14 @@ public enum BungeeProxyCore implements ProxyCore {
     @Override
     public Optional<Server> serverFromName(String serverName) {
         ServerInfo serverInfo = PROXY_SERVER.getServerInfo(serverName);
-        if (serverInfo == null)
-            return Optional.empty();
+        if (serverInfo == null) {
+            if (!LIMBO_HOOK.isLimbo(serverName))
+                return Optional.empty();
+            Server server = LIMBO_HOOK.createLimboWrapper(serverName);
+            if (!server.isExists())
+                return Optional.empty();
+            return Optional.of(server);
+        }
         return Optional.of(new BungeeServer(serverInfo));
     }
 

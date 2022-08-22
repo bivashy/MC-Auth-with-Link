@@ -19,6 +19,7 @@ import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.utils.TimeUtils;
+import net.kyori.adventure.platform.AudienceProvider;
 
 public interface ProxyPlugin extends Castable<ProxyPlugin> {
     static ProxyPlugin instance() {
@@ -36,6 +37,8 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
     }
 
     ProxyCore getCore();
+
+    AudienceProvider getAudienceProvider();
 
     PluginConfig getConfig();
 

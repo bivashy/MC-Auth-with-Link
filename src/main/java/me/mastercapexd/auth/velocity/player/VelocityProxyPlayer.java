@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import com.velocitypowered.api.proxy.Player;
 
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
+import me.mastercapexd.auth.proxy.message.SelfHandledProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.velocity.component.VelocityComponent;
 
@@ -16,24 +18,20 @@ public class VelocityProxyPlayer implements ProxyPlayer {
     }
 
     @Override
-    public void disconnect(String reason) {
-        player.disconnect(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(reason));
-    }
-
-    @Override
     public void disconnect(ProxyComponent component) {
+        if (component.safeAs(SelfHandledProxyComponent.class).isPresent()) {
+            disconnect(ProxyPlugin.instance().getCore().componentJson(component.jsonText()));
+            return;
+        }
         player.disconnect(component.as(VelocityComponent.class).component());
     }
 
     @Override
-    public void sendMessage(String message) {
-        if (message.isEmpty())
-            return;
-        player.sendMessage(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(message));
-    }
-
-    @Override
     public void sendMessage(ProxyComponent component) {
+        if (component.safeAs(SelfHandledProxyComponent.class).isPresent()) {
+            component.as(SelfHandledProxyComponent.class).send(this);
+            return;
+        }
         player.sendMessage(component.as(VelocityComponent.class).component());
     }
 

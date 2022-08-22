@@ -35,6 +35,9 @@
         <vk-api-bungee.version>0.3.2-Snapshot</vk-api-bungee.version>
         <java-telegram-bot-api.version>6.0.1</java-telegram-bot-api.version>
         <fastlogin.version>1.10</fastlogin.version>
+        <minimessage.version>4.11.0</minimessage.version>
+        <adventure.serializer.version>4.10.1</adventure.serializer.version>
+        <adventure.bungee.version>4.1.1</adventure.bungee.version>
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -251,6 +254,37 @@
             <artifactId>java-telegram-bot-api</artifactId>
             <version>${java-telegram-bot-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Mini message -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>${minimessage.version}</version>
+        </dependency>
+
+        <!-- BungeeCord adventure -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bungeecord</artifactId>
+            <version>${adventure.bungee.version}</version>
+        </dependency>
+
+        <!-- Adventure serializers -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>${adventure.serializer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-legacy</artifactId>
+            <version>${adventure.serializer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
+            <version>${adventure.serializer.version}</version>
         </dependency>
     </dependencies>
 

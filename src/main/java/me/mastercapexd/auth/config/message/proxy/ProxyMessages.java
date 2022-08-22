@@ -1,18 +1,24 @@
 package me.mastercapexd.auth.config.message.proxy;
 
+import com.ubivashka.configuration.annotation.ConfigField;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.message.AbstractMessages;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.proxy.adventure.AdventureProxyComponent;
+import me.mastercapexd.auth.proxy.adventure.ComponentDeserializer;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class ProxyMessages extends AbstractMessages<ProxyComponent> {
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    @ConfigField("deserializer")
+    private final ComponentDeserializer deserializer = ComponentDeserializer.LEGACY_AMPERSAND;
 
     public ProxyMessages(ConfigurationSectionHolder configurationSection) {
         super(configurationSection, DEFAULT_DELIMITER, "");
+        ProxyPlugin.instance().getConfigurationProcessor().resolve(configurationSection, this);
     }
 
     @Override
@@ -30,7 +36,7 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
 
     @Override
     public ProxyComponent fromText(String text) {
-        return PLUGIN.getCore().componentLegacy(text);
+        return new AdventureProxyComponent(deserializer.deserialize(text));
     }
 
     @Override
@@ -41,5 +47,9 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
     @Override
     protected Messages<ProxyComponent> createMessages(ConfigurationSectionHolder configurationSection) {
         return new ProxyMessages(configurationSection);
+    }
+
+    public ComponentDeserializer getDeserializer() {
+        return deserializer;
     }
 }

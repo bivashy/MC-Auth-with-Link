@@ -152,6 +152,13 @@ google-authenticator:
   # Включена ли привязка к Google Authenticator, если вы отключите привязку игроки не смогут подтверждать вход, привязывать аккаунты.
   enabled: false
 messages:
+  # PLAIN            - Обычный текст без цветовых кодов
+  # GSON             - Текст в новом формате JSON
+  # GSON_LEGACY      - Текст в старом формате JSON
+  # LEGACY_AMPERSAND - Формат по умолчанию со знаком &
+  # LEGACY_SECTION   - Формат по умолчанию со знаком §
+  # MINIMESSAGE      - Формат MiniMessage (https://docs.adventure.kyori.net/minimessage/format.html)
+  deserializer: LEGACY_AMPERSAND
   # Регистрация
   register-chat: '&fПожалуйста зарегистрируйтесь командой &e/register <пароль>'
   register-title: '&eРегистрация'

@@ -98,7 +98,7 @@ public class VelocityProxyCore implements ProxyCore {
 
     @Override
     public ProxyComponent componentLegacy(String legacy) {
-        return new VelocityComponent(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(legacy));
+        return new VelocityComponent(LegacyComponentSerializer.legacyAmpersand().deserialize(legacy));
     }
 
     @Override
@@ -129,6 +129,6 @@ public class VelocityProxyCore implements ProxyCore {
 
     @Override
     public String colorize(String text) {
-        return LegacyComponentSerializer.legacySection().serialize(VelocityComponent.LEGACY_COMPONENT_SERIALIZER.deserialize(text));
+        return text;
     }
 }

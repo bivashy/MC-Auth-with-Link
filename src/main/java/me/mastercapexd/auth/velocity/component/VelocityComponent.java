@@ -7,7 +7,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class VelocityComponent implements ProxyComponent {
-    public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder().character('&').hexColors().build();
     private final Component component;
 
     public VelocityComponent(Component component) {
@@ -22,7 +21,7 @@ public class VelocityComponent implements ProxyComponent {
 
     @Override
     public String legacyText() {
-        return LEGACY_COMPONENT_SERIALIZER.serialize(component);
+        return LegacyComponentSerializer.legacyAmpersand().serialize(component);
     }
 
     @Override

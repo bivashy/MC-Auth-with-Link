@@ -12,6 +12,7 @@ import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.proxy.server.Server;
+import net.kyori.adventure.audience.Audience;
 
 public interface ProxyCore extends Castable<ProxyCore> {
     <E> void callEvent(E event);
@@ -47,6 +48,10 @@ public interface ProxyCore extends Castable<ProxyCore> {
     void schedule(ProxyPlugin instance, Runnable task, long joinDelay, TimeUnit milliseconds);
 
     void runAsync(Runnable task);
+
+    default Audience getAudience(ProxyPlayer player){
+        return ProxyPlugin.instance().getAudienceProvider().player(player.getUniqueId());
+    }
 
     String colorize(String text);
 }
