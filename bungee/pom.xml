@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>me.mastercapexd.auth</groupId>
+        <artifactId>main</artifactId>
+        <version>1.6.1</version>
+    </parent>
+    <artifactId>bungee</artifactId>
+
+    <properties>
+        <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
+        <lamp.command-library.version>3.0.8</lamp.command-library.version>
+        <adventure.bungee.version>4.1.1</adventure.bungee.version>
+        <configuration-library.version>3.0.3</configuration-library.version>
+        <telegram.api.version>6.1.0</telegram.api.version>
+        <vk.api.version>0.3.2-Snapshot</vk.api.version>
+        <fastlogin.version>1.10</fastlogin.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Core auth -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- BungeeCord API -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>${bungeecord.version}</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- BungeeCord Javadoc API -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>${bungeecord.version}</version>
+            <type>javadoc</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Lamp Bungee Module -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>bungee</artifactId>
+            <version>${lamp.command-library.version}</version>
+        </dependency>
+
+        <!-- BungeeCord adventure -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bungeecord</artifactId>
+            <version>${adventure.bungee.version}</version>
+        </dependency>
+
+        <!-- VK API -->
+        <dependency>
+            <groupId>com.github.U61vashka</groupId>
+            <artifactId>VK-API-Spigot-Bungee</artifactId>
+            <version>${vk.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Telegram API -->
+        <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+            <version>${telegram.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- FastLogin -->
+        <dependency>
+            <groupId>com.github.games647</groupId>
+            <artifactId>FastLogin</artifactId>
+            <version>${fastlogin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>BungeeAuth</artifactId>
+                    <groupId>me.vik1395</groupId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
