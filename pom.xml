@@ -38,6 +38,7 @@
         <minimessage.version>4.11.0</minimessage.version>
         <adventure.serializer.version>4.10.1</adventure.serializer.version>
         <adventure.bungee.version>4.1.1</adventure.bungee.version>
+        <proxylimbo.version>1.0.2</proxylimbo.version>
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -285,6 +286,14 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
             <version>${adventure.serializer.version}</version>
+        </dependency>
+
+        <!-- ProxyLimbo -->
+        <dependency>
+            <groupId>com.github.U61vashka.ProxyLimbo</groupId>
+            <artifactId>core</artifactId>
+            <version>${proxylimbo.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
