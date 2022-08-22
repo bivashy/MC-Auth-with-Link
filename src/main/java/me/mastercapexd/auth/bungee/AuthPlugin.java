@@ -35,6 +35,8 @@ import me.mastercapexd.auth.engine.DefaultAuthEngine;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
+import me.mastercapexd.auth.hooks.limbo.LimboHook;
+import me.mastercapexd.auth.hooks.limbo.ProxyLimboHook;
 import me.mastercapexd.auth.management.DefaultLoginManagement;
 import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.ProxyCore;
@@ -105,6 +107,8 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
         new DefaultAuthEngine().start();
+
+        HOOKS.put(LimboHook.class, new ProxyLimboHook());
 
         this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
