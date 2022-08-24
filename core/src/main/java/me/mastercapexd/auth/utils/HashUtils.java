@@ -16,7 +16,7 @@ public class HashUtils {
     static {
         try {
             MD5 = MessageDigest.getInstance("MD5");
-            SHA256 = MessageDigest.getInstance("SHA256");
+            SHA256 = MessageDigest.getInstance("SHA-256");
         } catch(NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
