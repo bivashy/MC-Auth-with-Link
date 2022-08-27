@@ -84,7 +84,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     @ConfigField("session-durability")
     private ConfigurationDuration sessionDurability = new ConfigurationDuration(14400L);
     @ConfigField("join-delay")
-    private ConfigurationDuration joinDelay = new ConfigurationDuration(1000L);
+    private ConfigurationDuration joinDelay = new ConfigurationDuration(0);
     @ConfigField("block-chat")
     private boolean blockChat = true;
     @ConfigField("authentication-steps")

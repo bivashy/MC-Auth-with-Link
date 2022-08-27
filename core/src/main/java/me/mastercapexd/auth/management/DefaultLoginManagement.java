@@ -51,12 +51,6 @@ public class DefaultLoginManagement implements LoginManagement {
                 return;
             }
 
-            AuthenticationStepCreator authenticationStepCreator =
-                    plugin.getAuthenticationStepCreatorDealership().findFirstByPredicate(
-                                    stepCreator -> stepCreator.getAuthenticationStepName()
-                                            .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
-                            .orElse(new NullAuthenticationStep.NullAuthenticationStepCreator());
-
             if (account == null) {
                 Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(), player.getUniqueId(), nickname,
                         config.getActiveHashType(), AccountFactory.DEFAULT_PASSWORD, AccountFactory.DEFAULT_GOOGLE_KEY, AccountFactory.DEFAULT_VK_ID,
@@ -70,13 +64,23 @@ public class DefaultLoginManagement implements LoginManagement {
                 return;
             }
 
+            AuthenticationStepCreator authenticationStepCreator =
+                    plugin.getAuthenticationStepCreatorDealership().findFirstByPredicate(
+                                    stepCreator -> stepCreator.getAuthenticationStepName()
+                                            .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
+                            .orElse(new NullAuthenticationStep.NullAuthenticationStepCreator());
+
             AuthenticationStepContext context =
                     plugin.getAuthenticationContextFactoryDealership().createContext(authenticationStepCreator.getAuthenticationStepName(),
                             account);
 
             if (account.isSessionActive(config.getSessionDurability())) {
                 player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
-                core.schedule(ProxyPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+                if (config.getJoinDelay() == 0) {
+                    account.nextAuthenticationStep(context);
+                } else {
+                    core.schedule(ProxyPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+                }
                 return;
             }
 
