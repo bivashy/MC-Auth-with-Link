@@ -25,7 +25,7 @@ jobs:
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots verify
     - name: Move artifact  
-      run: mkdir staging && cp target/*.jar staging
+      run: mkdir staging && mv bungee/target/*-jar-with-dependencies.jar staging/mcAuth-bungee.jar && mv velocity/target/*-jar-with-dependencies.jar staging/mcAuth-velocity.jar
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
