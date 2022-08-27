@@ -24,6 +24,7 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.account.factories.DefaultAccountFactory;
+import me.mastercapexd.auth.authentication.step.steps.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
@@ -118,6 +119,7 @@ public class AuthPlugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership.add(new GoogleLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
+        this.authenticationStepCreatorDealership.add(new EnterAuthServerAuthenticationStepCreator());
     }
 
     private void initializeListener() {
