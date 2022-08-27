@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
+import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
@@ -33,7 +34,6 @@ public class VelocityProxyCore implements ProxyCore {
     public VelocityProxyCore(ProxyServer server) {
         this.server = server;
     }
-
 
     @Override
     public <E> void callEvent(E event) {
@@ -104,6 +104,16 @@ public class VelocityProxyCore implements ProxyCore {
     @Override
     public Optional<Server> serverFromName(String serverName) {
         Optional<RegisteredServer> serverOptional = server.getServer(serverName);
+        LimboHook limboHook = ProxyPlugin.instance().getHook(LimboHook.class);
+        if (!serverOptional.isPresent() && limboHook != null) {
+            if (!limboHook.isLimbo(serverName))
+                return Optional.empty();
+            Server server = limboHook.createLimboWrapper(serverName);
+            if (!server.isExists())
+                return Optional.empty();
+            return Optional.of(server);
+        }
+
         return serverOptional.map(VelocityServer::new);
     }
 

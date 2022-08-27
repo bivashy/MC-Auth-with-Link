@@ -36,7 +36,6 @@ public enum BungeeProxyCore implements ProxyCore {
 
     private static final ProxyServer PROXY_SERVER = ProxyServer.getInstance();
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    private static final LimboHook LIMBO_HOOK = ProxyPlugin.instance().getHook(LimboHook.class);
 
     @Override
     public <E> void callEvent(E event) {
@@ -113,10 +112,11 @@ public enum BungeeProxyCore implements ProxyCore {
     @Override
     public Optional<Server> serverFromName(String serverName) {
         ServerInfo serverInfo = PROXY_SERVER.getServerInfo(serverName);
-        if (serverInfo == null) {
-            if (!LIMBO_HOOK.isLimbo(serverName))
+        LimboHook limboHook = ProxyPlugin.instance().getHook(LimboHook.class);
+        if (serverInfo == null && limboHook != null) {
+            if (!limboHook.isLimbo(serverName))
                 return Optional.empty();
-            Server server = LIMBO_HOOK.createLimboWrapper(serverName);
+            Server server = limboHook.createLimboWrapper(serverName);
             if (!server.isExists())
                 return Optional.empty();
             return Optional.of(server);
