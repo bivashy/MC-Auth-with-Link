@@ -31,7 +31,7 @@ public class ProxyLimboHook implements LimboHook {
         try {
             com.ubivashka.limbo.ProxyLimbo.instance();
             return true;
-        } catch(Exception e) {
+        } catch(NoClassDefFoundError e) {
             return false;
         }
     }
