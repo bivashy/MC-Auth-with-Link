@@ -61,7 +61,7 @@ import net.kyori.adventure.platform.AudienceProvider;
 
 @Plugin(id = "mcauth", name = "McAuth", version = "1.6.1", authors = {"Ubivashka"},
         dependencies = {@Dependency(id = "vk-api", optional = true),
-                @Dependency(id = "telegram-bot-api", optional = true)})
+                @Dependency(id = "telegram-bot-api", optional = true), @Dependency(id = "limboapi", optional = true)})
 public class AuthPlugin implements ProxyPlugin {
     private static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new SpongeConfigurateProcessor();
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
@@ -111,6 +111,7 @@ public class AuthPlugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
         new DefaultAuthEngine().start();
+
 
         this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
