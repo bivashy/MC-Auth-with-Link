@@ -18,6 +18,7 @@
         <telegram.api.version>6.1.0</telegram.api.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
         <fastlogin.version>1.10</fastlogin.version>
+        <build.version>2</build.version>
     </properties>
 
     <repositories>
