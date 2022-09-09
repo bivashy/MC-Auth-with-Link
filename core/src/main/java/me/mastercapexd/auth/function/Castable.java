@@ -24,7 +24,7 @@ public interface Castable<T> {
      * @return Optional value of casted object
      */
     default <R extends T> Optional<R> safeAs(Class<R> clazz) {
-        return Optional.of(safeAs(clazz, null));
+        return Optional.ofNullable(safeAs(clazz, null));
     }
 
     /**
@@ -38,8 +38,7 @@ public interface Castable<T> {
      */
     default <R extends T> R safeAs(Class<R> clazz, R defaultValue) {
         try {
-            R result = clazz.cast(this);
-            return result;
+            return clazz.cast(this);
         } catch(ClassCastException ignored) {
             return defaultValue;
         }
