@@ -34,14 +34,13 @@ public abstract class SpongeConfiguratePluginConfig extends AbstractPluginConfig
                     getConfigurationNode(walkStream.filter(path -> path.toString().endsWith(".yml")).map(Path::toFile).toArray(File[]::new));
             walkStream.close();
 
-            boolean hasConfigurationVersion = !configuration.node("configuration-version").virtual();
 
             for (Resource resource : folderResource.getResources()) {
                 try (InputStream ignored = resource.getStream()) {
                     String realConfigurationName = resource.getName().substring(folderResource.getName().length() + 1);
-                    File resourceConfiguration = new File(folder + File.separator + realConfigurationName);
+                    File resourceConfiguration = new File(folder, realConfigurationName);
                     ConfigurationNode defaultConfiguration;
-                    if (!resourceConfiguration.exists() && !hasConfigurationVersion) {
+                    if (!resourceConfiguration.exists()) {
                         resource.write(resourceConfiguration);
                         defaultConfiguration = YamlConfigurationLoader.builder().file(resourceConfiguration).build().load();
                     } else {

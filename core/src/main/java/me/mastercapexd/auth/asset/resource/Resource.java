@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import com.ubivashka.functions.Castable;
-
-import me.mastercapexd.auth.utils.IOUtils;
 
 public interface Resource extends Castable<Resource> {
     String getName();
@@ -16,12 +15,12 @@ public interface Resource extends Castable<Resource> {
     InputStream getStream();
 
     default Resource write(File file) throws IOException {
-        IOUtils.streamToFile(getStream(), file);
+        write(file.toPath());
         return this;
     }
 
     default Resource write(Path path) throws IOException {
-        Files.copy(getStream(), path);
+        Files.copy(getStream(), path, StandardCopyOption.REPLACE_EXISTING);
         return this;
     }
 
