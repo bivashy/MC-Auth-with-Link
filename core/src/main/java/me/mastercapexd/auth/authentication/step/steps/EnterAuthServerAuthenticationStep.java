@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.authentication.step.steps;
 
+import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
@@ -16,14 +17,16 @@ public class EnterAuthServerAuthenticationStep extends AbstractAuthenticationSte
 
     @Override
     public boolean shouldPassToNextStep() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean shouldSkip() {
+        if (!Auth.hasAccount(authenticationStepContext.getAccount().getId()) ||
+                authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
+            return true;
         authenticationStepContext.getAccount()
-                .getPlayer()
-                .ifPresent(player -> PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getAuthServers()).asProxyServer().sendPlayer(player));
+                .getPlayer().ifPresent(PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getAuthServers()).asProxyServer()::sendPlayer);
         return true;
     }
 

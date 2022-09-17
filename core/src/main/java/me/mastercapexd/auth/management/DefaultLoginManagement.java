@@ -58,9 +58,8 @@ public class DefaultLoginManagement implements LoginManagement {
                         AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
 
                 AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership().createContext(newAccount);
-                newAccount.nextAuthenticationStep(context);
-
                 Auth.addAccount(newAccount);
+                newAccount.nextAuthenticationStep(context);
                 return;
             }
 
@@ -86,7 +85,6 @@ public class DefaultLoginManagement implements LoginManagement {
 
             Auth.addAccount(account);
             account.nextAuthenticationStep(context);
-
         });
     }
 
