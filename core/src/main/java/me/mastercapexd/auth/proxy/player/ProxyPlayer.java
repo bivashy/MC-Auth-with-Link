@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.proxy.player;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import me.mastercapexd.auth.function.Castable;
@@ -29,6 +30,8 @@ public interface ProxyPlayer extends Castable<ProxyPlayer> {
     UUID getUniqueId();
 
     String getPlayerIp();
+
+    Optional<Server> getCurrentServer();
 
     <T> T getRealPlayer();
 

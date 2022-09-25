@@ -1,9 +1,11 @@
 package me.mastercapexd.auth.proxy.commands.parameters;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.server.Server;
 
 public class ArgumentProxyPlayer implements ProxyPlayer {
     private final ProxyPlayer player;
@@ -45,6 +47,11 @@ public class ArgumentProxyPlayer implements ProxyPlayer {
     @Override
     public String getPlayerIp() {
         return player.getPlayerIp();
+    }
+
+    @Override
+    public Optional<Server> getCurrentServer() {
+        return player.getCurrentServer();
     }
 
     @Override

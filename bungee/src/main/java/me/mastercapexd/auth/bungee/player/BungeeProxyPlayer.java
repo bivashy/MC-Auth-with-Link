@@ -1,12 +1,15 @@
 package me.mastercapexd.auth.bungee.player;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
+import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.message.SelfHandledProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeProxyPlayer implements ProxyPlayer {
@@ -47,6 +50,13 @@ public class BungeeProxyPlayer implements ProxyPlayer {
     @Override
     public String getPlayerIp() {
         return player.getAddress().getHostName();
+    }
+
+    @Override
+    public Optional<Server> getCurrentServer() {
+        if (player.getServer() == null)
+            return Optional.empty();
+        return Optional.of(new BungeeServer(player.getServer().getInfo()));
     }
 
     @SuppressWarnings("unchecked")

@@ -1,14 +1,18 @@
 package me.mastercapexd.auth.velocity.player;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.message.SelfHandledProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.server.Server;
 import me.mastercapexd.auth.velocity.component.VelocityComponent;
+import me.mastercapexd.auth.velocity.server.VelocityServer;
 
 public class VelocityProxyPlayer implements ProxyPlayer {
     private final Player player;
@@ -48,6 +52,11 @@ public class VelocityProxyPlayer implements ProxyPlayer {
     @Override
     public String getPlayerIp() {
         return player.getRemoteAddress().getAddress().getHostAddress();
+    }
+
+    @Override
+    public Optional<Server> getCurrentServer() {
+        return player.getCurrentServer().map(ServerConnection::getServer).map(VelocityServer::new);
     }
 
     @Override
