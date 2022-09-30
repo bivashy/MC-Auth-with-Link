@@ -15,13 +15,8 @@ public class MessengerMessages extends AbstractMessages<String> {
     }
 
     @Override
-    public String getMessageNullable(String key) {
-        return getStringMessage(key);
-    }
-
-    @Override
     public String getMessage(String key, MessageContext context) {
-        return context.apply(getMessageNullable(key));
+        return context.apply(getMessage(key));
     }
 
     @Override

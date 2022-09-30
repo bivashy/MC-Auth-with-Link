@@ -34,13 +34,13 @@ public class DefaultLoginManagement implements LoginManagement {
     public void onLogin(ProxyPlayer player) {
         String nickname = player.getNickname();
         if (!config.getNamePattern().matcher(nickname).matches()) {
-            player.disconnect(config.getProxyMessages().getMessageNullable("illegal-name-chars"));
+            player.disconnect(config.getProxyMessages().getMessage("illegal-name-chars"));
             return;
         }
         if (config.getMaxLoginPerIP() != 0 &&
                 core.getPlayers().stream().filter(onlinePlayer -> onlinePlayer.getPlayerIp().equals(player.getPlayerIp())).count() >
                         config.getMaxLoginPerIP()) {
-            player.disconnect(config.getProxyMessages().getMessageNullable("limit-ip-reached"));
+            player.disconnect(config.getProxyMessages().getMessage("limit-ip-reached"));
             return;
         }
         String id = config.getActiveIdentifierType().getId(player);

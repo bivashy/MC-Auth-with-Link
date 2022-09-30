@@ -69,7 +69,7 @@ public abstract class MessengerCommandRegistry {
                             linkUser -> linkUser.getLinkType().equals(linkType) && linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId()));
 
             if (confirmationUsers.isEmpty())
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessageNullable("confirmation-no-code"));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-no-code"));
 
             LinkConfirmationUser confirmationUser =
                     confirmationUsers.stream().filter(user -> user.getConfirmationInfo().getConfirmationCode().equals(code)).findFirst().orElse(null);
@@ -96,7 +96,7 @@ public abstract class MessengerCommandRegistry {
             LinkUserIdentificator userId = context.actor().as(LinkCommandActorWrapper.class).userId();
             Account account = PLUGIN.getAccountStorage().getAccountFromName(playerName).get();
             if (account == null || !account.isRegistered())
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessageNullable("account-not-found"));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
 
             Optional<LinkUser> linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
             if (!linkUser.isPresent())

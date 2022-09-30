@@ -22,14 +22,6 @@ public class ProxyMessages extends AbstractMessages<ProxyComponent> {
     }
 
     @Override
-    public ProxyComponent getMessageNullable(String key) {
-        String message = getStringMessage(key, (String) null);
-        if (message == null)
-            return null;
-        return fromText(message);
-    }
-
-    @Override
     public ProxyComponent getMessage(String key, MessageContext context) {
         return fromText(context.apply(getStringMessage(key)));
     }

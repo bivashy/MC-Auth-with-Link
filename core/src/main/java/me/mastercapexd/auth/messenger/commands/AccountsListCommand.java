@@ -42,7 +42,7 @@ public class AccountsListCommand implements OrphanCommand {
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page, @Flag("pageSize") @Default(
             "5") Integer accountsPerPage, @Flag("type") @Default("my") String type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("linked"))) {
-            actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("not-enough-permission"));
+            actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
             return;
         }
 
@@ -62,16 +62,16 @@ public class AccountsListCommand implements OrphanCommand {
 
         accountsCollection.thenAccept(accounts -> {
             if (accounts.isEmpty()) {
-                actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("no-accounts"));
+                actorWrapper.reply(linkType.getLinkMessages().getMessage("no-accounts"));
                 return;
             }
             List<Account> paginatedAccounts = CollectionUtils.getListPage(new ArrayList<>(accounts), page, accountsPerPage);
             if(paginatedAccounts.isEmpty()){
-                actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("no-page-accounts"));
+                actorWrapper.reply(linkType.getLinkMessages().getMessage("no-page-accounts"));
                 return;
             }
             Keyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type, paginatedAccounts);
-            actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessageNullable("accounts")).keyboard(keyboard).build());
+            actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("accounts")).keyboard(keyboard).build());
         });
     }
 

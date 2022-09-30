@@ -11,10 +11,10 @@ public class AdminPanelCommand implements OrphanCommand {
     @Default
     public void adminPanelMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId())) {
-            actorWrapper.reply(linkType.getLinkMessages().getMessageNullable("not-enough-permission"));
+            actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
             return;
         }
         Keyboard adminPanelKeyboard = linkType.getSettings().getKeyboards().createKeyboard("admin-panel");
-        actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessageNullable("admin-panel")).keyboard(adminPanelKeyboard).build());
+        actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage("admin-panel")).keyboard(adminPanelKeyboard).build());
     }
 }

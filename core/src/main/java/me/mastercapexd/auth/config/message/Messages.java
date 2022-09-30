@@ -5,8 +5,6 @@ import me.mastercapexd.auth.config.message.context.MessageContext;
 public interface Messages<T> {
     String NULL_STRING = null;
 
-    T getMessageNullable(String key);
-
     T getMessage(String key, MessageContext context);
 
     T getMessage(String key);
