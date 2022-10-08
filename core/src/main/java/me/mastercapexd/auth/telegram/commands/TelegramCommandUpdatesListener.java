@@ -3,7 +3,7 @@ package me.mastercapexd.auth.telegram.commands;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
@@ -22,17 +22,21 @@ import me.mastercapexd.auth.link.telegram.TelegramCommandActorWrapper;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
 import me.mastercapexd.auth.messenger.commands.custom.MessengerCustomCommand;
+import me.mastercapexd.auth.telegram.commands.listener.TelegramUpdatesListener;
 import revxrsal.commands.command.ArgumentStack;
 
-public class TelegramCommandUpdatesListener implements UpdatesListener {
+public class TelegramCommandUpdatesListener extends TelegramUpdatesListener {
     private static final Gson GSON = new Gson();
     private static final LinkType LINK_TYPE = TelegramLinkType.getInstance();
 
+    public TelegramCommandUpdatesListener(TelegramBot bot) {
+        super(bot);
+    }
+
     @Override
-    public int process(List<Update> updates) {
+    public void processValidUpdates(List<Update> updates) {
         for (Update update : updates)
             processUpdate(update);
-        return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
     private void processUpdate(Update update) {
