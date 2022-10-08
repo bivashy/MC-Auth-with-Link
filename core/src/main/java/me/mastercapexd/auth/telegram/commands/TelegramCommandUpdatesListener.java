@@ -3,7 +3,6 @@ package me.mastercapexd.auth.telegram.commands;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
@@ -28,10 +27,6 @@ import revxrsal.commands.command.ArgumentStack;
 public class TelegramCommandUpdatesListener extends TelegramUpdatesListener {
     private static final Gson GSON = new Gson();
     private static final LinkType LINK_TYPE = TelegramLinkType.getInstance();
-
-    public TelegramCommandUpdatesListener(TelegramBot bot) {
-        super(bot);
-    }
 
     @Override
     public void processValidUpdates(List<Update> updates) {
@@ -63,10 +58,13 @@ public class TelegramCommandUpdatesListener extends TelegramUpdatesListener {
             handleCommandDispatch(handler, new CallbackQueryDispatchSource(callbackQuery));
             if (callbackQuery.message() == null)
                 return;
-            LINK_TYPE.getSettings().getCustomCommands().execute(new CustomCommandExecuteContext(callbackQuery.data()).setButtonExecution(true)).forEach(customCommand -> {
-                Message customCommandMessageResponse = createMessageResponse(customCommand);
-                customCommandMessageResponse.send(Identificator.of(callbackQuery.message().chat().id()));
-            });
+            LINK_TYPE.getSettings()
+                    .getCustomCommands()
+                    .execute(new CustomCommandExecuteContext(callbackQuery.data()).setButtonExecution(true))
+                    .forEach(customCommand -> {
+                        Message customCommandMessageResponse = createMessageResponse(customCommand);
+                        customCommandMessageResponse.send(Identificator.of(callbackQuery.message().chat().id()));
+                    });
         });
     }
 

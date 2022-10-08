@@ -24,7 +24,7 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
     }
 
     private void startBot(){
-        TELEGRAM_HOOK.getTelegramBot().setUpdatesListener(new TelegramCommandUpdatesListener(TELEGRAM_HOOK.getTelegramBot()), exception -> {
+        TELEGRAM_HOOK.getTelegramBot().setUpdatesListener(new TelegramCommandUpdatesListener(), exception -> {
             exception.printStackTrace();
             if (exception.response() == null) {
                 System.err.println("Restarting telegram bot!");
