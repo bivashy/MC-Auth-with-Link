@@ -47,16 +47,16 @@ public abstract class MessengerCommandRegistry {
             if (!command.hasAnnotation(GoogleUse.class))
                 return;
             if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled())
-                throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getSubMessages("google").getStringMessage("disabled"));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("google-disabled"));
         });
 
         commandHandler.registerValueResolver(NewPassword.class, context -> {
             String newRawPassword = context.pop();
             if (newRawPassword.length() < PLUGIN.getConfig().getPasswordMinLength())
-                throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-short"));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("changepass-password-too-short"));
 
             if (newRawPassword.length() > PLUGIN.getConfig().getPasswordMaxLength())
-                throw new SendMessageException(PLUGIN.getConfig().getProxyMessages().getStringMessage("password-too-long"));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("changepass-password-too-long"));
             return new NewPassword(newRawPassword);
         });
 

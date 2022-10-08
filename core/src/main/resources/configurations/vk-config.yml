@@ -278,6 +278,7 @@ vk:
         "inline": true
       }
   vk-messages: #Для переноса строк используйте "<br>" без кавычек.
+    account-not-found: 'Аккаунт с таким не найден!'
     # Привязка ВК
     confirmation-error: 'Введен неправильный код! <br>Введите заного /addvk Ваш_Буквенный_Id и не постарайтесь не ошибится при вводе кода'
     confirmation-success: 'Вы успешно привязали аккаунт к ВК'
@@ -330,6 +331,7 @@ vk:
     # Гугл-Код-Аутентификация
     google-disabled: 'Гугл-Аутентификация отключена!'
     google-code-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гугл-код [ник] [код]'
+    google-code-not-need-enter: 'Вводить код гугл незачем!'
     google-code-account-not-have-google: 'Ошибка! У аккаунта нету гугл-ключа'
     google-code-account-not-need-enter: 'Вход через гугл аутентификацию не требуется!'
     google-code-not-valid: 'Введенный код неправильный!'

@@ -223,6 +223,7 @@ telegram:
         ]
       }
   telegram-messages: #Для переноса строк используйте "\n" без кавычек.
+    account-not-found: 'Аккаунт с таким не найден!'
     # Привязка Telegram
     confirmation-error: 'Введен неправильный код! <br>Введите заного /addvk Ваш_Id и не постарайтесь не ошибится при вводе кода'
     confirmation-success: 'Вы успешно привязали аккаунт к Telegram'
@@ -275,6 +276,7 @@ telegram:
     # Гугл-Код-Аутентификация
     google-disabled: 'Гугл-Аутентификация отключена!'
     google-code-not-enough-arguments: 'Недостаточно аргументов! Правильный ввод: /гугл-код [ник] [код]'
+    google-code-not-need-enter: 'Вводить код гугл незачем!'
     google-code-account-not-have-google: 'Ошибка! У аккаунта нету гугл-ключа'
     google-code-account-not-need-enter: 'Вход через гугл аутентификацию не требуется!'
     google-code-not-valid: 'Введенный код неправильный!'
