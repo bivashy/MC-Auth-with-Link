@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
-import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -16,11 +16,9 @@ import net.md_5.bungee.event.EventHandler;
 
 public class AuthenticationListener implements Listener {
     private final ProxyPlugin plugin;
-    private final PluginConfig config;
 
     public AuthenticationListener(ProxyPlugin plugin) {
         this.plugin = plugin;
-        this.config = plugin.getConfig();
     }
 
     @EventHandler
@@ -41,28 +39,29 @@ public class AuthenticationListener implements Listener {
         if (!playerOptional.isPresent())
             return;
         ProxyPlayer player = playerOptional.get();
-        if (!Auth.hasAccount(config.getActiveIdentifierType().getId(player)))
+        if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
             return;
-        if (config.shouldBlockChat() && !event.isProxyCommand()) {
-            player.sendMessage(config.getProxyMessages().getStringMessage("disabled-chat"));
+        if (plugin.getConfig().shouldBlockChat() && !event.isProxyCommand()) {
+            player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-chat"));
             event.setCancelled(true);
             return;
         }
-        if (config.getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(event.getMessage()).find()))
+        if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(event.getMessage()).find()))
             return;
-        player.sendMessage(config.getProxyMessages().getStringMessage("disabled-command"));
+        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-command"));
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onBlockedServerConnect(ServerConnectEvent event) {
         ProxyPlayer player = new BungeeProxyPlayer(event.getPlayer());
-        String id = config.getActiveIdentifierType().getId(player);
+        String id = plugin.getConfig().getActiveIdentifierType().getId(player);
         if (!Auth.hasAccount(id))
             return;
         if (config.getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId())))
             return;
-        player.sendMessage(config.getProxyMessages().getStringMessage("disabled-server"));
+        }
+        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-server"));
         event.setCancelled(true);
     }
 }
