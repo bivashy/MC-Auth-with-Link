@@ -49,4 +49,8 @@ public class VelocityServer implements Server {
     public boolean isExists() {
         return registeredServer != null;
     }
+
+    public RegisteredServer getServer() {
+        return registeredServer;
+    }
 }

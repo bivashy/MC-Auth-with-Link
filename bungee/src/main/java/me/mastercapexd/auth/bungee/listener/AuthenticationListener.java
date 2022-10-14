@@ -58,7 +58,8 @@ public class AuthenticationListener implements Listener {
         String id = plugin.getConfig().getActiveIdentifierType().getId(player);
         if (!Auth.hasAccount(id))
             return;
-        if (config.getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId())))
+        if (plugin.getConfig().getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId()))) {
+            event.setTarget(plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(BungeeServer.class).getServerInfo());
             return;
         }
         player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-server"));

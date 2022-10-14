@@ -46,4 +46,8 @@ public class BungeeServer implements Server {
     public boolean isExists() {
         return bungeeServerInfo != null;
     }
+
+    public ServerInfo getServerInfo(){
+        return bungeeServerInfo;
+    }
 }

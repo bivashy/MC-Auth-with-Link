@@ -11,7 +11,6 @@ import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent.ServerResult;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.velocity.server.VelocityServer;
@@ -75,7 +74,13 @@ public class AuthenticationListener {
                 .stream()
                 .noneMatch(server -> event.getResult().getServer().get().getServerInfo().getName().equals(server.getId())))
             return;
-        player.sendMessage(config.getProxyMessages().getStringMessage("disabled-server"));
+        if (!event.getResult().getServer().isPresent()) {
+            event.setResult(ServerResult.allowed(
+                    plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(VelocityServer.class).getServer()));
+            return;
+        }
+
+        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-server"));
         event.setResult(ServerPreConnectEvent.ServerResult.denied());
     }
 }
