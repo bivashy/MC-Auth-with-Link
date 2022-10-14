@@ -15,7 +15,7 @@
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
         <telegram.api.version>6.1.0</telegram.api.version>
         <lamp.command-library.version>3.0.8</lamp.command-library.version>
-        <limbo.api.version>1.0.5</limbo.api.version>
+        <limbo.api.version>1.0.6</limbo.api.version>
     </properties>
 
     <repositories>
