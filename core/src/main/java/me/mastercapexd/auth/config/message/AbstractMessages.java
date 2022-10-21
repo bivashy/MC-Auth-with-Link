@@ -47,6 +47,8 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
 
     @Override
     public String getStringMessage(String key) {
+        if (nullMessage == null)
+            return getStringMessage(key, (String) null);
         return getStringMessage(key, String.format(nullMessage, key));
     }
 
