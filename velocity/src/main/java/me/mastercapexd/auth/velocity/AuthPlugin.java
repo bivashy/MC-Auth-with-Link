@@ -61,7 +61,7 @@ import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import net.kyori.adventure.platform.AudienceProvider;
 
-@Plugin(id = "mcauth", name = "McAuth", version = "1.6.1-5", authors = "Ubivashka",
+@Plugin(id = "mcauth", name = "McAuth", version = "1.6.1-6", authors = "Ubivashka",
         dependencies = {@Dependency(id = "vk-api", optional = true),
                 @Dependency(id = "telegram-bot-api", optional = true), @Dependency(id = "limboapi", optional = true)})
 public class AuthPlugin implements ProxyPlugin {
