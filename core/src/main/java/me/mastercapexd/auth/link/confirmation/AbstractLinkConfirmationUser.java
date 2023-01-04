@@ -5,10 +5,8 @@ import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.confirmation.info.LinkConfirmationInfo;
 import me.mastercapexd.auth.link.user.AbstractLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public abstract class AbstractLinkConfirmationUser extends AbstractLinkUser implements LinkConfirmationUser {
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
     private final long linkTimeoutMillis;
     private final LinkConfirmationInfo confirmationInfo;
 

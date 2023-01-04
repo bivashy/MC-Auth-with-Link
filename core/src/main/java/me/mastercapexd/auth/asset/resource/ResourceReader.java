@@ -5,9 +5,5 @@ public interface ResourceReader<T extends Resource> {
         return () -> new DefaultResource(resourceName, classLoader.getResourceAsStream(resourceName));
     }
 
-    static ResourceReader<Resource> defaultReader(String resourceName) {
-        return defaultReader(Thread.currentThread().getContextClassLoader(), resourceName);
-    }
-
     T read();
 }

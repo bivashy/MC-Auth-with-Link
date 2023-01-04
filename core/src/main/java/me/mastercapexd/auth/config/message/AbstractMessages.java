@@ -36,10 +36,6 @@ public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationH
         }
     }
 
-    public AbstractMessages(ConfigurationSectionHolder configurationSection) {
-        this(configurationSection, DEFAULT_DELIMITER);
-    }
-
     @Override
     public Messages<T> getSubMessages(String key) {
         return subMessages.getOrDefault(key, null);

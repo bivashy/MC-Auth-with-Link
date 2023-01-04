@@ -2,7 +2,6 @@ package me.mastercapexd.auth.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +35,7 @@ public abstract class SpongeConfiguratePluginConfig extends AbstractPluginConfig
 
 
             for (Resource resource : folderResource.getResources()) {
-                try (InputStream ignored = resource.getStream()) {
+                try {
                     String realConfigurationName = resource.getName().substring(folderResource.getName().length() + 1);
                     File resourceConfiguration = new File(folder, realConfigurationName);
                     ConfigurationNode defaultConfiguration;

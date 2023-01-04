@@ -11,10 +11,6 @@ public class FolderResourceReader implements ResourceReader<FolderResource> {
         this.resourceName = resourceName;
     }
 
-    public FolderResourceReader(String resourceName) {
-        this(Thread.currentThread().getContextClassLoader(), resourceName);
-    }
-
     @Override
     public FolderResource read() {
         return new FolderResource(resourceName, classLoader);
