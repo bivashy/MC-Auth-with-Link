@@ -24,7 +24,6 @@ import me.mastercapexd.auth.authentication.step.steps.link.GoogleCodeAuthenticat
 import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
-import me.mastercapexd.auth.bungee.hooks.BungeeFastLoginHook;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.bungee.listener.AuthenticationListener;
 import me.mastercapexd.auth.bungee.listener.VkDispatchListener;
@@ -36,8 +35,6 @@ import me.mastercapexd.auth.engine.DefaultAuthEngine;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
-import me.mastercapexd.auth.hooks.limbo.LimboHook;
-import me.mastercapexd.auth.hooks.limbo.ProxyLimboHook;
 import me.mastercapexd.auth.management.DefaultLoginManagement;
 import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.ProxyCore;
@@ -52,7 +49,6 @@ import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
@@ -88,8 +84,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
             initializeTelegram();
         if (config.getGoogleAuthenticatorSettings().isEnabled())
             googleAuthenticator = new GoogleAuthenticator();
-        if (ProxyServer.getInstance().getPluginManager().getPlugin("FastLogin") != null)
-            initializeFastLogin();
     }
 
     @Override
@@ -108,8 +102,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
         new DefaultAuthEngine().start();
-
-        HOOKS.put(LimboHook.class, new ProxyLimboHook());
 
         this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
@@ -145,12 +137,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
         getProxy().getPluginManager().registerListener(this, new VkDispatchListener());
         new VKCommandRegistry();
-    }
-
-    private void initializeFastLogin() {
-        com.github.games647.fastlogin.bungee.FastLoginBungee fastLoginBungee = (com.github.games647.fastlogin.bungee.FastLoginBungee) ProxyServer.getInstance()
-                .getPluginManager().getPlugin("FastLogin");
-        new BungeeFastLoginHook(this, fastLoginBungee);
     }
 
     private AccountStorage loadAccountStorage(StorageType storageType) {
