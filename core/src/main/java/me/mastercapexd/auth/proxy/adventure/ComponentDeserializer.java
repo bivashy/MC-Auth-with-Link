@@ -29,14 +29,14 @@ public enum ComponentDeserializer {
             return serializer.deserialize(text);
         }
     }, LEGACY_AMPERSAND {
-        private final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
+        private final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand().toBuilder().hexColors().build();
 
         @Override
         public Component deserialize(String text) {
             return serializer.deserialize(text);
         }
     }, LEGACY_SECTION {
-        private final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacySection();
+        private final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacySection().toBuilder().hexColors().build();
 
         @Override
         public Component deserialize(String text) {
