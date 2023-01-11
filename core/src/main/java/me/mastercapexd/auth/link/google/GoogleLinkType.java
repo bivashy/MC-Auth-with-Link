@@ -86,4 +86,8 @@ public class GoogleLinkType implements LinkType {
         return DEFAULT_IDENTIFICATOR;
     }
 
+    @Override
+    public String getName() {
+        return "GOOGLE";
+    }
 }
