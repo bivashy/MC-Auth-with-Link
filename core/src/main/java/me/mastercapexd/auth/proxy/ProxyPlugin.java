@@ -10,6 +10,8 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
+import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
+import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
@@ -27,13 +29,17 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
     }
 
     default void initializeConfigurationProcessor() {
-        getConfigurationProcessor().registerFieldResolver(ConfigurationServer.class,
-                        (context) -> new ConfigurationServer(context.getString())).registerFieldResolver(ConfigurationDuration.class,
-                        (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
+        getConfigurationProcessor().registerFieldResolver(ConfigurationServer.class, (context) -> new ConfigurationServer(context.getString()))
+                .registerFieldResolver(ConfigurationDuration.class, (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
-                .registerFieldResolver(
-                        ProxyComponent.class,
-                        new ProxyComponentFieldResolver());
+                .registerFieldResolver(ProxyComponent.class, new ProxyComponentFieldResolver())
+                .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
+                .registerFieldResolver(File.class, (context) -> {
+                    String path = context.getString("");
+                    if (path.isEmpty())
+                        return null;
+                    return new File(path.replace("%plugin_folder%", getFolder().getAbsolutePath()));
+                });
     }
 
     ProxyCore getCore();

@@ -27,6 +27,7 @@
         <adventure.serializer.version>4.10.1</adventure.serializer.version>
         <adventure.platform.version>4.1.2</adventure.platform.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
+        <ormlite.version>6.1</ormlite.version>
     </properties>
 
     <repositories>
@@ -199,6 +200,13 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
             <version>${adventure.serializer.version}</version>
+        </dependency>
+
+        <!-- ORMLite -->
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>${ormlite.version}</version>
         </dependency>
     </dependencies>
 </project>

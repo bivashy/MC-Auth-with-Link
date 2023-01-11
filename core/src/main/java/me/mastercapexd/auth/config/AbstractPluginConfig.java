@@ -17,8 +17,10 @@ import me.mastercapexd.auth.config.bossbar.BossBarSettings;
 import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.config.google.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
+import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.config.server.FillType;
+import me.mastercapexd.auth.config.storage.DatabaseConfiguration;
 import me.mastercapexd.auth.config.storage.LegacyStorageDataSettings;
 import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
@@ -61,9 +63,10 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     private List<ConfigurationServer> blockedServers = new ArrayList<>();
     @ConfigField("allowed-commands")
     private List<String> allowedCommands = new ArrayList<>();
-    @ImportantField
     @ConfigField("data")
     private LegacyStorageDataSettings legacyStorageDataSettings = null;
+    @ConfigField("database")
+    private DatabaseConfiguration databaseConfiguration;
     @ConfigField("max-login-per-ip")
     private Integer maxLoginPerIP = 0;
     @ConfigField("messages-delay")
@@ -97,6 +100,10 @@ public abstract class AbstractPluginConfig implements PluginConfig {
         this.configurationRoot = createConfiguration(proxyPlugin);
         proxyPlugin.getConfigurationProcessor().resolve(configurationRoot, this);
         this.allowedPatternCommands = allowedCommands.stream().map(Pattern::compile).collect(Collectors.toList());
+
+        if (databaseConfiguration == null && legacyStorageDataSettings != null)
+            databaseConfiguration = new DatabaseConfiguration(RawURLProvider.of(storageType.getConnectionUrl(legacyStorageDataSettings)),
+                    storageType.getDriverDownloadUrl(), legacyStorageDataSettings.getUser(), legacyStorageDataSettings.getPassword());
     }
 
     @Override
@@ -209,6 +216,11 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     @Override
     public LegacyStorageDataSettings getStorageDataSettings() {
         return legacyStorageDataSettings;
+    }
+
+    @Override
+    public DatabaseConfiguration getDatabaseConfiguration() {
+        return databaseConfiguration;
     }
 
     @Override
