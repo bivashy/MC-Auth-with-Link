@@ -19,7 +19,7 @@ import me.mastercapexd.auth.config.google.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.config.server.FillType;
-import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.storage.LegacyStorageDataSettings;
 import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -63,7 +63,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     private List<String> allowedCommands = new ArrayList<>();
     @ImportantField
     @ConfigField("data")
-    private StorageDataSettings storageDataSettings = null;
+    private LegacyStorageDataSettings legacyStorageDataSettings = null;
     @ConfigField("max-login-per-ip")
     private Integer maxLoginPerIP = 0;
     @ConfigField("messages-delay")
@@ -207,8 +207,8 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     }
 
     @Override
-    public StorageDataSettings getStorageDataSettings() {
-        return storageDataSettings;
+    public LegacyStorageDataSettings getStorageDataSettings() {
+        return legacyStorageDataSettings;
     }
 
     @Override

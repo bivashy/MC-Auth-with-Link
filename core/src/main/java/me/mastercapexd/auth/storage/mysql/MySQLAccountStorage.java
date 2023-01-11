@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.storage.LegacyStorageDataSettings;
 import me.mastercapexd.auth.storage.sql.SQLAccountStorage;
 
 public class MySQLAccountStorage extends SQLAccountStorage {
@@ -38,7 +38,7 @@ public class MySQLAccountStorage extends SQLAccountStorage {
         super(config, accountFactory, CREATE_TABLE, SELECT_BY_ID, SELECT_BY_NAME, SELECT_BY_VKID, SELECT_BY_LINK_ID, SELECT_BY_LAST_QUIT_ORDERED,
                 SELECT_VKIDs, SELECT_ALL, SELECT_ALL_LINKED, UPDATE_ID, DELETE);
 
-        StorageDataSettings dataSettings = config.getStorageDataSettings();
+        LegacyStorageDataSettings dataSettings = config.getStorageDataSettings();
         String host = dataSettings.getHost();
         int port = dataSettings.getPort();
         String databaseName = dataSettings.getDatabase();

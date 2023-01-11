@@ -7,7 +7,7 @@ import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public class StorageDataSettings implements ConfigurationHolder {
+public class LegacyStorageDataSettings implements ConfigurationHolder {
 
     @ImportantField
     @ConfigField("host")
@@ -25,7 +25,7 @@ public class StorageDataSettings implements ConfigurationHolder {
     @ConfigField("port")
     private int port = 0;
 
-    public StorageDataSettings(ConfigurationSectionHolder configurationSection) {
+    public LegacyStorageDataSettings(ConfigurationSectionHolder configurationSection) {
         ProxyPlugin.instance().getConfigurationProcessor().resolve(configurationSection, this);
     }
 

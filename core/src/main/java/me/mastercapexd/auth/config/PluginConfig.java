@@ -9,14 +9,14 @@ import me.mastercapexd.auth.config.bossbar.BossBarSettings;
 import me.mastercapexd.auth.config.google.GoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.config.server.ConfigurationServer;
-import me.mastercapexd.auth.config.storage.StorageDataSettings;
+import me.mastercapexd.auth.config.storage.LegacyStorageDataSettings;
 import me.mastercapexd.auth.config.telegram.TelegramSettings;
 import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.storage.StorageType;
 
 public interface PluginConfig {
 
-    StorageDataSettings getStorageDataSettings();
+    LegacyStorageDataSettings getStorageDataSettings();
 
     IdentifierType getActiveIdentifierType();
 

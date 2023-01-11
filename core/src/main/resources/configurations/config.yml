@@ -1,15 +1,64 @@
 # Как должен хранить данные плагин
-# Возможные варианты: MYSQL, SQLITE
+# Возможные варианты: MYSQL, SQLITE, POSTGRESQL, MARIADB
 storage-type: SQLITE
 
 # Данный блок отвечает за настройки для удаленного хранилища (База данных).
-# Вы должны настроить данные поля если используете следующие базы: MYSQL
+# Вы должны настроить данные поля если используете следующие базы: MYSQL, POSTGRESQL, MARIADB
 data:
   host: localhost
   database: database
   username: username
   password: password
   port: 3306
+
+#database: # Более расширенная настройка подключения базы данных, но вы по прежнему можете использовать старую версию конфигурации плагина
+#  # Ваш url для подключения базы данных.
+#  # MySQL:     jdbc:mysql://ВАШ_ХОСТ:ПОРТ/БАЗА_ДАННЫХ.      jdbc:mysql://localhost:3306/database
+#  # SQLite:    jdbc:sqlite:ПУТЬ_ДО_ФАЙЛА.                   jdbc:sqlite:%plugin_folder%/database.db.
+#  # PostgreSQL jdbc:postgresql://ВАШ_ХОСТ:ПОРТ/БАЗА_ДАННЫХ. jdbc:postgresql://localhost:3306/database
+#  # MariaDB    jdbc:mariadb://ВАШ_ХОСТ:ПОРТ/БАЗА_ДАННЫХ.    jdbc:mariadb://localhost:3306/database
+#  url: 'jdbc:sqlite:code_auth.db'
+#  #url:
+#  #  type: mysql/sqlite/postgresql/mariadb
+#  #  host: ВАШ_ХОСТ
+#  #  port: ПОРТ
+#  #  database: БАЗА_ДАННЫХ
+#  username: 'admin'
+#  password: 'admin'
+#
+#  # Ссылка для скачивания драйвера.
+#  # MySQL 8.0.31:      https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.31/mysql-connector-j-8.0.31.jar
+#  # SQLite 3.36.0.3:   https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar
+#  # PostgreSQL 42.4.0: https://repo1.maven.org/maven2/org/postgresql/postgresql/42.5.1/postgresql-42.5.1.jar
+#  # MariaDB 3.0.6:     https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.0.8/mariadb-java-client-3.0.8.jar
+#  download-url: 'https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar'
+#
+#  # Если интересно что такое драйвер (Просто для ознакомления, не более):
+#  #     #*
+#  #    %(#&%@    */(&,/                    Да кто этот ваш драйвер?
+#  #   %/#/@@    %##,        ,,,,,,,         /
+#  #   ,%%%@      (/(      ///////(((((
+#  #              #((#   .%###(((#####%%                                       &&%
+#  #              %%%##  %%%#########%%/                                  ,@%%%&%
+#  #               %%%%#(.%%%%######%%%                               %@&%%%%%&%
+#  #                %%%%#((#@&%%%%%##                               &&&&%%%%%&%
+#  #                 %%%##(((%&&                                   @***#%#%%&%
+#  #                 %##(((((##%%@                               ,&&***///%&%
+#  #                 ##((((((((#%%%%%                           &&&&%%%%%%&%
+#  #                ##((((/((((#%@@&&%(/.                      %&&&%%%%%%&#
+#  #               .((///////((#%      &&##(//(((%%%%%%%%%%######%&&&&/%%/
+#  #              (/////////((#%%  .........##############(##############&&&%%##((//
+#  #             ///*//////(........................................................
+#  #            //***...............................................................
+#
+#  # Простыми словами: Драйвер это как официант который передает еду с кухни на стол клиента. То есть берет и говорить базе данных "Добавь такое-то значение" или "Найди значение которое (тут какая то проверка значения)"
+#  # Скучное описание: https://www.iobroker.net/docu/index-130.htm?page_id=4044&lang=ru (Или загуглите (Зачем?))
+#
+#  # Название драйвера которое будет "кешировано" из ссылки.
+#  # !!! Если вы изменили ссылку, советую удалить драйвер   или изменить это значение. !!!
+#  # .jar в конце лучше оставить.
+#  # Драйвер будет кеширован в папке плагина!
+#  #cache-driver-path: 'database-driver.jar'
 
 # Разрешенные команды в этапе авторизации/регистрации в виде REGEX (сайт для проверки: regex101.com)
 allowed-commands:
