@@ -1,10 +1,5 @@
 package me.mastercapexd.auth;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import org.mindrot.jbcrypt.BCrypt;
 
 import me.mastercapexd.auth.utils.HashUtils;
@@ -13,26 +8,12 @@ public enum HashType {
     MD5 {
         @Override
         public String hash(String string) {
-            return HashUtils.hashMd5(string);
-        }
-
-        @Override
-        public boolean checkHash(String string, String hash) {
-            if (string == null || hash == null)
-                return false;
-            return hash(string).equals(hash);
+            return HashUtils.hashText(string, HashUtils.getMD5());
         }
     }, SHA256 {
         @Override
         public String hash(String string) {
-            return HashUtils.hashSha256(string);
-        }
-
-        @Override
-        public boolean checkHash(String string, String hash) {
-            if (string == null || hash == null)
-                return false;
-            return hash(string).equals(hash);
+            return HashUtils.hashText(string, HashUtils.getSHA256());
         }
     }, BCRYPT {
         @Override
@@ -48,5 +29,9 @@ public enum HashType {
 
     public abstract String hash(String string);
 
-    public abstract boolean checkHash(String string, String hash);
+    public boolean checkHash(String string, String hash) {
+        if (string == null || hash == null)
+            return false;
+        return hash(string).equals(hash);
+    }
 }

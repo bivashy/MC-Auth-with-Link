@@ -10,6 +10,7 @@ public class HashUtils {
     }
 
     private static final String FORMAT = "%032x";
+    private static final String MD_5_EXTENSION = ".md5";
     private static MessageDigest MD5;
     private static MessageDigest SHA256;
 
@@ -22,12 +23,15 @@ public class HashUtils {
         }
     }
 
-    public static String hashMd5(String input) {
-        return String.format(FORMAT, new BigInteger(1, MD5.digest(input.getBytes(StandardCharsets.UTF_8))));
+    public static String hashText(String input, MessageDigest messageDigest) {
+        return String.format(FORMAT, new BigInteger(1, messageDigest.digest(input.getBytes(StandardCharsets.UTF_8))));
     }
 
+    public static MessageDigest getMD5() {
+        return MD5;
+    }
 
-    public static String hashSha256(String input) {
-        return String.format(FORMAT, new BigInteger(1, SHA256.digest(input.getBytes(StandardCharsets.UTF_8))));
+    public static MessageDigest getSHA256() {
+        return SHA256;
     }
 }
