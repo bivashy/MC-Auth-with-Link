@@ -8,7 +8,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.ubivashka.messenger.telegram.message.keyboard.TelegramKeyboard;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
 
-import me.mastercapexd.auth.adapter.ArrayPairHashMapAdapter;
+import me.mastercapexd.auth.utils.CollectionUtils.ArrayPairHashMapAdapter;
 
 public interface MessengerKeyboards {
     Gson GSON = new Gson();

@@ -14,7 +14,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.utils.CollectionUtils;
+import me.mastercapexd.auth.utils.CollectionUtils.ArrayPairHashMapAdapter.PaginatedList;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
@@ -32,11 +32,11 @@ public class AccountsListCommand implements OrphanCommand {
      * @param page            Page that need to show
      * @param accountsPerPage One page limit
      * @param type            <pre>
-     *                                    Accounts type, available types:
-     *                                    all - Show all accounts. Only admins can use this accounts type.
-     *                                    linked - Show all linked accounts . Only admins can use this accounts type.
-     *                                    my - Show all accounts that linked to the actorWrapper
-     *                                               </pre>
+     *                                                           Accounts type, available types:
+     *                                                           all - Show all accounts. Only admins can use this accounts type.
+     *                                                           linked - Show all linked accounts . Only admins can use this accounts type.
+     *                                                           my - Show all accounts that linked to the actorWrapper
+     *                                                                      </pre>
      */
     @Default
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page, @Flag("pageSize") @Default(
@@ -65,8 +65,9 @@ public class AccountsListCommand implements OrphanCommand {
                 actorWrapper.reply(linkType.getLinkMessages().getMessage("no-accounts"));
                 return;
             }
-            List<Account> paginatedAccounts = CollectionUtils.getListPage(new ArrayList<>(accounts), page, accountsPerPage);
-            if(paginatedAccounts.isEmpty()){
+
+            List<Account> paginatedAccounts = new PaginatedList<>(accountsPerPage, accounts).getPage(page);
+            if (paginatedAccounts.isEmpty()) {
                 actorWrapper.reply(linkType.getLinkMessages().getMessage("no-page-accounts"));
                 return;
             }
