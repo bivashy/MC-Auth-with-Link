@@ -17,7 +17,6 @@
         <configuration-library.version>3.0.3</configuration-library.version>
         <telegram.api.version>6.1.0</telegram.api.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
-        <fastlogin.version>1.10</fastlogin.version>
         <build.version>6</build.version>
     </properties>
 
@@ -86,20 +85,6 @@
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
             <version>${telegram.api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- FastLogin -->
-        <dependency>
-            <groupId>com.github.games647</groupId>
-            <artifactId>FastLogin</artifactId>
-            <version>${fastlogin.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>BungeeAuth</artifactId>
-                    <groupId>me.vik1395</groupId>
-                </exclusion>
-            </exclusions>
             <scope>provided</scope>
         </dependency>
     </dependencies>
