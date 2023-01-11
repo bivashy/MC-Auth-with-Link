@@ -58,9 +58,4 @@ public class MySQLAccountStorage extends SQLAccountStorage {
     protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
-
-    @Override
-    public String getConfigurationName() {
-        return "MYSQL";
-    }
 }
