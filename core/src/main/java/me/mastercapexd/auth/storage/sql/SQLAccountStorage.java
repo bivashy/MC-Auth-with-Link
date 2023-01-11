@@ -224,23 +224,6 @@ public abstract class SQLAccountStorage implements AccountStorage {
     }
 
     @Override
-    public CompletableFuture<Collection<Account>> getAccounts(int limit) {
-        return CompletableFuture.supplyAsync(() -> {
-            Collection<Account> accounts = Sets.newHashSet();
-            try (Connection connection = this.getConnection()) {
-                PreparedStatement statement = connection.prepareStatement(SELECT_BY_LAST_QUIT_ORDERED);
-                statement.setInt(1, limit);
-                ResultSet resultSet = statement.executeQuery();
-                while(resultSet.next())
-                    accounts.add(createFromResult(resultSet));
-            } catch(SQLException e) {
-                e.printStackTrace();
-            }
-            return accounts;
-        });
-    }
-
-    @Override
     public CompletableFuture<Collection<Account>> getAllAccounts() {
         return CompletableFuture.supplyAsync(() -> {
             Collection<Account> accounts = Sets.newHashSet();
@@ -273,26 +256,6 @@ public abstract class SQLAccountStorage implements AccountStorage {
                 e.printStackTrace();
             }
             return accounts;
-        });
-    }
-
-    @Override
-    public CompletableFuture<Collection<Integer>> getVKIDs() {
-        return CompletableFuture.supplyAsync(() -> {
-            Collection<Integer> vkIDs = Sets.newHashSet();
-            try (Connection connection = this.getConnection()) {
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SELECT_VKIDs);
-                while(resultSet.next()) {
-                    Integer vkId = resultSet.getInt(VK_ID_COLUMN_KEY);
-                    if (vkId == null || vkId == AccountFactory.DEFAULT_VK_ID)
-                        continue;
-                    vkIDs.add(vkId);
-                }
-            } catch(SQLException e) {
-                e.printStackTrace();
-            }
-            return vkIDs;
         });
     }
 
