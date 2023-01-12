@@ -81,7 +81,7 @@ public class VKLinkCommand {
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
                     UserNumberIdentificator userIdentificator = new UserNumberIdentificator(userId);
 
-                    Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getId().equals(accountId) &&
+                    Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                             linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
                     Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator,
                             code)));

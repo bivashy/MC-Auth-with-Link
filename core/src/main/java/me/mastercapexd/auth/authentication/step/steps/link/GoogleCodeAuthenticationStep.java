@@ -42,7 +42,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled())
             return true;
 
-        if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance()))
+        if (Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance()))
             return true;
 
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))

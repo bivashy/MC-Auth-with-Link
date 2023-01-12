@@ -32,10 +32,10 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 
     public void enterServer() {
         Account account = authenticationStepContext.getAccount();
-        String accountId = account.getId();
+        String accountId = account.getPlayerId();
         Auth.removeAccount(accountId);
         Optional<ProxyPlayer> playerOptional = account.getPlayer();
-        account.setLastSessionStart(System.currentTimeMillis());
+        account.setLastSessionStartTimestamp(System.currentTimeMillis());
         playerOptional.map(ProxyPlayer::getPlayerIp).ifPresent(account::setLastIpAddress);
         PLUGIN.getAccountStorage().saveOrUpdateAccount(account);
         if (!playerOptional.isPresent())

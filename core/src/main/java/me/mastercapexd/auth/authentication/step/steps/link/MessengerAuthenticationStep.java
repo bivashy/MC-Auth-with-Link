@@ -41,7 +41,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
         if (!linkType.getSettings().isEnabled()) // Ignore if messenger was disabled in configuration
             return true;
 
-        if (Auth.getLinkEntryAuth().hasLinkUser(account.getId(), linkType)) // Ignore if user already confirming
+        if (Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), linkType)) // Ignore if user already confirming
             return true;
 
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability())) // Ignore if player has active session

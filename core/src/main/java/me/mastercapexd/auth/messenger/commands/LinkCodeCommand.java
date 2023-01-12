@@ -19,7 +19,7 @@ public class LinkCodeCommand implements OrphanCommand {
     @Default
     @ConfigurationArgumentError("confirmation-not-enough-arguments")
     public void onLink(LinkCommandActorWrapper actorWrapper, LinkType linkType, MessengerLinkContext linkContext) {
-        accountStorage.getAccount(linkContext.getConfirmationUser().getAccount().getId()).thenAccept(account -> {
+        accountStorage.getAccount(linkContext.getConfirmationUser().getAccount().getPlayerId()).thenAccept(account -> {
 
             account.findFirstLinkUser(linkUser -> linkUser.getLinkType().equals(linkType)).get().getLinkUserInfo().setIdentificator(actorWrapper.userId());
 

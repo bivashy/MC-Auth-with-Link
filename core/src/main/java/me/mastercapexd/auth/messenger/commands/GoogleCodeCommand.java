@@ -41,14 +41,14 @@ public class GoogleCodeCommand implements OrphanCommand {
             return;
         }
 
-        if (!Auth.getLinkEntryAuth().hasLinkUser(account.getId(), GoogleLinkType.getInstance())) {
+        if (!Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance())) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-need-enter", linkType.newMessageContext(account)));
             return;
         }
 
         if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-valid", linkType.newMessageContext(account)));
-            Auth.removeAccount(account.getId());
+            Auth.removeAccount(account.getPlayerId());
             account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
             return;
         }

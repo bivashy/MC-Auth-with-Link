@@ -27,7 +27,7 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep implemen
 
     @Override
     public boolean shouldSkip() {
-        return !Auth.hasAccount(authenticationStepContext.getAccount().getId()) || authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
+        return !Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) || authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
     }
 
     @Override

@@ -56,7 +56,7 @@ public class TelegramLinkCommand {
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
                 UserNumberIdentificator userIdentificator = new UserNumberIdentificator(telegramIdentificator);
 
-                Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getId().equals(accountId) &&
+                Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                         linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
                 Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account,
                         new DefaultConfirmationInfo(userIdentificator, code)));

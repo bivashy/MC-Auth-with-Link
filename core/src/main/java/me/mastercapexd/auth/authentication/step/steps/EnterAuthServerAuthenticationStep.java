@@ -28,7 +28,7 @@ public class EnterAuthServerAuthenticationStep extends AbstractAuthenticationSte
 
     @Override
     public boolean shouldSkip() {
-        if (!Auth.hasAccount(authenticationStepContext.getAccount().getId()) ||
+        if (!Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
         authenticationStepContext.getAccount()

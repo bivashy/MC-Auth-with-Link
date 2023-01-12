@@ -20,9 +20,9 @@ public abstract class AccountFactoryTemplate implements AccountFactory {
 
         account.setHashType(hashType);
         account.setPasswordHash(password);
-        account.setLastQuitTime(lastQuit);
+        account.setLastQuitTimestamp(lastQuit);
         account.setLastIpAddress(lastIp);
-        account.setLastSessionStart(lastSessionStart);
+        account.setLastSessionStartTimestamp(lastSessionStart);
 
         account.addLinkUser(new VKLinkUser(account, vkId, vkConfirmationEnabled));
         account.addLinkUser(new TelegramLinkUser(account, telegramId, telegramConfirmationEnabled));

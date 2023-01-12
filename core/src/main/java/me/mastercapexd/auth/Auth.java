@@ -27,8 +27,8 @@ public class Auth {
     }
 
     public static synchronized void addAccount(Account account) {
-        ACCOUNTS.put(account.getId(), account);
-        ACCOUNT_JOIN_TIMES.put(account.getId(), System.currentTimeMillis());
+        ACCOUNTS.put(account.getPlayerId(), account);
+        ACCOUNT_JOIN_TIMES.put(account.getPlayerId(), System.currentTimeMillis());
     }
 
     public static synchronized void removeAccount(String id) {

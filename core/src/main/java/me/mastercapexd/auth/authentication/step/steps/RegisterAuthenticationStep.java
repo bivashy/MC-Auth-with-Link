@@ -29,9 +29,9 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
             Account account = authenticationStepContext.getAccount();
             ProxyPlayer player = account.getPlayer().get();
 
-            Auth.removeAccount(account.getId());
+            Auth.removeAccount(account.getPlayerId());
             account.setLastIpAddress(player.getPlayerIp());
-            account.setLastSessionStart(System.currentTimeMillis());
+            account.setLastSessionStartTimestamp(System.currentTimeMillis());
         }
         return isCurrentAccountRegistered;
     }

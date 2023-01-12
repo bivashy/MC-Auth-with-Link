@@ -38,12 +38,12 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
     }
 
     @Override
-    public int getCurrentConfigurationAuthenticationStepCreatorIndex() {
+    public int getCurrentAuthenticationStepCreatorIndex() {
         return currentConfigurationAuthenticationStepCreatorIndex;
     }
 
     @Override
-    public void setCurrentConfigurationAuthenticationStepCreatorIndex(int index) {
+    public void setCurrentAuthenticationStepCreatorIndex(int index) {
         String stepName = PLUGIN.getConfig().getAuthenticationStepName(index);
 
         AuthenticationStepCreator authenticationStepCreator =

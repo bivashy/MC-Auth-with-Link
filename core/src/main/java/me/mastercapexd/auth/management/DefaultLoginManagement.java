@@ -91,13 +91,13 @@ public class DefaultLoginManagement implements LoginManagement {
     @Override
     public void onDisconnect(ProxyPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
-        Auth.getLinkEntryAuth().removeLinkUsers(entryUser -> entryUser.getAccount().getId().equals(id));
+        Auth.getLinkEntryAuth().removeLinkUsers(entryUser -> entryUser.getAccount().getPlayerId().equals(id));
         if (Auth.hasAccount(id)) {
             Auth.removeAccount(id);
             return;
         }
         accountStorage.getAccount(id).thenAccept(account -> {
-            account.setLastQuitTime(System.currentTimeMillis());
+            account.setLastQuitTimestamp(System.currentTimeMillis());
             accountStorage.saveOrUpdateAccount(account);
         });
     }

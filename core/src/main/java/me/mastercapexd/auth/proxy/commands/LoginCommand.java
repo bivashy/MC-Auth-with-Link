@@ -25,7 +25,7 @@ public class LoginCommand {
     @Default
     @AuthenticationStepCommand(stepName = LoginAuthenticationStep.STEP_NAME)
     public void login(ProxyPlayer player, Account account, String password) {
-        String id = account.getId();
+        String id = account.getPlayerId();
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 
         if (!account.getHashType().checkHash(password, account.getPasswordHash())) {

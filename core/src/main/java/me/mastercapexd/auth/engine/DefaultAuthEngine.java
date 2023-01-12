@@ -54,7 +54,7 @@ public class DefaultAuthEngine implements AuthEngine {
                 int onlineTime = (int) (now - Auth.getJoinTime(id));
 
                 long authTime = PLUGIN_CONFIG.getAuthTime();
-                for (LinkEntryUser entryUser : Auth.getLinkEntryAuth().getLinkUsers(user -> user.getAccount().getId().equals(account.getId())))
+                for (LinkEntryUser entryUser : Auth.getLinkEntryAuth().getLinkUsers(user -> user.getAccount().getPlayerId().equals(account.getPlayerId())))
                     if (entryUser != null)
                         try {
                             authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();

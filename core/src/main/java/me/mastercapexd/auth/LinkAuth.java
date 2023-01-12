@@ -18,7 +18,7 @@ public class LinkAuth<T extends LinkUser> {
     }
 
     public synchronized boolean hasLinkUser(String id, LinkType linkType) {
-        return hasLinkUser(linkUser -> linkUser.getAccount().getId().equals(id) && linkUser.getLinkType().equals(linkType));
+        return hasLinkUser(linkUser -> linkUser.getAccount().getPlayerId().equals(id) && linkUser.getLinkType().equals(linkType));
     }
 
     public synchronized void addLinkUser(T linkUser) {
@@ -30,7 +30,7 @@ public class LinkAuth<T extends LinkUser> {
     }
 
     public synchronized void removeLinkUser(String id, LinkType linkType) {
-        removeLinkUsers(linkUser -> linkUser.getAccount().getId().equals(id) && linkUser.getLinkType().equals(linkType));
+        removeLinkUsers(linkUser -> linkUser.getAccount().getPlayerId().equals(id) && linkUser.getLinkType().equals(linkType));
     }
 
     public synchronized void removeLinkUser(T linkUser) {
@@ -46,7 +46,7 @@ public class LinkAuth<T extends LinkUser> {
     }
 
     public synchronized T getLinkUser(String id, LinkType linkType) {
-        return findFirstLinkUser(linkUser -> linkUser.getAccount().getId().equals(id) && linkUser.getLinkType().equals(linkType)).orElse(null);
+        return findFirstLinkUser(linkUser -> linkUser.getAccount().getPlayerId().equals(id) && linkUser.getLinkType().equals(linkType)).orElse(null);
     }
 
 }

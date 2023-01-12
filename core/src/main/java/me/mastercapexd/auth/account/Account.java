@@ -104,12 +104,12 @@ public interface Account {
     default void logout(long sessionDurability) {
         if (!isSessionActive(sessionDurability))
             return;
-        setLastSessionStart(0);
+        setLastSessionStartTimestamp(0);
     }
 
     default boolean isSessionActive(long sessionDurability) {
         Optional<ProxyPlayer> proxiedPlayer = getPlayer();
-        long sessionEndTime = getLastSessionStart() + sessionDurability;
+        long sessionEndTime = getLastSessionStartTimestamp() + sessionDurability;
         return proxiedPlayer.map(proxyPlayer -> proxyPlayer.getPlayerIp().equals(getLastIpAddress()) && (sessionEndTime >= System.currentTimeMillis()))
                 .orElseGet(() -> (sessionEndTime >= System.currentTimeMillis()));
     }
@@ -123,7 +123,7 @@ public interface Account {
     }
 
     default Optional<ProxyPlayer> getPlayer() {
-        return getIdentifierType().getPlayer(getId());
+        return getIdentifierType().getPlayer(getPlayerId());
     }
 
     default boolean isRegistered() {

@@ -28,7 +28,6 @@ public class DefaultAccount extends AccountTemplate {
         this.name = name;
     }
 
-
     @Override
     public HashType getHashType() {
         return hashType;
@@ -60,27 +59,27 @@ public class DefaultAccount extends AccountTemplate {
     }
 
     @Override
-    public long getLastQuitTime() {
+    public long getLastQuitTimestamp() {
         return lastQuitTime;
     }
 
     @Override
-    public void setLastQuitTime(long lastQuitTime) {
+    public void setLastQuitTimestamp(long lastQuitTime) {
         this.lastQuitTime = lastQuitTime;
     }
 
     @Override
-    public long getLastSessionStart() {
+    public long getLastSessionStartTimestamp() {
         return lastSessionStart;
     }
 
     @Override
-    public void setLastSessionStart(long lastSessionStart) {
+    public void setLastSessionStartTimestamp(long lastSessionStart) {
         this.lastSessionStart = lastSessionStart;
     }
 
     @Override
-    public String getId() {
+    public String getPlayerId() {
         return id;
     }
 

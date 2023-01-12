@@ -112,7 +112,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
             LinkUserInfo googleLinkInfo = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(new GoogleLinkUser(account,
                     AccountFactory.DEFAULT_GOOGLE_KEY)).getLinkUserInfo();
 
-            statement.setString(1, account.getIdentifierType().fromRawString(account.getId()));
+            statement.setString(1, account.getIdentifierType().fromRawString(account.getPlayerId()));
             statement.setString(2, account.getUniqueId().toString());
             statement.setString(3, account.getName());
             statement.setString(4, account.getPasswordHash());
@@ -121,9 +121,9 @@ public abstract class SQLAccountStorage implements AccountStorage {
             statement.setBoolean(7, vkLinkInfo.getConfirmationState().shouldSendConfirmation());
             statement.setLong(8, telegramLinkInfo.getIdentificator().asNumber());
             statement.setBoolean(9, telegramLinkInfo.getConfirmationState().shouldSendConfirmation());
-            statement.setLong(10, account.getLastQuitTime());
+            statement.setLong(10, account.getLastQuitTimestamp());
             statement.setString(11, account.getLastIpAddress());
-            statement.setLong(12, account.getLastSessionStart());
+            statement.setLong(12, account.getLastSessionStartTimestamp());
             statement.setString(13, account.getIdentifierType().name());
             statement.setString(14, account.getHashType().name());
             statement.execute();
