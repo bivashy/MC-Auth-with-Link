@@ -11,7 +11,7 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.link.user.LinkUser;
 
-public class DefaultAccount extends AbstractAccount {
+public class DefaultAccount extends AccountTemplate {
     private final List<LinkUser> linkUsers = new ArrayList<>();
     private final String id;
     private final IdentifierType identifierType;
@@ -100,7 +100,7 @@ public class DefaultAccount extends AbstractAccount {
     }
 
     @Override
-    public int compareTo(AbstractAccount o) {
+    public int compareTo(AccountTemplate o) {
         return name.compareTo(o.getName());
     }
 
