@@ -1,26 +1,18 @@
 package me.mastercapexd.auth.link.user.info;
 
-import me.mastercapexd.auth.link.user.info.confirmation.DefaultLinkUserConfirmationState;
-import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public abstract class LinkUserInfoTemplate implements LinkUserInfo {
-    protected LinkUserConfirmationState confirmationState;
     protected LinkUserIdentificator userIdentificator;
+    protected boolean confirmationEnabled;
 
-    public LinkUserInfoTemplate(LinkUserIdentificator userIdentificator, LinkUserConfirmationState confirmationState) {
-        this.confirmationState = confirmationState;
+    public LinkUserInfoTemplate(LinkUserIdentificator userIdentificator, boolean confirmationEnabled) {
         this.userIdentificator = userIdentificator;
+        this.confirmationEnabled = confirmationEnabled;
     }
 
     public LinkUserInfoTemplate(LinkUserIdentificator userIdentificator) {
-        this.confirmationState = new DefaultLinkUserConfirmationState();
-        this.userIdentificator = userIdentificator;
-    }
-
-    @Override
-    public LinkUserConfirmationState getConfirmationState() {
-        return confirmationState;
+        this(userIdentificator, true);
     }
 
     @Override
@@ -35,9 +27,13 @@ public abstract class LinkUserInfoTemplate implements LinkUserInfo {
     }
 
     @Override
-    public LinkUserInfo setConfirmationState(LinkUserConfirmationState confirmationState) {
-        this.confirmationState = confirmationState;
-        return this;
+    public boolean isConfirmationEnabled() {
+        return confirmationEnabled;
     }
 
+    @Override
+    public LinkUserInfo setConfirmationEnabled(boolean confirmationEnabled) {
+        this.confirmationEnabled = confirmationEnabled;
+        return this;
+    }
 }

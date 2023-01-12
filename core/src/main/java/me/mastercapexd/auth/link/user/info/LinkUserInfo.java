@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.link.user.info;
 
 import me.mastercapexd.auth.function.Castable;
-import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
 public interface LinkUserInfo extends Castable<LinkUserInfo> {
@@ -24,20 +23,7 @@ public interface LinkUserInfo extends Castable<LinkUserInfo> {
      */
     LinkUserInfo setIdentificator(LinkUserIdentificator userIdentificator);
 
-    /**
-     * Returns modifiable confirmation states as {@link LinkUserConfirmationState}.
-     *
-     * @return Confirmation state of user
-     */
-    LinkUserConfirmationState getConfirmationState();
+    boolean isConfirmationEnabled();
 
-    /**
-     * Set user confirmation state, may throw {@link UnsupportedOperationException}
-     * if {@link LinkUserInfo} cannot process provided
-     * {@link LinkUserConfirmationState} confirmationState.
-     *
-     * @param confirmationState that should be applied
-     * @return this {@link LinkUserInfo}
-     */
-    LinkUserInfo setConfirmationState(LinkUserConfirmationState confirmationState);
+    LinkUserInfo setConfirmationEnabled(boolean confirmationEnabled);
 }

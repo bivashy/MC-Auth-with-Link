@@ -56,7 +56,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
 
         LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-        if (linkUserInfo != null && !linkUserInfo.getConfirmationState().shouldSendConfirmation())
+        if (linkUserInfo != null && !linkUserInfo.isConfirmationEnabled())
             return true;
 
         if (linkUserInfo == null || linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator())) {

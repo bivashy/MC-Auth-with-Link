@@ -56,7 +56,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
         if (linkUserInfo == null || linkUserInfo.getIdentificator().asString() == AccountFactory.DEFAULT_GOOGLE_KEY ||
-                !linkUserInfo.getConfirmationState().shouldSendConfirmation())
+                !linkUserInfo.isConfirmationEnabled())
             return true;
 
         Auth.getLinkEntryAuth().addLinkUser(entryUser);

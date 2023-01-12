@@ -3,7 +3,7 @@ package me.mastercapexd.auth.messenger.commands;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
+import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Default;
@@ -22,9 +22,9 @@ public class ConfirmationToggleCommand implements OrphanCommand {
             return;
         }
         actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggled", linkType.newMessageContext(account)));
-        LinkUserConfirmationState confirmationState =
-                account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo().getConfirmationState();
-        confirmationState.setSendConfirmation(!confirmationState.shouldSendConfirmation());
+        LinkUserInfo linkUserInfo =
+                account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
+        linkUserInfo.setConfirmationEnabled(!linkUserInfo.isConfirmationEnabled());
         accountStorage.saveOrUpdateAccount(account);
     }
 }
