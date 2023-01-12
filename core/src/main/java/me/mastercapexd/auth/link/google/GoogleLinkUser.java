@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.link.google;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.AbstractLinkUser;
+import me.mastercapexd.auth.link.user.LinkUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
-public class GoogleLinkUser extends AbstractLinkUser {
+public class GoogleLinkUser extends LinkUserTemplate {
     private GoogleLinkUserInfo linkInfoAccount;
 
     public GoogleLinkUser(Account account, String googleKey) {

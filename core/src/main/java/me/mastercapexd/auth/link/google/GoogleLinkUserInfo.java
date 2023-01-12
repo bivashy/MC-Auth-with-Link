@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.link.google;
 
-import me.mastercapexd.auth.link.user.info.AbstractLinkUserInfo;
+import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
 
-public class GoogleLinkUserInfo extends AbstractLinkUserInfo {
+public class GoogleLinkUserInfo extends LinkUserInfoTemplate {
     public GoogleLinkUserInfo(String userId) {
         super(new UserStringIdentificator(userId));
     }

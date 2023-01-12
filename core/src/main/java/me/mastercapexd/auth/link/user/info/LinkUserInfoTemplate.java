@@ -4,16 +4,16 @@ import me.mastercapexd.auth.link.user.info.confirmation.DefaultLinkUserConfirmat
 import me.mastercapexd.auth.link.user.info.confirmation.LinkUserConfirmationState;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
-public abstract class AbstractLinkUserInfo implements LinkUserInfo {
+public abstract class LinkUserInfoTemplate implements LinkUserInfo {
     protected LinkUserConfirmationState confirmationState;
     protected LinkUserIdentificator userIdentificator;
 
-    public AbstractLinkUserInfo(LinkUserIdentificator userIdentificator, LinkUserConfirmationState confirmationState) {
+    public LinkUserInfoTemplate(LinkUserIdentificator userIdentificator, LinkUserConfirmationState confirmationState) {
         this.confirmationState = confirmationState;
         this.userIdentificator = userIdentificator;
     }
 
-    public AbstractLinkUserInfo(LinkUserIdentificator userIdentificator) {
+    public LinkUserInfoTemplate(LinkUserIdentificator userIdentificator) {
         this.confirmationState = new DefaultLinkUserConfirmationState();
         this.userIdentificator = userIdentificator;
     }

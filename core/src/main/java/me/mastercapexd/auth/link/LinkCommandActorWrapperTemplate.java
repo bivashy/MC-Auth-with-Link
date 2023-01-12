@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.CommandActor;
 
-public abstract class AbstractLinkCommandActorWrapper<T extends CommandActor> implements LinkCommandActorWrapper {
+public abstract class LinkCommandActorWrapperTemplate<T extends CommandActor> implements LinkCommandActorWrapper {
 
     protected final T actor;
 
-    public AbstractLinkCommandActorWrapper(T actor) {
+    public LinkCommandActorWrapperTemplate(T actor) {
         this.actor = actor;
     }
 

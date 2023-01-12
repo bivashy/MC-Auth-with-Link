@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.link.telegram;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.AbstractLinkUser;
+import me.mastercapexd.auth.link.user.LinkUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
-public class TelegramLinkUser extends AbstractLinkUser {
+public class TelegramLinkUser extends LinkUserTemplate {
     private TelegramLinkUserInfo linkInfoAccount;
 
     public TelegramLinkUser(Account account, Long telegramId, boolean confirmationEnabled) {

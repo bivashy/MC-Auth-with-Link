@@ -6,11 +6,11 @@ import com.ubivashka.messenger.telegram.message.TelegramMessage;
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.message.Message;
 
-import me.mastercapexd.auth.link.AbstractLinkCommandActorWrapper;
+import me.mastercapexd.auth.link.LinkCommandActorWrapperTemplate;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 
-public class TelegramCommandActorWrapper extends AbstractLinkCommandActorWrapper<TelegramActor> implements TelegramActor {
+public class TelegramCommandActorWrapper extends LinkCommandActorWrapperTemplate<TelegramActor> implements TelegramActor {
 
     public TelegramCommandActorWrapper(TelegramActor actor) {
         super(actor);

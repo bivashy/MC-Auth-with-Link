@@ -2,15 +2,15 @@ package me.mastercapexd.auth.link.entryuser;
 
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.AbstractLinkUser;
+import me.mastercapexd.auth.link.user.LinkUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
-public abstract class AbstractLinkEntryUser extends AbstractLinkUser implements LinkEntryUser {
+public class LinkEntryUserTemplate extends LinkUserTemplate implements LinkEntryUser {
     protected final long confirmationStartTime = System.currentTimeMillis();
     protected final LinkUserInfo linkUserInfo;
     protected boolean confirmed = false;
 
-    public AbstractLinkEntryUser(LinkType linkType, Account account, LinkUserInfo linkUserInfo) {
+    public LinkEntryUserTemplate(LinkType linkType, Account account, LinkUserInfo linkUserInfo) {
         super(linkType, account);
         this.linkUserInfo = linkUserInfo;
     }

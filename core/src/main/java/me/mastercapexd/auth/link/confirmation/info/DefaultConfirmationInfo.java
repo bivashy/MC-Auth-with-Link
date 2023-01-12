@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.link.confirmation.info;
 
-import me.mastercapexd.auth.link.user.info.AbstractLinkUserInfo;
+import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
-public class DefaultConfirmationInfo extends AbstractLinkUserInfo implements LinkConfirmationInfo {
+public class DefaultConfirmationInfo extends LinkUserInfoTemplate implements LinkConfirmationInfo {
 
     private final String confirmationCode;
 

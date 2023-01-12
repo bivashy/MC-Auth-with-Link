@@ -8,11 +8,11 @@ import com.vk.api.sdk.objects.messages.Conversation;
 import com.vk.api.sdk.objects.messages.ConversationPeerType;
 import com.vk.api.sdk.objects.users.UserFull;
 
-import me.mastercapexd.auth.link.AbstractLinkCommandActorWrapper;
+import me.mastercapexd.auth.link.LinkCommandActorWrapperTemplate;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 
-public class VKCommandActorWrapper extends AbstractLinkCommandActorWrapper<VkActor> implements VkActor {
+public class VKCommandActorWrapper extends LinkCommandActorWrapperTemplate<VkActor> implements VkActor {
     public VKCommandActorWrapper(VkActor actor) {
         super(actor);
     }

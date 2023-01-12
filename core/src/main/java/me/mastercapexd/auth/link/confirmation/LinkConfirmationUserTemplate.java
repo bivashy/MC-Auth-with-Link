@@ -3,10 +3,10 @@ package me.mastercapexd.auth.link.confirmation;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.confirmation.info.LinkConfirmationInfo;
-import me.mastercapexd.auth.link.user.AbstractLinkUser;
+import me.mastercapexd.auth.link.user.LinkUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
-public class LinkConfirmationUserTemplate extends AbstractLinkUser implements LinkConfirmationUser {
+public class LinkConfirmationUserTemplate extends LinkUserTemplate implements LinkConfirmationUser {
     private final long linkTimeoutMillis;
     private final LinkConfirmationInfo confirmationInfo;
 

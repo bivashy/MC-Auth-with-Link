@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.link.entryuser.vk;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.entryuser.AbstractLinkEntryUser;
+import me.mastercapexd.auth.link.entryuser.LinkEntryUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 
-public class VKLinkEntryUser extends AbstractLinkEntryUser {
+public class VKLinkEntryUser extends LinkEntryUserTemplate {
 
     public VKLinkEntryUser(Account account, LinkUserInfo linkUserInfo) {
         super(VKLinkType.getInstance(), account, linkUserInfo);
