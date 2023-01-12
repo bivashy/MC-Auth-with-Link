@@ -41,6 +41,7 @@ import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.hooks.limbo.LimboHook;
+import me.mastercapexd.auth.link.LinkTypeProvider;
 import me.mastercapexd.auth.management.DefaultLoginManagement;
 import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.ProxyCore;
@@ -76,6 +77,7 @@ public class AuthPlugin implements ProxyPlugin {
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
     private AccountFactory accountFactory;
+    private LinkTypeProvider linkTypeProvider;
     private AccountStorage accountStorage;
     private AuthenticationStepCreatorDealership authenticationStepCreatorDealership;
     private AuthenticationStepContextFactoryDealership authenticationContextFactoryDealership;
@@ -108,6 +110,7 @@ public class AuthPlugin implements ProxyPlugin {
         initializeConfigurationProcessor();
         this.config = new DefaultPluginConfig(this);
         this.accountFactory = new DefaultAccountFactory();
+        this.linkTypeProvider = LinkTypeProvider.defaultProvider();
         this.accountStorage = loadAccountStorage(config.getStorageType());
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
@@ -183,6 +186,11 @@ public class AuthPlugin implements ProxyPlugin {
     @Override
     public AccountFactory getAccountFactory() {
         return accountFactory;
+    }
+
+    @Override
+    public LinkTypeProvider getLinkTypeProvider() {
+        return linkTypeProvider;
     }
 
     @Override

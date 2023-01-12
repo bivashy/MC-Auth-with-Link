@@ -16,6 +16,7 @@ import me.mastercapexd.auth.config.server.ConfigurationServer;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.function.Castable;
+import me.mastercapexd.auth.link.LinkTypeProvider;
 import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
@@ -63,6 +64,8 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
     LoginManagement getLoginManagement();
 
     ProxyPlugin setLoginManagement(LoginManagement loginManagement);
+
+    LinkTypeProvider getLinkTypeProvider();
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 
