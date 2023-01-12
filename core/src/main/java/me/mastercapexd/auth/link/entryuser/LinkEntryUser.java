@@ -8,7 +8,7 @@ public interface LinkEntryUser extends LinkUser {
      * @return UNIX timestamp when ILinkInfo instance created or link account
      * confirmation started
      */
-    Long getConfirmationStartTime();
+    long getConfirmationStartTime();
 
     boolean isConfirmed();
 

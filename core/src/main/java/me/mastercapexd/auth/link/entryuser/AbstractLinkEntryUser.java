@@ -6,7 +6,7 @@ import me.mastercapexd.auth.link.user.AbstractLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public abstract class AbstractLinkEntryUser extends AbstractLinkUser implements LinkEntryUser {
-    protected final Long confirmationStartTime = System.currentTimeMillis();
+    protected final long confirmationStartTime = System.currentTimeMillis();
     protected final LinkUserInfo linkUserInfo;
     protected boolean confirmed = false;
 
@@ -15,7 +15,7 @@ public abstract class AbstractLinkEntryUser extends AbstractLinkUser implements 
         this.linkUserInfo = linkUserInfo;
     }
 
-    public Long getConfirmationStartTime() {
+    public long getConfirmationStartTime() {
         return confirmationStartTime;
     }
 
