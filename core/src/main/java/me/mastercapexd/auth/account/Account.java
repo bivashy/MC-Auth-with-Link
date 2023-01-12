@@ -14,8 +14,12 @@ import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public interface Account {
+    @Deprecated
+    default String getId(){
+        return getPlayerId();
+    }
 
-    String getId();
+    String getPlayerId();
 
     IdentifierType getIdentifierType();
 
@@ -47,21 +51,51 @@ public interface Account {
      */
     Optional<LinkUser> findFirstLinkUser(Predicate<LinkUser> filter);
 
-    long getLastQuitTime();
+    @Deprecated
+    default long getLastQuitTime(){
+        return getLastQuitTimestamp();
+    }
 
-    void setLastQuitTime(long time);
+    @Deprecated
+    default void setLastQuitTime(long time){
+        setLastQuitTimestamp(time);
+    }
+
+    long getLastQuitTimestamp();
+
+    void setLastQuitTimestamp(long timestamp);
 
     String getLastIpAddress();
 
     void setLastIpAddress(String hostString);
 
-    long getLastSessionStart();
+    @Deprecated
+    default long getLastSessionStart(){
+        return getLastSessionStartTimestamp();
+    }
 
-    void setLastSessionStart(long currentTimeMillis);
+    @Deprecated
+    default void setLastSessionStart(long currentTimeMillis){
+        setLastSessionStartTimestamp(currentTimeMillis);
+    }
 
-    int getCurrentConfigurationAuthenticationStepCreatorIndex();
+    long getLastSessionStartTimestamp();
 
-    void setCurrentConfigurationAuthenticationStepCreatorIndex(int index);
+    void setLastSessionStartTimestamp(long timestamp);
+
+    @Deprecated
+    default int getCurrentConfigurationAuthenticationStepCreatorIndex(){
+        return getCurrentAuthenticationStepCreatorIndex();
+    }
+
+    @Deprecated
+    default void setCurrentConfigurationAuthenticationStepCreatorIndex(int index){
+        setCurrentAuthenticationStepCreatorIndex(index);
+    }
+
+    int getCurrentAuthenticationStepCreatorIndex();
+
+    void setCurrentAuthenticationStepCreatorIndex(int index);
 
     AuthenticationStep getCurrentAuthenticationStep();
 
