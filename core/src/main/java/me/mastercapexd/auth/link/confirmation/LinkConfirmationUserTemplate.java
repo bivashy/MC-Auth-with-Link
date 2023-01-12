@@ -6,11 +6,11 @@ import me.mastercapexd.auth.link.confirmation.info.LinkConfirmationInfo;
 import me.mastercapexd.auth.link.user.AbstractLinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
-public abstract class AbstractLinkConfirmationUser extends AbstractLinkUser implements LinkConfirmationUser {
+public class LinkConfirmationUserTemplate extends AbstractLinkUser implements LinkConfirmationUser {
     private final long linkTimeoutMillis;
     private final LinkConfirmationInfo confirmationInfo;
 
-    public AbstractLinkConfirmationUser(LinkType linkType, Account account, LinkConfirmationInfo confirmationInfo) {
+    public LinkConfirmationUserTemplate(LinkType linkType, Account account, LinkConfirmationInfo confirmationInfo) {
         super(linkType, account);
         this.linkTimeoutMillis = System.currentTimeMillis() + linkType.getSettings().getConfirmationSettings().getRemoveDelay().getMillis();
         this.confirmationInfo = confirmationInfo;
