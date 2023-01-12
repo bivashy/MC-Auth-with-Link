@@ -7,7 +7,7 @@ import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
-public abstract class AbstractAccount implements Account, Comparable<AbstractAccount> {
+public abstract class AccountTemplate implements Account, Comparable<AccountTemplate> {
 
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 

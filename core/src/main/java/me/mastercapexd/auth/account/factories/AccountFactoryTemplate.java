@@ -9,7 +9,7 @@ import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.telegram.TelegramLinkUser;
 import me.mastercapexd.auth.link.vk.VKLinkUser;
 
-public abstract class AbstractAccountFactory implements AccountFactory {
+public abstract class AccountFactoryTemplate implements AccountFactory {
 
     @Override
     public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType, String password, String googleKey,
