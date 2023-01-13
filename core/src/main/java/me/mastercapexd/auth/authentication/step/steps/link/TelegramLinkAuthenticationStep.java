@@ -3,7 +3,7 @@ package me.mastercapexd.auth.authentication.step.steps.link;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import me.mastercapexd.auth.link.entryuser.telegram.TelegramLinkEntryUser;
+import me.mastercapexd.auth.link.telegram.TelegramLinkEntryUser;
 
 public class TelegramLinkAuthenticationStep extends MessengerAuthenticationStep {
     public static final String STEP_NAME = "TELEGRAM_LINK";

@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.link.entryuser;
+package me.mastercapexd.auth.link.user.entry;
 
 import me.mastercapexd.auth.link.user.LinkUser;
 

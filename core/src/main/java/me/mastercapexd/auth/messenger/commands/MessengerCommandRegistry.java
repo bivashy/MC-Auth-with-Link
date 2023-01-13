@@ -8,7 +8,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
+import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;

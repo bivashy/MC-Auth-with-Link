@@ -1,8 +1,7 @@
-package me.mastercapexd.auth.link.entryuser.telegram;
+package me.mastercapexd.auth.link.telegram;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUserTemplate;
-import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public class TelegramLinkEntryUser extends LinkEntryUserTemplate {

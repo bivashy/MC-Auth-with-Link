@@ -1,8 +1,7 @@
-package me.mastercapexd.auth.link.entryuser.google;
+package me.mastercapexd.auth.link.google;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUserTemplate;
-import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public class GoogleLinkEntryUser extends LinkEntryUserTemplate {

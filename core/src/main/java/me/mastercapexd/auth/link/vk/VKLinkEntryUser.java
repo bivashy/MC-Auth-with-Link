@@ -1,9 +1,8 @@
-package me.mastercapexd.auth.link.entryuser.vk;
+package me.mastercapexd.auth.link.vk;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUserTemplate;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
-import me.mastercapexd.auth.link.vk.VKLinkType;
 
 public class VKLinkEntryUser extends LinkEntryUserTemplate {
 

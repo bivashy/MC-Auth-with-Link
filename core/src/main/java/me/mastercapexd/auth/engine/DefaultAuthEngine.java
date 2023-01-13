@@ -8,7 +8,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.MessageableAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;

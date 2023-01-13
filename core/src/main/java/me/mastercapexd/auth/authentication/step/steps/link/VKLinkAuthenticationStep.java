@@ -3,7 +3,7 @@ package me.mastercapexd.auth.authentication.step.steps.link;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationStepCreator;
-import me.mastercapexd.auth.link.entryuser.vk.VKLinkEntryUser;
+import me.mastercapexd.auth.link.vk.VKLinkEntryUser;
 
 public class VKLinkAuthenticationStep extends MessengerAuthenticationStep {
     public static final String STEP_NAME = "VK_LINK";

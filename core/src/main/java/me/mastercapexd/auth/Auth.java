@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.confirmation.LinkConfirmationUser;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
+import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 
 public class Auth {

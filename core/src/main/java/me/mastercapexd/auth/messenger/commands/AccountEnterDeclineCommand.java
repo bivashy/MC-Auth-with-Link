@@ -7,7 +7,7 @@ import java.util.List;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.orphan.OrphanCommand;
 

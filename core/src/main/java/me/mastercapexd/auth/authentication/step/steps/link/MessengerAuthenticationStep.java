@@ -11,7 +11,7 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.proxy.ProxyPlugin;

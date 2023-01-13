@@ -8,7 +8,7 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.entryuser.LinkEntryUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;

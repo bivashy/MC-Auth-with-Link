@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.link.confirmation.info;
+package me.mastercapexd.auth.link.user.confirmation.info;
 
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
