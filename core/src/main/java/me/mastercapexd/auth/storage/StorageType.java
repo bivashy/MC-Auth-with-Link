@@ -1,6 +1,9 @@
 package me.mastercapexd.auth.storage;
 
+import java.io.File;
+
 import me.mastercapexd.auth.config.storage.LegacyStorageDataSettings;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public enum StorageType {
     MYSQL("https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.31/mysql-connector-j-8.0.31.jar") {
@@ -11,7 +14,7 @@ public enum StorageType {
     }, SQLITE("https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar") {
         @Override
         public String getConnectionUrl(LegacyStorageDataSettings settings) {
-            return "jdbc:sqlite:auth.db";
+            return "jdbc:sqlite:" + ProxyPlugin.instance().getFolder().getAbsolutePath() + File.separator + "auth.db";
         }
     }, POSTGRESQL("https://repo1.maven.org/maven2/org/postgresql/postgresql/42.5.1/postgresql-42.5.1.jar") {
         @Override
