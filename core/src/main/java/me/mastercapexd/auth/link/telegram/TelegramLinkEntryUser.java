@@ -11,7 +11,7 @@ public class TelegramLinkEntryUser extends LinkEntryUserTemplate {
     }
 
     public TelegramLinkEntryUser(Account account) {
-        this(account, account.findFirstLinkUser(TelegramLinkType.LINK_USER_FILTER).get().getLinkUserInfo());
+        this(account, account.findFirstLinkUserOrNew(TelegramLinkType.LINK_USER_FILTER, TelegramLinkType.getInstance()).getLinkUserInfo());
     }
 
 }

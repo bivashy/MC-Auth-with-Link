@@ -8,8 +8,8 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
@@ -64,29 +64,34 @@ public abstract class MessengerCommandRegistry {
             String code = context.popForParameter();
             LinkCommandActorWrapper commandActor = context.actor().as(LinkCommandActorWrapper.class);
 
-            List<LinkConfirmationUser> confirmationUsers =
-                    Auth.getLinkConfirmationAuth().getLinkUsers(
+            List<LinkConfirmationUser> confirmationUsers = Auth.getLinkConfirmationAuth()
+                    .getLinkUsers(
                             linkUser -> linkUser.getLinkType().equals(linkType) && linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId()));
 
             if (confirmationUsers.isEmpty())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-no-code"));
 
-            LinkConfirmationUser confirmationUser =
-                    confirmationUsers.stream().filter(user -> user.getConfirmationInfo().getConfirmationCode().equals(code)).findFirst().orElse(null);
+            LinkConfirmationUser confirmationUser = confirmationUsers.stream()
+                    .filter(user -> user.getConfirmationInfo().getConfirmationCode().equals(code))
+                    .findFirst()
+                    .orElse(null);
 
             if (confirmationUser == null)
                 throw new SendMessageException(linkType.getSettings().getMessages().getStringMessage("confirmation-error"));
 
             if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-timed-out",
-                        linkType.newMessageContext(confirmationUser.getAccount())));
+                throw new SendMessageException(
+                        linkType.getSettings().getMessages().getMessage("confirmation-timed-out", linkType.newMessageContext(confirmationUser.getAccount())));
 
 
-            LinkUserInfo linkUserInfo = confirmationUser.getAccount().findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
+            LinkUserInfo linkUserInfo = confirmationUser.getAccount()
+                    .findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType)
+                    .getLinkUserInfo();
 
             if (!linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator()))
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-already-linked",
-                        linkType.newMessageContext(confirmationUser.getAccount())));
+                throw new SendMessageException(linkType.getSettings()
+                        .getMessages()
+                        .getMessage("confirmation-already-linked", linkType.newMessageContext(confirmationUser.getAccount())));
 
             return new MessengerLinkContext(code, confirmationUser);
         });

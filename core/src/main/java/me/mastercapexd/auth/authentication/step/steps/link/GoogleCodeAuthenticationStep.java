@@ -2,7 +2,6 @@ package me.mastercapexd.auth.authentication.step.steps.link;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.MessageableAuthenticationStep;
@@ -11,10 +10,9 @@ import me.mastercapexd.auth.authentication.step.creators.AbstractAuthenticationS
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.link.google.GoogleLinkEntryUser;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
-import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
@@ -48,19 +46,15 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
 
-        LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+        return account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).map(linkUser -> {
+            LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-        if (linkUser == null)
-            return true;
+            if (linkUserInfo == null || linkUserInfo.getIdentificator().asString() == null || !linkUserInfo.isConfirmationEnabled())
+                return true;
 
-        LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
-
-        if (linkUserInfo == null || linkUserInfo.getIdentificator().asString() == AccountFactory.DEFAULT_GOOGLE_KEY ||
-                !linkUserInfo.isConfirmationEnabled())
-            return true;
-
-        Auth.getLinkEntryAuth().addLinkUser(entryUser);
-        return false;
+            Auth.getLinkEntryAuth().addLinkUser(entryUser);
+            return false;
+        }).orElse(true);
     }
 
     @Override
@@ -69,7 +63,12 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         PluginConfig config = ProxyPlugin.instance().getConfig();
         Messages<ProxyComponent> googleMessages = config.getProxyMessages().getSubMessages("google");
         player.sendMessage(googleMessages.getMessage("need-code-chat", new ProxyMessageContext(account)));
-        ProxyPlugin.instance().getCore().createTitle(googleMessages.getStringMessage("need-code-title")).subtitle(googleMessages.getStringMessage("need-code-subtitle")).stay(120).send(player);
+        ProxyPlugin.instance()
+                .getCore()
+                .createTitle(googleMessages.getStringMessage("need-code-title"))
+                .subtitle(googleMessages.getStringMessage("need-code-subtitle"))
+                .stay(120)
+                .send(player);
     }
 
     public static class GoogleLinkAuthenticationStepCreator extends AbstractAuthenticationStepCreator {

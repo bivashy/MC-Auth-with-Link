@@ -4,9 +4,9 @@ import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
-import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
 import me.mastercapexd.auth.link.telegram.TelegramConfirmationUser;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -42,7 +42,8 @@ public class TelegramLinkCommand {
                 player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
                 return;
             }
-            LinkUserInfo telegramLinkInfo = account.findFirstLinkUser(TelegramLinkType.LINK_USER_FILTER).get().getLinkUserInfo();
+            LinkUserInfo telegramLinkInfo = account.findFirstLinkUserOrNew(TelegramLinkType.LINK_USER_FILTER,
+                    TelegramLinkType.getInstance()).getLinkUserInfo();
 
             if (telegramLinkInfo.getIdentificator() != null && telegramLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_TELEGRAM_ID) {
                 player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("already-linked"));
@@ -56,10 +57,10 @@ public class TelegramLinkCommand {
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
                 UserNumberIdentificator userIdentificator = new UserNumberIdentificator(telegramIdentificator);
 
-                Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
-                        linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
-                Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account,
-                        new DefaultConfirmationInfo(userIdentificator, code)));
+                Auth.getLinkConfirmationAuth()
+                        .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
+                                linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
+                Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
                 player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("confirmation-sent").replaceAll("(?i)%code%", code));
             });
         });

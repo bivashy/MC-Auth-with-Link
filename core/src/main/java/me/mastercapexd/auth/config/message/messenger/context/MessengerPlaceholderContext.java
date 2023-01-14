@@ -11,7 +11,7 @@ public class MessengerPlaceholderContext extends DefaultAccountPlaceholderContex
 
     public MessengerPlaceholderContext(Account account, LinkType linkType, String linkName) {
         super(account);
-        linkUser = account.findFirstLinkUser((user) -> user.getLinkType().equals(linkType)).orElseThrow(() -> new NullPointerException());
+        linkUser = account.findFirstLinkUser((user) -> user.getLinkType().equals(linkType)).orElseThrow(NullPointerException::new);
         registerPlaceholderProvider(PlaceholderProvider.of(linkUser.getLinkUserInfo().getIdentificator().asString(), "%" + linkName + "_id%"));
     }
 }

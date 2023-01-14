@@ -10,12 +10,15 @@ import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.KickResult;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
+import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.LinkUserTemplate;
+import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public interface Account {
     @Deprecated
-    default String getId(){
+    default String getId() {
         return getPlayerId();
     }
 
@@ -51,13 +54,24 @@ public interface Account {
      */
     Optional<LinkUser> findFirstLinkUser(Predicate<LinkUser> filter);
 
+    default LinkUser findFirstLinkUserOrCreate(Predicate<LinkUser> filter, LinkUser def) {
+        return findFirstLinkUser(filter).orElseGet(() -> {
+            addLinkUser(def);
+            return def;
+        });
+    }
+
+    default LinkUser findFirstLinkUserOrNew(Predicate<LinkUser> filter, LinkType linkType) {
+        return findFirstLinkUserOrCreate(filter, LinkUserTemplate.of(linkType, this, new LinkUserInfoTemplate(null)));
+    }
+
     @Deprecated
-    default long getLastQuitTime(){
+    default long getLastQuitTime() {
         return getLastQuitTimestamp();
     }
 
     @Deprecated
-    default void setLastQuitTime(long time){
+    default void setLastQuitTime(long time) {
         setLastQuitTimestamp(time);
     }
 
@@ -70,12 +84,12 @@ public interface Account {
     void setLastIpAddress(String hostString);
 
     @Deprecated
-    default long getLastSessionStart(){
+    default long getLastSessionStart() {
         return getLastSessionStartTimestamp();
     }
 
     @Deprecated
-    default void setLastSessionStart(long currentTimeMillis){
+    default void setLastSessionStart(long currentTimeMillis) {
         setLastSessionStartTimestamp(currentTimeMillis);
     }
 
@@ -84,12 +98,12 @@ public interface Account {
     void setLastSessionStartTimestamp(long timestamp);
 
     @Deprecated
-    default int getCurrentConfigurationAuthenticationStepCreatorIndex(){
+    default int getCurrentConfigurationAuthenticationStepCreatorIndex() {
         return getCurrentAuthenticationStepCreatorIndex();
     }
 
     @Deprecated
-    default void setCurrentConfigurationAuthenticationStepCreatorIndex(int index){
+    default void setCurrentConfigurationAuthenticationStepCreatorIndex(int index) {
         setCurrentAuthenticationStepCreatorIndex(index);
     }
 

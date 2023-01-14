@@ -11,7 +11,7 @@ public class GoogleLinkEntryUser extends LinkEntryUserTemplate {
     }
 
     public GoogleLinkEntryUser(Account account) {
-        this(account, account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get().getLinkUserInfo());
+        this(account, account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance()).getLinkUserInfo());
     }
 
 }

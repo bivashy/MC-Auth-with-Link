@@ -27,11 +27,11 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
         boolean isCurrentAccountRegistered = authenticationStepContext.getAccount().isRegistered();
         if (!isRegistered && isCurrentAccountRegistered) {
             Account account = authenticationStepContext.getAccount();
-            ProxyPlayer player = account.getPlayer().get();
-
-            Auth.removeAccount(account.getPlayerId());
-            account.setLastIpAddress(player.getPlayerIp());
-            account.setLastSessionStartTimestamp(System.currentTimeMillis());
+            account.getPlayer().ifPresent(player -> {
+                Auth.removeAccount(account.getPlayerId());
+                account.setLastIpAddress(player.getPlayerIp());
+                account.setLastSessionStartTimestamp(System.currentTimeMillis());
+            });
         }
         return isCurrentAccountRegistered;
     }
@@ -46,7 +46,12 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = ProxyPlugin.instance().getConfig();
         player.sendMessage(config.getProxyMessages().getMessage("register-chat", new ProxyMessageContext(account)));
-        ProxyPlugin.instance().getCore().createTitle(config.getProxyMessages().getStringMessage("register-title")).subtitle(config.getProxyMessages().getStringMessage("register-subtitle")).stay(120).send(player);
+        ProxyPlugin.instance()
+                .getCore()
+                .createTitle(config.getProxyMessages().getStringMessage("register-title"))
+                .subtitle(config.getProxyMessages().getStringMessage("register-subtitle"))
+                .stay(120)
+                .send(player);
     }
 
     public static class RegisterAuthenticationStepCreator extends AbstractAuthenticationStepCreator {

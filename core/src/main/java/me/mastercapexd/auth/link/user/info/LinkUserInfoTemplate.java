@@ -2,7 +2,7 @@ package me.mastercapexd.auth.link.user.info;
 
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 
-public abstract class LinkUserInfoTemplate implements LinkUserInfo {
+public class LinkUserInfoTemplate implements LinkUserInfo {
     protected LinkUserIdentificator userIdentificator;
     protected boolean confirmationEnabled;
 

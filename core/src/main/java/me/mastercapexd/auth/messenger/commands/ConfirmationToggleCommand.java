@@ -22,9 +22,10 @@ public class ConfirmationToggleCommand implements OrphanCommand {
             return;
         }
         actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggled", linkType.newMessageContext(account)));
-        LinkUserInfo linkUserInfo =
-                account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).get().getLinkUserInfo();
-        linkUserInfo.setConfirmationEnabled(!linkUserInfo.isConfirmationEnabled());
-        accountStorage.saveOrUpdateAccount(account);
+        account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).ifPresent(linkUser -> {
+            LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
+            linkUserInfo.setConfirmationEnabled(!linkUserInfo.isConfirmationEnabled());
+            accountStorage.saveOrUpdateAccount(account);
+        });
     }
 }

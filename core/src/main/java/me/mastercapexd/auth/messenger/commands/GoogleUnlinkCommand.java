@@ -24,7 +24,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
     @Default
     @ConfigurationArgumentError("google-unlink-not-enough-arguments")
     public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
-        LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).get();
+        LinkUser linkUser = account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER,GoogleLinkType.getInstance());
 
         String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
         if (linkUserKey == AccountFactory.DEFAULT_GOOGLE_KEY || linkUserKey.isEmpty()) {

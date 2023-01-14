@@ -2,6 +2,7 @@ package me.mastercapexd.auth.link.user;
 
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkType;
+import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public abstract class LinkUserTemplate implements LinkUser {
     protected final LinkType linkType;
@@ -22,4 +23,12 @@ public abstract class LinkUserTemplate implements LinkUser {
         return account;
     }
 
+    public static LinkUser of(LinkType linkType, Account account, LinkUserInfo linkUserInfo) {
+        return new LinkUserTemplate(linkType, account) {
+            @Override
+            public LinkUserInfo getLinkUserInfo() {
+                return linkUserInfo;
+            }
+        };
+    }
 }

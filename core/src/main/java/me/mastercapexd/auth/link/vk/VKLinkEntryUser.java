@@ -11,7 +11,7 @@ public class VKLinkEntryUser extends LinkEntryUserTemplate {
     }
 
     public VKLinkEntryUser(Account account) {
-        this(account, account.findFirstLinkUser(VKLinkType.LINK_USER_FILTER).get().getLinkUserInfo());
+        this(account, account.findFirstLinkUserOrNew(VKLinkType.LINK_USER_FILTER, VKLinkType.getInstance()).getLinkUserInfo());
     }
 
 }
