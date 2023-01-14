@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import com.ubivashka.configuration.ConfigurationHolder;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
+import com.ubivaska.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.config.messenger.MessengerKeyboards;
 
@@ -20,5 +22,11 @@ public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
     @Override
     public Map<String, String> getRawJsonKeyboards() {
         return Collections.unmodifiableMap(jsonKeyboards);
+    }
+
+    @Override
+    public Keyboard createKeyboardModel(String rawJson) {
+        System.out.println(rawJson);
+        return new VkKeyboard(GSON.fromJson(rawJson, com.vk.api.sdk.objects.messages.Keyboard.class));
     }
 }
