@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.proxy.commands;
 
-import com.vk.api.sdk.client.VkApiClient;
-import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
@@ -12,9 +10,9 @@ import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
-import me.mastercapexd.auth.link.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
+import me.mastercapexd.auth.link.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.VkUse;
@@ -29,9 +27,6 @@ import revxrsal.commands.annotation.Optional;
 @Command({"addvk", "vkadd", "vklink", "linkvk"})
 public class VKLinkCommand {
     private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("vk");
-    private static final VkPluginHook VK_HOOK = ProxyPlugin.instance().getHook(VkPluginHook.class);
-    private static final VkApiClient VK = VK_HOOK.getClient();
-    private static final GroupActor ACTOR = VK_HOOK.getActor();
     @Dependency
     private ProxyPlugin plugin;
     @Dependency
@@ -98,9 +93,10 @@ public class VKLinkCommand {
         vkLink(player, vkIdentificator);
     }
 
-    private static java.util.Optional<GetResponse> fetchUserFromIdentificator(String vkIdentificator) {
+    private java.util.Optional<GetResponse> fetchUserFromIdentificator(String vkIdentificator) {
         try {
-            return VK.users().get(ACTOR).userIds(vkIdentificator).execute().stream().findFirst();
+            VkPluginHook vkHook = ProxyPlugin.instance().getHook(VkPluginHook.class);
+            return vkHook.getClient().users().get(vkHook.getActor()).userIds(vkIdentificator).execute().stream().findFirst();
         } catch(ApiException | ClientException e) {
             e.printStackTrace();
         }
