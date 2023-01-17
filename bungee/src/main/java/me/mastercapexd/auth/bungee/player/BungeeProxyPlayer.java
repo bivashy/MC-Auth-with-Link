@@ -49,7 +49,7 @@ public class BungeeProxyPlayer implements ProxyPlayer {
 
     @Override
     public String getPlayerIp() {
-        return player.getAddress().getHostName();
+        return player.getAddress().getAddress().getHostAddress();
     }
 
     @Override
