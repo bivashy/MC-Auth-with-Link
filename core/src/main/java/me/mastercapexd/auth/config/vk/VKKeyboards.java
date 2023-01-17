@@ -26,7 +26,6 @@ public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
 
     @Override
     public Keyboard createKeyboardModel(String rawJson) {
-        System.out.println(rawJson);
         return new VkKeyboard(GSON.fromJson(rawJson, com.vk.api.sdk.objects.messages.Keyboard.class));
     }
 }
