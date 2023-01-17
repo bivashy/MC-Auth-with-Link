@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.management;
 
+import java.util.concurrent.CompletableFuture;
+
+import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 /**
@@ -10,8 +13,10 @@ public interface LoginManagement {
     /**
      * Handle player join. Start authentication/registration/session process.
      * On BungeeCord this will use PostLoginEvent.
+     *
+     * @return future of account that was taken from database, may be null
      */
-    void onLogin(ProxyPlayer player);
+    CompletableFuture<Account> onLogin(ProxyPlayer player);
 
     /**
      * Handle player leave. Remove him from caching or modify player on database (Save player quit event for example).

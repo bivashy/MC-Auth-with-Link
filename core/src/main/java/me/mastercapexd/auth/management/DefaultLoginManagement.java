@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.management;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import me.mastercapexd.auth.Auth;
@@ -31,24 +32,26 @@ public class DefaultLoginManagement implements LoginManagement {
     }
 
     @Override
-    public void onLogin(ProxyPlayer player) {
+    public CompletableFuture<Account> onLogin(ProxyPlayer player) {
         String nickname = player.getNickname();
         if (!config.getNamePattern().matcher(nickname).matches()) {
             player.disconnect(config.getProxyMessages().getMessage("illegal-name-chars"));
-            return;
+            return CompletableFuture.completedFuture(null);
         }
         if (config.getMaxLoginPerIP() != 0 &&
                 core.getPlayers().stream().filter(onlinePlayer -> onlinePlayer.getPlayerIp().equals(player.getPlayerIp())).count() >
                         config.getMaxLoginPerIP()) {
             player.disconnect(config.getProxyMessages().getMessage("limit-ip-reached"));
-            return;
+            return CompletableFuture.completedFuture(null);
         }
         String id = config.getActiveIdentifierType().getId(player);
-        accountStorage.getAccount(id).thenAccept(account -> {
+        return accountStorage.getAccount(id).thenCompose(account -> {
             if (config.isNameCaseCheckEnabled() && account != null && !account.getName().equals(nickname)) {
-                player.disconnect(config.getProxyMessages().getStringMessage("check-name-case-failed").replaceAll("(?i)%correct%", account.getName())
+                player.disconnect(config.getProxyMessages()
+                        .getStringMessage("check-name-case-failed")
+                        .replaceAll("(?i)%correct%", account.getName())
                         .replaceAll("(?i)%failed%", nickname));
-                return;
+                return CompletableFuture.completedFuture(account);
             }
 
             if (account == null) {
@@ -60,18 +63,18 @@ public class DefaultLoginManagement implements LoginManagement {
                 AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership().createContext(newAccount);
                 Auth.addAccount(newAccount);
                 newAccount.nextAuthenticationStep(context);
-                return;
+                return CompletableFuture.completedFuture(null);
             }
 
-            AuthenticationStepCreator authenticationStepCreator =
-                    plugin.getAuthenticationStepCreatorDealership().findFirstByPredicate(
-                                    stepCreator -> stepCreator.getAuthenticationStepName()
-                                            .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
-                            .orElse(new NullAuthenticationStep.NullAuthenticationStepCreator());
 
-            AuthenticationStepContext context =
-                    plugin.getAuthenticationContextFactoryDealership().createContext(authenticationStepCreator.getAuthenticationStepName(),
-                            account);
+
+            AuthenticationStepCreator authenticationStepCreator = plugin.getAuthenticationStepCreatorDealership()
+                    .findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName()
+                            .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
+                    .orElse(new NullAuthenticationStep.NullAuthenticationStepCreator());
+
+            AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership()
+                    .createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
             if (account.isSessionActive(config.getSessionDurability())) {
                 player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
@@ -80,11 +83,15 @@ public class DefaultLoginManagement implements LoginManagement {
                 } else {
                     core.schedule(ProxyPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
                 }
-                return;
+                return CompletableFuture.completedFuture(account);
             }
+
+            if(Auth.hasAccount(account.getPlayerId()))
+                throw new IllegalStateException("Cannot have two authenticating account at the same time!");
 
             Auth.addAccount(account);
             account.nextAuthenticationStep(context);
+            return CompletableFuture.completedFuture(account);
         });
     }
 
