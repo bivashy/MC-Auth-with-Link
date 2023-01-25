@@ -55,7 +55,7 @@ public class AuthenticationListener implements Listener {
         ProxyPlayer player = playerOptional.get();
         if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
             return;
-        if (plugin.getConfig().shouldBlockChat() && !event.isProxyCommand()) {
+        if (plugin.getConfig().shouldBlockChat() && !event.isCommand()) {
             player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-chat"));
             event.setCancelled(true);
             return;
