@@ -54,7 +54,7 @@ public class VKLinkCommand {
                 player.sendMessage(VK_MESSAGES.getStringMessage("already-sent"));
                 return;
             }
-            Integer userId = user.getId();
+            int userId = user.getId();
 
             accountStorage.getAccount(accountId).thenAccept(account -> {
                 if (account == null || !account.isRegistered()) {
@@ -66,13 +66,13 @@ public class VKLinkCommand {
                     player.sendMessage(VK_MESSAGES.getStringMessage("already-linked"));
                     return;
                 }
-                accountStorage.getAccountsByVKID(userId).thenAccept(accounts -> {
+                UserNumberIdentificator userIdentificator = new UserNumberIdentificator(userId);
+                accountStorage.getAccountsFromLinkIdentificator(userIdentificator).thenAccept(accounts -> {
                     if (config.getVKSettings().getMaxLinkCount() != 0 && accounts.size() >= config.getVKSettings().getMaxLinkCount()) {
                         player.sendMessage(VK_MESSAGES.getStringMessage("link-limit-reached"));
                         return;
                     }
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
-                    UserNumberIdentificator userIdentificator = new UserNumberIdentificator(userId);
 
                     Auth.getLinkConfirmationAuth().removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                             linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
