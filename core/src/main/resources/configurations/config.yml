@@ -147,7 +147,7 @@ password-regex-pattern: '[a-zA-Z0-9_$#@^-]*'
 
 # Как плагин должен хешировать пароли игроков
 # Возможные варианты: MD5, SHA256, BCRYPT
-hash-type: SHA256
+hash-type: BCRYPT
 
 # Должны ли писать подтверждать свои пароли при регистрации
 enable-password-confirm: false
