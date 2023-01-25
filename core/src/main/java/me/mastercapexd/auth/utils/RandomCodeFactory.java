@@ -3,26 +3,26 @@ package me.mastercapexd.auth.utils;
 import java.util.Random;
 
 public class RandomCodeFactory {
-    private static final String LETTERS = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
-    private static final String NUMBERS = "1234567890";
+    private static final char[] LETTERS = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
+    private static final char[] NUMBERS = "1234567890".toCharArray();
 
-    private RandomCodeFactory() {}
+    private RandomCodeFactory() {
+    }
 
     public static int random(int min, int max) {
         if (min >= max)
             return -1;
-        Random r = new Random();
-        return r.nextInt(max - min + 1) + min;
+        return new Random().nextInt(max - min + 1) + min;
     }
 
     public static char generateRandomCharacter() {
         boolean isLetter = (random(0, 1) == 1);
 
         if (isLetter) {
-            return LETTERS.toCharArray()[random(0, (LETTERS.toCharArray()).length - 1)];
+            return LETTERS[random(0, (LETTERS).length - 1)];
         }
 
-        return NUMBERS.toCharArray()[random(0, (NUMBERS.toCharArray()).length - 1)];
+        return NUMBERS[random(0, (NUMBERS).length - 1)];
     }
 
     public static char generateRandomCharacter(String characters) {
