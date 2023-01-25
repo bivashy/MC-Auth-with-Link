@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.link.user;
 
+import java.util.Optional;
+
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
@@ -21,4 +23,11 @@ public interface LinkUser {
      * @return Instance of {@link LinkUserInfo}
      */
     LinkUserInfo getLinkUserInfo();
+
+    default boolean isIdentifierDefaultOrNull() {
+        return Optional.ofNullable(getLinkUserInfo())
+                .map(LinkUserInfo::getIdentificator)
+                .map(identificator -> !(identificator.equals(getLinkType().getDefaultIdentificator()) || identificator.asString() == null))
+                .orElse(false);
+    }
 }

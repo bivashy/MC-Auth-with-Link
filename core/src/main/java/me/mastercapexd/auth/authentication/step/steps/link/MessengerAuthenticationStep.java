@@ -11,15 +11,14 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.link.user.LinkUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class MessengerAuthenticationStep extends AbstractAuthenticationStep implements MessageableAuthenticationStep {
-
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
     private final LinkEntryUser linkEntryUser;
 
@@ -56,13 +55,13 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
 
         LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-        if (linkUserInfo != null && !linkUserInfo.isConfirmationEnabled())
-            return true;
-
-        if (linkUserInfo == null || linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator())) {
+        if (linkUserInfo == null || linkUser.isIdentifierDefaultOrNull()) {
             linkEntryUser.getAccount().getPlayer().ifPresent(player -> player.sendMessage(linkType.getProxyMessages().getMessage("not-linked")));
             return true;
         }
+
+        if (!linkUserInfo.isConfirmationEnabled())
+            return true;
 
         Auth.getLinkEntryAuth().addLinkUser(linkEntryUser);
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("confirmation", "%name%", account.getName());

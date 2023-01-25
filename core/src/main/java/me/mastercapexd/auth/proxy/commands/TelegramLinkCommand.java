@@ -1,13 +1,12 @@
 package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.link.telegram.TelegramConfirmationUser;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.TelegramUse;
@@ -42,10 +41,8 @@ public class TelegramLinkCommand {
                 player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
                 return;
             }
-            LinkUserInfo telegramLinkInfo = account.findFirstLinkUserOrNew(TelegramLinkType.LINK_USER_FILTER,
-                    TelegramLinkType.getInstance()).getLinkUserInfo();
-
-            if (telegramLinkInfo.getIdentificator() != null && telegramLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_TELEGRAM_ID) {
+            LinkUser linkUser = account.findFirstLinkUserOrNew(TelegramLinkType.LINK_USER_FILTER, TelegramLinkType.getInstance());
+            if (!linkUser.isIdentifierDefaultOrNull()) {
                 player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("already-linked"));
                 return;
             }

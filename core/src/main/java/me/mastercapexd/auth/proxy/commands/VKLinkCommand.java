@@ -5,12 +5,11 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.hooks.VkPluginHook;
+import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 import me.mastercapexd.auth.link.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -62,9 +61,8 @@ public class VKLinkCommand {
                     player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
                     return;
                 }
-                LinkUserInfo vkLinkInfo = account.findFirstLinkUserOrNew(VKLinkType.LINK_USER_FILTER, VKLinkType.getInstance()).getLinkUserInfo();
-
-                if (vkLinkInfo.getIdentificator() != null && vkLinkInfo.getIdentificator().asNumber() != AccountFactory.DEFAULT_VK_ID) {
+                LinkUser linkUser = account.findFirstLinkUserOrNew(VKLinkType.LINK_USER_FILTER, VKLinkType.getInstance());
+                if (!linkUser.isIdentifierDefaultOrNull()) {
                     player.sendMessage(VK_MESSAGES.getStringMessage("already-linked"));
                     return;
                 }

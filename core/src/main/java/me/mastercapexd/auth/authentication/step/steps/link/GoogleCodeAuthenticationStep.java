@@ -49,7 +49,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         return account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).map(linkUser -> {
             LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-            if (linkUserInfo == null || linkUserInfo.getIdentificator().asString() == null || !linkUserInfo.isConfirmationEnabled())
+            if (!linkUserInfo.isConfirmationEnabled() || linkUser.isIdentifierDefaultOrNull())
                 return true;
 
             Auth.getLinkEntryAuth().addLinkUser(entryUser);

@@ -10,7 +10,6 @@ import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
@@ -84,11 +83,10 @@ public abstract class MessengerCommandRegistry {
                         linkType.getSettings().getMessages().getMessage("confirmation-timed-out", linkType.newMessageContext(confirmationUser.getAccount())));
 
 
-            LinkUserInfo linkUserInfo = confirmationUser.getAccount()
-                    .findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType)
-                    .getLinkUserInfo();
+            LinkUser linkUser = confirmationUser.getAccount()
+                    .findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType);
 
-            if (!linkUserInfo.getIdentificator().equals(linkType.getDefaultIdentificator()))
+            if (linkUser.isIdentifierDefaultOrNull())
                 throw new SendMessageException(linkType.getSettings()
                         .getMessages()
                         .getMessage("confirmation-already-linked", linkType.newMessageContext(confirmationUser.getAccount())));

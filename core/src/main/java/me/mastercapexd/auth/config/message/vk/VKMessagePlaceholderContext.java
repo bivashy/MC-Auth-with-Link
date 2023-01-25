@@ -23,6 +23,8 @@ public class VKMessagePlaceholderContext extends MessengerPlaceholderContext {
     public VKMessagePlaceholderContext(Account account) {
         super(account, VKLinkType.getInstance(), "vk");
         try {
+            if (linkUser.isIdentifierDefaultOrNull() || !linkUser.getLinkUserInfo().getIdentificator().isNumber())
+                return;
             List<GetResponse> userInformationResponses =
                     CLIENT.users().get(ACTOR).userIds(String.valueOf(linkUser.getLinkUserInfo().getIdentificator().asNumber())).execute();
             if (userInformationResponses.isEmpty())

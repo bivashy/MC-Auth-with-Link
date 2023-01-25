@@ -39,7 +39,7 @@ public class GoogleCodeCommand {
                 return;
             }
             LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
-            if (linkUser == null || linkUser.getLinkUserInfo().getIdentificator().asString().isEmpty()) {
+            if (linkUser == null || linkUser.isIdentifierDefaultOrNull()) {
                 player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
                 return;
             }
