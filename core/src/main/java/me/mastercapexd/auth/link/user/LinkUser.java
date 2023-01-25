@@ -27,7 +27,7 @@ public interface LinkUser {
     default boolean isIdentifierDefaultOrNull() {
         return Optional.ofNullable(getLinkUserInfo())
                 .map(LinkUserInfo::getIdentificator)
-                .map(identificator -> !(identificator.equals(getLinkType().getDefaultIdentificator()) || identificator.asString() == null))
-                .orElse(false);
+                .map(identificator -> identificator.equals(getLinkType().getDefaultIdentificator()) || identificator.asString() == null)
+                .orElse(true);
     }
 }

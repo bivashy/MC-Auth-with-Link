@@ -86,7 +86,7 @@ public abstract class MessengerCommandRegistry {
             LinkUser linkUser = confirmationUser.getAccount()
                     .findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType);
 
-            if (linkUser.isIdentifierDefaultOrNull())
+            if (!linkUser.isIdentifierDefaultOrNull())
                 throw new SendMessageException(linkType.getSettings()
                         .getMessages()
                         .getMessage("confirmation-already-linked", linkType.newMessageContext(confirmationUser.getAccount())));
