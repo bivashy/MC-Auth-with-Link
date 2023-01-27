@@ -39,6 +39,19 @@ public class AuthenticationListener implements Listener {
     }
 
     @EventHandler
+    public void onPostLogin(PostLoginEvent e) { // Using PostLoginEvent for sending message about session, because in LoginEvent we can`t send message
+        ProxyPlayer player = new BungeeProxyPlayer(e.getPlayer());
+        String id = plugin.getConfig().getActiveIdentifierType().getId(player);
+        if (Auth.hasAccount(id))
+            return;
+        plugin.getAccountStorage().getAccount(id).thenAccept(account -> {
+            if (!account.isSessionActive(plugin.getConfig().getSessionDurability()))
+                return;
+            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
+        });
+    }
+
+    @EventHandler
     public void onPlayerLeave(PlayerDisconnectEvent event) {
         if (INVALID_ACCOUNTS.remove(event.getPlayer().getUniqueId()))
             return;
