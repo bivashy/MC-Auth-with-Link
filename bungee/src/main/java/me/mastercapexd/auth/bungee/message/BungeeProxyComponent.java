@@ -7,9 +7,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 public class BungeeProxyComponent implements BungeeComponent {
     protected BaseComponent component;
 
-    protected BungeeProxyComponent() {
-    }
-
     public BungeeProxyComponent(BaseComponent component) {
         this.component = component;
     }

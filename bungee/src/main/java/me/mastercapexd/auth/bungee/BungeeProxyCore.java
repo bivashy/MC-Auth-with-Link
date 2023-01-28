@@ -33,7 +33,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 
 public enum BungeeProxyCore implements ProxyCore {
     INSTANCE;
-
     private static final ProxyServer PROXY_SERVER = ProxyServer.getInstance();
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
@@ -80,18 +79,13 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public ProxyTitle createTitle(String title) {
-        return new BungeeProxyTitle().title(title);
-    }
-
-    @Override
-    public ProxyBossbar createBossbar(String title) {
-        return new BungeeProxyBossbar(title);
+    public ProxyTitle createTitle(ProxyComponent title) {
+        return new BungeeProxyTitle(title);
     }
 
     @Override
     public ProxyBossbar createBossbar(ProxyComponent component) {
-        return new BungeeProxyBossbar(component.as(BungeeComponent.class).components());
+        return new BungeeProxyBossbar(component.jsonText());
     }
 
     @Override
@@ -138,7 +132,6 @@ public enum BungeeProxyCore implements ProxyCore {
     public void schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
         PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, unit);
     }
-
 
     @Override
     public void runAsync(Runnable task) {

@@ -72,13 +72,8 @@ public class VelocityProxyCore implements ProxyCore {
     }
 
     @Override
-    public ProxyTitle createTitle(String title) {
+    public ProxyTitle createTitle(ProxyComponent title) {
         return new VelocityProxyTitle(title);
-    }
-
-    @Override
-    public ProxyBossbar createBossbar(String title) {
-        return new VelocityProxyBossbar(title);
     }
 
     @Override

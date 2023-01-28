@@ -1,18 +1,20 @@
 package me.mastercapexd.auth.proxy.api.title;
 
 import me.mastercapexd.auth.function.Castable;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public abstract class ProxyTitle implements Castable<ProxyTitle> {
-    protected String title = "", subtitle = "";
+    private static final ProxyComponent EMPTY = ProxyComponent.fromPlain("");
+    protected ProxyComponent title = EMPTY, subtitle = EMPTY;
     protected int fadeIn = 10, stay = 60, fadeOut = 10;
 
-    public ProxyTitle title(String title) {
+    public ProxyTitle title(ProxyComponent title) {
         this.title = title;
         return this;
     }
 
-    public ProxyTitle subtitle(String subtitle) {
+    public ProxyTitle subtitle(ProxyComponent subtitle) {
         this.subtitle = subtitle;
         return this;
     }

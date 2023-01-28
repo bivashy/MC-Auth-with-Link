@@ -13,7 +13,6 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class RegisterAuthenticationStep extends AbstractAuthenticationStep implements MessageableAuthenticationStep {
-
     public static final String STEP_NAME = "REGISTER";
     private final boolean isRegistered;
 
@@ -48,8 +47,8 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
         player.sendMessage(config.getProxyMessages().getMessage("register-chat", new ProxyMessageContext(account)));
         ProxyPlugin.instance()
                 .getCore()
-                .createTitle(config.getProxyMessages().getStringMessage("register-title"))
-                .subtitle(config.getProxyMessages().getStringMessage("register-subtitle"))
+                .createTitle(config.getProxyMessages().getMessage("register-title"))
+                .subtitle(config.getProxyMessages().getMessage("register-subtitle"))
                 .stay(120)
                 .send(player);
     }
@@ -64,5 +63,4 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
             return new RegisterAuthenticationStep(context);
         }
     }
-
 }

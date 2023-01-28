@@ -27,9 +27,7 @@ public interface ProxyCore extends Castable<ProxyCore> {
 
     Logger getLogger();
 
-    ProxyTitle createTitle(String title);
-
-    ProxyBossbar createBossbar(String title);
+    ProxyTitle createTitle(ProxyComponent title);
 
     ProxyBossbar createBossbar(ProxyComponent barText);
 

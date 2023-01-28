@@ -12,7 +12,6 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class LoginAuthenticationStep extends AbstractAuthenticationStep implements MessageableAuthenticationStep {
-
     public static final String STEP_NAME = "LOGIN";
     private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 
@@ -27,7 +26,8 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep implemen
 
     @Override
     public boolean shouldSkip() {
-        return !Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) || authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
+        return !Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) ||
+                authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
     }
 
     @Override
@@ -35,7 +35,12 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep implemen
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = ProxyPlugin.instance().getConfig();
         player.sendMessage(config.getProxyMessages().getMessage("login-chat", new ProxyMessageContext(account)));
-        ProxyPlugin.instance().getCore().createTitle(config.getProxyMessages().getStringMessage("login-title")).subtitle(config.getProxyMessages().getStringMessage("login-subtitle")).stay(120).send(player);
+        ProxyPlugin.instance()
+                .getCore()
+                .createTitle(config.getProxyMessages().getMessage("login-title"))
+                .subtitle(config.getProxyMessages().getMessage("login-subtitle"))
+                .stay(120)
+                .send(player);
     }
 
     public static class LoginAuthenticationStepCreator extends AbstractAuthenticationStepCreator {
@@ -48,5 +53,4 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep implemen
             return new LoginAuthenticationStep(context);
         }
     }
-
 }

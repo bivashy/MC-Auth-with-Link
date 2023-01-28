@@ -77,7 +77,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
     public void process(ProxyPlayer player) {
         Messages<ProxyComponent> messages = linkEntryUser.getLinkType().getProxyMessages();
         player.sendMessage(messages.getMessage("enter-confirm-need-chat", new ProxyMessageContext(linkEntryUser.getAccount())));
-        PLUGIN.getCore().createTitle(messages.getStringMessage("enter-confirm-need-title")).subtitle(messages.getStringMessage("enter-confirm-need-subtitle"))
+        PLUGIN.getCore().createTitle(messages.getMessage("enter-confirm-need-title")).subtitle(messages.getMessage("enter-confirm-need-subtitle"))
                 .stay(120).send(player);
     }
 }

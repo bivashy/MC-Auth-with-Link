@@ -2,17 +2,17 @@ package me.mastercapexd.auth.velocity.api.title;
 
 import java.time.Duration;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.velocity.component.VelocityComponent;
 import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
 import net.kyori.adventure.title.Title;
 
 public class VelocityProxyTitle extends ProxyTitle {
     private static final int MILLIS_PER_TICK = 1000 / 20;
 
-    public VelocityProxyTitle(String title) {
-        super();
+    public VelocityProxyTitle(ProxyComponent title){
         title(title);
     }
 
@@ -36,8 +36,8 @@ public class VelocityProxyTitle extends ProxyTitle {
 
     @Override
     public ProxyTitle send(ProxyPlayer... players) {
-        Title createdTitle = Title.title(ProxyPlugin.instance().getConfig().getProxyMessages().getDeserializer().deserialize(title),
-                ProxyPlugin.instance().getConfig().getProxyMessages().getDeserializer().deserialize(subtitle),
+        Title createdTitle = Title.title(title.as(VelocityComponent.class).component(),
+                subtitle.as(VelocityComponent.class).component(),
                 Title.Times.of(Duration.ofMillis(fadeIn), Duration.ofMillis(stay), Duration.ofMillis(fadeOut)));
         for (ProxyPlayer player : players)
             player.as(VelocityProxyPlayer.class).getPlayer().showTitle(createdTitle);
