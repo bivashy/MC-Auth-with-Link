@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.proxy.adventure;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -50,6 +53,10 @@ public enum ComponentDeserializer {
             return serializer.deserialize(text);
         }
     };
+
+    public static Optional<ComponentDeserializer> findWithName(String name) {
+        return Arrays.stream(ComponentDeserializer.values()).filter(value -> value.name().equals(name)).findFirst();
+    }
 
     public abstract Component deserialize(String text);
 }
