@@ -18,7 +18,6 @@ public class BungeeConnectionProxyPlayer implements ProxyPlayer {
         this.pendingConnection = pendingConnection;
     }
 
-
     @Override
     public void disconnect(ProxyComponent component) {
         if (component.safeAs(SelfHandledProxyComponent.class).isPresent()) {

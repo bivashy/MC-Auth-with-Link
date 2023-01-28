@@ -10,7 +10,6 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.adventure.AdventureProxyComponent;
 import me.mastercapexd.auth.proxy.adventure.ComponentDeserializer;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
-
 import me.mastercapexd.auth.proxy.message.SelfHandledProxyComponent;
 
 public class ProxyMessages extends AbstractMessages<ProxyComponent> {

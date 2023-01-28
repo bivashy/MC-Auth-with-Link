@@ -66,8 +66,6 @@ public class DefaultLoginManagement implements LoginManagement {
                 return CompletableFuture.completedFuture(null);
             }
 
-
-
             AuthenticationStepCreator authenticationStepCreator = plugin.getAuthenticationStepCreatorDealership()
                     .findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName()
                             .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
@@ -86,7 +84,7 @@ public class DefaultLoginManagement implements LoginManagement {
                 return CompletableFuture.completedFuture(account);
             }
 
-            if(Auth.hasAccount(account.getPlayerId()))
+            if (Auth.hasAccount(account.getPlayerId()))
                 throw new IllegalStateException("Cannot have two authenticating account at the same time!");
 
             Auth.addAccount(account);

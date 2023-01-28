@@ -29,10 +29,9 @@ public abstract class SpongeConfiguratePluginConfig extends AbstractPluginConfig
             if (!folder.exists())
                 folder.mkdir();
             Stream<Path> walkStream = Files.walk(folder.toPath());
-            ConfigurationNode configuration =
-                    getConfigurationNode(walkStream.filter(path -> path.toString().endsWith(".yml")).map(Path::toFile).toArray(File[]::new));
+            ConfigurationNode configuration = getConfigurationNode(
+                    walkStream.filter(path -> path.toString().endsWith(".yml")).map(Path::toFile).toArray(File[]::new));
             walkStream.close();
-
 
             for (Resource resource : folderResource.getResources()) {
                 try {

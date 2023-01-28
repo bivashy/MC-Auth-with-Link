@@ -10,11 +10,13 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.player.BungeeConnectionProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -30,12 +32,11 @@ public class AuthenticationListener implements Listener {
     @EventHandler
     public void onLogin(LoginEvent event) {
         event.registerIntent(plugin.as(AuthPlugin.class));
-        plugin.getLoginManagement()
-                .onLogin(new BungeeConnectionProxyPlayer(event.getConnection())).whenComplete((account, exception) -> {
-                    if (exception != null)
-                        INVALID_ACCOUNTS.add(event.getConnection().getUniqueId());
-                    event.completeIntent(plugin.as(AuthPlugin.class));
-                });
+        plugin.getLoginManagement().onLogin(new BungeeConnectionProxyPlayer(event.getConnection())).whenComplete((account, exception) -> {
+            if (exception != null)
+                INVALID_ACCOUNTS.add(event.getConnection().getUniqueId());
+            event.completeIntent(plugin.as(AuthPlugin.class));
+        });
     }
 
     @EventHandler
