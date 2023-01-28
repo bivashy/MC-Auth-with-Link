@@ -10,7 +10,8 @@ public class MessengerMessages extends AbstractMessages<String> {
     private final String delimiter;
 
     public MessengerMessages(ConfigurationSectionHolder configurationSection, String delimiter) {
-        super(configurationSection, delimiter);
+        super(delimiter);
+        initializeMessages(configurationSection);
         this.delimiter = delimiter;
     }
 

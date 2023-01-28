@@ -9,30 +9,34 @@ import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import me.mastercapexd.auth.config.message.context.MessageContext;
 
 public abstract class AbstractMessages<T> implements Messages<T>, ConfigurationHolder {
-    protected static final String DEFAULT_DELIMITER = "\n";
+    public static final String DEFAULT_DELIMITER = "\n";
+    private final CharSequence delimiter;
+    private Map<String, String> messages = new HashMap<>();
+    private Map<String, Messages<T>> subMessages = new HashMap<>();
     private String nullMessage = "Message with key %s not found!";
 
-    protected Map<String, String> messages = new HashMap<>();
-    protected Map<String, Messages<T>> subMessages = new HashMap<>();
-
-    public AbstractMessages(ConfigurationSectionHolder configurationSectionHolder, CharSequence delimeter, String nullMessage) {
-        this(configurationSectionHolder, delimeter);
+    public AbstractMessages(CharSequence delimeter, String nullMessage) {
+        this(delimeter);
         this.nullMessage = nullMessage;
     }
 
-    public AbstractMessages(ConfigurationSectionHolder configurationSection, CharSequence delimiter) {
-        for (String key : configurationSection.keys()) {
-            if (configurationSection.isList(key)) {
-                addMessage(key, String.join(delimiter, configurationSection.getList(key).toArray(new String[0])));
+    public AbstractMessages(CharSequence delimiter) {
+        this.delimiter = delimiter;
+    }
+
+    protected void initializeMessages(ConfigurationSectionHolder sectionHolder){
+        for (String key : sectionHolder.keys()) {
+            if (sectionHolder.isList(key)) {
+                addMessage(key, String.join(delimiter, sectionHolder.getList(key).toArray(new String[0])));
                 continue;
             }
 
-            if (configurationSection.isSection(key)) {
-                subMessages.put(key, createMessages(configurationSection.section(key)));
+            if (sectionHolder.isSection(key)) {
+                subMessages.put(key, createMessages(sectionHolder.section(key)));
                 continue;
             }
 
-            addMessage(key, configurationSection.getString(key));
+            addMessage(key, sectionHolder.getString(key));
         }
     }
 
