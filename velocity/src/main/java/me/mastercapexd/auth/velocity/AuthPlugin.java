@@ -174,7 +174,7 @@ public class AuthPlugin implements ProxyPlugin {
     }
 
     @Override
-    public AudienceProvider getAudienceProvider() {
+    public VelocityAudienceProvider getAudienceProvider() {
         return audienceProvider;
     }
 

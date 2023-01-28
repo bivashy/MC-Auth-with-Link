@@ -8,10 +8,12 @@ import com.velocitypowered.api.proxy.Player;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.commands.ProxyCommandActor;
 import me.mastercapexd.auth.proxy.commands.ProxyCommandsRegistry;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.commands.annotations.Permission;
+import me.mastercapexd.auth.proxy.commands.exception.SendComponentException;
 import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.velocity.AuthPlugin;
@@ -39,6 +41,8 @@ public class VelocityCommandRegistry extends ProxyCommandsRegistry {
                 throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
             return new VelocityProxyPlayer(player);
         });
+        commandHandler.registerContextResolver(ProxyCommandActor.class,
+                (context) -> new VelocityProxyCommandActor(context.actor().as(VelocityCommandActor.class)));
         commandHandler.registerValueResolver(ArgumentProxyPlayer.class, (context) -> {
             String value = context.pop();
             Optional<ProxyPlayer> player = PLUGIN.getCore().getPlayer(value);
@@ -84,6 +88,9 @@ public class VelocityCommandRegistry extends ProxyCommandsRegistry {
             CommandPermission commandPermissionAnnotation = Annotations.create(CommandPermission.class, "value", annotation.value());
             return Collections.singletonList(commandPermissionAnnotation);
         });
+
+        commandHandler.registerExceptionHandler(SendComponentException.class,
+                (actor, componentException) -> new VelocityProxyCommandActor(actor.as(VelocityCommandActor.class)).reply(componentException.getComponent()));
         registerCommands();
     }
 }

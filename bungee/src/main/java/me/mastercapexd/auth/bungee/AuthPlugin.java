@@ -153,7 +153,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     }
 
     @Override
-    public AudienceProvider getAudienceProvider() {
+    public BungeeAudiences getAudienceProvider() {
         return bungeeAudiences;
     }
 

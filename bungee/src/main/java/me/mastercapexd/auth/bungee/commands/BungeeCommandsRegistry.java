@@ -8,10 +8,12 @@ import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.proxy.commands.ProxyCommandActor;
 import me.mastercapexd.auth.proxy.commands.ProxyCommandsRegistry;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.proxy.commands.annotations.Permission;
+import me.mastercapexd.auth.proxy.commands.exception.SendComponentException;
 import me.mastercapexd.auth.proxy.commands.parameters.ArgumentProxyPlayer;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import net.md_5.bungee.api.ProxyServer;
@@ -37,6 +39,7 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
                 throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
             return new BungeeProxyPlayer(selfPlayer);
         });
+        commandHandler.registerContextResolver(ProxyCommandActor.class, (context) -> new BungeeProxyCommandActor(context.actor().as(BungeeCommandActor.class)));
         commandHandler.registerValueResolver(ArgumentProxyPlayer.class, (context) -> {
             String value = context.pop();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
@@ -82,6 +85,9 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             CommandPermission commandPermissionAnnotation = Annotations.create(CommandPermission.class, "value", annotation.value());
             return Collections.singletonList(commandPermissionAnnotation);
         });
+
+        commandHandler.registerExceptionHandler(SendComponentException.class,
+                (actor, componentException) -> new BungeeProxyCommandActor(actor.as(BungeeCommandActor.class)).reply(componentException.getComponent()));
         registerCommands();
     }
 }
