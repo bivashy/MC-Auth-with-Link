@@ -12,7 +12,7 @@ import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class BossBarSettings implements ConfigurationHolder {
     @ConfigField("use")
-    private Boolean enabled = false;
+    private boolean enabled = false;
     @ConfigField("bar-color")
     private ProxyBossbar.Color barColor = Color.BLUE;
     @ConfigField("bar-style")
@@ -22,6 +22,9 @@ public class BossBarSettings implements ConfigurationHolder {
 
     public BossBarSettings(ConfigurationSectionHolder sectionHolder) {
         ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
+    }
+
+    public BossBarSettings() {
     }
 
     public boolean isEnabled() {

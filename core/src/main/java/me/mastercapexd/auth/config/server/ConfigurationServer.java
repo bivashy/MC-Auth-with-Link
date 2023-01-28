@@ -10,7 +10,7 @@ public class ConfigurationServer {
     public ConfigurationServer(String stringFormat) {
         String[] args = stringFormat.split(":");
         this.id = args[0];
-        this.maxPlayers = args.length >= 2 ? Integer.parseInt(args[1]) : 50;
+        this.maxPlayers = args.length >= 2 ? Integer.parseInt(args[1]) : Integer.MAX_VALUE;
     }
 
     public ConfigurationServer(String id, int maxPlayers) {

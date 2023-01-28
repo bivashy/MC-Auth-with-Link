@@ -14,6 +14,9 @@ public class GoogleAuthenticatorSettings implements ConfigurationHolder {
         ProxyPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
     }
 
+    public GoogleAuthenticatorSettings() {
+    }
+
     public boolean isEnabled() {
         return enabled;
     }

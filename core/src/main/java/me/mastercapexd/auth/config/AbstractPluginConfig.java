@@ -30,13 +30,14 @@ import me.mastercapexd.auth.storage.StorageType;
 
 public abstract class AbstractPluginConfig implements PluginConfig {
     protected final ProxyPlugin proxyPlugin;
+    private final List<Pattern> allowedPatternCommands;
     protected ConfigurationSectionHolder configurationRoot;
     @ConfigField("id-type")
     private IdentifierType activeIdentifierType = IdentifierType.NAME;
     @ConfigField("check-name-case")
-    private Boolean nameCaseCheckEnabled = true;
+    private boolean nameCaseCheckEnabled = true;
     @ConfigField("enable-password-confirm")
-    private Boolean passwordConfirmationEnabled = false;
+    private boolean passwordConfirmationEnabled = false;
     @ConfigField("hash-type")
     private HashType activeHashType = HashType.SHA256;
     @ConfigField("storage-type")
@@ -46,11 +47,11 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     @ConfigField("password-regex-pattern")
     private Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9_$#@^-]*");
     @ConfigField("password-min-length")
-    private Integer passwordMinLength = 5;
+    private int passwordMinLength = 5;
     @ConfigField("password-max-length")
-    private Integer passwordMaxLength = 20;
+    private int passwordMaxLength = 20;
     @ConfigField("password-attempts")
-    private Integer passwordAttempts = 3;
+    private int passwordAttempts = 3;
     @ConfigField("auth-time")
     private ConfigurationDuration authTime = new ConfigurationDuration(60);
     @ImportantField
@@ -68,22 +69,22 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     @ConfigField("database")
     private DatabaseConfiguration databaseConfiguration;
     @ConfigField("max-login-per-ip")
-    private Integer maxLoginPerIP = 0;
+    private int maxLoginPerIP = 0;
     @ConfigField("messages-delay")
-    private Integer messagesDelay = 5;
+    private int messagesDelay = 5;
     @ConfigField("telegram")
     private TelegramSettings telegramSettings = new TelegramSettings();
     @ConfigField("vk")
     private VKSettings vkSettings = new VKSettings();
     @ConfigField("google-authenticator")
-    private GoogleAuthenticatorSettings googleAuthenticatorSettings = null;
+    private GoogleAuthenticatorSettings googleAuthenticatorSettings = new GoogleAuthenticatorSettings();
     @ImportantField
     @ConfigField("messages")
     private ProxyMessages proxyMessages = null;
     @ConfigField("boss-bar")
-    private BossBarSettings barSettings = null;
+    private BossBarSettings barSettings = new BossBarSettings();
     @ConfigField("fill-type")
-    private FillType fillType;
+    private FillType fillType = FillType.GRADUALLY;
     @ConfigField("session-durability")
     private ConfigurationDuration sessionDurability = new ConfigurationDuration(14400L);
     @ConfigField("join-delay")
@@ -91,9 +92,7 @@ public abstract class AbstractPluginConfig implements PluginConfig {
     @ConfigField("block-chat")
     private boolean blockChat = true;
     @ConfigField("authentication-steps")
-    private List<String> authenticationSteps = new ArrayList<>(Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER"));
-
-    private final List<Pattern> allowedPatternCommands;
+    private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
 
     public AbstractPluginConfig(ProxyPlugin proxyPlugin) {
         this.proxyPlugin = proxyPlugin;
