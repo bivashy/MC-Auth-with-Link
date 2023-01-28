@@ -49,7 +49,10 @@ public abstract class SpongeConfiguratePluginConfig extends AbstractPluginConfig
                         tempDefaultConfigurationFile.delete();
                     }
 
-                    ConfigurationTransformation.builder().addAction(NodePath.path("messages"), TransformAction.remove()).build().apply(defaultConfiguration);
+                    ConfigurationTransformation.builder()
+                            .addAction(NodePath.path("messages", ConfigurationTransformation.WILDCARD_OBJECT, "not-linked"), TransformAction.remove())
+                            .build()
+                            .apply(defaultConfiguration);
 
                     configuration = configuration.empty() ? defaultConfiguration : configuration.mergeFrom(defaultConfiguration);
                 } catch(IOException e) {
