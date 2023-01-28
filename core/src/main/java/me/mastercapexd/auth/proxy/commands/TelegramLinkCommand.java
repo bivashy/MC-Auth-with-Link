@@ -3,6 +3,7 @@ package me.mastercapexd.auth.proxy.commands;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.link.telegram.TelegramConfirmationUser;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
@@ -30,7 +31,7 @@ public class TelegramLinkCommand {
     @TelegramUse
     public void telegramLink(ProxyPlayer player, @Optional Long telegramIdentificator) {
         if (telegramIdentificator == null) {
-            player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("usage"));
+            player.sendMessage(TELEGRAM_MESSAGES.getMessage("usage"));
             return;
         }
 
@@ -38,17 +39,17 @@ public class TelegramLinkCommand {
 
         accountStorage.getAccount(accountId).thenAccept(account -> {
             if (account == null || !account.isRegistered()) {
-                player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
+                player.sendMessage(config.getProxyMessages().getMessage("account-not-found"));
                 return;
             }
             LinkUser linkUser = account.findFirstLinkUserOrNew(TelegramLinkType.LINK_USER_FILTER, TelegramLinkType.getInstance());
             if (!linkUser.isIdentifierDefaultOrNull()) {
-                player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("already-linked"));
+                player.sendMessage(TELEGRAM_MESSAGES.getMessage("already-linked"));
                 return;
             }
             accountStorage.getAccountsFromLinkIdentificator(new UserNumberIdentificator(telegramIdentificator)).thenAccept(accounts -> {
                 if (config.getTelegramSettings().getMaxLinkCount() != 0 && accounts.size() >= config.getTelegramSettings().getMaxLinkCount()) {
-                    player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("link-limit-reached"));
+                    player.sendMessage(TELEGRAM_MESSAGES.getMessage("link-limit-reached"));
                     return;
                 }
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
@@ -58,7 +59,7 @@ public class TelegramLinkCommand {
                         .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                                 linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
                 Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
-                player.sendMessage(TELEGRAM_MESSAGES.getStringMessage("confirmation-sent").replaceAll("(?i)%code%", code));
+                player.sendMessage(TELEGRAM_MESSAGES.getMessage("confirmation-sent", MessageContext.of("%code%", code)));
             });
         });
     }

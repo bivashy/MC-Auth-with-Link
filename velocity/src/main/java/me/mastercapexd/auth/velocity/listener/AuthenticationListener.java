@@ -9,6 +9,7 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent.ServerResult;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -36,13 +37,14 @@ public class AuthenticationListener {
     public void onChatEvent(PlayerChatEvent event) {
         if (!event.getResult().isAllowed())
             return;
-        ProxyPlayer player = plugin.getCore().wrapPlayer(event.getPlayer()).get();
-        if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
-            return;
-        if (!plugin.getConfig().shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
-            return;
-        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-chat"));
-        event.setResult(PlayerChatEvent.ChatResult.denied());
+        plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
+            if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
+                return;
+            if (!plugin.getConfig().shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
+                return;
+            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-chat"));
+            event.setResult(PlayerChatEvent.ChatResult.denied());
+        });
     }
 
     @Subscribe
@@ -58,29 +60,32 @@ public class AuthenticationListener {
         String command = "/" + event.getCommand();
         if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(command).find()))
             return;
-        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-command"));
+        player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-command"));
         event.setResult(CommandExecuteEvent.CommandResult.denied());
     }
 
-
     @Subscribe
     public void onBlockedServerConnect(ServerPreConnectEvent event) {
-        ProxyPlayer player = plugin.getCore().wrapPlayer(event.getPlayer()).get();
-        String id = plugin.getConfig().getActiveIdentifierType().getId(player);
-        if (!Auth.hasAccount(id))
-            return;
-        if (plugin.getConfig()
-                .getBlockedServers()
-                .stream()
-                .noneMatch(server -> event.getResult().getServer().get().getServerInfo().getName().equals(server.getId())))
-            return;
-        if (!event.getResult().getServer().isPresent()) {
-            event.setResult(ServerResult.allowed(
-                    plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(VelocityServer.class).getServer()));
-            return;
-        }
+        plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
+            String id = plugin.getConfig().getActiveIdentifierType().getId(player);
+            if (!Auth.hasAccount(id))
+                return;
+            Optional<RegisteredServer> resultServerOptional = event.getResult().getServer();
+            if (!resultServerOptional.isPresent())
+                return;
+            if (plugin.getConfig()
+                    .getBlockedServers()
+                    .stream()
+                    .noneMatch(server -> resultServerOptional.get().getServerInfo().getName().equals(server.getId())))
+                return;
+            if (!event.getResult().getServer().isPresent()) {
+                event.setResult(ServerResult.allowed(
+                        plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(VelocityServer.class).getServer()));
+                return;
+            }
 
-        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-server"));
-        event.setResult(ServerPreConnectEvent.ServerResult.denied());
+            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-server"));
+            event.setResult(ServerPreConnectEvent.ServerResult.denied());
+        });
     }
 }

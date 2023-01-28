@@ -19,14 +19,14 @@ public class LogoutCommand {
     public void logout(ProxyPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         if (Auth.hasAccount(id)) {
-            player.sendMessage(config.getProxyMessages().getStringMessage("already-logged-out"));
+            player.sendMessage(config.getProxyMessages().getMessage("already-logged-out"));
             return;
         }
         accountStorage.getAccount(id).thenAccept(account -> {
             account.logout(config.getSessionDurability());
             accountStorage.saveOrUpdateAccount(account);
             Auth.addAccount(account);
-            player.sendMessage(config.getProxyMessages().getStringMessage("logout-success"));
+            player.sendMessage(config.getProxyMessages().getMessage("logout-success"));
             player.sendTo(config.findServerInfo(config.getAuthServers()).asProxyServer());
         });
     }

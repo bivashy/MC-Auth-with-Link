@@ -32,10 +32,10 @@ public class MessengerExceptionHandler extends DefaultExceptionHandler {
     @Override
     public void missingArgument(CommandActor actor, MissingArgumentException exception) {
         if (exception.getCommand().hasAnnotation(ConfigurationArgumentError.class)) {
-            actor.reply(linkType.getLinkMessages().getStringMessage(exception.getCommand().getAnnotation(ConfigurationArgumentError.class).value()));
+            actor.reply(linkType.getLinkMessages().getMessage(exception.getCommand().getAnnotation(ConfigurationArgumentError.class).value()));
             return;
         }
-        actor.reply(linkType.getLinkMessages().getStringMessage("unresolved-argument").replaceAll("%argument_name%", exception.getParameter().getName()));
+        actor.reply(linkType.getLinkMessages().getMessage("unresolved-argument").replaceAll("%argument_name%", exception.getParameter().getName()));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MessengerExceptionHandler extends DefaultExceptionHandler {
 
     @Override
     public void invalidNumber(CommandActor actor, InvalidNumberException exception) {
-        actor.reply(linkType.getLinkMessages().getStringMessage("unresolved-number").replaceAll("%input%", exception.getInput()));
+        actor.reply(linkType.getLinkMessages().getMessage("unresolved-number").replaceAll("%input%", exception.getInput()));
     }
 
     @Override
@@ -65,12 +65,12 @@ public class MessengerExceptionHandler extends DefaultExceptionHandler {
 
     @Override
     public void argumentParse(CommandActor actor, ArgumentParseException exception) {
-        actor.reply(linkType.getLinkMessages().getStringMessage("command-invocation"));
+        actor.reply(linkType.getLinkMessages().getMessage("command-invocation"));
     }
 
     @Override
     public void commandInvocation(CommandActor actor, CommandInvocationException exception) {
-        actor.reply(linkType.getLinkMessages().getStringMessage("command-invocation"));
+        actor.reply(linkType.getLinkMessages().getMessage("command-invocation"));
         exception.getCause().printStackTrace();
     }
 
@@ -110,6 +110,6 @@ public class MessengerExceptionHandler extends DefaultExceptionHandler {
     @Override
     public void onUnhandledException(CommandActor actor, Throwable throwable) {
         throwable.printStackTrace();
-        actor.reply(linkType.getLinkMessages().getStringMessage("command-invocation"));
+        actor.reply(linkType.getLinkMessages().getMessage("command-invocation"));
     }
 }

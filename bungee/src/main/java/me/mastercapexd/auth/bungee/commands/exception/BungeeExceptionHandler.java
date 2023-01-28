@@ -1,7 +1,10 @@
 package me.mastercapexd.auth.bungee.commands.exception;
 
-import me.mastercapexd.auth.config.message.AbstractMessages;
+import me.mastercapexd.auth.bungee.commands.BungeeProxyCommandActor;
 import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.context.MessageContext;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
+import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.exception.BungeeExceptionAdapter;
 import revxrsal.commands.bungee.exception.InvalidPlayerException;
 import revxrsal.commands.bungee.exception.SenderNotConsoleException;
@@ -26,9 +29,9 @@ import revxrsal.commands.exception.SendableException;
 import revxrsal.commands.exception.TooManyArgumentsException;
 
 public class BungeeExceptionHandler extends BungeeExceptionAdapter {
-    private final Messages<?> messages;
+    private final Messages<ProxyComponent> messages;
 
-    public BungeeExceptionHandler(AbstractMessages<?> messages) {
+    public BungeeExceptionHandler(Messages<ProxyComponent> messages) {
         this.messages = messages;
     }
 
@@ -42,12 +45,12 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void invalidPlayer(CommandActor actor, InvalidPlayerException exception) {
-        actor.reply(messages.getStringMessage("player-offline").replaceAll("%player%", exception.getInput()));
+        sendProxyComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player%", exception.getInput())));
     }
 
     @Override
     public void missingArgument(CommandActor actor, MissingArgumentException exception) {
-        actor.reply(messages.getStringMessage("unresolved-argument").replaceAll("%argument_name%", exception.getParameter().getName()));
+        sendProxyComponent(actor, messages.getMessage("unresolved-argument", MessageContext.of("%argument_name%", exception.getParameter().getName())));
     }
 
     @Override
@@ -56,7 +59,7 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void invalidNumber(CommandActor actor, InvalidNumberException exception) {
-        actor.reply(messages.getStringMessage("unresolved-number").replaceAll("%input%", exception.getInput()));
+        sendProxyComponent(actor, messages.getMessage("unresolved-number", MessageContext.of("%input%", exception.getInput())));
     }
 
     @Override
@@ -73,17 +76,17 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void noPermission(CommandActor actor, NoPermissionException exception) {
-        actor.reply(messages.getStringMessage("no-permission"));
+        sendProxyComponent(actor, messages.getMessage("no-permission"));
     }
 
     @Override
     public void argumentParse(CommandActor actor, ArgumentParseException exception) {
-        actor.reply(messages.getStringMessage("command-invocation"));
+        sendProxyComponent(actor, messages.getMessage("command-invocation"));
     }
 
     @Override
     public void commandInvocation(CommandActor actor, CommandInvocationException exception) {
-        actor.reply(messages.getStringMessage("command-invocation"));
+        sendProxyComponent(actor, messages.getMessage("command-invocation"));
         exception.getCause().printStackTrace();
     }
 
@@ -122,8 +125,11 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void onUnhandledException(CommandActor actor, Throwable throwable) {
-        actor.reply(messages.getStringMessage("command-invocation"));
+        sendProxyComponent(actor, messages.getMessage("command-invocation"));
         throwable.printStackTrace();
     }
 
+    private void sendProxyComponent(CommandActor actor, ProxyComponent component) {
+        new BungeeProxyCommandActor(actor.as(BungeeCommandActor.class)).reply(component);
+    }
 }

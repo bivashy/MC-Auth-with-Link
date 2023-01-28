@@ -11,8 +11,7 @@ import me.mastercapexd.auth.proxy.server.Server;
 
 public interface ProxyPlayer extends Castable<ProxyPlayer> {
     default void disconnect(String reason) {
-        disconnect(ProxyPlugin.instance().getCore().componentJson(new AdventureProxyComponent(
-                ProxyPlugin.instance().getConfig().getProxyMessages().getDeserializer().deserialize(reason)).jsonText()));
+        disconnect(new AdventureProxyComponent(ProxyPlugin.instance().getConfig().getProxyMessages().getDeserializer().deserialize(reason)));
     }
 
     void disconnect(ProxyComponent component);

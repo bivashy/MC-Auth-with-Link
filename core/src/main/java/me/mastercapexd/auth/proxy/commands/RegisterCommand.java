@@ -38,6 +38,6 @@ public class RegisterCommand {
 
         account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 
-        player.sendMessage(config.getProxyMessages().getStringMessage("register-success"));
+        player.sendMessage(config.getProxyMessages().getMessage("register-success"));
     }
 }

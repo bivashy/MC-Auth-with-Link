@@ -10,6 +10,7 @@ import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContex
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
@@ -48,9 +49,7 @@ public class DefaultLoginManagement implements LoginManagement {
         return accountStorage.getAccount(id).thenCompose(account -> {
             if (config.isNameCaseCheckEnabled() && account != null && !account.getName().equals(nickname)) {
                 player.disconnect(config.getProxyMessages()
-                        .getStringMessage("check-name-case-failed")
-                        .replaceAll("(?i)%correct%", account.getName())
-                        .replaceAll("(?i)%failed%", nickname));
+                        .getMessage("check-name-case-failed", MessageContext.of("%correct%", account.getName(), "%failed%", nickname)));
                 return CompletableFuture.completedFuture(account);
             }
 

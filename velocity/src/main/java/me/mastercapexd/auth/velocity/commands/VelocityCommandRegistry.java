@@ -21,16 +21,14 @@ import me.mastercapexd.auth.velocity.commands.exception.VelocityExceptionHandler
 import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.annotation.dynamic.Annotations;
-import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.velocity.VelocityCommandActor;
 import revxrsal.commands.velocity.annotation.CommandPermission;
 import revxrsal.commands.velocity.core.VelocityHandler;
 
 public class VelocityCommandRegistry extends ProxyCommandsRegistry {
     private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
-    public static final CommandHandler VELOCITY_COMMAND_HANDLER =
-            new VelocityHandler(PLUGIN, PLUGIN.getProxyServer()).setExceptionHandler(new VelocityExceptionHandler(PLUGIN.getConfig().getProxyMessages()))
-                    .disableStackTraceSanitizing();
+    public static final CommandHandler VELOCITY_COMMAND_HANDLER = new VelocityHandler(PLUGIN, PLUGIN.getProxyServer()).setExceptionHandler(
+            new VelocityExceptionHandler(PLUGIN.getConfig().getProxyMessages())).disableStackTraceSanitizing();
 
     public VelocityCommandRegistry() {
         super(VELOCITY_COMMAND_HANDLER);
@@ -38,7 +36,7 @@ public class VelocityCommandRegistry extends ProxyCommandsRegistry {
         commandHandler.registerContextResolver(ProxyPlayer.class, (context) -> {
             Player player = context.actor().as(VelocityCommandActor.class).getAsPlayer();
             if (player == null)
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("players-only"));
             return new VelocityProxyPlayer(player);
         });
         commandHandler.registerContextResolver(ProxyCommandActor.class,
@@ -47,7 +45,7 @@ public class VelocityCommandRegistry extends ProxyCommandsRegistry {
             String value = context.pop();
             Optional<ProxyPlayer> player = PLUGIN.getCore().getPlayer(value);
             if (!player.isPresent())
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("player-offline"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("player-offline"));
             return new ArgumentProxyPlayer(player.get());
         });
         commandHandler.registerCondition((actor, command, arguments) -> {
@@ -65,22 +63,23 @@ public class VelocityCommandRegistry extends ProxyCommandsRegistry {
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
             if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
                 return;
-            throw new SendMessageException(config.getProxyMessages().getSubMessages("authentication-step-usage")
-                    .getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
+            throw new SendComponentException(config.getProxyMessages()
+                    .getSubMessages("authentication-step-usage")
+                    .getMessage(account.getCurrentAuthenticationStep().getStepName()));
         });
         commandHandler.registerContextResolver(Account.class, (context) -> {
             ProxyPlayer player = new VelocityProxyPlayer(context.actor().as(VelocityCommandActor.class).getAsPlayer());
             if (player.getRealPlayer() == null)
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("players-only"));
             String id = config.getActiveIdentifierType().getId(player);
             if (!Auth.hasAccount(id))
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("already-logged-in"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("already-logged-in"));
 
             Account account = Auth.getAccount(id);
             if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("account-not-found"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("account-not-found"));
             if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("account-exists"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("account-exists"));
             return account;
         });
 

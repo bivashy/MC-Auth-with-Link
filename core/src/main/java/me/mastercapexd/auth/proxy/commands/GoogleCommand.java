@@ -2,6 +2,7 @@ package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.link.user.LinkUser;
@@ -30,7 +31,7 @@ public class GoogleCommand {
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {
             if (account == null || !account.isRegistered()) {
-                player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
+                player.sendMessage(config.getProxyMessages().getMessage("account-not-found"));
                 return;
             }
             String key = plugin.getGoogleAuthenticator().createCredentials().getKey();
@@ -40,9 +41,9 @@ public class GoogleCommand {
                 return googleLinkUser;
             });
             if (linkUser.isIdentifierDefaultOrNull()) {
-                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("generated").replaceAll("(?i)%google_key%", key));
+                player.sendMessage(GOOGLE_MESSAGES.getMessage("generated", MessageContext.of("%google_key%", key)));
             } else {
-                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("regenerated").replaceAll("(?i)%google_key%", key));
+                player.sendMessage(GOOGLE_MESSAGES.getMessage("regenerated", MessageContext.of("%google_key%", key)));
             }
             linkUser.getLinkUserInfo().getIdentificator().setString(key);
             accountStorage.saveOrUpdateAccount(account);

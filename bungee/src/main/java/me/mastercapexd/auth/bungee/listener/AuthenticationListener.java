@@ -70,13 +70,13 @@ public class AuthenticationListener implements Listener {
         if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
             return;
         if (plugin.getConfig().shouldBlockChat() && !event.isCommand()) {
-            player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-chat"));
+            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-chat"));
             event.setCancelled(true);
             return;
         }
         if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(event.getMessage()).find()))
             return;
-        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-command"));
+        player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-command"));
         event.setCancelled(true);
     }
 
@@ -90,7 +90,7 @@ public class AuthenticationListener implements Listener {
             event.setTarget(plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(BungeeServer.class).getServerInfo());
             return;
         }
-        player.sendMessage(plugin.getConfig().getProxyMessages().getStringMessage("disabled-server"));
+        player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-server"));
         event.setCancelled(true);
     }
 }

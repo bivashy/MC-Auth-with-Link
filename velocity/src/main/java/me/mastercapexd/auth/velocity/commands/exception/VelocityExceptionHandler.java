@@ -2,8 +2,10 @@ package me.mastercapexd.auth.velocity.commands.exception;
 
 import org.jetbrains.annotations.NotNull;
 
-import me.mastercapexd.auth.config.message.AbstractMessages;
 import me.mastercapexd.auth.config.message.Messages;
+import me.mastercapexd.auth.config.message.context.MessageContext;
+import me.mastercapexd.auth.proxy.message.ProxyComponent;
+import me.mastercapexd.auth.velocity.commands.VelocityProxyCommandActor;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.ArgumentParseException;
 import revxrsal.commands.exception.CommandInvocationException;
@@ -22,12 +24,13 @@ import revxrsal.commands.exception.NoSubcommandSpecifiedException;
 import revxrsal.commands.exception.NumberNotInRangeException;
 import revxrsal.commands.exception.SendableException;
 import revxrsal.commands.exception.TooManyArgumentsException;
+import revxrsal.commands.velocity.VelocityCommandActor;
 import revxrsal.commands.velocity.exception.VelocityExceptionAdapter;
 
 public class VelocityExceptionHandler extends VelocityExceptionAdapter {
-    private final Messages<?> messages;
+    private final Messages<ProxyComponent> messages;
 
-    public VelocityExceptionHandler(AbstractMessages<?> messages) {
+    public VelocityExceptionHandler(Messages<ProxyComponent> messages) {
         this.messages = messages;
     }
 
@@ -41,12 +44,12 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
 
     @Override
     public void invalidPlayer(@NotNull CommandActor actor, revxrsal.commands.velocity.exception.@NotNull InvalidPlayerException exception) {
-        actor.reply(messages.getStringMessage("player-offline").replaceAll("%player%", exception.getInput()));
+        sendComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player%", exception.getInput())));
     }
 
     @Override
     public void missingArgument(CommandActor actor, MissingArgumentException exception) {
-        actor.reply(messages.getStringMessage("unresolved-argument").replaceAll("%argument_name%", exception.getParameter().getName()));
+        sendComponent(actor, messages.getMessage("unresolved-argument", MessageContext.of("%argument_name%", exception.getParameter().getName())));
     }
 
     @Override
@@ -55,7 +58,7 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
 
     @Override
     public void invalidNumber(CommandActor actor, InvalidNumberException exception) {
-        actor.reply(messages.getStringMessage("unresolved-number").replaceAll("%input%", exception.getInput()));
+        sendComponent(actor, messages.getMessage("unresolved-number", MessageContext.of("%input%", exception.getInput())));
     }
 
     @Override
@@ -72,17 +75,17 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
 
     @Override
     public void noPermission(CommandActor actor, NoPermissionException exception) {
-        actor.reply(messages.getStringMessage("no-permission"));
+        sendComponent(actor, messages.getMessage("no-permission"));
     }
 
     @Override
     public void argumentParse(CommandActor actor, ArgumentParseException exception) {
-        actor.reply(messages.getStringMessage("command-invocation"));
+        sendComponent(actor, messages.getMessage("command-invocation"));
     }
 
     @Override
     public void commandInvocation(CommandActor actor, CommandInvocationException exception) {
-        actor.reply(messages.getStringMessage("command-invocation"));
+        sendComponent(actor, messages.getMessage("command-invocation"));
         exception.getCause().printStackTrace();
     }
 
@@ -121,7 +124,11 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
 
     @Override
     public void onUnhandledException(CommandActor actor, Throwable throwable) {
-        actor.reply(messages.getStringMessage("command-invocation"));
+        sendComponent(actor, messages.getMessage("command-invocation"));
         throwable.printStackTrace();
+    }
+
+    private void sendComponent(CommandActor actor, ProxyComponent component) {
+        new VelocityProxyCommandActor(actor.as(VelocityCommandActor.class)).reply(component);
     }
 }

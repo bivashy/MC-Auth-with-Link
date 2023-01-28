@@ -26,7 +26,7 @@ public class GoogleCodeCommand {
 
     @Default
     public void defaultCommand(ProxyPlayer player) {
-        player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-enough-arguments"));
+        player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-enough-arguments"));
     }
 
     @GoogleUse
@@ -35,25 +35,25 @@ public class GoogleCodeCommand {
         String playerId = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(playerId).thenAccept(account -> {
             if (account == null || !account.isRegistered()) {
-                player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
+                player.sendMessage(config.getProxyMessages().getMessage("account-not-found"));
                 return;
             }
             LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
             if (linkUser == null || linkUser.isIdentifierDefaultOrNull()) {
-                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-exists"));
+                player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-exists"));
                 return;
             }
             if (!Auth.getLinkEntryAuth().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
-                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-not-need-enter"));
+                player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-need-enter"));
                 return;
             }
             if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
-                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-entered"));
+                player.sendMessage(GOOGLE_MESSAGES.getMessage("code-entered"));
                 account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
                 account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
                 return;
             }
-            player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-wrong-code"));
+            player.sendMessage(GOOGLE_MESSAGES.getMessage("code-wrong-code"));
         });
     }
 }

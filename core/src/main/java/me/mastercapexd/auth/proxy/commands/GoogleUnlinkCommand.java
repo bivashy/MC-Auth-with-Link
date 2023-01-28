@@ -27,16 +27,16 @@ public class GoogleUnlinkCommand {
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {
             if (account == null || !account.isRegistered()) {
-                player.sendMessage(config.getProxyMessages().getStringMessage("account-not-found"));
+                player.sendMessage(config.getProxyMessages().getMessage("account-not-found"));
                 return;
             }
 
             LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
             if (linkUser == null || linkUser.isIdentifierDefaultOrNull()) {
-                player.sendMessage(GOOGLE_MESSAGES.getStringMessage("unlink-not-exists"));
+                player.sendMessage(GOOGLE_MESSAGES.getMessage("unlink-not-exists"));
                 return;
             }
-            player.sendMessage(GOOGLE_MESSAGES.getStringMessage("unlinked"));
+            player.sendMessage(GOOGLE_MESSAGES.getMessage("unlinked"));
             linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
             accountStorage.saveOrUpdateAccount(account);
         });

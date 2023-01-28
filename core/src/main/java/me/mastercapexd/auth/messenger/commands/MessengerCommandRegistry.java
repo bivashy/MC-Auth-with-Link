@@ -76,7 +76,7 @@ public abstract class MessengerCommandRegistry {
                     .orElse(null);
 
             if (confirmationUser == null)
-                throw new SendMessageException(linkType.getSettings().getMessages().getStringMessage("confirmation-error"));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-error"));
 
             if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
                 throw new SendMessageException(

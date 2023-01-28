@@ -23,12 +23,11 @@ import revxrsal.commands.annotation.dynamic.Annotations;
 import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.core.BungeeHandler;
-import revxrsal.commands.exception.SendMessageException;
 
 public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
     private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
-    public static final CommandHandler BUNGEE_COMMAND_HANDLER =
-            new BungeeHandler(PLUGIN).setExceptionHandler(new BungeeExceptionHandler(PLUGIN.getConfig().getProxyMessages())).disableStackTraceSanitizing();
+    public static final CommandHandler BUNGEE_COMMAND_HANDLER = new BungeeHandler(PLUGIN).setExceptionHandler(
+            new BungeeExceptionHandler(PLUGIN.getConfig().getProxyMessages())).disableStackTraceSanitizing();
 
     public BungeeCommandsRegistry() {
         super(BUNGEE_COMMAND_HANDLER);
@@ -36,15 +35,16 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
         commandHandler.registerContextResolver(ProxyPlayer.class, (context) -> {
             ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
             if (selfPlayer == null)
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("players-only"));
             return new BungeeProxyPlayer(selfPlayer);
         });
         commandHandler.registerContextResolver(ProxyCommandActor.class, (context) -> new BungeeProxyCommandActor(context.actor().as(BungeeCommandActor.class)));
         commandHandler.registerValueResolver(ArgumentProxyPlayer.class, (context) -> {
             String value = context.pop();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
-            if (player == null)
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("player-offline"));
+            if (player == null) {
+                throw new SendComponentException(config.getProxyMessages().getMessage("player-offline"));
+            }
             return new ArgumentProxyPlayer(new BungeeProxyPlayer(player));
         });
         commandHandler.registerCondition((actor, command, arguments) -> {
@@ -62,22 +62,23 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
             if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
                 return;
-            throw new SendMessageException(config.getProxyMessages().getSubMessages("authentication-step-usage")
-                    .getStringMessage(account.getCurrentAuthenticationStep().getStepName()));
+            throw new SendComponentException(config.getProxyMessages()
+                    .getSubMessages("authentication-step-usage")
+                    .getMessage(account.getCurrentAuthenticationStep().getStepName()));
         });
         commandHandler.registerContextResolver(Account.class, (context) -> {
             ProxyPlayer player = new BungeeProxyPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
             if (player.getRealPlayer() == null)
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("players-only"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("players-only"));
             String id = config.getActiveIdentifierType().getId(player);
             if (!Auth.hasAccount(id))
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("already-logged-in"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("already-logged-in"));
 
             Account account = Auth.getAccount(id);
             if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("account-not-found"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("account-not-found"));
             if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))
-                throw new SendMessageException(config.getProxyMessages().getStringMessage("account-exists"));
+                throw new SendComponentException(config.getProxyMessages().getMessage("account-exists"));
             return account;
         });
 
