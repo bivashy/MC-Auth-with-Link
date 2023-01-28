@@ -49,7 +49,7 @@ public class GoogleCodeCommand {
             }
             if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
                 player.sendMessage(GOOGLE_MESSAGES.getStringMessage("code-entered"));
-                Auth.removeAccount(account.getPlayerId());
+                account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
                 account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
                 return;
             }
