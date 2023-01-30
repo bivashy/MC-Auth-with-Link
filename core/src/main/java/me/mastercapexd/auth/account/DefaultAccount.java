@@ -11,6 +11,7 @@ import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.link.user.LinkUser;
 
+@Deprecated
 public class DefaultAccount extends AccountTemplate {
     private final List<LinkUser> linkUsers = new ArrayList<>();
     private final String id;

@@ -14,7 +14,7 @@ import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.account.factories.DefaultAccountFactory;
+import me.mastercapexd.auth.account.factories.AuthAccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
@@ -43,12 +43,10 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.ProxyPluginProvider;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.storage.StorageType;
-import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
-import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
+import me.mastercapexd.auth.storage.AuthAccountDatabaseProxy;
+import me.mastercapexd.auth.storage.DatabaseHelper;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
-import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -98,9 +96,9 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.initializeConfigurationProcessor();
         this.bungeeAudiences = BungeeAudiences.create(this);
         this.config = new DefaultPluginConfig(this);
-        this.accountFactory = new DefaultAccountFactory();
+        this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = LinkTypeProvider.defaultProvider();
-        this.accountStorage = loadAccountStorage(config.getStorageType());
+        this.accountStorage = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
@@ -140,16 +138,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
 
         getProxy().getPluginManager().registerListener(this, new VkDispatchListener());
         new VKCommandRegistry();
-    }
-
-    private AccountStorage loadAccountStorage(StorageType storageType) {
-        switch (storageType) {
-            case SQLITE:
-                return new SQLiteAccountStorage(config, accountFactory, this.getDataFolder());
-            case MYSQL:
-                return new MySQLAccountStorage(config, accountFactory);
-        }
-        throw new NullPointerException("Wrong account storage!");
     }
 
     @Override

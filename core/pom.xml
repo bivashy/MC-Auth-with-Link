@@ -12,8 +12,6 @@
 
     <properties>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <sqlite.jdbc.version>3.36.0.1</sqlite.jdbc.version>
-        <mysql.connector.version>6.0.6</mysql.connector.version>
         <google.authenticator.version>1.4.0</google.authenticator.version>
         <zxing.library.version>3.5.1</zxing.library.version>
         <configuration-library.version>3.0.5</configuration-library.version>
@@ -43,20 +41,6 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>${jbcrypt.version}</version>
-        </dependency>
-
-        <!-- SQLite library -->
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>${sqlite.jdbc.version}</version>
-        </dependency>
-
-        <!-- MySQL library -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.connector.version}</version>
         </dependency>
 
         <!-- GoogleAuthenticator library -->

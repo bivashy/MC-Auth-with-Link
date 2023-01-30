@@ -1,7 +1,12 @@
 package me.mastercapexd.auth.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -25,6 +30,16 @@ public class HashUtils {
 
     public static String hashText(String input, MessageDigest messageDigest) {
         return String.format(FORMAT, new BigInteger(1, messageDigest.digest(input.getBytes(StandardCharsets.UTF_8))));
+    }
+
+    public static URL mapToMd5URL(URL url) throws MalformedURLException {
+        return new URL(url.toString() + MD_5_EXTENSION);
+    }
+
+    public static String getFileCheckSum(File file, MessageDigest messageDigest) throws IOException {
+        if (!file.exists())
+            return null;
+        return new BigInteger(1, messageDigest.digest(Files.readAllBytes(file.toPath()))).toString(16);
     }
 
     public static MessageDigest getMD5() {

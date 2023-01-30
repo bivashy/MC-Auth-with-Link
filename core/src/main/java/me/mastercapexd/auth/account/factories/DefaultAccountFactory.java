@@ -6,6 +6,7 @@ import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.DefaultAccount;
 
+@Deprecated
 public class DefaultAccountFactory extends AccountFactoryTemplate {
     @Override
     protected Account newAccount(String id, IdentifierType identifierType, UUID uniqueId, String name) {

@@ -23,7 +23,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.account.factories.DefaultAccountFactory;
+import me.mastercapexd.auth.account.factories.AuthAccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep.EnterServerAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep.LoginAuthenticationStepCreator;
@@ -49,9 +49,7 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.ProxyPluginProvider;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.storage.StorageType;
-import me.mastercapexd.auth.storage.mysql.MySQLAccountStorage;
-import me.mastercapexd.auth.storage.sqlite.SQLiteAccountStorage;
+import me.mastercapexd.auth.storage.DatabaseHelper;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
@@ -60,7 +58,6 @@ import me.mastercapexd.auth.velocity.hooks.limbo.LimboAPIHook;
 import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
-import net.kyori.adventure.platform.AudienceProvider;
 
 @Plugin(id = "mcauth", name = "McAuth", version = "1.6.1-6", authors = "Ubivashka",
         dependencies = {@Dependency(id = "vk-api", optional = true),
@@ -109,9 +106,9 @@ public class AuthPlugin implements ProxyPlugin {
     private void initialize() {
         initializeConfigurationProcessor();
         this.config = new DefaultPluginConfig(this);
-        this.accountFactory = new DefaultAccountFactory();
+        this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = LinkTypeProvider.defaultProvider();
-        this.accountStorage = loadAccountStorage(config.getStorageType());
+        this.accountStorage = new DatabaseHelper(this).getAuthAccountStorage();
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
@@ -153,16 +150,6 @@ public class AuthPlugin implements ProxyPlugin {
 
         proxyServer.getEventManager().register(this, new VkDispatchListener());
         new VKCommandRegistry();
-    }
-
-    private AccountStorage loadAccountStorage(StorageType storageType) {
-        switch (storageType) {
-            case SQLITE:
-                return new SQLiteAccountStorage(config, accountFactory, this.getFolder());
-            case MYSQL:
-                return new MySQLAccountStorage(config, accountFactory);
-        }
-        throw new NullPointerException("Wrong account storage!");
     }
 
     public ProxyServer getProxyServer() {
