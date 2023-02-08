@@ -302,7 +302,7 @@ messages:
     unlink-not-exists: '&cВы не привязали Google-Authenticator!'
     unlinked: '&cВы успешно отвязали Google-Authenticator!'
   # Подключение
-  autoconnect: '&aСессия восстановлена. Присоеденяем Вас к серверу...'
+  autoconnect: '&aСессия восстановлена. Присоединяем Вас к серверу...'
   check-name-case-failed: '&cНеправильное имя. Аккаунт зарегистрирован под ником %correct%.'
   no-permission: '&cУ вас недостаточно прав для этого.'
   info-registered: '&fИгроков зарегистрировано: &e%players%'
