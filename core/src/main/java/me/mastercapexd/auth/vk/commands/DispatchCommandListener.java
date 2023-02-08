@@ -18,7 +18,6 @@ import com.ubivaska.messenger.common.message.Message;
 import com.ubivaska.messenger.common.message.Message.MessageBuilder;
 import com.vk.api.sdk.objects.messages.Keyboard;
 
-import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.CustomCommandExecuteContext;
@@ -28,8 +27,9 @@ import revxrsal.commands.command.CommandActor;
 
 public abstract class DispatchCommandListener {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    private static final LinkType LINK_TYPE = VKLinkType.getInstance();
+    private static final VKLinkType LINK_TYPE = VKLinkType.getInstance();
     private static final Gson GSON = new Gson();
+    private static final double CONVERSATION_PEER_ID_OFFSET = 2e9;
 
     protected void onMessage(com.vk.api.sdk.objects.messages.Message vkMessage, int peerId) {
         EXECUTOR_SERVICE.execute(() -> VkHandler.getInstances().forEach((commandHandler) -> {
@@ -47,14 +47,19 @@ public abstract class DispatchCommandListener {
             CallbackButton callbackButton = GSON.fromJson(GSON.toJson(buttonEvent), CallbackButton.class);
             handleCommandDispatch(commandHandler, new ButtonDispatchSource(callbackButton));
 
-            LINK_TYPE.getSettings().getCustomCommands().execute(new CustomCommandExecuteContext(buttonEvent.getPayload()).setButtonExecution(true)).forEach(customCommand -> {
-                Message message = createMessage(customCommand);
-                message.send(Identificator.of(buttonEvent.getPeerID()));
-            });
+            LINK_TYPE.getSettings()
+                    .getCustomCommands()
+                    .execute(new CustomCommandExecuteContext(buttonEvent.getPayload()).setButtonExecution(true))
+                    .forEach(customCommand -> {
+                        Message message = createMessage(customCommand);
+                        message.send(Identificator.of(buttonEvent.getPeerID()));
+                    });
         }));
     }
 
     private void handleCommandDispatch(VkCommandHandler handler, DispatchSource source) {
+        if (LINK_TYPE.getSettings().shouldDisableConversationCommands() && isConversationPeerId(source.getPeerId()))
+            return;
         CommandActor commandActor = new VKCommandActorWrapper(new BaseVkActor(source, handler));
         ArgumentStack argumentStack = source.getArgumentStack(handler);
         if (argumentStack.isEmpty())
@@ -67,5 +72,9 @@ public abstract class DispatchCommandListener {
         if (customCommand.getSectionHolder().contains("keyboard"))
             builder.keyboard(new VkKeyboard(GSON.fromJson(customCommand.getSectionHolder().getString("keyboard"), Keyboard.class)));
         return builder.build();
+    }
+
+    private boolean isConversationPeerId(int peerId) {
+        return peerId > CONVERSATION_PEER_ID_OFFSET;
     }
 }

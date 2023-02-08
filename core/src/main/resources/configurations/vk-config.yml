@@ -50,6 +50,10 @@ vk:
     code-length: 7 # Длина кода
     # Символы которые будут использованы в коде
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+  # Выключает сообщения (кроме кастомных)
+  disable-conversation-commands: true
+
   vk-commands: # Основные команды 
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле

@@ -16,7 +16,6 @@ import me.mastercapexd.auth.config.vk.VKSettings;
 import me.mastercapexd.auth.storage.StorageType;
 
 public interface PluginConfig {
-
     @Deprecated
     LegacyStorageDataSettings getStorageDataSettings();
 
@@ -79,5 +78,4 @@ public interface PluginConfig {
     TelegramSettings getTelegramSettings();
 
     VKSettings getVKSettings();
-
 }

@@ -39,6 +39,8 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
     private VKKeyboards keyboards;
     @ConfigField("admin-accounts")
     private List<Integer> adminAccounts;
+    @ConfigField("disable-conversation-commands")
+    private boolean disableConversationCommands;
 
     public VKSettings() {
     }
@@ -72,6 +74,10 @@ public class VKSettings implements ConfigurationHolder, MessengerSettings {
         if (identificator == null || !identificator.isNumber())
             return false;
         return adminAccounts.contains((int) identificator.asNumber());
+    }
+
+    public boolean shouldDisableConversationCommands() {
+        return disableConversationCommands;
     }
 
     public boolean isAdministrator(int userId) {
