@@ -6,8 +6,8 @@ import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.config.message.context.MessageContext;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
@@ -16,7 +16,6 @@ import me.mastercapexd.auth.link.vk.VKConfirmationUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.VkUse;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Command;
@@ -26,19 +25,21 @@ import revxrsal.commands.annotation.Optional;
 
 @Command({"addvk", "vkadd", "vklink", "linkvk"})
 public class VKLinkCommand {
-    private static final Messages<ProxyComponent> VK_MESSAGES = ProxyPlugin.instance().getConfig().getProxyMessages().getSubMessages("vk");
+    private static final String VK_SUBMESSAGES_KEY = "vk";
     @Dependency
     private ProxyPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
     private AccountStorage accountStorage;
+    @Dependency
+    private ProxyMessages messages;
 
     @Default
     @VkUse
     public void vkLink(ProxyPlayer player, @Optional String vkIdentificator) {
         if (vkIdentificator == null) {
-            player.sendMessage(VK_MESSAGES.getMessage("usage"));
+            player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("usage"));
             return;
         }
 
@@ -47,12 +48,12 @@ public class VKLinkCommand {
         plugin.getCore().runAsync(() -> {
             GetResponse user = fetchUserFromIdentificator(vkIdentificator).orElse(null);
             if (user == null) {
-                player.sendMessage(VK_MESSAGES.getMessage("user-not-exists"));
+                player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("user-not-exists"));
                 return;
             }
 
             if (Auth.getLinkEntryAuth().hasLinkUser(accountId, VKLinkType.getInstance())) {
-                player.sendMessage(VK_MESSAGES.getMessage("already-sent"));
+                player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("already-sent"));
                 return;
             }
             int userId = user.getId();
@@ -64,13 +65,13 @@ public class VKLinkCommand {
                 }
                 LinkUser linkUser = account.findFirstLinkUserOrNew(VKLinkType.LINK_USER_FILTER, VKLinkType.getInstance());
                 if (!linkUser.isIdentifierDefaultOrNull()) {
-                    player.sendMessage(VK_MESSAGES.getMessage("already-linked"));
+                    player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("already-linked"));
                     return;
                 }
                 UserNumberIdentificator userIdentificator = new UserNumberIdentificator(userId);
                 accountStorage.getAccountsFromLinkIdentificator(userIdentificator).thenAccept(accounts -> {
                     if (config.getVKSettings().getMaxLinkCount() != 0 && accounts.size() >= config.getVKSettings().getMaxLinkCount()) {
-                        player.sendMessage(VK_MESSAGES.getMessage("link-limit-reached"));
+                        player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("link-limit-reached"));
                         return;
                     }
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
@@ -79,7 +80,7 @@ public class VKLinkCommand {
                             .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                                     linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
                     Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
-                    player.sendMessage(VK_MESSAGES.getMessage("confirmation-sent", MessageContext.of("%code%", code)));
+                    player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("confirmation-sent", MessageContext.of("%code%", code)));
                 });
             });
         });

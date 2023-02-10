@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.proxy.commands;
 
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.proxy.commands.annotations.TelegramUse;
@@ -99,6 +100,7 @@ public abstract class ProxyCommandsRegistry {
 
     private void registerDependencies() {
         commandHandler.registerDependency(PluginConfig.class, plugin.getConfig());
+        commandHandler.registerDependency(ProxyMessages.class, plugin.getConfig().getProxyMessages());
         commandHandler.registerDependency(AccountStorage.class, plugin.getAccountStorage());
         commandHandler.registerDependency(ProxyPlugin.class, plugin);
     }
