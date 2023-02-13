@@ -30,7 +30,6 @@ public class DatabaseHelper {
     private ConnectionSource connectionSource;
     private AuthAccountDao authAccountDao;
     private AccountLinkDao accountLinkDao;
-    private AuthAccountDatabaseProxy authAccountDatabaseProxy;
 
     public DatabaseHelper(ProxyPlugin plugin) {
         DatabaseConfiguration databaseConfiguration = plugin.getConfig().getDatabaseConfiguration();
@@ -58,8 +57,6 @@ public class DatabaseHelper {
 
                 authAccountMigrationCoordinator.migrate(connectionSource, authAccountDao);
                 accountLinkMigrationCoordinator.migrate(connectionSource, accountLinkDao);
-
-                this.authAccountDatabaseProxy = new AuthAccountDatabaseProxy(this);
             } catch(SQLException | IOException e) {
                 e.printStackTrace();
             }
@@ -84,9 +81,5 @@ public class DatabaseHelper {
 
     public AccountLinkDao getAccountLinkDao() {
         return accountLinkDao;
-    }
-
-    public AuthAccountDatabaseProxy getAuthAccountStorage() {
-        return authAccountDatabaseProxy;
     }
 }

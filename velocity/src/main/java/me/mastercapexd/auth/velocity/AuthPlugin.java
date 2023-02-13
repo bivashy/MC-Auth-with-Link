@@ -49,6 +49,7 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.ProxyPluginProvider;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
+import me.mastercapexd.auth.storage.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.storage.DatabaseHelper;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
@@ -70,7 +71,6 @@ public class AuthPlugin implements ProxyPlugin {
     private final ProxyCore core;
     private final File dataFolder;
     private final VelocityAudienceProvider audienceProvider;
-
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
     private AccountFactory accountFactory;
@@ -90,6 +90,10 @@ public class AuthPlugin implements ProxyPlugin {
         this.dataFolder = dataDirectory.toFile();
     }
 
+    public static AuthPlugin getInstance() {
+        return instance;
+    }
+
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
         initialize();
@@ -106,9 +110,11 @@ public class AuthPlugin implements ProxyPlugin {
     private void initialize() {
         initializeConfigurationProcessor();
         this.config = new DefaultPluginConfig(this);
-        this.accountFactory = new AuthAccountFactory();
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        this.accountFactory = new AuthAccountFactory(databaseHelper);
         this.linkTypeProvider = LinkTypeProvider.defaultProvider();
-        this.accountStorage = new DatabaseHelper(this).getAuthAccountStorage();
+        this.accountStorage = new AuthAccountDatabaseProxy(databaseHelper);
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
@@ -154,10 +160,6 @@ public class AuthPlugin implements ProxyPlugin {
 
     public ProxyServer getProxyServer() {
         return proxyServer;
-    }
-
-    public static AuthPlugin getInstance() {
-        return instance;
     }
 
     @Override

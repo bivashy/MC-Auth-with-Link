@@ -96,9 +96,11 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.initializeConfigurationProcessor();
         this.bungeeAudiences = BungeeAudiences.create(this);
         this.config = new DefaultPluginConfig(this);
-        this.accountFactory = new AuthAccountFactory();
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        this.accountFactory = new AuthAccountFactory(databaseHelper);
         this.linkTypeProvider = LinkTypeProvider.defaultProvider();
-        this.accountStorage = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
+        this.accountStorage = new AuthAccountDatabaseProxy(databaseHelper);
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
