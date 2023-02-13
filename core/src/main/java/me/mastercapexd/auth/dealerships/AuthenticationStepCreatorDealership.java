@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
 
@@ -33,5 +35,9 @@ public class AuthenticationStepCreatorDealership {
 
     public Iterator<AuthenticationStepCreator> iterator() {
         return authenticationSteps.iterator();
+    }
+
+    public Optional<AuthenticationStepCreator> findFirst(Predicate<AuthenticationStepCreator> filter) {
+        return authenticationSteps.stream().filter(filter).findFirst();
     }
 }

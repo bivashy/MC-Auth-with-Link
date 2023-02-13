@@ -66,7 +66,7 @@ public class DefaultLoginManagement implements LoginManagement {
             }
 
             AuthenticationStepCreator authenticationStepCreator = plugin.getAuthenticationStepCreatorDealership()
-                    .findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName()
+                    .findFirst(stepCreator -> stepCreator.getAuthenticationStepName()
                             .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
                     .orElse(new NullAuthenticationStep.NullAuthenticationStepCreator());
 

@@ -8,11 +8,8 @@ import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.Nul
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public abstract class AccountTemplate implements Account, Comparable<AccountTemplate> {
-
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
-
+        private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
     private Integer currentConfigurationAuthenticationStepCreatorIndex = 0;
-
     private AuthenticationStep currentAuthenticationStep = new NullAuthenticationStep();
 
     @Override
@@ -27,7 +24,9 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
         }
         String stepCreatorName = PLUGIN.getConfig().getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
         AuthenticationStepCreator authenticationStepCreator =
-                PLUGIN.getAuthenticationStepCreatorDealership().findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName)).orElse(new NullAuthenticationStepCreator());
+                PLUGIN.getAuthenticationStepCreatorDealership()
+                        .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName))
+                        .orElse(new NullAuthenticationStepCreator());
         currentAuthenticationStep = authenticationStepCreator.createNewAuthenticationStep(stepContext);
         currentConfigurationAuthenticationStepCreatorIndex += 1;
         if (currentAuthenticationStep.shouldSkip()) {
@@ -47,7 +46,9 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
         String stepName = PLUGIN.getConfig().getAuthenticationStepName(index);
 
         AuthenticationStepCreator authenticationStepCreator =
-                PLUGIN.getAuthenticationStepCreatorDealership().findFirstByPredicate(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepName)).orElse(new NullAuthenticationStepCreator());
+                PLUGIN.getAuthenticationStepCreatorDealership()
+                        .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepName))
+                        .orElse(new NullAuthenticationStepCreator());
 
         AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryDealership().createContext(stepName, this);
         currentConfigurationAuthenticationStepCreatorIndex = index;
@@ -61,5 +62,4 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
 
         return currentAuthenticationStep;
     }
-
 }
