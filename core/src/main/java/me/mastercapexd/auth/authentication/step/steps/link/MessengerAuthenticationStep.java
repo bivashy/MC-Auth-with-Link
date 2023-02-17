@@ -37,13 +37,13 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
         Account account = authenticationStepContext.getAccount();
         LinkType linkType = linkEntryUser.getLinkType();
 
-        if (!linkType.getSettings().isEnabled()) // Ignore if messenger was disabled in configuration
+        if (!linkType.getSettings().isEnabled())
             return true;
 
-        if (Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), linkType)) // Ignore if user already confirming
+        if (Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), linkType))
             return true;
 
-        if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability())) // Ignore if player has active session
+        if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
 
         LinkUser linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).orElse(null);
