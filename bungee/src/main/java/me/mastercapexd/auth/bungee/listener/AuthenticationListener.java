@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.AuthPlugin;
@@ -13,10 +14,10 @@ import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -36,19 +37,13 @@ public class AuthenticationListener implements Listener {
             if (exception != null)
                 INVALID_ACCOUNTS.add(event.getConnection().getUniqueId());
             event.completeIntent(plugin.as(AuthPlugin.class));
-        });
-    }
-
-    @EventHandler
-    public void onPostLogin(PostLoginEvent e) { // Using PostLoginEvent for sending message about session, because in LoginEvent we can`t send message
-        ProxyPlayer player = new BungeeProxyPlayer(e.getPlayer());
-        String id = plugin.getConfig().getActiveIdentifierType().getId(player);
-        if (Auth.hasAccount(id))
-            return;
-        plugin.getAccountStorage().getAccount(id).thenAccept(account -> {
-            if (!account.isSessionActive(plugin.getConfig().getSessionDurability()))
+            if (account == null)
                 return;
-            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
+            // Using dirty way because we cannot send message in LoginEvent
+            plugin.getCore()
+                    .schedule(plugin, () -> account.getPlayer()
+                            .ifPresent(player -> player.sendMessage(
+                                    plugin.getConfig().getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)))), 1, TimeUnit.SECONDS);
         });
     }
 
@@ -87,6 +82,7 @@ public class AuthenticationListener implements Listener {
         if (!Auth.hasAccount(id))
             return;
         if (plugin.getConfig().getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId()))) {
+            System.out.println("Server name:" + player.getCurrentServer().map(Server::getServerName).orElse(null));
             event.setTarget(plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(BungeeServer.class).getServerInfo());
             return;
         }
