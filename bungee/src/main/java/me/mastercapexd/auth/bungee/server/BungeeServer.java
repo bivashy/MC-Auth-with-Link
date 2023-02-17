@@ -25,7 +25,7 @@ public class BungeeServer implements Server {
     public void sendPlayer(ProxyPlayer... players) {
         for (ProxyPlayer player : players) {
             ProxiedPlayer bungeePlayer = player.getRealPlayer();
-            if (bungeePlayer.getServer() != null && bungeePlayer.getServer().getInfo().equals(bungeeServerInfo))
+            if (bungeeServerInfo.getName().equals(player.getCurrentServer().map(Server::getServerName).orElse(null)))
                 continue;
             bungeePlayer.connect(bungeeServerInfo, (result, exception) -> {
             });
@@ -47,7 +47,7 @@ public class BungeeServer implements Server {
         return bungeeServerInfo != null;
     }
 
-    public ServerInfo getServerInfo(){
+    public ServerInfo getServerInfo() {
         return bungeeServerInfo;
     }
 }

@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import com.velocitypowered.api.proxy.server.ServerInfo;
 
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -28,7 +30,9 @@ public class VelocityServer implements Server {
     public void sendPlayer(ProxyPlayer... players) {
         for (ProxyPlayer player : players) {
             Player proxyPlayer = player.as(VelocityProxyPlayer.class).getPlayer();
-            if (proxyPlayer.getCurrentServer().isPresent() && proxyPlayer.getCurrentServer().get().getServerInfo().equals(registeredServer.getServerInfo()))
+            if (registeredServer.getServerInfo()
+                    .getName()
+                    .equals(proxyPlayer.getCurrentServer().map(ServerConnection::getServerInfo).map(ServerInfo::getName).orElse(null)))
                 continue;
             proxyPlayer.createConnectionRequest(registeredServer).connect();
         }
@@ -36,7 +40,10 @@ public class VelocityServer implements Server {
 
     @Override
     public List<ProxyPlayer> getPlayers() {
-        return registeredServer.getPlayersConnected().stream().map(ProxyPlugin.instance().getCore()::wrapPlayer).map(Optional::get)
+        return registeredServer.getPlayersConnected()
+                .stream()
+                .map(ProxyPlugin.instance().getCore()::wrapPlayer)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
