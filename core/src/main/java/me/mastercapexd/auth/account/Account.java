@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.KickResult;
@@ -49,7 +50,7 @@ public interface Account {
     void addLinkUser(LinkUser linkUser);
 
     /**
-     * @param filter
+     * @param filter filter
      * @return ILinkUser that fits filter
      */
     Optional<LinkUser> findFirstLinkUser(Predicate<LinkUser> filter);
@@ -122,10 +123,8 @@ public interface Account {
     }
 
     default boolean isSessionActive(long sessionDurability) {
-        Optional<ProxyPlayer> proxiedPlayer = getPlayer();
         long sessionEndTime = getLastSessionStartTimestamp() + sessionDurability;
-        return proxiedPlayer.map(proxyPlayer -> proxyPlayer.getPlayerIp().equals(getLastIpAddress()) && (sessionEndTime >= System.currentTimeMillis()))
-                .orElseGet(() -> (sessionEndTime >= System.currentTimeMillis()));
+        return sessionEndTime >= System.currentTimeMillis() && !Auth.hasAccount(getPlayerId());
     }
 
     default KickResult kick(String reason) {

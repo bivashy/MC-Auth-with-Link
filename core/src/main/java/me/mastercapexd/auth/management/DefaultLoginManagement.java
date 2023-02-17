@@ -73,7 +73,7 @@ public class DefaultLoginManagement implements LoginManagement {
             AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership()
                     .createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
-            if (account.isSessionActive(config.getSessionDurability())) {
+            if (account.isSessionActive(config.getSessionDurability()) && account.getLastIpAddress().equals(player.getPlayerIp())) {
                 player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
                 if (config.getJoinDelay() == 0) {
                     account.nextAuthenticationStep(context);
