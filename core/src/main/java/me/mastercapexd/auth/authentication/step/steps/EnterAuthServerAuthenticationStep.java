@@ -31,16 +31,20 @@ public class EnterAuthServerAuthenticationStep extends AbstractAuthenticationSte
         if (!Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
-        authenticationStepContext.getAccount()
-                .getPlayer().ifPresent(this::tryToConnect);
+        tryToConnect(true);
         return true;
     }
 
-    private void tryToConnect(ProxyPlayer player) {
+    private void tryToConnect(boolean shouldTryAgain) {
+        Optional<ProxyPlayer> playerOptional = authenticationStepContext.getAccount().getPlayer();
+        if (!playerOptional.isPresent())
+            return;
+        ProxyPlayer player = playerOptional.get();
         ConfigurationServer foundServer = PLUGIN.getConfig().findServerInfo(PLUGIN.getConfig().getAuthServers());
         Optional<Server> currentServerOptional = player.getCurrentServer();
         if (!currentServerOptional.isPresent()) {
-            PLUGIN.getCore().schedule(PLUGIN, () -> tryToConnect(player), 3, TimeUnit.SECONDS);
+            if (shouldTryAgain)
+                PLUGIN.getCore().schedule(PLUGIN, () -> tryToConnect(false), 3, TimeUnit.SECONDS);
             return;
         }
         if (currentServerOptional.get().getServerName().equals(foundServer.getId()))
