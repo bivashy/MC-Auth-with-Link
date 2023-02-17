@@ -14,7 +14,6 @@ import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -82,7 +81,6 @@ public class AuthenticationListener implements Listener {
         if (!Auth.hasAccount(id))
             return;
         if (plugin.getConfig().getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId()))) {
-            System.out.println("Server name:" + player.getCurrentServer().map(Server::getServerName).orElse(null));
             event.setTarget(plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(BungeeServer.class).getServerInfo());
             return;
         }
