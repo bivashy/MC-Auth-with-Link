@@ -3,7 +3,6 @@ package me.mastercapexd.auth.engine;
 import java.util.concurrent.TimeUnit;
 
 import me.mastercapexd.auth.Auth;
-import me.mastercapexd.auth.AuthEngine;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.MessageableAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
@@ -14,12 +13,11 @@ import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
-public class DefaultAuthEngine implements AuthEngine {
+public class DefaultAuthEngine {
     private static final ProxyPlugin PROXY_PLUGIN = ProxyPlugin.instance();
     private static final ProxyCore PROXY_CORE = PROXY_PLUGIN.getCore();
     private static final PluginConfig PLUGIN_CONFIG = PROXY_PLUGIN.getConfig();
 
-    @Override
     public void start() {
         startMessageTask();
         startAuthTask();
@@ -58,7 +56,7 @@ public class DefaultAuthEngine implements AuthEngine {
                     if (entryUser != null)
                         try {
                             authTime += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();
-                        }catch(UnsupportedOperationException ignored){ // If link type has no settings support
+                        } catch(UnsupportedOperationException ignored) { // If link type has no settings support
                         }
 
                 if (onlineTime >= authTime) {
