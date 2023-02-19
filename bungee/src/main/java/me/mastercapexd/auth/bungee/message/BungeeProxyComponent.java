@@ -1,33 +1,38 @@
 package me.mastercapexd.auth.bungee.message;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 public class BungeeProxyComponent implements BungeeComponent {
-    protected BaseComponent component;
+    private BaseComponent[] components;
 
-    public BungeeProxyComponent(BaseComponent component) {
-        this.component = component;
+    public BungeeProxyComponent(BaseComponent[] components) {
+        this.components = components;
+    }
+
+    public BungeeProxyComponent(String legacyText) {
+        this(TextComponent.fromLegacyText(BungeeComponent.colorText(legacyText)));
     }
 
     @Override
     public String jsonText() {
-        return ComponentSerializer.toString(component);
+        return ComponentSerializer.toString(components);
     }
 
     @Override
     public String legacyText() {
-        return TextComponent.toLegacyText(component);
+        return TextComponent.toLegacyText(components);
     }
 
     @Override
     public String plainText() {
-        return component.toPlainText();
+        return ChatColor.stripColor(legacyText());
     }
 
     @Override
     public BaseComponent[] components() {
-        return new BaseComponent[]{component};
+        return components;
     }
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
 import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
-import me.mastercapexd.auth.bungee.message.BungeeMultiProxyComponent;
+import me.mastercapexd.auth.bungee.message.BungeeProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.hooks.limbo.LimboHook;
@@ -90,17 +90,17 @@ public enum BungeeProxyCore implements ProxyCore {
 
     @Override
     public ProxyComponent componentPlain(String plain) {
-        return new BungeeMultiProxyComponent(ChatColor.stripColor(plain));
+        return new BungeeProxyComponent(ChatColor.stripColor(plain));
     }
 
     @Override
     public ProxyComponent componentJson(String json) {
-        return new BungeeMultiProxyComponent(ComponentSerializer.parse(json));
+        return new BungeeProxyComponent(ComponentSerializer.parse(json));
     }
 
     @Override
     public ProxyComponent componentLegacy(String legacy) {
-        return new BungeeMultiProxyComponent(legacy);
+        return new BungeeProxyComponent(legacy);
     }
 
     @Override
