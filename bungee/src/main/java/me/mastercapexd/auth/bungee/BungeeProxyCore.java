@@ -14,6 +14,7 @@ import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
 import me.mastercapexd.auth.bungee.message.BungeeProxyComponent;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
+import me.mastercapexd.auth.bungee.scheduler.BungeeSchedulerWrapper;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.proxy.ProxyCore;
@@ -22,6 +23,7 @@ import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -124,13 +126,13 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
-        PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, period, unit);
+    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
+        return new BungeeSchedulerWrapper(PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, period, unit));
     }
 
     @Override
-    public void schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
-        PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, unit);
+    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
+        return new BungeeSchedulerWrapper(PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, unit));
     }
 
     @Override

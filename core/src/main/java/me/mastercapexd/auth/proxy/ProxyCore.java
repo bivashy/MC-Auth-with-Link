@@ -11,6 +11,7 @@ import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
 import me.mastercapexd.auth.proxy.server.Server;
 import net.kyori.adventure.audience.Audience;
 
@@ -41,9 +42,9 @@ public interface ProxyCore extends Castable<ProxyCore> {
 
     void registerListener(ProxyPlugin plugin, Object listener);
 
-    void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
+    ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
 
-    void schedule(ProxyPlugin instance, Runnable task, long delay, TimeUnit milliseconds);
+    ProxyScheduler schedule(ProxyPlugin instance, Runnable task, long delay, TimeUnit milliseconds);
 
     void runAsync(Runnable task);
 

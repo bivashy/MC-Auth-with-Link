@@ -18,10 +18,12 @@ import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
 import me.mastercapexd.auth.proxy.server.Server;
 import me.mastercapexd.auth.velocity.api.bossbar.VelocityProxyBossbar;
 import me.mastercapexd.auth.velocity.component.VelocityComponent;
 import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
+import me.mastercapexd.auth.velocity.scheduler.VelocitySchedulerWrapper;
 import me.mastercapexd.auth.velocity.server.VelocityServer;
 import me.mastercapexd.auth.velocity.api.title.VelocityProxyTitle;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -118,13 +120,13 @@ public class VelocityProxyCore implements ProxyCore {
     }
 
     @Override
-    public void schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
-        server.getScheduler().buildTask(plugin, task).delay(delay, unit).repeat(period, unit).schedule();
+    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
+        return new VelocitySchedulerWrapper(server.getScheduler().buildTask(plugin, task).delay(delay, unit).repeat(period, unit).schedule());
     }
 
     @Override
-    public void schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
-        server.getScheduler().buildTask(plugin, task).delay(delay, unit).schedule();
+    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
+        return new VelocitySchedulerWrapper(server.getScheduler().buildTask(plugin, task).delay(delay, unit).schedule());
     }
 
     @Override
