@@ -4,6 +4,7 @@ import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.event.AccountRegisterEvent;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
@@ -16,7 +17,6 @@ import revxrsal.commands.annotation.Dependency;
 
 @Command({"reg", "register"})
 public class RegisterCommand {
-
     @Dependency
     private ProxyPlugin plugin;
     @Dependency
@@ -28,16 +28,20 @@ public class RegisterCommand {
     @AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
     public void register(ProxyPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
-        currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
+        plugin.getEventBus().publish(AccountRegisterEvent.class, account, false).thenAccept(registerEventPostResult -> {
+            if (registerEventPostResult.getEvent().isCancelled())
+                return;
+            currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 
-        if (account.getHashType() != config.getActiveHashType())
-            account.setHashType(config.getActiveHashType());
-        account.setPasswordHash(account.getHashType().hash(password.getPassword()));
+            if (account.getHashType() != config.getActiveHashType())
+                account.setHashType(config.getActiveHashType());
+            account.setPasswordHash(account.getHashType().hash(password.getPassword()));
 
-        accountStorage.saveOrUpdateAccount(account);
+            accountStorage.saveOrUpdateAccount(account);
 
-        account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
+            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
 
-        player.sendMessage(config.getProxyMessages().getMessage("register-success"));
+            player.sendMessage(config.getProxyMessages().getMessage("register-success"));
+        });
     }
 }

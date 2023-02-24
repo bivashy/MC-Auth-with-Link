@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -22,6 +23,8 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
+import io.github.revxrsal.eventbus.EventBus;
+import io.github.revxrsal.eventbus.EventBusBuilder;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.account.factories.AuthAccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepCreator;
@@ -60,9 +63,8 @@ import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 
-@Plugin(id = "mcauth", name = "McAuth", version = "1.7.0-RC4", authors = "Ubivashka",
-        dependencies = {@Dependency(id = "vk-api", optional = true),
-                @Dependency(id = "telegram-bot-api", optional = true), @Dependency(id = "limboapi", optional = true)})
+@Plugin(id = "mcauth", name = "McAuth", version = "1.7.0-RC4", authors = "Ubivashka", dependencies = {@Dependency(id = "vk-api", optional = true),
+        @Dependency(id = "telegram-bot-api", optional = true), @Dependency(id = "limboapi", optional = true)})
 public class AuthPlugin implements ProxyPlugin {
     private static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new SpongeConfigurateProcessor();
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
@@ -71,6 +73,7 @@ public class AuthPlugin implements ProxyPlugin {
     private final ProxyCore core;
     private final File dataFolder;
     private final VelocityAudienceProvider audienceProvider;
+    private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
     private AccountFactory accountFactory;
@@ -231,6 +234,17 @@ public class AuthPlugin implements ProxyPlugin {
     @Override
     public ConfigurationProcessor getConfigurationProcessor() {
         return CONFIGURATION_PROCESSOR;
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    @Override
+    public ProxyPlugin setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+        return this;
     }
 
     @Override

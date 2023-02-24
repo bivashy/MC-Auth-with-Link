@@ -3,6 +3,7 @@ package me.mastercapexd.auth.management;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import io.github.revxrsal.eventbus.PostResult;
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
@@ -12,6 +13,8 @@ import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
+import me.mastercapexd.auth.event.AccountJoinEvent;
+import me.mastercapexd.auth.event.AccountSessionEnterEvent;
 import me.mastercapexd.auth.proxy.ProxyCore;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
@@ -73,22 +76,30 @@ public class DefaultLoginManagement implements LoginManagement {
             AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership()
                     .createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
-            if (account.isSessionActive(config.getSessionDurability()) && account.getLastIpAddress().equals(player.getPlayerIp())) {
-                player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
-                if (config.getJoinDelay() == 0) {
-                    account.nextAuthenticationStep(context);
-                } else {
-                    core.schedule(ProxyPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+            return plugin.getEventBus().publish(AccountJoinEvent.class, account, false).thenApplyAsync(event -> {
+                if (event.getEvent().isCancelled())
+                    return account;
+                if (account.isSessionActive(config.getSessionDurability()) && account.getLastIpAddress().equals(player.getPlayerIp())) {
+                    PostResult<AccountSessionEnterEvent> sessionEnterEventPostResult = plugin.getEventBus()
+                            .publish(AccountSessionEnterEvent.class, account, false)
+                            .join();
+                    if (sessionEnterEventPostResult.getEvent().isCancelled())
+                        player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
+                    if (config.getJoinDelay() == 0) {
+                        account.nextAuthenticationStep(context);
+                    } else {
+                        core.schedule(ProxyPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+                    }
+                    return account;
                 }
-                return CompletableFuture.completedFuture(account);
-            }
 
-            if (Auth.hasAccount(account.getPlayerId()))
-                throw new IllegalStateException("Cannot have two authenticating account at the same time!");
+                if (Auth.hasAccount(account.getPlayerId()))
+                    throw new IllegalStateException("Cannot have two authenticating account at the same time!");
 
-            Auth.addAccount(account);
-            account.nextAuthenticationStep(context);
-            return CompletableFuture.completedFuture(account);
+                Auth.addAccount(account);
+                account.nextAuthenticationStep(context);
+                return account;
+            });
         });
     }
 

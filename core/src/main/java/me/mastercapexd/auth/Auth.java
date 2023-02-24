@@ -4,18 +4,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import me.mastercapexd.auth.account.Account;
+import me.mastercapexd.auth.event.AccountStateClearEvent;
 import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 
 public class Auth {
-
     private static final Map<String, Account> ACCOUNTS = Collections.synchronizedMap(new HashMap<>());
     private static final Map<String, Long> ACCOUNT_JOIN_TIMES = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, Integer> ATTEMPTS =  Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, ProxyBossbar> BARS =  Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, Integer> ATTEMPTS = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, ProxyBossbar> BARS = Collections.synchronizedMap(new HashMap<>());
     private static final LinkAuth<LinkConfirmationUser> LINK_CONFIRMATION_AUTH = new LinkAuth<>();
     private static final LinkAuth<LinkEntryUser> LINK_ENTRY_AUTH = new LinkAuth<>();
 
@@ -32,6 +34,7 @@ public class Auth {
     }
 
     public static synchronized void removeAccount(String id) {
+        ProxyPlugin.instance().getEventBus().post(AccountStateClearEvent.class, Optional.ofNullable(getAccount(id)));
         ACCOUNTS.remove(id);
         ATTEMPTS.remove(id);
         ACCOUNT_JOIN_TIMES.remove(id);

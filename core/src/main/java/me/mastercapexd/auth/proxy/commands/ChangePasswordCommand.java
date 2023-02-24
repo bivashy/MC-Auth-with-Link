@@ -1,6 +1,9 @@
 package me.mastercapexd.auth.proxy.commands;
 
+import io.github.revxrsal.eventbus.PostResult;
 import me.mastercapexd.auth.config.PluginConfig;
+import me.mastercapexd.auth.event.AccountTryChangePasswordEvent;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -10,7 +13,8 @@ import revxrsal.commands.annotation.Dependency;
 
 @Command({"passchange", "changepass", "changepassword"})
 public class ChangePasswordCommand {
-
+    @Dependency
+    private ProxyPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
@@ -19,13 +23,18 @@ public class ChangePasswordCommand {
     @Default
     public void changePlayerPassword(ProxyPlayer sender, DoublePassword password) {
         String id = config.getActiveIdentifierType().getId(sender);
-        accountStorage.getAccount(id).thenAccept(account -> {
+        accountStorage.getAccount(id).thenAcceptAsync(account -> {
             if (account == null || !account.isRegistered()) {
                 sender.sendMessage(config.getProxyMessages().getMessage("account-not-found"));
                 return;
             }
+            boolean isWrongPassword = !account.getHashType().checkHash(password.getOldPassword(), account.getPasswordHash());
+            PostResult<AccountTryChangePasswordEvent> tryChangePasswordEventPostResult = plugin.getEventBus()
+                    .publish(AccountTryChangePasswordEvent.class, account, false, !isWrongPassword).join();
+            if (tryChangePasswordEventPostResult.getEvent().isCancelled())
+                return;
 
-            if (!account.getHashType().checkHash(password.getOldPassword(), account.getPasswordHash())) {
+            if (isWrongPassword) {
                 sender.sendMessage(config.getProxyMessages().getMessage("wrong-old-password"));
                 return;
             }

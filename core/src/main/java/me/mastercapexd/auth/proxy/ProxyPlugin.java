@@ -5,6 +5,7 @@ import java.io.File;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
+import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.duration.ConfigurationDuration;
@@ -66,6 +67,10 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
     ProxyPlugin setLoginManagement(LoginManagement loginManagement);
 
     LinkTypeProvider getLinkTypeProvider();
+
+    EventBus getEventBus();
+
+    ProxyPlugin setEventBus(EventBus eventBus);
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 

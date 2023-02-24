@@ -17,6 +17,7 @@
         <configuration-library.version>3.0.5</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
         <lamp.command-library.version>3.0.8</lamp.command-library.version>
+        <event-bus.version>1.2</event-bus.version>
         <vk-lamp-module.version>0.0.5</vk-lamp-module.version>
         <telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
         <multimessenger.version>0.0.7</multimessenger.version>
@@ -109,11 +110,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <!-- Lamp telegram module -->
         <dependency>
             <groupId>com.github.U61vashka</groupId>
             <artifactId>TelegramLampModule</artifactId>
             <version>${telegram-lamp-module.version}</version>
+        </dependency>
+
+        <!-- Event bus -->
+        <dependency>
+            <groupId>com.github.Revxrsal</groupId>
+            <artifactId>EventBus</artifactId>
+            <version>${event-bus.version}</version>
         </dependency>
 
         <!-- MultiMessenger library -->

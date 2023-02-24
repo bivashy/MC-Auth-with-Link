@@ -3,6 +3,7 @@ package me.mastercapexd.auth.bungee;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.configurate.SpongeConfigurateProcessor;
@@ -13,6 +14,8 @@ import com.ubivashka.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
+import io.github.revxrsal.eventbus.EventBus;
+import io.github.revxrsal.eventbus.EventBusBuilder;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.account.factories.AuthAccountFactory;
 import me.mastercapexd.auth.authentication.step.steps.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepCreator;
@@ -52,9 +55,9 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class AuthPlugin extends Plugin implements ProxyPlugin {
     public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new SpongeConfigurateProcessor();
-
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
     private static AuthPlugin instance;
+    private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
     private AccountFactory accountFactory;
@@ -211,6 +214,17 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     @Override
     public ConfigurationProcessor getConfigurationProcessor() {
         return CONFIGURATION_PROCESSOR;
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    @Override
+    public ProxyPlugin setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+        return this;
     }
 
     @Override
