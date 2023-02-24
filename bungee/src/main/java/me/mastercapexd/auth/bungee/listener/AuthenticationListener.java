@@ -31,17 +31,21 @@ public class AuthenticationListener implements Listener {
     @EventHandler
     public void onLogin(LoginEvent event) {
         event.registerIntent(plugin.as(AuthPlugin.class));
-        plugin.getLoginManagement().onLogin(new BungeeConnectionProxyPlayer(event.getConnection())).whenComplete((account, exception) -> {
+        ProxyPlayer connectionPlayer = new BungeeConnectionProxyPlayer(event.getConnection());
+        plugin.getLoginManagement().onLogin(connectionPlayer).whenComplete((account, exception) -> {
             if (exception != null)
                 INVALID_ACCOUNTS.add(event.getConnection().getUniqueId());
             event.completeIntent(plugin.as(AuthPlugin.class));
             if (account == null)
                 return;
             // Using dirty way because we cannot send message in LoginEvent
-            plugin.getCore()
-                    .schedule(plugin, () -> account.getPlayer()
-                            .ifPresent(player -> player.sendMessage(
-                                    plugin.getConfig().getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)))), 1, TimeUnit.SECONDS);
+            plugin.getCore().schedule(plugin, () -> {
+                if (plugin.getAuthenticatingAccountBucket().isAuthorizing(connectionPlayer))
+                    return;
+                account.getPlayer()
+                        .ifPresent(player -> player.sendMessage(
+                                plugin.getConfig().getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account))));
+            }, 1, TimeUnit.SECONDS);
         });
     }
 
