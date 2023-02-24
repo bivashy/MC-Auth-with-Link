@@ -15,15 +15,14 @@ import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.LinkUserTemplate;
 import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
+import me.mastercapexd.auth.model.PlayerIdSupplier;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
-public interface Account {
+public interface Account extends PlayerIdSupplier {
     @Deprecated
     default String getId() {
         return getPlayerId();
     }
-
-    String getPlayerId();
 
     IdentifierType getIdentifierType();
 

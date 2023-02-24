@@ -22,6 +22,7 @@ import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import me.mastercapexd.auth.storage.AccountStorage;
+import me.mastercapexd.auth.task.AuthenticationTaskBucket;
 import me.mastercapexd.auth.utils.TimeUtils;
 import net.kyori.adventure.platform.AudienceProvider;
 
@@ -71,6 +72,8 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
     EventBus getEventBus();
 
     ProxyPlugin setEventBus(EventBus eventBus);
+
+    AuthenticationTaskBucket getAuthenticationTaskBucket();
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 

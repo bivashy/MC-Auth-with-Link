@@ -39,7 +39,6 @@ import me.mastercapexd.auth.config.DefaultPluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
-import me.mastercapexd.auth.engine.DefaultAuthEngine;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
@@ -54,6 +53,10 @@ import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.storage.DatabaseHelper;
+import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
+import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
+import me.mastercapexd.auth.task.AuthenticationTaskBucket;
+import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
@@ -73,6 +76,7 @@ public class AuthPlugin implements ProxyPlugin {
     private final ProxyCore core;
     private final File dataFolder;
     private final VelocityAudienceProvider audienceProvider;
+    private final AuthenticationTaskBucket taskBucket = new AuthenticationTaskBucket();
     private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
@@ -121,7 +125,6 @@ public class AuthPlugin implements ProxyPlugin {
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
-        new DefaultAuthEngine().start();
 
         HOOKS.put(LimboHook.class, new LimboAPIHook());
 
@@ -133,6 +136,10 @@ public class AuthPlugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new EnterAuthServerAuthenticationStepCreator());
+
+        this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
+        this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
+        this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
     }
 
     private void initializeListener() {
@@ -245,6 +252,11 @@ public class AuthPlugin implements ProxyPlugin {
     public ProxyPlugin setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
         return this;
+    }
+
+    @Override
+    public AuthenticationTaskBucket getAuthenticationTaskBucket() {
+        return taskBucket;
     }
 
     @Override

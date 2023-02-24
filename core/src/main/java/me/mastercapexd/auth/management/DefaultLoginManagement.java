@@ -84,7 +84,8 @@ public class DefaultLoginManagement implements LoginManagement {
                             .publish(AccountSessionEnterEvent.class, account, false)
                             .join();
                     if (sessionEnterEventPostResult.getEvent().isCancelled())
-                        player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
+                        return account;
+                    player.sendMessage(config.getProxyMessages().getMessage("autoconnect", new ProxyMessageContext(account)));
                     if (config.getJoinDelay() == 0) {
                         account.nextAuthenticationStep(context);
                     } else {

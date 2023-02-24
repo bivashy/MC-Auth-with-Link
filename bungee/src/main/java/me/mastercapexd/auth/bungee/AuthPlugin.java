@@ -34,7 +34,6 @@ import me.mastercapexd.auth.config.DefaultPluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
-import me.mastercapexd.auth.engine.DefaultAuthEngine;
 import me.mastercapexd.auth.hooks.DefaultTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
@@ -48,6 +47,10 @@ import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.storage.AccountStorage;
 import me.mastercapexd.auth.storage.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.storage.DatabaseHelper;
+import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
+import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
+import me.mastercapexd.auth.task.AuthenticationTaskBucket;
+import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.commands.TelegramCommandRegistry;
 import me.mastercapexd.auth.vk.commands.VKCommandRegistry;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
@@ -57,6 +60,7 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new SpongeConfigurateProcessor();
     private static final Map<Class<? extends PluginHook>, PluginHook> HOOKS = new HashMap<>();
     private static AuthPlugin instance;
+    private final AuthenticationTaskBucket taskBucket = new AuthenticationTaskBucket();
     private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
@@ -107,7 +111,6 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.authenticationContextFactoryDealership = new AuthenticationStepContextFactoryDealership();
         this.authenticationStepCreatorDealership = new AuthenticationStepCreatorDealership();
         this.loginManagement = new DefaultLoginManagement(this);
-        new DefaultAuthEngine().start();
 
         this.authenticationStepCreatorDealership.add(new NullAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new LoginAuthenticationStepCreator());
@@ -117,6 +120,10 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
         this.authenticationStepCreatorDealership.add(new TelegramLinkAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new EnterServerAuthenticationStepCreator());
         this.authenticationStepCreatorDealership.add(new EnterAuthServerAuthenticationStepCreator());
+
+        this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
+        this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
+        this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
     }
 
     private void initializeListener() {
@@ -225,6 +232,11 @@ public class AuthPlugin extends Plugin implements ProxyPlugin {
     public ProxyPlugin setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
         return this;
+    }
+
+    @Override
+    public AuthenticationTaskBucket getAuthenticationTaskBucket() {
+        return taskBucket;
     }
 
     @Override
