@@ -114,7 +114,7 @@ public interface Account {
 
     AuthenticationStep getCurrentAuthenticationStep();
 
-    boolean nextAuthenticationStep(AuthenticationStepContext stepContext);
+    void nextAuthenticationStep(AuthenticationStepContext stepContext);
 
     default void logout(long sessionDurability) {
         if (!isSessionActive(sessionDurability))
