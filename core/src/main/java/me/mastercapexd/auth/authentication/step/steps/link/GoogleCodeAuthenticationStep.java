@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.authentication.step.steps.link;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
@@ -40,7 +39,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
         if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled())
             return true;
 
-        if (Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance()))
+        if (PLUGIN.getLinkEntryBucket().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance()))
             return true;
 
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
@@ -52,7 +51,7 @@ public class GoogleCodeAuthenticationStep extends AbstractAuthenticationStep imp
             if (!linkUserInfo.isConfirmationEnabled() || linkUser.isIdentifierDefaultOrNull())
                 return true;
 
-            Auth.getLinkEntryAuth().addLinkUser(entryUser);
+            PLUGIN.getLinkEntryBucket().addLinkUser(entryUser);
             return false;
         }).orElse(true);
     }

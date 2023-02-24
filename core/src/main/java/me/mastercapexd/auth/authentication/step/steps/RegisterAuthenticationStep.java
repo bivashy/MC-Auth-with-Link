@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.authentication.step.steps;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
@@ -14,6 +13,7 @@ import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 
 public class RegisterAuthenticationStep extends AbstractAuthenticationStep implements MessageableAuthenticationStep {
     public static final String STEP_NAME = "REGISTER";
+    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
     private final boolean isRegistered;
 
     public RegisterAuthenticationStep(AuthenticationStepContext context) {
@@ -27,7 +27,7 @@ public class RegisterAuthenticationStep extends AbstractAuthenticationStep imple
         if (!isRegistered && isCurrentAccountRegistered) {
             Account account = authenticationStepContext.getAccount();
             account.getPlayer().ifPresent(player -> {
-                Auth.removeAccount(account.getPlayerId());
+                PLUGIN.getAuthenticatingAccountBucket().removeAuthorizingAccount(account);
                 account.setLastIpAddress(player.getPlayerIp());
                 account.setLastSessionStartTimestamp(System.currentTimeMillis());
             });

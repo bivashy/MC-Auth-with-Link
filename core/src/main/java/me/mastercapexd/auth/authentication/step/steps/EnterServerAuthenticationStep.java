@@ -2,7 +2,6 @@ package me.mastercapexd.auth.authentication.step.steps;
 
 import java.util.Optional;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
@@ -32,8 +31,7 @@ public class EnterServerAuthenticationStep extends AbstractAuthenticationStep {
 
     public void enterServer() {
         Account account = authenticationStepContext.getAccount();
-        String accountId = account.getPlayerId();
-        Auth.removeAccount(accountId);
+        PLUGIN.getAuthenticatingAccountBucket().removeAuthorizingAccount(account);
         Optional<ProxyPlayer> playerOptional = account.getPlayer();
         account.setLastSessionStartTimestamp(System.currentTimeMillis());
         playerOptional.map(ProxyPlayer::getPlayerIp).ifPresent(account::setLastIpAddress);

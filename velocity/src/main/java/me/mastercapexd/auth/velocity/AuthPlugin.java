@@ -35,6 +35,9 @@ import me.mastercapexd.auth.authentication.step.steps.RegisterAuthenticationStep
 import me.mastercapexd.auth.authentication.step.steps.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepCreator;
 import me.mastercapexd.auth.authentication.step.steps.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepCreator;
+import me.mastercapexd.auth.bucket.AuthenticatingAccountBucket;
+import me.mastercapexd.auth.bucket.DefaultAuthenticatingAccountBucket;
+import me.mastercapexd.auth.bucket.LinkAuthenticationBucket;
 import me.mastercapexd.auth.config.DefaultPluginConfig;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealership;
@@ -44,6 +47,9 @@ import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.link.LinkTypeProvider;
+import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
+import me.mastercapexd.auth.listener.AuthenticationAttemptListener;
 import me.mastercapexd.auth.management.DefaultLoginManagement;
 import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.ProxyCore;
@@ -77,6 +83,9 @@ public class AuthPlugin implements ProxyPlugin {
     private final File dataFolder;
     private final VelocityAudienceProvider audienceProvider;
     private final AuthenticationTaskBucket taskBucket = new AuthenticationTaskBucket();
+    private final LinkAuthenticationBucket<LinkConfirmationUser> linkConfirmationBucket = new LinkAuthenticationBucket<>();
+    private final LinkAuthenticationBucket<LinkEntryUser> linkEntryBucket = new LinkAuthenticationBucket<>();
+    private AuthenticatingAccountBucket accountBucket;
     private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
@@ -115,6 +124,8 @@ public class AuthPlugin implements ProxyPlugin {
     }
 
     private void initialize() {
+        this.accountBucket = new DefaultAuthenticatingAccountBucket(this);
+
         initializeConfigurationProcessor();
         this.config = new DefaultPluginConfig(this);
 
@@ -140,6 +151,8 @@ public class AuthPlugin implements ProxyPlugin {
         this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
         this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
         this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
+
+        this.eventBus.register(new AuthenticationAttemptListener(this));
     }
 
     private void initializeListener() {
@@ -257,6 +270,21 @@ public class AuthPlugin implements ProxyPlugin {
     @Override
     public AuthenticationTaskBucket getAuthenticationTaskBucket() {
         return taskBucket;
+    }
+
+    @Override
+    public AuthenticatingAccountBucket getAuthenticatingAccountBucket() {
+        return accountBucket;
+    }
+
+    @Override
+    public LinkAuthenticationBucket<LinkConfirmationUser> getLinkConfirmationBucket() {
+        return linkConfirmationBucket;
+    }
+
+    @Override
+    public LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket() {
+        return linkEntryBucket;
     }
 
     @Override

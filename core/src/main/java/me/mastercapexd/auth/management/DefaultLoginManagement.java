@@ -4,7 +4,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import io.github.revxrsal.eventbus.PostResult;
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
@@ -63,7 +62,7 @@ public class DefaultLoginManagement implements LoginManagement {
                         AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
 
                 AuthenticationStepContext context = plugin.getAuthenticationContextFactoryDealership().createContext(newAccount);
-                Auth.addAccount(newAccount);
+                plugin.getAuthenticatingAccountBucket().addAuthorizingAccount(newAccount);
                 newAccount.nextAuthenticationStep(context);
                 return CompletableFuture.completedFuture(null);
             }
@@ -94,10 +93,10 @@ public class DefaultLoginManagement implements LoginManagement {
                     return account;
                 }
 
-                if (Auth.hasAccount(account.getPlayerId()))
+                if (plugin.getAuthenticatingAccountBucket().isAuthorizing(account))
                     throw new IllegalStateException("Cannot have two authenticating account at the same time!");
 
-                Auth.addAccount(account);
+                plugin.getAuthenticatingAccountBucket().addAuthorizingAccount(account);
                 account.nextAuthenticationStep(context);
                 return account;
             });
@@ -107,9 +106,9 @@ public class DefaultLoginManagement implements LoginManagement {
     @Override
     public void onDisconnect(ProxyPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
-        Auth.getLinkEntryAuth().removeLinkUsers(entryUser -> entryUser.getAccount().getPlayerId().equals(id));
-        if (Auth.hasAccount(id)) {
-            Auth.removeAccount(id);
+        plugin.getLinkEntryBucket().removeLinkUsers(entryUser -> entryUser.getAccount().getPlayerId().equals(id));
+        if (plugin.getAuthenticatingAccountBucket().isAuthorizing(player)) {
+            plugin.getAuthenticatingAccountBucket().removeAuthorizingAccount(player);
             return;
         }
         accountStorage.getAccount(id).thenAccept(account -> {

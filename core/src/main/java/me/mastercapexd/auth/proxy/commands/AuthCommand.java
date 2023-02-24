@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.proxy.commands;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationStepContext;
 import me.mastercapexd.auth.authentication.step.steps.EnterServerAuthenticationStep;
@@ -30,8 +29,9 @@ public class AuthCommand {
     public void accountInfos(ProxyCommandActor commandActor) {
         accountStorage.getAllAccounts().thenAccept(accounts -> {
             commandActor.reply(config.getProxyMessages().getMessage("info-registered", MessageContext.of("%players%", Integer.toString(accounts.size()))));
-            commandActor.reply(
-                    config.getProxyMessages().getMessage("info-auth", MessageContext.of("%players%", Integer.toString(Auth.getAccountIds().size()))));
+            commandActor.reply(config.getProxyMessages()
+                    .getMessage("info-auth",
+                            MessageContext.of("%players%", Integer.toString(plugin.getAuthenticatingAccountBucket().getAccountIdEntries().size()))));
             commandActor.reply(config.getProxyMessages().getMessage("info-version", MessageContext.of("%version%", plugin.getVersion())));
         });
     }

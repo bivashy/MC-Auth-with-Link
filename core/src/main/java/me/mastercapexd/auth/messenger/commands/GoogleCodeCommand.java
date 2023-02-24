@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.account.factories.AccountFactory;
 import me.mastercapexd.auth.config.PluginConfig;
@@ -41,7 +40,7 @@ public class GoogleCodeCommand implements OrphanCommand {
             return;
         }
 
-        if (!Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance())) {
+        if (!plugin.getLinkEntryBucket().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance())) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-need-enter", linkType.newMessageContext(account)));
             return;
         }

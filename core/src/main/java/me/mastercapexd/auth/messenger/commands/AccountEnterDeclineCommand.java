@@ -4,17 +4,21 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountEnterDeclineCommand implements OrphanCommand {
+    @Dependency
+    private ProxyPlugin plugin;
+
     @Default
     public void onDecline(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
-        List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(entryUser -> {
+        List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().getLinkUsers(entryUser -> {
             if (!entryUser.getLinkType().equals(linkType))
                 return false;
 
@@ -36,7 +40,7 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
             return;
         }
         accounts.forEach((entryUser) -> {
-            Auth.getLinkEntryAuth().removeLinkUser(entryUser);
+            plugin.getLinkEntryBucket().removeLinkUser(entryUser);
             entryUser.getAccount().kick(linkType.getProxyMessages().getStringMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));
         });

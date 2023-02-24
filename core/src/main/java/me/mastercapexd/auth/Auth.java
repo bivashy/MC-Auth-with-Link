@@ -1,93 +1,75 @@
 package me.mastercapexd.auth;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.event.AccountStateClearEvent;
+import me.mastercapexd.auth.bucket.LinkAuthenticationBucket;
 import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
 import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
+import me.mastercapexd.auth.model.PlayerIdSupplier;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 
+@Deprecated
 public class Auth {
-    private static final Map<String, Account> ACCOUNTS = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, Long> ACCOUNT_JOIN_TIMES = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, Integer> ATTEMPTS = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, ProxyBossbar> BARS = Collections.synchronizedMap(new HashMap<>());
-    private static final LinkAuth<LinkConfirmationUser> LINK_CONFIRMATION_AUTH = new LinkAuth<>();
-    private static final LinkAuth<LinkEntryUser> LINK_ENTRY_AUTH = new LinkAuth<>();
+    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
 
     private Auth() {
     }
 
     public static synchronized Collection<String> getAccountIds() {
-        return Collections.unmodifiableSet(ACCOUNTS.keySet());
+        return PLUGIN.getAuthenticatingAccountBucket().getAccountIdEntries();
     }
 
     public static synchronized void addAccount(Account account) {
-        ACCOUNTS.put(account.getPlayerId(), account);
-        ACCOUNT_JOIN_TIMES.put(account.getPlayerId(), System.currentTimeMillis());
+        PLUGIN.getAuthenticatingAccountBucket().addAuthorizingAccount(account);
     }
 
     public static synchronized void removeAccount(String id) {
-        ProxyPlugin.instance().getEventBus().post(AccountStateClearEvent.class, Optional.ofNullable(getAccount(id)));
-        ACCOUNTS.remove(id);
-        ATTEMPTS.remove(id);
-        ACCOUNT_JOIN_TIMES.remove(id);
-
-        if (Auth.getBar(id) != null) {
-            Auth.getBar(id).removeAll();
-            Auth.removeBar(id);
-        }
+        PLUGIN.getAuthenticatingAccountBucket().removeAuthorizingAccount(PlayerIdSupplier.of(id));
     }
 
     public static synchronized boolean hasAccount(String id) {
-        return ACCOUNTS.containsKey(id);
+        return PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(PlayerIdSupplier.of(id));
     }
 
     public static synchronized Account getAccount(String id) {
-        return ACCOUNTS.getOrDefault(id, null);
+        return PLUGIN.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(id));
     }
 
     public static synchronized long getJoinTime(String id) {
-        return ACCOUNT_JOIN_TIMES.getOrDefault(id, 0L);
+        return PLUGIN.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(id));
     }
 
     public static synchronized void incrementAttempts(String id) {
-        ATTEMPTS.put(id, getPlayerAttempts(id) + 1);
+        throw new UnsupportedOperationException();
     }
 
     public static synchronized void decrementAttempts(String id) {
-        ATTEMPTS.put(id, getPlayerAttempts(id) - 1);
+        throw new UnsupportedOperationException();
     }
 
     public static synchronized int getPlayerAttempts(String id) {
-        return ATTEMPTS.getOrDefault(id, 0);
+        throw new UnsupportedOperationException();
     }
 
-    public static LinkAuth<LinkConfirmationUser> getLinkConfirmationAuth() {
-        return LINK_CONFIRMATION_AUTH;
+    public static LinkAuthenticationBucket<LinkConfirmationUser> getLinkConfirmationAuth() {
+        return PLUGIN.getLinkConfirmationBucket();
     }
 
-    public static LinkAuth<LinkEntryUser> getLinkEntryAuth() {
-        return LINK_ENTRY_AUTH;
+    public static LinkAuthenticationBucket<LinkEntryUser> getLinkEntryAuth() {
+        return PLUGIN.getLinkEntryBucket();
     }
 
     public static synchronized void addBar(String user, ProxyBossbar bar) {
-        if (BARS.containsKey(user))
-            BARS.get(user).removeAll();
-        BARS.put(user, bar);
+        throw new UnsupportedOperationException();
     }
 
     public static synchronized ProxyBossbar getBar(String user) {
-        return BARS.get(user);
+        throw new UnsupportedOperationException();
     }
 
     public static synchronized void removeBar(String user) {
-        BARS.remove(user);
+        throw new UnsupportedOperationException();
     }
 }

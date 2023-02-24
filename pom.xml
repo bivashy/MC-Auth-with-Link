@@ -21,7 +21,7 @@
         <!-- Building -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
-        <project.mainclass>me.mastercapexd.auth.Auth</project.mainclass>
+        <project.mainclass>me.mastercapexd.auth.account.Account</project.mainclass>
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>

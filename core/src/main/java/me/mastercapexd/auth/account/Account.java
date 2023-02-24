@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.HashType;
 import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.KickResult;
@@ -121,10 +120,7 @@ public interface Account extends PlayerIdSupplier {
         setLastSessionStartTimestamp(0);
     }
 
-    default boolean isSessionActive(long sessionDurability) {
-        long sessionEndTime = getLastSessionStartTimestamp() + sessionDurability;
-        return sessionEndTime >= System.currentTimeMillis() && !Auth.hasAccount(getPlayerId());
-    }
+    boolean isSessionActive(long sessionDurability);
 
     default KickResult kick(String reason) {
         Optional<ProxyPlayer> proxyPlayer = getPlayer();

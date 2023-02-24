@@ -3,7 +3,6 @@ package me.mastercapexd.auth.messenger.commands;
 import java.util.List;
 import java.util.Optional;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
@@ -63,7 +62,7 @@ public abstract class MessengerCommandRegistry {
             String code = context.popForParameter();
             LinkCommandActorWrapper commandActor = context.actor().as(LinkCommandActorWrapper.class);
 
-            List<LinkConfirmationUser> confirmationUsers = Auth.getLinkConfirmationAuth()
+            List<LinkConfirmationUser> confirmationUsers = PLUGIN.getLinkConfirmationBucket()
                     .getLinkUsers(
                             linkUser -> linkUser.getLinkType().equals(linkType) && linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId()));
 
@@ -81,7 +80,6 @@ public abstract class MessengerCommandRegistry {
             if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
                 throw new SendMessageException(
                         linkType.getSettings().getMessages().getMessage("confirmation-timed-out", linkType.newMessageContext(confirmationUser.getAccount())));
-
 
             LinkUser linkUser = confirmationUser.getAccount()
                     .findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType);

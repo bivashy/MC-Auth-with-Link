@@ -4,7 +4,6 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
@@ -52,7 +51,7 @@ public class VKLinkCommand {
                 return;
             }
 
-            if (Auth.getLinkEntryAuth().hasLinkUser(accountId, VKLinkType.getInstance())) {
+            if (plugin.getLinkEntryBucket().hasLinkUser(accountId, VKLinkType.getInstance())) {
                 player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("already-sent"));
                 return;
             }
@@ -76,10 +75,10 @@ public class VKLinkCommand {
                     }
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
 
-                    Auth.getLinkConfirmationAuth()
+                    plugin.getLinkConfirmationBucket()
                             .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                                     linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
-                    Auth.getLinkConfirmationAuth().addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
+                    plugin.getLinkConfirmationBucket().addLinkUser(new VKConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
                     player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("confirmation-sent", MessageContext.of("%code%", code)));
                 });
             });

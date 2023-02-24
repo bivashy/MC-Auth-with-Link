@@ -7,6 +7,8 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.account.factories.AccountFactory;
+import me.mastercapexd.auth.bucket.AuthenticatingAccountBucket;
+import me.mastercapexd.auth.bucket.LinkAuthenticationBucket;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.duration.ConfigurationDuration;
 import me.mastercapexd.auth.config.factories.ConfigurationHolderMapResolverFactory;
@@ -18,6 +20,8 @@ import me.mastercapexd.auth.dealerships.AuthenticationStepContextFactoryDealersh
 import me.mastercapexd.auth.dealerships.AuthenticationStepCreatorDealership;
 import me.mastercapexd.auth.function.Castable;
 import me.mastercapexd.auth.link.LinkTypeProvider;
+import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
+import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
 import me.mastercapexd.auth.management.LoginManagement;
 import me.mastercapexd.auth.proxy.hooks.PluginHook;
 import me.mastercapexd.auth.proxy.message.ProxyComponent;
@@ -74,6 +78,12 @@ public interface ProxyPlugin extends Castable<ProxyPlugin> {
     ProxyPlugin setEventBus(EventBus eventBus);
 
     AuthenticationTaskBucket getAuthenticationTaskBucket();
+
+    AuthenticatingAccountBucket getAuthenticatingAccountBucket();
+
+    LinkAuthenticationBucket<LinkConfirmationUser> getLinkConfirmationBucket();
+
+    LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket();
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 

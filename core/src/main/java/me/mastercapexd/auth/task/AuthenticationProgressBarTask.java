@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.github.revxrsal.eventbus.SubscribeEvent;
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.event.AccountJoinEvent;
 import me.mastercapexd.auth.event.AccountStateClearEvent;
+import me.mastercapexd.auth.model.PlayerIdSupplier;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
 import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
@@ -24,9 +24,10 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 
-            for (String accountPlayerId : Auth.getAccountIds()) {
-                Account account = Auth.getAccount(accountPlayerId);
-                int accountEnterElapsedMillis = (int) (now - Auth.getJoinTime(accountPlayerId));
+            for (String accountPlayerId : plugin.getAuthenticatingAccountBucket().getAccountIdEntries()) {
+                Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
+                int accountEnterElapsedMillis = (int) (now -
+                        plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
                 ProxyBossbar progressBar = progressBars.get(account.getPlayerId());
                 if (progressBar == null)
                     continue;

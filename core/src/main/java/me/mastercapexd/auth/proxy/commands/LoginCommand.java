@@ -1,11 +1,9 @@
 package me.mastercapexd.auth.proxy.commands;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.steps.LoginAuthenticationStep;
 import me.mastercapexd.auth.config.PluginConfig;
-import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.event.AccountTryLoginEvent;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.AuthenticationStepCommand;
@@ -31,24 +29,9 @@ public class LoginCommand {
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 
         boolean isWrongPassword = !account.getHashType().checkHash(password, account.getPasswordHash());
-        plugin.getEventBus().publish(AccountTryLoginEvent.class, account, false, !isWrongPassword).thenAccept(tryLoginEventPostResult -> {
+        plugin.getEventBus().publish(AccountTryLoginEvent.class, account, isWrongPassword, !isWrongPassword).thenAccept(tryLoginEventPostResult -> {
             if (tryLoginEventPostResult.getEvent().isCancelled())
                 return;
-            if (isWrongPassword) {
-                if (config.getPasswordAttempts() < 1) {
-                    player.sendMessage(config.getProxyMessages().getMessage("wrong-password"));
-                    return;
-                }
-                Auth.incrementAttempts(id);
-                int attempts = Auth.getPlayerAttempts(id);
-                if (attempts < config.getPasswordAttempts()) {
-                    player.sendMessage(config.getProxyMessages()
-                            .getMessage("wrong-password", MessageContext.of("%attempts%", Integer.toString(config.getPasswordAttempts() - attempts))));
-                    return;
-                }
-                player.disconnect(config.getProxyMessages().getMessage("attempts-limit"));
-                return;
-            }
 
             if (account.getHashType() != config.getActiveHashType()) {
                 account.setHashType(config.getActiveHashType());

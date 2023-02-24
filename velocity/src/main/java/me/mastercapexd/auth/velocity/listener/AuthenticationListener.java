@@ -11,7 +11,6 @@ import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent.ServerResult;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.velocity.server.VelocityServer;
@@ -38,7 +37,7 @@ public class AuthenticationListener {
         if (!event.getResult().isAllowed())
             return;
         plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
-            if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
                 return;
             if (!plugin.getConfig().shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
                 return;
@@ -55,7 +54,7 @@ public class AuthenticationListener {
         if (!proxyPlayerOptional.isPresent())
             return;
         ProxyPlayer player = proxyPlayerOptional.get();
-        if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
+        if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
             return;
         String command = "/" + event.getCommand();
         if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(command).find()))
@@ -68,7 +67,7 @@ public class AuthenticationListener {
     public void onBlockedServerConnect(ServerPreConnectEvent event) {
         plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
             String id = plugin.getConfig().getActiveIdentifierType().getId(player);
-            if (!Auth.hasAccount(id))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
                 return;
             Optional<RegisteredServer> resultServerOptional = event.getResult().getServer();
             if (!resultServerOptional.isPresent())

@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.LinkType;
@@ -20,7 +19,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 
     @Default
     public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
-        List<LinkEntryUser> accounts = Auth.getLinkEntryAuth().getLinkUsers(entryUser -> {
+        List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().getLinkUsers(entryUser -> {
             if (!entryUser.getLinkType().equals(linkType))
                 return false;
 
@@ -47,7 +46,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
             account.getPlayer().ifPresent(player -> player.sendMessage(linkType.getProxyMessages().getStringMessage("enter-confirmed",
                     linkType.newMessageContext(account))));
             account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
-            Auth.getLinkEntryAuth().removeLinkUser(entryUser);
+            plugin.getLinkEntryBucket().removeLinkUser(entryUser);
 
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted", linkType.newMessageContext(account)));
         });

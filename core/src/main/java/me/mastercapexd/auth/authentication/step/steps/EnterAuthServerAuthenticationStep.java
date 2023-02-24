@@ -3,7 +3,6 @@ package me.mastercapexd.auth.authentication.step.steps;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.AuthenticationStep;
 import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
@@ -28,7 +27,7 @@ public class EnterAuthServerAuthenticationStep extends AbstractAuthenticationSte
 
     @Override
     public boolean shouldSkip() {
-        if (!Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) ||
+        if (!PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(authenticationStepContext.getAccount()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
         tryToConnect(true);

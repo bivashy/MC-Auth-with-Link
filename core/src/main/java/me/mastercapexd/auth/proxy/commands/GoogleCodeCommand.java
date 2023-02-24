@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.proxy.commands;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.Messages;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
@@ -43,7 +42,7 @@ public class GoogleCodeCommand {
                 player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-exists"));
                 return;
             }
-            if (!Auth.getLinkEntryAuth().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
+            if (!plugin.getLinkEntryBucket().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
                 player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-need-enter"));
                 return;
             }

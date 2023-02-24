@@ -2,10 +2,10 @@ package me.mastercapexd.auth.task;
 
 import java.util.concurrent.TimeUnit;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
 import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
+import me.mastercapexd.auth.model.PlayerIdSupplier;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
 
@@ -17,11 +17,12 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 
-            for (String accountPlayerId : Auth.getAccountIds()) {
-                Account account = Auth.getAccount(accountPlayerId);
-                int accountEnterElapsedMillis = (int) (now - Auth.getJoinTime(accountPlayerId));
+            for (String accountPlayerId : plugin.getAuthenticatingAccountBucket().getAccountIdEntries()) {
+                Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
+                int accountEnterElapsedMillis = (int) (now -
+                        plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
 
-                for (LinkEntryUser entryUser : Auth.getLinkEntryAuth().getLinkUsers(user -> user.getAccount().getPlayerId().equals(account.getPlayerId())))
+                for (LinkEntryUser entryUser : plugin.getLinkEntryBucket().getLinkUsers(user -> user.getAccount().getPlayerId().equals(account.getPlayerId())))
                     if (entryUser != null)
                         try {
                             authTimeoutMillis += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();
@@ -34,7 +35,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
                         .ifPresent(
                                 player -> player.disconnect(plugin.getConfig().getProxyMessages().getMessage("time-left", new ProxyMessageContext(account))));
             }
-        },  0, 1, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     @Override

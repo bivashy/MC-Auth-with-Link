@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.proxy.commands;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.config.message.context.MessageContext;
 import me.mastercapexd.auth.config.message.proxy.ProxyMessages;
@@ -9,6 +8,7 @@ import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.link.user.confirmation.info.DefaultConfirmationInfo;
 import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
+import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.proxy.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.proxy.player.ProxyPlayer;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -20,6 +20,8 @@ import revxrsal.commands.annotation.Optional;
 @Command({"addtelegram", "addtg", "telegramadd", "tgadd", "telegramlink", "tglink", "linktelegram", "linktg"})
 public class TelegramLinkCommand {
     private static final String TELEGRAM_SUBMESSAGES_KEY = "telegram";
+    @Dependency
+    private ProxyPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
@@ -54,11 +56,10 @@ public class TelegramLinkCommand {
                 }
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
                 UserNumberIdentificator userIdentificator = new UserNumberIdentificator(telegramIdentificator);
-
-                Auth.getLinkConfirmationAuth()
+                plugin.getLinkConfirmationBucket()
                         .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                                 linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
-                Auth.getLinkConfirmationAuth().addLinkUser(new TelegramConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
+                plugin.getLinkConfirmationBucket().addLinkUser(new TelegramConfirmationUser(account, new DefaultConfirmationInfo(userIdentificator, code)));
                 player.sendMessage(messages.getSubMessages(TELEGRAM_SUBMESSAGES_KEY).getMessage("confirmation-sent", MessageContext.of("%code%", code)));
             });
         });

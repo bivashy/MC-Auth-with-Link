@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.player.BungeeConnectionProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
@@ -61,7 +60,7 @@ public class AuthenticationListener implements Listener {
         if (!playerOptional.isPresent())
             return;
         ProxyPlayer player = playerOptional.get();
-        if (!Auth.hasAccount(plugin.getConfig().getActiveIdentifierType().getId(player)))
+        if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
             return;
         if (plugin.getConfig().shouldBlockChat() && !event.isCommand()) {
             player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-chat"));
@@ -77,8 +76,7 @@ public class AuthenticationListener implements Listener {
     @EventHandler
     public void onBlockedServerConnect(ServerConnectEvent event) {
         ProxyPlayer player = new BungeeProxyPlayer(event.getPlayer());
-        String id = plugin.getConfig().getActiveIdentifierType().getId(player);
-        if (!Auth.hasAccount(id))
+        if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
             return;
         if (plugin.getConfig().getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId()))) {
             event.setTarget(plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(BungeeServer.class).getServerInfo());

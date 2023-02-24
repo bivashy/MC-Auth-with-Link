@@ -3,7 +3,6 @@ package me.mastercapexd.auth.authentication.step.steps.link;
 import com.ubivaska.messenger.common.identificator.Identificator;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.MessageableAuthenticationStep;
@@ -40,7 +39,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
         if (!linkType.getSettings().isEnabled())
             return true;
 
-        if (Auth.getLinkEntryAuth().hasLinkUser(account.getPlayerId(), linkType))
+        if (PLUGIN.getLinkEntryBucket().hasLinkUser(account.getPlayerId(), linkType))
             return true;
 
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
@@ -63,7 +62,7 @@ public class MessengerAuthenticationStep extends AbstractAuthenticationStep impl
         if (!linkUserInfo.isConfirmationEnabled())
             return true;
 
-        Auth.getLinkEntryAuth().addLinkUser(linkEntryUser);
+        PLUGIN.getLinkEntryBucket().addLinkUser(linkEntryUser);
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("confirmation", "%name%", account.getName());
 
         Identificator userIdentificator = linkUserInfo.getIdentificator().isNumber() ? Identificator.of(linkUserInfo.getIdentificator().asNumber()) :

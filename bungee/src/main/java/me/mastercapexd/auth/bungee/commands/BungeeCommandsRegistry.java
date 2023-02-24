@@ -2,7 +2,6 @@ package me.mastercapexd.auth.bungee.commands;
 
 import java.util.Collections;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.bungee.AuthPlugin;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
@@ -51,12 +50,11 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             if (!actor.as(BungeeCommandActor.class).isPlayer())
                 return;
             ProxyPlayer player = new BungeeProxyPlayer(actor.as(BungeeCommandActor.class).asPlayer());
-            String accountId = config.getActiveIdentifierType().getId(player);
-            if (!Auth.hasAccount(accountId))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
                 return;
             if (!command.hasAnnotation(AuthenticationStepCommand.class))
                 return;
-            Account account = Auth.getAccount(accountId);
+            Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(player);
             if (account.getCurrentAuthenticationStep() == null)
                 return;
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
@@ -70,11 +68,10 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             ProxyPlayer player = new BungeeProxyPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
             if (player.getRealPlayer() == null)
                 throw new SendComponentException(config.getProxyMessages().getMessage("players-only"));
-            String id = config.getActiveIdentifierType().getId(player);
-            if (!Auth.hasAccount(id))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
                 throw new SendComponentException(config.getProxyMessages().getMessage("already-logged-in"));
 
-            Account account = Auth.getAccount(id);
+            Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(player);
             if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
                 throw new SendComponentException(config.getProxyMessages().getMessage("account-not-found"));
             if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))

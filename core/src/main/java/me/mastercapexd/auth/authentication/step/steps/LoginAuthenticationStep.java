@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.authentication.step.steps;
 
-import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.authentication.step.AbstractAuthenticationStep;
 import me.mastercapexd.auth.authentication.step.MessageableAuthenticationStep;
@@ -26,7 +25,7 @@ public class LoginAuthenticationStep extends AbstractAuthenticationStep implemen
 
     @Override
     public boolean shouldSkip() {
-        return !Auth.hasAccount(authenticationStepContext.getAccount().getPlayerId()) ||
+        return !PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(authenticationStepContext.getAccount()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
     }
 
