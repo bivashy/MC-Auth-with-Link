@@ -6,6 +6,7 @@ import java.util.Map;
 import io.github.revxrsal.eventbus.SubscribeEvent;
 import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.config.message.context.MessageContext;
+import me.mastercapexd.auth.event.AccountStateClearEvent;
 import me.mastercapexd.auth.event.AccountTryLoginEvent;
 import me.mastercapexd.auth.proxy.ProxyPlugin;
 
@@ -38,10 +39,14 @@ public class AuthenticationAttemptListener {
         account.getPlayer().ifPresent(player -> player.disconnect(plugin.getConfig().getProxyMessages().getMessage("attempts-limit")));
     }
 
+    @SubscribeEvent
+    public void onClear(AccountStateClearEvent e) {
+        e.getAccount().map(Account::getPlayerId).ifPresent(loginAttemptCounts::remove);
+    }
+
     private int incrementLoginAttemptsAndGet(Account account) {
         int accountLoginAttempts = loginAttemptCounts.getOrDefault(account.getPlayerId(), 0);
-
-        loginAttemptCounts.put(account.getPlayerId(), accountLoginAttempts++);
-        return accountLoginAttempts++;
+        loginAttemptCounts.put(account.getPlayerId(), accountLoginAttempts + 1);
+        return loginAttemptCounts.get(account.getPlayerId());
     }
 }
