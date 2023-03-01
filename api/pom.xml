@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>me.mastercapexd.auth</groupId>
+        <artifactId>main</artifactId>
+        <version>1.7.0-RC4</version>
+    </parent>
+    <groupId>com.bivashy.auth</groupId>
+    <artifactId>api</artifactId>
+
+    <properties>
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <multimessenger.version>0.0.7</multimessenger.version>
+        <adventure.serializer.version>4.12.0</adventure.serializer.version>
+        <adventure.platform.version>4.2.0</adventure.platform.version>
+        <ormlite.version>6.1</ormlite.version>
+        <google.authenticator.version>1.4.0</google.authenticator.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- BCrypt library -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
+
+        <!-- MultiMessenger library -->
+        <dependency>
+            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <artifactId>common</artifactId>
+            <version>${multimessenger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <artifactId>vk</artifactId>
+            <version>${multimessenger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <artifactId>telegram</artifactId>
+            <version>${multimessenger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.pengrad</groupId>
+                    <artifactId>java-telegram-bot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Adventure platform -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-api</artifactId>
+            <version>${adventure.platform.version}</version>
+        </dependency>
+
+        <!-- Adventure serializers -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>${adventure.serializer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-legacy</artifactId>
+            <version>${adventure.serializer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
+            <version>${adventure.serializer.version}</version>
+        </dependency>
+
+        <!-- ORMLite -->
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>${ormlite.version}</version>
+        </dependency>
+
+        <!-- GoogleAuthenticator library -->
+        <dependency>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+            <version>${google.authenticator.version}</version>
+        </dependency>
+    </dependencies>
+</project>

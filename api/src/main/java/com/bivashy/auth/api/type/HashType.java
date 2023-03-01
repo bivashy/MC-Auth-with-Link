@@ -1,8 +1,8 @@
-package me.mastercapexd.auth;
+package com.bivashy.auth.api.type;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import me.mastercapexd.auth.utils.HashUtils;
+import com.bivashy.auth.api.util.HashUtils;
 
 public enum HashType {
     MD5 {
