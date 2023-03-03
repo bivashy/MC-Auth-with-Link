@@ -11,6 +11,7 @@ import com.bivashy.auth.api.server.bossbar.ServerBossbar;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.server.proxy.ProxyServer;
+import com.bivashy.auth.api.server.scheduler.ServerScheduler;
 import com.bivashy.auth.api.server.title.ServerTitle;
 import com.bivashy.auth.api.util.Castable;
 
@@ -43,9 +44,9 @@ public interface ServerCore extends Castable<ServerCore> {
 
     void registerListener(AuthPlugin plugin, Object listener);
 
-    void schedule(AuthPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
+    ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
 
-    void schedule(AuthPlugin instance, Runnable task, long delay, TimeUnit milliseconds);
+    ServerScheduler schedule(AuthPlugin instance, Runnable task, long delay, TimeUnit milliseconds);
 
     void runAsync(Runnable task);
 

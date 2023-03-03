@@ -1,4 +1,12 @@
 package com.bivashy.auth.api.config.link.command;
 
-public class LinkCustomCommandSettings {
+import com.bivashy.auth.api.link.command.context.CustomCommandExecutionContext;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+
+public interface LinkCustomCommandSettings {
+    boolean shouldExecute(CustomCommandExecutionContext context);
+
+    String getAnswer();
+
+    ConfigurationSectionHolder getSectionHolder();
 }

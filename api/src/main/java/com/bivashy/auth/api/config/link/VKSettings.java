@@ -1,4 +1,4 @@
 package com.bivashy.auth.api.config.link;
 
-public interface VKSettings {
+public interface VKSettings extends LinkSettings {
 }

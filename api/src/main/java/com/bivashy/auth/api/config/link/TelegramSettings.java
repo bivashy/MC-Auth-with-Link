@@ -1,4 +1,4 @@
 package com.bivashy.auth.api.config.link;
 
-public interface TelegramSettings {
+public interface TelegramSettings extends LinkSettings {
 }
