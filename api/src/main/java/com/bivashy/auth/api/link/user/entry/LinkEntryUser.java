@@ -1,6 +1,6 @@
-package me.mastercapexd.auth.link.user.entry;
+package com.bivashy.auth.api.link.user.entry;
 
-import me.mastercapexd.auth.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.LinkUser;
 
 public interface LinkEntryUser extends LinkUser {
 

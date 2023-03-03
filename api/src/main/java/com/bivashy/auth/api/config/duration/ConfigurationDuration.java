@@ -1,5 +1,13 @@
 package com.bivashy.auth.api.config.duration;
 
-public interface ConfigurationDuration {
-    long getMillis();
+public class ConfigurationDuration {
+    private final long millis;
+
+    public ConfigurationDuration(long millis) {
+        this.millis = millis;
+    }
+
+    public long getMillis() {
+        return millis;
+    }
 }
