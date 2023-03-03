@@ -14,6 +14,7 @@ import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.util.Castable;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
+import io.github.revxrsal.eventbus.EventBus;
 import net.kyori.adventure.platform.AudienceProvider;
 
 public interface AuthPlugin extends Castable<AuthPlugin> {
@@ -42,6 +43,10 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
     AuthPlugin setLoginManagement(LoginManagement loginManagement);
 
     LinkTypeProvider getLinkTypeProvider();
+
+    EventBus getEventBus();
+
+    AuthPlugin setEventBus(EventBus eventBus);
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 
