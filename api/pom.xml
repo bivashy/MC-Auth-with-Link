@@ -104,5 +104,12 @@
             <artifactId>EventBus</artifactId>
             <version>${event-bus.version}</version>
         </dependency>
+
+        <!-- Configuration library core -->
+        <dependency>
+            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <artifactId>core</artifactId>
+            <version>${configuration-library.version}</version>
+        </dependency>
     </dependencies>
 </project>

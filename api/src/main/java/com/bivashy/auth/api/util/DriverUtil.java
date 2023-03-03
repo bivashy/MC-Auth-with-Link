@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.utils;
+package com.bivashy.auth.api.util;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

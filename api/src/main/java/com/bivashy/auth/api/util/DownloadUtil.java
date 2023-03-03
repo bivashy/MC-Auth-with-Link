@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.utils;
+package com.bivashy.auth.api.util;
 
 import java.io.BufferedReader;
 import java.io.File;

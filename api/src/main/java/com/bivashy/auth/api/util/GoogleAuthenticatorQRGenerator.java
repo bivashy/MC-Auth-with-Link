@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.utils;
+package com.bivashy.auth.api.util;
 
 import org.apache.http.client.utils.URIBuilder;
 
