@@ -1,8 +1,8 @@
-package me.mastercapexd.auth.event;
+package com.bivashy.auth.api.event;
 
-import me.mastercapexd.auth.event.base.AccountEvent;
-import me.mastercapexd.auth.event.base.CancellableEvent;
-import me.mastercapexd.auth.event.base.PasswordCheckEvent;
+import com.bivashy.auth.api.event.base.AccountEvent;
+import com.bivashy.auth.api.event.base.CancellableEvent;
+import com.bivashy.auth.api.event.base.PasswordCheckEvent;
 
 /**
  * Called when player changes tries to change his password. Cancel prevents validating, and sending messages.

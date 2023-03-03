@@ -18,6 +18,8 @@
         <adventure.platform.version>4.2.0</adventure.platform.version>
         <ormlite.version>6.1</ormlite.version>
         <google.authenticator.version>1.4.0</google.authenticator.version>
+        <event-bus.version>1.2</event-bus.version>
+        <configuration-library.version>3.0.5</configuration-library.version>
     </properties>
 
     <repositories>
@@ -94,6 +96,13 @@
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
             <version>${google.authenticator.version}</version>
+        </dependency>
+
+        <!-- Event Bus -->
+        <dependency>
+            <groupId>com.github.Revxrsal</groupId>
+            <artifactId>EventBus</artifactId>
+            <version>${event-bus.version}</version>
         </dependency>
     </dependencies>
 </project>

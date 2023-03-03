@@ -1,7 +1,8 @@
-package me.mastercapexd.auth.event.base;
+package com.bivashy.auth.api.event.base;
+
+import com.bivashy.auth.api.account.Account;
 
 import io.github.revxrsal.eventbus.gen.Index;
-import me.mastercapexd.auth.account.Account;
 
 public interface AccountEvent {
     @Index(0)
