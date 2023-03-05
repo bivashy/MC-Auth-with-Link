@@ -51,7 +51,7 @@ vk:
     # Символы которые будут использованы в коде
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-  # Выключает сообщения (кроме кастомных)
+  # Выключает сообщения из беседы
   disable-conversation-commands: true
 
   vk-commands: # Основные команды 
