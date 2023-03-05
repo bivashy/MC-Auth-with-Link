@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.LinkUserTemplate;
-import com.bivashy.auth.api.link.user.info.impl.LinkUserInfoTemplate;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.step.AuthenticationStep;
@@ -61,7 +61,7 @@ public interface Account extends PlayerIdSupplier {
     }
 
     default LinkUser findFirstLinkUserOrNew(Predicate<LinkUser> filter, LinkType linkType) {
-        return findFirstLinkUserOrCreate(filter, LinkUserTemplate.of(linkType, this, new LinkUserInfoTemplate(null)));
+        return findFirstLinkUserOrCreate(filter, LinkUserTemplate.of(linkType, this, LinkUserInfo.NULL_USER_INFO));
     }
 
     @Deprecated
