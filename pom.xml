@@ -15,7 +15,7 @@
     <properties>
         <!-- Manifest -->
         <manifest.contact>https://vk.me/bbaty45/</manifest.contact>
-        <manifest.developer>Ubivashka</manifest.developer>
+        <manifest.developer>bivashy</manifest.developer>
         <manifest.version>${project.version}</manifest.version>
 
         <!-- Building -->
