@@ -7,8 +7,9 @@ import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.proxy.ProxyServer;
+import com.bivashy.auth.api.util.Castable;
 
-public interface ServerPlayer extends PlayerIdSupplier {
+public interface ServerPlayer extends Castable<ServerPlayer>, PlayerIdSupplier {
     @Override
     default String getPlayerId() {
         return AuthPlugin.instance().getConfig().getActiveIdentifierType().getId(this);
