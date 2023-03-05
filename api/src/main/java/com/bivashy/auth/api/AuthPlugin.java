@@ -3,15 +3,21 @@ package com.bivashy.auth.api;
 import java.io.File;
 
 import com.bivashy.auth.api.account.AccountFactory;
+import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
+import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
+import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
+import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
+import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.util.Castable;
+import com.ubivashka.configuration.ConfigurationProcessor;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import io.github.revxrsal.eventbus.EventBus;
@@ -34,9 +40,11 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
 
     GoogleAuthenticator getGoogleAuthenticator();
 
-    AuthenticationStepFactoryBucket getAuthenticationStepCreatorBucket();
+    AuthenticationStepFactoryBucket getAuthenticationStepFactoryBucket();
 
     AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket();
+
+    ConfigurationProcessor getConfigurationProcessor();
 
     LoginManagement getLoginManagement();
 
@@ -47,6 +55,14 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
     EventBus getEventBus();
 
     AuthPlugin setEventBus(EventBus eventBus);
+
+    AuthenticationTaskBucket getAuthenticationTaskBucket();
+
+    AuthenticatingAccountBucket getAuthenticatingAccountBucket();
+
+    LinkAuthenticationBucket<LinkConfirmationUser> getLinkConfirmationBucket();
+
+    LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket();
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 
