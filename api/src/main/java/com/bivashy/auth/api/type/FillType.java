@@ -1,8 +1,10 @@
-package me.mastercapexd.auth.config.server;
+package com.bivashy.auth.api.type;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.bivashy.auth.api.config.server.ConfigurationServer;
 
 public enum FillType {
     RANDOM {
