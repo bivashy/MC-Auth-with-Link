@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.link.vk;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUserTemplate;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
-public class VKLinkEntryUser extends LinkEntryUserTemplate {
+import me.mastercapexd.auth.link.user.entry.BaseLinkEntryUser;
 
+public class VKLinkEntryUser extends BaseLinkEntryUser {
     public VKLinkEntryUser(Account account, LinkUserInfo linkUserInfo) {
         super(VKLinkType.getInstance(), account, linkUserInfo);
     }
@@ -13,5 +13,4 @@ public class VKLinkEntryUser extends LinkEntryUserTemplate {
     public VKLinkEntryUser(Account account) {
         this(account, account.findFirstLinkUserOrNew(VKLinkType.LINK_USER_FILTER, VKLinkType.getInstance()).getLinkUserInfo());
     }
-
 }

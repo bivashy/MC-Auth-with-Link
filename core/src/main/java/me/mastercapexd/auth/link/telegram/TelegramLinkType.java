@@ -2,24 +2,24 @@ package me.mastercapexd.auth.link.telegram;
 
 import java.util.function.Predicate;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.config.link.LinkSettings;
+import com.bivashy.auth.api.config.message.Messages;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.ubivashka.messenger.telegram.MessengerTelegram;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.message.Messages;
-import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholderContext;
+import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
 import me.mastercapexd.auth.config.message.telegram.TelegramMessagePlaceholderContext;
-import me.mastercapexd.auth.config.messenger.MessengerSettings;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
-import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
 
 public class TelegramLinkType implements LinkType, MessengerTelegram {
     private static final TelegramLinkType INSTANCE = new TelegramLinkType();
     public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserNumberIdentificator(Long.valueOf(-1));
 
     private TelegramLinkType() {
@@ -30,8 +30,8 @@ public class TelegramLinkType implements LinkType, MessengerTelegram {
     }
 
     @Override
-    public Messages<ProxyComponent> getProxyMessages() {
-        return PLUGIN.getConfig().getProxyMessages().getSubMessages("telegram");
+    public Messages<ServerComponent> getServerMessages() {
+        return PLUGIN.getConfig().getServerMessages().getSubMessages("telegram");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TelegramLinkType implements LinkType, MessengerTelegram {
     }
 
     @Override
-    public MessengerSettings getSettings() {
+    public LinkSettings getSettings() {
         return PLUGIN.getConfig().getTelegramSettings();
     }
 
@@ -50,7 +50,7 @@ public class TelegramLinkType implements LinkType, MessengerTelegram {
     }
 
     @Override
-    public MessengerPlaceholderContext newMessageContext(Account account) {
+    public LinkPlaceholderContext newMessageContext(Account account) {
         return new TelegramMessagePlaceholderContext(account);
     }
 }

@@ -6,12 +6,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.account.AuthAccountAdapter;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
-import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 
-public class AuthAccountDatabaseProxy implements AccountStorage {
+import me.mastercapexd.auth.account.AuthAccountAdapter;
+
+public class AuthAccountDatabaseProxy implements AccountDatabase {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     private final DatabaseHelper databaseHelper;
 

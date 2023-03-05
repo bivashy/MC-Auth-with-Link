@@ -2,14 +2,13 @@ package me.mastercapexd.auth.storage.model;
 
 import java.util.UUID;
 
+import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.type.IdentifierType;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import me.mastercapexd.auth.HashType;
-import me.mastercapexd.auth.IdentifierType;
 
 @DatabaseTable(tableName = "mc_auth_accounts")
 public class AuthAccount {

@@ -1,9 +1,10 @@
 package me.mastercapexd.auth.link.telegram;
 
-import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
-import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 
-public class TelegramLinkUserInfo extends LinkUserInfoTemplate {
+import me.mastercapexd.auth.link.user.BaseLinkUserInfo;
+
+public class TelegramLinkUserInfo extends BaseLinkUserInfo {
     public TelegramLinkUserInfo(Long linkUserId, boolean confirmationEnabled) {
         super(new UserNumberIdentificator(linkUserId), confirmationEnabled);
     }

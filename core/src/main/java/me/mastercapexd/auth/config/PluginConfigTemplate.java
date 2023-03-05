@@ -1,0 +1,283 @@
+package me.mastercapexd.auth.config;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.config.bossbar.BossBarSettings;
+import com.bivashy.auth.api.config.database.LegacyStorageDataSettings;
+import com.bivashy.auth.api.config.duration.ConfigurationDuration;
+import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
+import com.bivashy.auth.api.config.link.TelegramSettings;
+import com.bivashy.auth.api.config.link.VKSettings;
+import com.bivashy.auth.api.config.message.server.ServerMessages;
+import com.bivashy.auth.api.config.server.ConfigurationServer;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
+import com.bivashy.auth.api.type.FillType;
+import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.type.IdentifierType;
+import com.bivashy.auth.api.type.StorageType;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.annotation.ImportantField;
+import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+
+import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
+import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;
+import me.mastercapexd.auth.config.message.server.BaseServerMessages;
+import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
+import me.mastercapexd.auth.config.server.BaseConfigurationServer;
+import me.mastercapexd.auth.config.storage.BaseDatabaseConfiguration;
+import me.mastercapexd.auth.config.storage.BaseLegacyStorageDataSettings;
+import me.mastercapexd.auth.config.telegram.BaseTelegramSettings;
+import me.mastercapexd.auth.config.vk.BaseVKSettings;
+
+public abstract class PluginConfigTemplate implements PluginConfig {
+    protected final AuthPlugin plugin;
+    private final List<Pattern> allowedPatternCommands;
+    protected ConfigurationSectionHolder configurationRoot;
+    @ConfigField("id-type")
+    private IdentifierType activeIdentifierType = IdentifierType.NAME;
+    @ConfigField("check-name-case")
+    private boolean nameCaseCheckEnabled = true;
+    @ConfigField("enable-password-confirm")
+    private boolean passwordConfirmationEnabled = false;
+    @ConfigField("hash-type")
+    private HashType activeHashType = HashType.SHA256;
+    @ConfigField("storage-type")
+    private StorageType storageType = StorageType.SQLITE;
+    @ConfigField("name-regex-pattern")
+    private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
+    @ConfigField("password-regex-pattern")
+    private Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9_$#@^-]*");
+    @ConfigField("password-min-length")
+    private int passwordMinLength = 5;
+    @ConfigField("password-max-length")
+    private int passwordMaxLength = 20;
+    @ConfigField("password-attempts")
+    private int passwordAttempts = 3;
+    @ConfigField("auth-time")
+    private ConfigurationDuration authTime = new ConfigurationDuration(60);
+    @ImportantField
+    @ConfigField("auth-servers")
+    private List<BaseConfigurationServer> authServers = Collections.emptyList();
+    @ImportantField
+    @ConfigField("game-servers")
+    private List<BaseConfigurationServer> gameServers = Collections.emptyList();
+    @ConfigField("blocked-servers")
+    private List<BaseConfigurationServer> blockedServers = Collections.emptyList();
+    @ConfigField("allowed-commands")
+    private List<String> allowedCommands = Collections.emptyList();
+    @ConfigField("data")
+    private BaseLegacyStorageDataSettings legacyStorageDataSettings = null;
+    @ConfigField("database")
+    private BaseDatabaseConfiguration databaseConfiguration;
+    @ConfigField("max-login-per-ip")
+    private int maxLoginPerIP = 0;
+    @ConfigField("messages-delay")
+    private int messagesDelay = 5;
+    @ConfigField("telegram")
+    private BaseTelegramSettings telegramSettings = new BaseTelegramSettings();
+    @ConfigField("vk")
+    private BaseVKSettings vkSettings = new BaseVKSettings();
+    @ConfigField("google-authenticator")
+    private BaseGoogleAuthenticatorSettings googleAuthenticatorSettings = new BaseGoogleAuthenticatorSettings();
+    @ImportantField
+    @ConfigField("messages")
+    private BaseServerMessages serverMessages = null;
+    @ConfigField("boss-bar")
+    private BaseBossBarSettings barSettings = new BaseBossBarSettings();
+    @ConfigField("fill-type")
+    private FillType fillType = FillType.GRADUALLY;
+    @ConfigField("session-durability")
+    private ConfigurationDuration sessionDurability = new ConfigurationDuration(14400L);
+    @ConfigField("join-delay")
+    private ConfigurationDuration joinDelay = new ConfigurationDuration(0);
+    @ConfigField("block-chat")
+    private boolean blockChat = true;
+    @ConfigField("authentication-steps")
+    private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
+
+    public PluginConfigTemplate(AuthPlugin plugin) {
+        this.plugin = plugin;
+        this.configurationRoot = createConfiguration(plugin);
+        plugin.getConfigurationProcessor().resolve(configurationRoot, this);
+        this.allowedPatternCommands = allowedCommands.stream().map(Pattern::compile).collect(Collectors.toList());
+
+        if (databaseConfiguration == null && legacyStorageDataSettings != null)
+            databaseConfiguration = new BaseDatabaseConfiguration(RawURLProvider.of(storageType.getConnectionUrl(legacyStorageDataSettings)),
+                    storageType.getDriverDownloadUrl(), legacyStorageDataSettings.getUser(), legacyStorageDataSettings.getPassword());
+    }
+
+    @Override
+    public ConfigurationServer findServerInfo(List<ConfigurationServer> servers) {
+        List<ConfigurationServer> filteredServers = fillType.shuffle(servers.stream().filter(server -> {
+            ProxyServer proxyServer = server.asProxyServer();
+            if (!proxyServer.isExists()) {
+                System.err.println("BaseConfigurationServer with name " + server.getId() + " doesn`t exists in your proxy!");
+                return false;
+            }
+            return server.getMaxPlayers() == -1 || (proxyServer.getPlayersCount() < server.getMaxPlayers());
+        }).collect(Collectors.toList()));
+
+        if (filteredServers.isEmpty())
+            return servers.get(0);
+
+        return filteredServers.get(0);
+    }
+
+    @Override
+    public void reload() {
+        this.configurationRoot = createConfiguration(plugin);
+        AuthPlugin.instance().getConfigurationProcessor().resolve(configurationRoot, this);
+    }
+
+    @Override
+    public IdentifierType getActiveIdentifierType() {
+        return activeIdentifierType;
+    }
+
+    @Override
+    public boolean isNameCaseCheckEnabled() {
+        return nameCaseCheckEnabled;
+    }
+
+    @Override
+    public boolean isPasswordConfirmationEnabled() {
+        return passwordConfirmationEnabled;
+    }
+
+    @Override
+    public HashType getActiveHashType() {
+        return activeHashType;
+    }
+
+    @Override
+    public StorageType getStorageType() {
+        return storageType;
+    }
+
+    @Override
+    public Pattern getNamePattern() {
+        return namePattern;
+    }
+
+    @Override
+    public Pattern getPasswordPattern() {
+        return passwordPattern;
+    }
+
+    public int getPasswordMinLength() {
+        return passwordMinLength;
+    }
+
+    @Override
+    public int getPasswordMaxLength() {
+        return passwordMaxLength;
+    }
+
+    @Override
+    public int getPasswordAttempts() {
+        return passwordAttempts;
+    }
+
+    @Override
+    public long getSessionDurability() {
+        return sessionDurability.getMillis();
+    }
+
+    @Override
+    public long getJoinDelay() {
+        return joinDelay.getMillis();
+    }
+
+    @Override
+    public long getAuthTime() {
+        return authTime.getMillis();
+    }
+
+    @Override
+    public boolean shouldBlockChat() {
+        return blockChat;
+    }
+
+    @Override
+    public List<ConfigurationServer> getAuthServers() {
+        return Collections.unmodifiableList(authServers);
+    }
+
+    @Override
+    public List<ConfigurationServer> getGameServers() {
+        return Collections.unmodifiableList(gameServers);
+    }
+
+    @Override
+    public List<ConfigurationServer> getBlockedServers() {
+        return Collections.unmodifiableList(blockedServers);
+    }
+
+    @Override
+    public LegacyStorageDataSettings getStorageDataSettings() {
+        return legacyStorageDataSettings;
+    }
+
+    @Override
+    public BaseDatabaseConfiguration getDatabaseConfiguration() {
+        return databaseConfiguration;
+    }
+
+    @Override
+    public ServerMessages getServerMessages() {
+        return serverMessages;
+    }
+
+    @Override
+    public TelegramSettings getTelegramSettings() {
+        return telegramSettings;
+    }
+
+    @Override
+    public VKSettings getVKSettings() {
+        return vkSettings;
+    }
+
+    @Override
+    public int getMaxLoginPerIP() {
+        return maxLoginPerIP;
+    }
+
+    @Override
+    public int getMessagesDelay() {
+        return this.messagesDelay;
+    }
+
+    @Override
+    public BossBarSettings getBossBarSettings() {
+        return this.barSettings;
+    }
+
+    @Override
+    public GoogleAuthenticatorSettings getGoogleAuthenticatorSettings() {
+        return googleAuthenticatorSettings;
+    }
+
+    @Override
+    public List<Pattern> getAllowedCommands() {
+        return Collections.unmodifiableList(allowedPatternCommands);
+    }
+
+    @Override
+    public List<String> getAuthenticationSteps() {
+        return Collections.unmodifiableList(authenticationSteps);
+    }
+
+    @Override
+    public String getAuthenticationStepName(int index) {
+        return index >= 0 && index < authenticationSteps.size() ? authenticationSteps.get(index) : "NULL";
+    }
+
+    protected abstract ConfigurationSectionHolder createConfiguration(AuthPlugin plugin);
+}

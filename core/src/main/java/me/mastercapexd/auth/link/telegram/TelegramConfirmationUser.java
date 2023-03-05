@@ -1,13 +1,12 @@
 package me.mastercapexd.auth.link.telegram;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUserTemplate;
-import me.mastercapexd.auth.link.user.confirmation.info.LinkConfirmationInfo;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationInfo;
 
-public class TelegramConfirmationUser extends LinkConfirmationUserTemplate {
+import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 
+public class TelegramConfirmationUser extends BaseLinkConfirmationUser {
     public TelegramConfirmationUser(Account account, LinkConfirmationInfo confirmationInfo) {
         super(TelegramLinkType.getInstance(), account, confirmationInfo);
     }
-
 }

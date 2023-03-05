@@ -4,17 +4,18 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
+
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountEnterDeclineCommand implements OrphanCommand {
     @Dependency
-    private ProxyPlugin plugin;
+    private AuthPlugin plugin;
 
     @Default
     public void onDecline(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
@@ -41,7 +42,7 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
         }
         accounts.forEach((entryUser) -> {
             plugin.getLinkEntryBucket().removeLinkUser(entryUser);
-            entryUser.getAccount().kick(linkType.getProxyMessages().getStringMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));
+            entryUser.getAccount().kick(linkType.getServerMessages().getStringMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));
         });
     }

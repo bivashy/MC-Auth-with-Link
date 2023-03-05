@@ -2,17 +2,16 @@ package me.mastercapexd.auth.config.resolver;
 
 import java.util.Arrays;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.ubivashka.configuration.context.ConfigurationFieldResolverContext;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolver;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
-
-public class ProxyComponentFieldResolver implements ConfigurationFieldResolver<ProxyComponent> {
+public class ProxyComponentFieldResolver implements ConfigurationFieldResolver<ServerComponent> {
     @Override
-    public ProxyComponent resolveField(ConfigurationFieldResolverContext context) {
-        ProxyPlugin proxyPlugin = ProxyPlugin.instance();
+    public ServerComponent resolveField(ConfigurationFieldResolverContext context) {
+        AuthPlugin proxyPlugin = AuthPlugin.instance();
         if (context.isSection()) {
             ConfigurationSectionHolder sectionHolder = context.getSection();
             String componentType = sectionHolder.getString("type");

@@ -11,11 +11,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import me.mastercapexd.auth.HashType;
-import me.mastercapexd.auth.IdentifierType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.type.IdentifierType;
+
 import me.mastercapexd.auth.link.user.AccountLinkAdapter;
-import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.storage.model.AccountLink;
 import me.mastercapexd.auth.storage.model.AuthAccount;
 import me.mastercapexd.auth.storage.model.AuthAccountProvider;
@@ -25,7 +26,7 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     private final AuthAccount authAccount;
 
     /**
-     * Create {@link Account} from {@link AuthAccount}
+     * Create {@link com.bivashy.auth.api.account.Account} from {@link AuthAccount}
      *
      * @param authAccount  - account that need to adapt
      * @param accountLinks - linked social {@link AccountLink} collection
@@ -36,7 +37,7 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     }
 
     /**
-     * Create {@link Account} from {@link AuthAccount}
+     * Create {@link com.bivashy.auth.api.account.Account} from {@link AuthAccount}
      * <p>
      * This constructor will query {@link me.mastercapexd.auth.storage.model.AccountLink} from database, because of
      * {@link com.j256.ormlite.dao.ForeignCollection}

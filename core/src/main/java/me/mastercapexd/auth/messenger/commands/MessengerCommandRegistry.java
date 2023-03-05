@@ -3,25 +3,26 @@ package me.mastercapexd.auth.messenger.commands;
 import java.util.List;
 import java.util.Optional;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.PluginConfig;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
-import me.mastercapexd.auth.proxy.commands.parameters.NewPassword;
-import me.mastercapexd.auth.storage.AccountStorage;
+import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.Orphans;
 
 public abstract class MessengerCommandRegistry {
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private final CommandHandler commandHandler;
     private final LinkType linkType;
 
@@ -95,7 +96,7 @@ public abstract class MessengerCommandRegistry {
         commandHandler.registerValueResolver(Account.class, (context) -> {
             String playerName = context.popForParameter();
             LinkUserIdentificator userId = context.actor().as(LinkCommandActorWrapper.class).userId();
-            Account account = PLUGIN.getAccountStorage().getAccountFromName(playerName).get();
+            Account account = PLUGIN.getAccountDatabase().getAccountFromName(playerName).get();
             if (account == null || !account.isRegistered())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
 
@@ -110,9 +111,9 @@ public abstract class MessengerCommandRegistry {
     }
 
     private void registerDependencies() {
-        commandHandler.registerDependency(AccountStorage.class, PLUGIN.getAccountStorage());
+        commandHandler.registerDependency(AccountDatabase.class, PLUGIN.getAccountDatabase());
         commandHandler.registerDependency(PluginConfig.class, PLUGIN.getConfig());
-        commandHandler.registerDependency(ProxyPlugin.class, PLUGIN);
+        commandHandler.registerDependency(AuthPlugin.class, PLUGIN);
         commandHandler.registerDependency(LinkType.class, linkType);
     }
 

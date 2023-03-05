@@ -1,11 +1,12 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import me.mastercapexd.auth.config.PluginConfig;
+import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
-import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
@@ -14,23 +15,23 @@ public class LinkCodeCommand implements OrphanCommand {
     @Dependency
     private PluginConfig config;
     @Dependency
-    private AccountStorage accountStorage;
+    private AccountDatabase accountDatabase;
 
     @Default
     @ConfigurationArgumentError("confirmation-not-enough-arguments")
     public void onLink(LinkCommandActorWrapper actorWrapper, LinkType linkType, MessengerLinkContext linkContext) {
-        accountStorage.getAccount(linkContext.getConfirmationUser().getAccount().getPlayerId()).thenAccept(account -> {
+        accountDatabase.getAccount(linkContext.getConfirmationUser().getAccount().getPlayerId()).thenAccept(account -> {
 
             account.findFirstLinkUserOrNew(linkUser -> linkUser.getLinkType().equals(linkType), linkType)
                     .getLinkUserInfo()
                     .setIdentificator(actorWrapper.userId());
 
-            accountStorage.saveOrUpdateAccount(account);
+            accountDatabase.saveOrUpdateAccount(account);
 
             linkContext.getConfirmationUser()
                     .getAccount()
                     .getPlayer()
-                    .ifPresent(player -> player.sendMessage(linkType.getProxyMessages().getMessage("linked")));
+                    .ifPresent(player -> player.sendMessage(linkType.getServerMessages().getMessage("linked")));
 
             actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-success", linkType.newMessageContext(account)));
         });

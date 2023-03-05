@@ -1,8 +1,9 @@
 package me.mastercapexd.auth.link.vk;
 
-import me.mastercapexd.auth.account.Account;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
+
 import me.mastercapexd.auth.link.user.LinkUserTemplate;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public class VKLinkUser extends LinkUserTemplate {
     private VKLinkUserInfo linkInfoAccount;
@@ -21,5 +22,4 @@ public class VKLinkUser extends LinkUserTemplate {
     public LinkUserInfo getLinkUserInfo() {
         return linkInfoAccount;
     }
-
 }

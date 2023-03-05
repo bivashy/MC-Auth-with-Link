@@ -5,15 +5,14 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.bivashy.auth.api.config.link.LinkKeyboards;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.ubivashka.configuration.ConfigurationHolder;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import com.ubivashka.messenger.telegram.message.keyboard.TelegramKeyboard;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
 
-import me.mastercapexd.auth.config.messenger.MessengerKeyboards;
-
-public class TelegramKeyboards implements ConfigurationHolder, MessengerKeyboards {
+public class TelegramKeyboards implements ConfigurationHolder, LinkKeyboards {
     private final Map<String, String> jsonKeyboards;
 
     public TelegramKeyboards(ConfigurationSectionHolder sectionHolder) {

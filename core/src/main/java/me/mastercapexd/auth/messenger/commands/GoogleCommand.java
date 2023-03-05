@@ -2,9 +2,18 @@ package me.mastercapexd.auth.messenger.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.account.AccountFactory;
+import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import me.mastercapexd.auth.util.GoogleAuthenticatorQRGenerator;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -13,31 +22,23 @@ import com.google.zxing.common.BitMatrix;
 import com.ubivaska.messenger.common.file.MessengerFile;
 import com.ubivaska.messenger.common.message.Message;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.config.PluginConfig;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
-import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.utils.GoogleAuthenticatorQRGenerator;
-import me.mastercapexd.auth.utils.RandomCodeFactory;
+import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.util.RandomCodeFactory;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class GoogleCommand implements OrphanCommand {
     @Dependency
-    private ProxyPlugin plugin;
+    private AuthPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
-    private AccountStorage accountStorage;
+    private AccountDatabase accountStorage;
 
     @Default
     @GoogleUse
@@ -57,12 +58,16 @@ public class GoogleCommand implements OrphanCommand {
 
         String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
 
-        if (linkUserKey == AccountFactory.DEFAULT_GOOGLE_KEY || linkUserKey.isEmpty()) {
-            String rawContent = linkType.getLinkMessages().getStringMessage("google-generated", linkType.newMessageContext(account)).replaceAll("(?i)%google_key%", rawKey);
+        if (Objects.equals(linkUserKey, AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
+            String rawContent = linkType.getLinkMessages()
+                    .getStringMessage("google-generated", linkType.newMessageContext(account))
+                    .replaceAll("(?i)%google_key%", rawKey);
             Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
             actorWrapper.send(googleQRMessage);
         } else {
-            String rawContent = linkType.getLinkMessages().getStringMessage("google-regenerated", linkType.newMessageContext(account)).replaceAll("(?i)%google_key%", rawKey);
+            String rawContent = linkType.getLinkMessages()
+                    .getStringMessage("google-regenerated", linkType.newMessageContext(account))
+                    .replaceAll("(?i)%google_key%", rawKey);
             Message googleQRMessage = buildGoogleQRMessage(totpKey, rawContent, linkType);
             actorWrapper.send(googleQRMessage);
         }

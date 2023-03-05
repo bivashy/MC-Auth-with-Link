@@ -1,8 +1,9 @@
 package me.mastercapexd.auth.link.google;
 
-import me.mastercapexd.auth.account.Account;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
+
 import me.mastercapexd.auth.link.user.LinkUserTemplate;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 
 public class GoogleLinkUser extends LinkUserTemplate {
     private GoogleLinkUserInfo linkInfoAccount;

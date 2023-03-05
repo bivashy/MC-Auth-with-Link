@@ -1,18 +1,19 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import me.mastercapexd.auth.account.Account;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
+
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
-import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class ConfirmationToggleCommand implements OrphanCommand {
     @Dependency
-    private AccountStorage accountStorage;
+    private AccountDatabase accountDatabase;
 
     @Default
     @ConfigurationArgumentError("confirmation-no-player")
@@ -25,7 +26,7 @@ public class ConfirmationToggleCommand implements OrphanCommand {
         account.findFirstLinkUser(user -> user.getLinkType().equals(linkType)).ifPresent(linkUser -> {
             LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
             linkUserInfo.setConfirmationEnabled(!linkUserInfo.isConfirmationEnabled());
-            accountStorage.saveOrUpdateAccount(account);
+            accountDatabase.saveOrUpdateAccount(account);
         });
     }
 }

@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.messenger.commands.exception;
 
-import me.mastercapexd.auth.link.LinkType;
+import com.bivashy.auth.api.link.LinkType;
+
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.ArgumentParseException;

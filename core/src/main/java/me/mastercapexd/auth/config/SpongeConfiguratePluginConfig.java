@@ -15,12 +15,12 @@ import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 import org.spongepowered.configurate.transformation.TransformAction;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-import me.mastercapexd.auth.asset.resource.Resource;
-import me.mastercapexd.auth.asset.resource.folder.FolderResource;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.asset.resource.Resource;
+import com.bivashy.auth.api.asset.resource.impl.FolderResource;
 
-public abstract class SpongeConfiguratePluginConfig extends AbstractPluginConfig {
-    public SpongeConfiguratePluginConfig(ProxyPlugin proxyPlugin) {
+public abstract class SpongeConfiguratePluginConfig extends PluginConfigTemplate {
+    public SpongeConfiguratePluginConfig(AuthPlugin proxyPlugin) {
         super(proxyPlugin);
     }
 

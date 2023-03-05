@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.link.google;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUserTemplate;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
-public class GoogleLinkEntryUser extends LinkEntryUserTemplate {
+import me.mastercapexd.auth.link.user.entry.BaseLinkEntryUser;
 
+public class GoogleLinkEntryUser extends BaseLinkEntryUser {
     public GoogleLinkEntryUser(Account account, LinkUserInfo linkUserInfo) {
         super(GoogleLinkType.getInstance(), account, linkUserInfo);
     }
@@ -13,5 +13,4 @@ public class GoogleLinkEntryUser extends LinkEntryUserTemplate {
     public GoogleLinkEntryUser(Account account) {
         this(account, account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance()).getLinkUserInfo());
     }
-
 }

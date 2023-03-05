@@ -5,15 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.bivashy.auth.api.AuthPlugin;
 import com.ubivashka.configuration.context.ConfigurationFieldFactoryContext;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolver;
 import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolverFactory;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-
 public class RawURLProviderFieldResolverFactory implements ConfigurationFieldResolverFactory {
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private static final String REMOTE_URI_TEMPLATE = "jdbc:%s://%s:%s/%s";
     private static final String PLUGIN_FOLDER_PLACEHOLDER_KEY = "%plugin_folder%";
     public static final String DATABASE_TYPE_KEY = "type";
@@ -40,7 +39,6 @@ public class RawURLProviderFieldResolverFactory implements ConfigurationFieldRes
             return () -> url;
         }
     }
-
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface SqlConnectionUrl {

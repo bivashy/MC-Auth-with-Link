@@ -1,28 +1,29 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.config.PluginConfig;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.account.AccountFactory;
+import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.link.user.LinkUser;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.commands.annotations.GoogleUse;
-import me.mastercapexd.auth.storage.AccountStorage;
+import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class GoogleCodeCommand implements OrphanCommand {
     @Dependency
-    private ProxyPlugin plugin;
+    private AuthPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
-    private AccountStorage accountStorage;
+    private AccountDatabase accountStorage;
 
     @GoogleUse
     @Default
@@ -48,7 +49,7 @@ public class GoogleCodeCommand implements OrphanCommand {
         if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-valid", linkType.newMessageContext(account)));
             account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
-            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryDealership().createContext(account));
+            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
             return;
         }
         actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-valid", linkType.newMessageContext(account)));

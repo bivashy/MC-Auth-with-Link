@@ -2,30 +2,29 @@ package me.mastercapexd.auth.link.google;
 
 import java.util.function.Predicate;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.account.AccountFactory;
+import com.bivashy.auth.api.config.link.LinkSettings;
+import com.bivashy.auth.api.config.message.Messages;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.ubivaska.messenger.common.button.Button.ButtonBuilder;
 import com.ubivaska.messenger.common.button.ButtonAction.ButtonActionBuilder;
 import com.ubivaska.messenger.common.button.ButtonColor.ButtonColorBuilder;
 import com.ubivaska.messenger.common.keyboard.Keyboard.KeyboardBuilder;
 import com.ubivaska.messenger.common.message.Message.MessageBuilder;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.account.factories.AccountFactory;
-import me.mastercapexd.auth.config.message.Messages;
-import me.mastercapexd.auth.config.message.messenger.context.MessengerPlaceholderContext;
-import me.mastercapexd.auth.config.messenger.MessengerSettings;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.LinkUser;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
-import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
+import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
 
 public class GoogleLinkType implements LinkType {
     private static final GoogleLinkType INSTANCE = new GoogleLinkType();
     public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserStringIdentificator(AccountFactory.DEFAULT_GOOGLE_KEY);
-
     private static final String CANNOT_CREATE_BUILDER_ERROR = "Can`t create builder with GoogleLinkType!";
     private static final String UNSUPPORTED_ERROR = "This method don`t supported by google link type";
 
@@ -62,13 +61,13 @@ public class GoogleLinkType implements LinkType {
     }
 
     @Override
-    public MessengerPlaceholderContext newMessageContext(Account account) {
+    public LinkPlaceholderContext newMessageContext(Account account) {
         throw new UnsupportedOperationException(UNSUPPORTED_ERROR);
     }
 
     @Override
-    public Messages<ProxyComponent> getProxyMessages() {
-        return PLUGIN.getConfig().getProxyMessages().getSubMessages("google");
+    public Messages<ServerComponent> getServerMessages() {
+        return PLUGIN.getConfig().getServerMessages().getSubMessages("google");
     }
 
     @Override
@@ -77,7 +76,7 @@ public class GoogleLinkType implements LinkType {
     }
 
     @Override
-    public MessengerSettings getSettings() {
+    public LinkSettings getSettings() {
         throw new UnsupportedOperationException(UNSUPPORTED_ERROR);
     }
 

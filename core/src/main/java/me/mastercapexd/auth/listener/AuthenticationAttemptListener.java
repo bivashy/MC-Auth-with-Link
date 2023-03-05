@@ -3,18 +3,19 @@ package me.mastercapexd.auth.listener;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.config.message.MessageContext;
+import com.bivashy.auth.api.event.AccountStateClearEvent;
+import com.bivashy.auth.api.event.AccountTryLoginEvent;
+
 import io.github.revxrsal.eventbus.SubscribeEvent;
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.message.context.MessageContext;
-import me.mastercapexd.auth.event.AccountStateClearEvent;
-import me.mastercapexd.auth.event.AccountTryLoginEvent;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
 
 public class AuthenticationAttemptListener {
     private final Map<String, Integer> loginAttemptCounts = new HashMap<>();
-    private final ProxyPlugin plugin;
+    private final AuthPlugin plugin;
 
-    public AuthenticationAttemptListener(ProxyPlugin plugin) {
+    public AuthenticationAttemptListener(AuthPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -25,18 +26,18 @@ public class AuthenticationAttemptListener {
             return;
         e.setCancelled(true);
         if (plugin.getConfig().getPasswordAttempts() < 1) {
-            account.getPlayer().ifPresent(player -> player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("wrong-password")));
+            account.getPlayer().ifPresent(player -> player.sendMessage(plugin.getConfig().getServerMessages().getMessage("wrong-password")));
             return;
         }
         int loginAttempts = incrementLoginAttemptsAndGet(e.getAccount());
         account.getPlayer()
                 .ifPresent(player -> player.sendMessage(plugin.getConfig()
-                        .getProxyMessages()
+                        .getServerMessages()
                         .getMessage("wrong-password",
                                 MessageContext.of("%attempts%", Integer.toString(plugin.getConfig().getPasswordAttempts() - loginAttempts)))));
-        if (loginAttempts < ProxyPlugin.instance().getConfig().getPasswordAttempts())
+        if (loginAttempts < AuthPlugin.instance().getConfig().getPasswordAttempts())
             return;
-        account.getPlayer().ifPresent(player -> player.disconnect(plugin.getConfig().getProxyMessages().getMessage("attempts-limit")));
+        account.getPlayer().ifPresent(player -> player.disconnect(plugin.getConfig().getServerMessages().getMessage("attempts-limit")));
     }
 
     @SubscribeEvent

@@ -11,22 +11,17 @@
     <artifactId>core</artifactId>
 
     <properties>
+        <auth.api.version>${project.version}</auth.api.version>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <google.authenticator.version>1.4.0</google.authenticator.version>
         <zxing.library.version>3.5.1</zxing.library.version>
         <configuration-library.version>3.0.5</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
         <lamp.command-library.version>3.0.8</lamp.command-library.version>
-        <event-bus.version>1.2</event-bus.version>
         <vk-lamp-module.version>0.0.5</vk-lamp-module.version>
         <telegram-lamp-module.version>0.0.5</telegram-lamp-module.version>
-        <multimessenger.version>0.0.7</multimessenger.version>
         <java-telegram-bot-api.version>6.3.0</java-telegram-bot-api.version>
         <minimessage.version>4.12.0</minimessage.version>
-        <adventure.serializer.version>4.12.0</adventure.serializer.version>
-        <adventure.platform.version>4.2.0</adventure.platform.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
-        <ormlite.version>6.1</ormlite.version>
     </properties>
 
     <repositories>
@@ -37,6 +32,13 @@
     </repositories>
 
     <dependencies>
+        <!-- MC-Auth API -->
+        <dependency>
+            <groupId>com.bivashy.auth</groupId>
+            <artifactId>api</artifactId>
+            <version>${auth.api.version}</version>
+        </dependency>
+
         <!-- BCrypt library -->
         <dependency>
             <groupId>org.mindrot</groupId>
@@ -44,14 +46,7 @@
             <version>${jbcrypt.version}</version>
         </dependency>
 
-        <!-- GoogleAuthenticator library -->
-        <dependency>
-            <groupId>com.warrenstrange</groupId>
-            <artifactId>googleauth</artifactId>
-            <version>${google.authenticator.version}</version>
-        </dependency>
-
-        <!-- Barcode, QRcode library -->
+        <!-- Barcode, QR library -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -61,13 +56,6 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>${zxing.library.version}</version>
-        </dependency>
-
-        <!-- Configuration library core -->
-        <dependency>
-            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
-            <artifactId>core</artifactId>
-            <version>${configuration-library.version}</version>
         </dependency>
 
         <!-- Configuration library for Configurate -->
@@ -118,36 +106,6 @@
             <version>${telegram-lamp-module.version}</version>
         </dependency>
 
-        <!-- Event bus -->
-        <dependency>
-            <groupId>com.github.Revxrsal</groupId>
-            <artifactId>EventBus</artifactId>
-            <version>${event-bus.version}</version>
-        </dependency>
-
-        <!-- MultiMessenger library -->
-        <dependency>
-            <groupId>com.github.U61vashka.MultiMessenger</groupId>
-            <artifactId>common</artifactId>
-            <version>${multimessenger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.U61vashka.MultiMessenger</groupId>
-            <artifactId>vk</artifactId>
-            <version>${multimessenger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.U61vashka.MultiMessenger</groupId>
-            <artifactId>telegram</artifactId>
-            <version>${multimessenger.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.github.pengrad</groupId>
-                    <artifactId>java-telegram-bot-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- VK API -->
         <dependency>
             <groupId>com.github.U61vashka</groupId>
@@ -169,37 +127,6 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>${minimessage.version}</version>
-        </dependency>
-
-        <!-- Adventure platform -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-api</artifactId>
-            <version>${adventure.platform.version}</version>
-        </dependency>
-
-        <!-- Adventure serializers -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>${adventure.serializer.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>${adventure.serializer.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>${adventure.serializer.version}</version>
-        </dependency>
-
-        <!-- ORMLite -->
-        <dependency>
-            <groupId>com.j256.ormlite</groupId>
-            <artifactId>ormlite-jdbc</artifactId>
-            <version>${ormlite.version}</version>
         </dependency>
     </dependencies>
 </project>

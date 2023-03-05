@@ -1,9 +1,10 @@
 package me.mastercapexd.auth.link.google;
 
-import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
-import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 
-public class GoogleLinkUserInfo extends LinkUserInfoTemplate {
+import me.mastercapexd.auth.link.user.BaseLinkUserInfo;
+
+public class GoogleLinkUserInfo extends BaseLinkUserInfo {
     public GoogleLinkUserInfo(String userId, boolean confirmationEnabled) {
         super(new UserStringIdentificator(userId), confirmationEnabled);
     }

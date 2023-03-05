@@ -1,11 +1,11 @@
 package me.mastercapexd.auth.link.telegram;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUserTemplate;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
-public class TelegramLinkEntryUser extends LinkEntryUserTemplate {
+import me.mastercapexd.auth.link.user.entry.BaseLinkEntryUser;
 
+public class TelegramLinkEntryUser extends BaseLinkEntryUser {
     public TelegramLinkEntryUser(Account account, LinkUserInfo linkUserInfo) {
         super(TelegramLinkType.getInstance(), account, linkUserInfo);
     }
@@ -13,5 +13,4 @@ public class TelegramLinkEntryUser extends LinkEntryUserTemplate {
     public TelegramLinkEntryUser(Account account) {
         this(account, account.findFirstLinkUserOrNew(TelegramLinkType.LINK_USER_FILTER, TelegramLinkType.getInstance()).getLinkUserInfo());
     }
-
 }

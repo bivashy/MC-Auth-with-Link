@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.link.vk;
 
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.ubivashka.lamp.commands.vk.VkActor;
 import com.ubivashka.lamp.commands.vk.message.DispatchSource;
 import com.ubivaska.messenger.common.identificator.Identificator;
@@ -9,8 +11,6 @@ import com.vk.api.sdk.objects.messages.ConversationPeerType;
 import com.vk.api.sdk.objects.users.UserFull;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapperTemplate;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
-import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
 
 public class VKCommandActorWrapper extends LinkCommandActorWrapperTemplate<VkActor> implements VkActor {
     public VKCommandActorWrapper(VkActor actor) {

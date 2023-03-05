@@ -5,14 +5,13 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.bivashy.auth.api.config.link.LinkKeyboards;
 import com.ubivashka.configuration.ConfigurationHolder;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 import com.ubivashka.messenger.vk.message.keyboard.VkKeyboard;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
 
-import me.mastercapexd.auth.config.messenger.MessengerKeyboards;
-
-public class VKKeyboards implements ConfigurationHolder, MessengerKeyboards {
+public class VKKeyboards implements ConfigurationHolder, LinkKeyboards {
     private final Map<String, String> jsonKeyboards;
 
     public VKKeyboards(ConfigurationSectionHolder sectionHolder) {

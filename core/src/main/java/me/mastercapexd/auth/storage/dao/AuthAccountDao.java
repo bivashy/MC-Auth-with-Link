@@ -5,12 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
 import me.mastercapexd.auth.storage.DatabaseHelper;
 import me.mastercapexd.auth.storage.model.AccountLink;
 import me.mastercapexd.auth.storage.model.AuthAccount;

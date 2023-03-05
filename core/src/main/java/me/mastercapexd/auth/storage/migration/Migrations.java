@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.bivashy.auth.api.database.migration.ConditionalBatchTaskMigrator;
+import com.bivashy.auth.api.database.migration.ConditionalMigrator;
+import com.bivashy.auth.api.database.migration.Migrator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.support.DatabaseConnection;

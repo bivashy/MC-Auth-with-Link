@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.messenger.commands.parameters;
 
-import me.mastercapexd.auth.link.user.confirmation.LinkConfirmationUser;
+import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
 
 public class MessengerLinkContext {
     private final LinkConfirmationUser confirmationUser;

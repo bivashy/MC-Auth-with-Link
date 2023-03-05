@@ -8,7 +8,6 @@ import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.CommandActor;
 
 public abstract class LinkCommandActorWrapperTemplate<T extends CommandActor> implements LinkCommandActorWrapper {
-
     protected final T actor;
 
     public LinkCommandActorWrapperTemplate(T actor) {

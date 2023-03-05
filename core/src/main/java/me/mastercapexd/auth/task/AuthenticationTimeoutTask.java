@@ -2,17 +2,19 @@ package me.mastercapexd.auth.task;
 
 import java.util.concurrent.TimeUnit;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.config.message.proxy.ProxyMessageContext;
-import me.mastercapexd.auth.link.user.entry.LinkEntryUser;
-import me.mastercapexd.auth.model.PlayerIdSupplier;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
+import com.bivashy.auth.api.model.AuthenticationTask;
+import com.bivashy.auth.api.model.PlayerIdSupplier;
+import com.bivashy.auth.api.server.scheduler.ServerScheduler;
+
+import me.mastercapexd.auth.config.message.server.ServerMessageContext;
 
 public class AuthenticationTimeoutTask implements AuthenticationTask {
-    private final ProxyScheduler scheduler;
+    private final ServerScheduler scheduler;
 
-    public AuthenticationTimeoutTask(ProxyPlugin plugin) {
+    public AuthenticationTimeoutTask(AuthPlugin plugin) {
         this.scheduler = plugin.getCore().schedule(plugin, () -> {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
@@ -33,7 +35,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
                     continue;
                 account.getPlayer()
                         .ifPresent(
-                                player -> player.disconnect(plugin.getConfig().getProxyMessages().getMessage("time-left", new ProxyMessageContext(account))));
+                                player -> player.disconnect(plugin.getConfig().getServerMessages().getMessage("time-left", new ServerMessageContext(account))));
             }
         }, 0, 1, TimeUnit.SECONDS);
     }

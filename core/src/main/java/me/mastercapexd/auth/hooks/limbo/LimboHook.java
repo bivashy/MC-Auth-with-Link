@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.hooks.limbo;
 
-import me.mastercapexd.auth.proxy.hooks.PluginHook;
-import me.mastercapexd.auth.proxy.server.limbo.LimboServerWrapper;
+import com.bivashy.auth.api.hook.PluginHook;
+import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
 
 public interface LimboHook extends PluginHook {
     boolean isLimbo(String serverName);

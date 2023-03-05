@@ -1,13 +1,11 @@
 package me.mastercapexd.auth.hooks;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.hook.PluginHook;
 import com.pengrad.telegrambot.TelegramBot;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.hooks.PluginHook;
-
 public interface TelegramPluginHook extends PluginHook {
-
-    ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    AuthPlugin PLUGIN = AuthPlugin.instance();
 
     @Override
     default boolean canHook() {

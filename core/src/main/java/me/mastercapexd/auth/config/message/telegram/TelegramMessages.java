@@ -2,9 +2,9 @@ package me.mastercapexd.auth.config.message.telegram;
 
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.message.messenger.MessengerMessages;
+import me.mastercapexd.auth.config.message.link.LinkMessages;
 
-public class TelegramMessages extends MessengerMessages {
+public class TelegramMessages extends LinkMessages {
     public TelegramMessages(ConfigurationSectionHolder configurationSection) {
         super(configurationSection, "\n");
     }

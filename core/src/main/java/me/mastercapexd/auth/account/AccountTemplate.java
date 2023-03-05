@@ -1,17 +1,19 @@
 package me.mastercapexd.auth.account;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.event.AccountNewStepRequestEvent;
+import com.bivashy.auth.api.event.AccountStepChangeEvent;
+import com.bivashy.auth.api.factory.AuthenticationStepFactory;
+import com.bivashy.auth.api.step.AuthenticationStep;
+import com.bivashy.auth.api.step.AuthenticationStepContext;
+
 import io.github.revxrsal.eventbus.PostResult;
-import me.mastercapexd.auth.authentication.step.AuthenticationStep;
-import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
-import me.mastercapexd.auth.authentication.step.creators.AuthenticationStepCreator;
-import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep;
-import me.mastercapexd.auth.authentication.step.steps.NullAuthenticationStep.NullAuthenticationStepCreator;
-import me.mastercapexd.auth.event.AccountNewStepRequestEvent;
-import me.mastercapexd.auth.event.AccountStepChangeEvent;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
+import me.mastercapexd.auth.step.impl.NullAuthenticationStep;
+import me.mastercapexd.auth.step.impl.NullAuthenticationStep.NullAuthenticationStepFactory;
 
 public abstract class AccountTemplate implements Account, Comparable<AccountTemplate> {
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+    private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private Integer currentConfigurationAuthenticationStepCreatorIndex = 0;
     private AuthenticationStep currentAuthenticationStep = new NullAuthenticationStep();
 
@@ -29,10 +31,10 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
                 return;
             }
             String stepCreatorName = PLUGIN.getConfig().getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
-            AuthenticationStepCreator authenticationStepCreator = PLUGIN.getAuthenticationStepCreatorDealership()
+            AuthenticationStepFactory authenticationStepFactory = PLUGIN.getAuthenticationStepFactoryBucket()
                     .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName))
-                    .orElse(new NullAuthenticationStepCreator());
-            AuthenticationStep newAuthenticationStep = authenticationStepCreator.createNewAuthenticationStep(stepContext);
+                    .orElse(new NullAuthenticationStepFactory());
+            AuthenticationStep newAuthenticationStep = authenticationStepFactory.createNewAuthenticationStep(stepContext);
             PostResult<AccountStepChangeEvent> stepChangeEventPostResult = PLUGIN.getEventBus()
                     .publish(AccountStepChangeEvent.class, this, false, stepContext, currentAuthenticationStep, newAuthenticationStep)
                     .join();
@@ -42,7 +44,7 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
             currentConfigurationAuthenticationStepCreatorIndex += 1;
             if (currentAuthenticationStep.shouldSkip()) {
                 currentAuthenticationStep = new NullAuthenticationStep();
-                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryDealership().createContext(this));
+                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this));
             }
         });
     }
@@ -62,19 +64,19 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
     public void setCurrentAuthenticationStepCreatorIndex(int index) {
         String stepName = PLUGIN.getConfig().getAuthenticationStepName(index);
 
-        AuthenticationStepCreator authenticationStepCreator = PLUGIN.getAuthenticationStepCreatorDealership()
+        AuthenticationStepFactory authenticationStepFactory = PLUGIN.getAuthenticationStepFactoryBucket()
                 .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepName))
-                .orElse(new NullAuthenticationStepCreator());
+                .orElse(new NullAuthenticationStepFactory());
 
-        AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryDealership().createContext(stepName, this);
+        AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryBucket().createContext(stepName, this);
         currentConfigurationAuthenticationStepCreatorIndex = index;
-        currentAuthenticationStep = authenticationStepCreator.createNewAuthenticationStep(stepContext);
+        currentAuthenticationStep = authenticationStepFactory.createNewAuthenticationStep(stepContext);
     }
 
     @Override
     public AuthenticationStep getCurrentAuthenticationStep() {
         if (currentAuthenticationStep.shouldPassToNextStep())
-            nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryDealership().createContext(this));
+            nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this));
 
         return currentAuthenticationStep;
     }

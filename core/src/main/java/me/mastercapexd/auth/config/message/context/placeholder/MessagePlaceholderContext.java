@@ -3,7 +3,7 @@ package me.mastercapexd.auth.config.message.context.placeholder;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mastercapexd.auth.config.message.context.MessageContext;
+import com.bivashy.auth.api.config.message.MessageContext;
 
 public abstract class MessagePlaceholderContext implements MessageContext {
     private final List<PlaceholderProvider> placeholderProviders = new ArrayList<>();

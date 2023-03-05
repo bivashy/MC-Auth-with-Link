@@ -1,17 +1,18 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import me.mastercapexd.auth.account.Account;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
-import me.mastercapexd.auth.storage.AccountStorage;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class UnlinkCommand implements OrphanCommand {
     @Dependency
-    private AccountStorage accountStorage;
+    private AccountDatabase accountDatabase;
 
     @Default
     @ConfigurationArgumentError("unlink-not-enough-arguments")
@@ -19,7 +20,7 @@ public class UnlinkCommand implements OrphanCommand {
         account.findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType)
                 .getLinkUserInfo()
                 .setIdentificator(linkType.getDefaultIdentificator());
-        accountStorage.saveOrUpdateAccount(account);
+        accountDatabase.saveOrUpdateAccount(account);
         actorWrapper.reply(linkType.getLinkMessages().getMessage("unlinked", linkType.newMessageContext(account)));
     }
 }

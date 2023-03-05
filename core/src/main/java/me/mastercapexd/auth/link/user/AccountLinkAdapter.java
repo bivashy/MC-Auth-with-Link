@@ -2,14 +2,15 @@ package me.mastercapexd.auth.link.user;
 
 import java.util.Optional;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
-import me.mastercapexd.auth.link.user.info.LinkUserInfoTemplate;
-import me.mastercapexd.auth.link.user.info.identificator.LinkUserIdentificator;
-import me.mastercapexd.auth.link.user.info.identificator.UserNumberIdentificator;
-import me.mastercapexd.auth.link.user.info.identificator.UserStringIdentificator;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
+import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
+
 import me.mastercapexd.auth.storage.model.AccountLink;
 
 public class AccountLinkAdapter extends LinkUserTemplate {
@@ -26,7 +27,7 @@ public class AccountLinkAdapter extends LinkUserTemplate {
     }
 
     public AccountLinkAdapter(AccountLink accountLink, Account account) {
-        this(ProxyPlugin.instance()
+        this(AuthPlugin.instance()
                         .getLinkTypeProvider()
                         .getLinkType(accountLink.getLinkType())
                         .orElseThrow(() -> new IllegalArgumentException("Link type " + accountLink.getLinkType() + " not exists!")), account,
@@ -43,7 +44,7 @@ public class AccountLinkAdapter extends LinkUserTemplate {
         return Optional.ofNullable(accountLink);
     }
 
-    public static class AccountLinkUserInfo extends LinkUserInfoTemplate {
+    public static class AccountLinkUserInfo extends BaseLinkUserInfo {
         public AccountLinkUserInfo(LinkUserIdentificator userIdentificator, boolean confirmationEnabled) {
             super(userIdentificator, confirmationEnabled);
         }

@@ -7,14 +7,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.util.CollectionUtil.ArrayPairHashMapAdapter.PaginatedList;
 import com.ubivaska.messenger.common.button.ButtonColor;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
 
-import me.mastercapexd.auth.account.Account;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.storage.AccountStorage;
-import me.mastercapexd.auth.utils.CollectionUtils.ArrayPairHashMapAdapter.PaginatedList;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
@@ -22,22 +22,8 @@ import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountsListCommand implements OrphanCommand {
     @Dependency
-    private AccountStorage accountStorage;
+    private AccountDatabase accountDatabase;
 
-    /**
-     * Command that sends accounts keyboard to the user.
-     *
-     * @param actorWrapper    Actor that executed command
-     * @param linkType        Messenger where command executed
-     * @param page            Page that need to show
-     * @param accountsPerPage One page limit
-     * @param type            <pre>
-     *                                                           Accounts type, available types:
-     *                                                           all - Show all accounts. Only admins can use this accounts type.
-     *                                                           linked - Show all linked accounts . Only admins can use this accounts type.
-     *                                                           my - Show all accounts that linked to the actorWrapper
-     *                                                                      </pre>
-     */
     @Default
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page, @Flag("pageSize") @Default(
             "5") Integer accountsPerPage, @Flag("type") @Default("my") String type) {
@@ -50,13 +36,13 @@ public class AccountsListCommand implements OrphanCommand {
 
         switch (type.toLowerCase()) {
             case "all":
-                accountsCollection = accountStorage.getAllAccounts();
+                accountsCollection = accountDatabase.getAllAccounts();
                 break;
             case "linked":
-                accountsCollection = accountStorage.getAllLinkedAccounts();
+                accountsCollection = accountDatabase.getAllLinkedAccounts();
                 break;
             case "my":
-                accountsCollection = accountStorage.getAccountsFromLinkIdentificator(actorWrapper.userId());
+                accountsCollection = accountDatabase.getAccountsFromLinkIdentificator(actorWrapper.userId());
                 break;
         }
 

@@ -6,22 +6,22 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.concurrent.Executors;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.config.database.DatabaseSettings;
+import me.mastercapexd.auth.util.DownloadUtil;
+import me.mastercapexd.auth.util.DriverUtil;
+import com.bivashy.auth.api.util.HashUtils;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.support.ConnectionSource;
 
-import me.mastercapexd.auth.config.storage.DatabaseConfiguration;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
 import me.mastercapexd.auth.storage.dao.AccountLinkDao;
 import me.mastercapexd.auth.storage.dao.AuthAccountDao;
 import me.mastercapexd.auth.storage.migration.MigrationCoordinator;
 import me.mastercapexd.auth.storage.migration.Migrations;
 import me.mastercapexd.auth.storage.model.AccountLink;
 import me.mastercapexd.auth.storage.model.AuthAccount;
-import me.mastercapexd.auth.utils.DownloadUtil;
-import me.mastercapexd.auth.utils.DriverUtil;
-import me.mastercapexd.auth.utils.HashUtils;
 
 public class DatabaseHelper {
     public static final String ID_FIELD_KEY = "id";
@@ -31,8 +31,8 @@ public class DatabaseHelper {
     private AuthAccountDao authAccountDao;
     private AccountLinkDao accountLinkDao;
 
-    public DatabaseHelper(ProxyPlugin plugin) {
-        DatabaseConfiguration databaseConfiguration = plugin.getConfig().getDatabaseConfiguration();
+    public DatabaseHelper(AuthPlugin plugin) {
+        DatabaseSettings databaseConfiguration = plugin.getConfig().getDatabaseConfiguration();
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {

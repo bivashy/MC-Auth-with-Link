@@ -4,21 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.event.AccountJoinEvent;
+import com.bivashy.auth.api.event.AccountStateClearEvent;
+import com.bivashy.auth.api.model.AuthenticationTask;
+import com.bivashy.auth.api.model.PlayerIdSupplier;
+import com.bivashy.auth.api.server.bossbar.ServerBossbar;
+import com.bivashy.auth.api.server.scheduler.ServerScheduler;
+
 import io.github.revxrsal.eventbus.SubscribeEvent;
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.event.AccountJoinEvent;
-import me.mastercapexd.auth.event.AccountStateClearEvent;
-import me.mastercapexd.auth.model.PlayerIdSupplier;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
 
 public class AuthenticationProgressBarTask implements AuthenticationTask {
-    private final Map<String, ProxyBossbar> progressBars = new HashMap<>();
-    private final ProxyPlugin plugin;
-    private final ProxyScheduler proxyScheduler;
+    private final Map<String, ServerBossbar> progressBars = new HashMap<>();
+    private final AuthPlugin plugin;
+    private final ServerScheduler proxyScheduler;
 
-    public AuthenticationProgressBarTask(ProxyPlugin plugin) {
+    public AuthenticationProgressBarTask(AuthPlugin plugin) {
         this.plugin = plugin;
         this.proxyScheduler = plugin.getCore().schedule(plugin, () -> {
             long now = System.currentTimeMillis();
@@ -28,7 +30,7 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
                 Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
                 int accountEnterElapsedMillis = (int) (now -
                         plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
-                ProxyBossbar progressBar = progressBars.get(account.getPlayerId());
+                ServerBossbar progressBar = progressBars.get(account.getPlayerId());
                 if (progressBar == null)
                     continue;
                 if (progressBar.players().isEmpty())
@@ -46,7 +48,7 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
 
     @SubscribeEvent
     public void onJoin(AccountJoinEvent e) {
-        progressBars.put(e.getAccount().getPlayerId(), plugin.getConfig().getBossBarSettings().createBossBar());
+        progressBars.put(e.getAccount().getPlayerId(), plugin.getConfig().getBossBarSettings().createBossbar());
     }
 
     @SubscribeEvent

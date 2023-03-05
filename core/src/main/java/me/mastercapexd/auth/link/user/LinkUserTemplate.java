@@ -1,8 +1,9 @@
 package me.mastercapexd.auth.link.user;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.link.LinkType;
-import me.mastercapexd.auth.link.user.info.LinkUserInfo;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
 public abstract class LinkUserTemplate implements LinkUser {
     protected final LinkType linkType;
