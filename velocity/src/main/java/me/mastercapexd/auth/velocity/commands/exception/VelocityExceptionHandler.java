@@ -2,9 +2,10 @@ package me.mastercapexd.auth.velocity.commands.exception;
 
 import org.jetbrains.annotations.NotNull;
 
-import me.mastercapexd.auth.config.message.Messages;
-import me.mastercapexd.auth.config.message.context.MessageContext;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
+import com.bivashy.auth.api.config.message.MessageContext;
+import com.bivashy.auth.api.config.message.Messages;
+import com.bivashy.auth.api.server.message.ServerComponent;
+
 import me.mastercapexd.auth.velocity.commands.VelocityProxyCommandActor;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.ArgumentParseException;
@@ -28,9 +29,9 @@ import revxrsal.commands.velocity.VelocityCommandActor;
 import revxrsal.commands.velocity.exception.VelocityExceptionAdapter;
 
 public class VelocityExceptionHandler extends VelocityExceptionAdapter {
-    private final Messages<ProxyComponent> messages;
+    private final Messages<ServerComponent> messages;
 
-    public VelocityExceptionHandler(Messages<ProxyComponent> messages) {
+    public VelocityExceptionHandler(Messages<ServerComponent> messages) {
         this.messages = messages;
     }
 
@@ -128,7 +129,7 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
         throwable.printStackTrace();
     }
 
-    private void sendComponent(CommandActor actor, ProxyComponent component) {
+    private void sendComponent(CommandActor actor, ServerComponent component) {
         new VelocityProxyCommandActor(actor.as(VelocityCommandActor.class)).reply(component);
     }
 }

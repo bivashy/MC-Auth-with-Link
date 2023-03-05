@@ -7,30 +7,31 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.ServerCore;
+import com.bivashy.auth.api.server.bossbar.ServerBossbar;
+import com.bivashy.auth.api.server.message.AdventureServerComponent;
+import com.bivashy.auth.api.server.message.ServerComponent;
+import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
+import com.bivashy.auth.api.server.scheduler.ServerScheduler;
+import com.bivashy.auth.api.server.title.ServerTitle;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import me.mastercapexd.auth.hooks.limbo.LimboHook;
-import me.mastercapexd.auth.proxy.ProxyCore;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
-import me.mastercapexd.auth.proxy.server.Server;
-import me.mastercapexd.auth.velocity.api.bossbar.VelocityProxyBossbar;
+import me.mastercapexd.auth.velocity.api.bossbar.VelocityServerBossbar;
+import me.mastercapexd.auth.velocity.api.title.VelocityServerTitle;
 import me.mastercapexd.auth.velocity.component.VelocityComponent;
-import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
+import me.mastercapexd.auth.velocity.player.VelocityServerPlayer;
 import me.mastercapexd.auth.velocity.scheduler.VelocitySchedulerWrapper;
-import me.mastercapexd.auth.velocity.server.VelocityServer;
-import me.mastercapexd.auth.velocity.api.title.VelocityProxyTitle;
+import me.mastercapexd.auth.velocity.server.VelocityProxyServer;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
-public class VelocityProxyCore implements ProxyCore {
+public class VelocityProxyCore implements ServerCore {
     private final ProxyServer server;
 
     public VelocityProxyCore(ProxyServer server) {
@@ -43,28 +44,28 @@ public class VelocityProxyCore implements ProxyCore {
     }
 
     @Override
-    public List<ProxyPlayer> getPlayers() {
-        return server.getAllPlayers().stream().map(VelocityProxyPlayer::new).collect(Collectors.toList());
+    public List<ServerPlayer> getPlayers() {
+        return server.getAllPlayers().stream().map(VelocityServerPlayer::new).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ProxyPlayer> getPlayer(UUID uniqueId) {
-        return server.getPlayer(uniqueId).map(VelocityProxyPlayer::new);
+    public Optional<ServerPlayer> getPlayer(UUID uniqueId) {
+        return server.getPlayer(uniqueId).map(VelocityServerPlayer::new);
     }
 
     @Override
-    public Optional<ProxyPlayer> getPlayer(String name) {
-        return server.getPlayer(name).map(VelocityProxyPlayer::new);
+    public Optional<ServerPlayer> getPlayer(String name) {
+        return server.getPlayer(name).map(VelocityServerPlayer::new);
     }
 
     @Override
-    public Optional<ProxyPlayer> wrapPlayer(Object player) {
+    public Optional<ServerPlayer> wrapPlayer(Object player) {
         if (player == null)
             return Optional.empty();
-        if (player instanceof ProxyPlayer)
-            return Optional.of((ProxyPlayer) player);
+        if (player instanceof ServerPlayer)
+            return Optional.of((ServerPlayer) player);
         if (player instanceof Player)
-            return Optional.of(new VelocityProxyPlayer((Player) player));
+            return Optional.of(new VelocityServerPlayer((Player) player));
         return Optional.empty();
     }
 
@@ -74,64 +75,64 @@ public class VelocityProxyCore implements ProxyCore {
     }
 
     @Override
-    public ProxyTitle createTitle(ProxyComponent title) {
-        return new VelocityProxyTitle(title);
+    public ServerTitle createTitle(ServerComponent title) {
+        return new VelocityServerTitle(title);
     }
 
     @Override
-    public ProxyBossbar createBossbar(ProxyComponent component) {
-        return new VelocityProxyBossbar(component.as(VelocityComponent.class).component());
+    public ServerBossbar createBossbar(ServerComponent component) {
+        return new VelocityServerBossbar(component.as(AdventureServerComponent.class).component());
     }
 
     @Override
-    public ProxyComponent componentPlain(String plain) {
+    public ServerComponent componentPlain(String plain) {
         return new VelocityComponent(PlainTextComponentSerializer.plainText().deserialize(plain));
     }
 
     @Override
-    public ProxyComponent componentJson(String json) {
+    public ServerComponent componentJson(String json) {
         return new VelocityComponent(GsonComponentSerializer.gson().deserialize(json));
     }
 
     @Override
-    public ProxyComponent componentLegacy(String legacy) {
+    public ServerComponent componentLegacy(String legacy) {
         return new VelocityComponent(LegacyComponentSerializer.legacyAmpersand().deserialize(legacy));
     }
 
     @Override
-    public Optional<Server> serverFromName(String serverName) {
+    public Optional<com.bivashy.auth.api.server.proxy.ProxyServer> serverFromName(String serverName) {
         Optional<RegisteredServer> serverOptional = server.getServer(serverName);
-        LimboHook limboHook = ProxyPlugin.instance().getHook(LimboHook.class);
+        LimboHook limboHook = AuthPlugin.instance().getHook(LimboHook.class);
         if (!serverOptional.isPresent() && limboHook != null) {
             if (!limboHook.isLimbo(serverName))
                 return Optional.empty();
-            Server server = limboHook.createLimboWrapper(serverName);
+            LimboServerWrapper server = limboHook.createLimboWrapper(serverName);
             if (!server.isExists())
                 return Optional.empty();
             return Optional.of(server);
         }
 
-        return serverOptional.map(VelocityServer::new);
+        return serverOptional.map(VelocityProxyServer::new);
     }
 
     @Override
-    public void registerListener(ProxyPlugin plugin, Object listener) {
+    public void registerListener(AuthPlugin plugin, Object listener) {
         server.getEventManager().register(plugin, listener);
     }
 
     @Override
-    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
+    public ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
         return new VelocitySchedulerWrapper(server.getScheduler().buildTask(plugin, task).delay(delay, unit).repeat(period, unit).schedule());
     }
 
     @Override
-    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
+    public ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, TimeUnit unit) {
         return new VelocitySchedulerWrapper(server.getScheduler().buildTask(plugin, task).delay(delay, unit).schedule());
     }
 
     @Override
     public void runAsync(Runnable task) {
-        server.getScheduler().buildTask(AuthPlugin.getInstance(), task).schedule();
+        server.getScheduler().buildTask(VelocityAuthPluginBootstrap.getInstance(), task).schedule();
     }
 
     @Override

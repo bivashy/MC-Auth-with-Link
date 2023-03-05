@@ -1,12 +1,12 @@
 package me.mastercapexd.auth.velocity.commands;
 
-import me.mastercapexd.auth.proxy.adventure.AdventureProxyComponent;
-import me.mastercapexd.auth.proxy.commands.ProxyCommandActor;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
-import me.mastercapexd.auth.velocity.component.VelocityComponent;
+import com.bivashy.auth.api.server.command.ServerCommandActor;
+import com.bivashy.auth.api.server.message.AdventureServerComponent;
+import com.bivashy.auth.api.server.message.ServerComponent;
+
 import revxrsal.commands.velocity.VelocityCommandActor;
 
-public class VelocityProxyCommandActor implements ProxyCommandActor {
+public class VelocityProxyCommandActor implements ServerCommandActor {
     private final VelocityCommandActor actor;
 
     public VelocityProxyCommandActor(VelocityCommandActor actor) {
@@ -14,8 +14,7 @@ public class VelocityProxyCommandActor implements ProxyCommandActor {
     }
 
     @Override
-    public void reply(ProxyComponent component) {
-        component.safeAs(VelocityComponent.class).ifPresent(velocityComponent -> actor.reply(velocityComponent.component()));
-        component.safeAs(AdventureProxyComponent.class).ifPresent(adventureProxyComponent -> actor.reply(adventureProxyComponent.getComponent()));
+    public void reply(ServerComponent component) {
+        component.safeAs(AdventureServerComponent.class).map(AdventureServerComponent::component).ifPresent(actor::reply);
     }
 }

@@ -3,18 +3,18 @@ package me.mastercapexd.auth.velocity.hooks.limbo;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.PluginContainer;
 
-import me.mastercapexd.auth.proxy.server.limbo.LimboServerWrapper;
-import me.mastercapexd.auth.velocity.AuthPlugin;
+import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 import me.mastercapexd.auth.velocity.hooks.limbo.config.LimboAPIConfig;
 import net.elytrium.limboapi.api.LimboFactory;
 import net.elytrium.limboapi.api.event.LoginLimboRegisterEvent;
 
 public class LimboAPIProvider {
     public static final String LIMBO_API_NAME = "limboapi";
-    private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
+    private static final VelocityAuthPluginBootstrap PLUGIN = VelocityAuthPluginBootstrap.getInstance();
     private final LimboFactory limboFactory = (LimboFactory) PLUGIN
             .getProxyServer()
             .getPluginManager()
@@ -42,6 +42,6 @@ public class LimboAPIProvider {
 
     @Subscribe
     public void onLimboLogin(LoginLimboRegisterEvent e) {
-        PLUGIN.getCore().wrapPlayer(e.getPlayer()).ifPresent(PLUGIN.getLoginManagement()::onLogin);
+        PLUGIN.getAuthPlugin().getCore().wrapPlayer(e.getPlayer()).ifPresent(PLUGIN.getAuthPlugin().getLoginManagement()::onLogin);
     }
 }

@@ -2,6 +2,8 @@ package me.mastercapexd.auth.velocity.listener;
 
 import java.util.Optional;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -11,14 +13,12 @@ import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent.ServerResult;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.velocity.server.VelocityServer;
+import me.mastercapexd.auth.velocity.server.VelocityProxyServer;
 
 public class AuthenticationListener {
-    private final ProxyPlugin plugin;
+    private final AuthPlugin plugin;
 
-    public AuthenticationListener(ProxyPlugin plugin) {
+    public AuthenticationListener(AuthPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -41,7 +41,7 @@ public class AuthenticationListener {
                 return;
             if (!plugin.getConfig().shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
                 return;
-            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-chat"));
+            player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-chat"));
             event.setResult(PlayerChatEvent.ChatResult.denied());
         });
     }
@@ -50,16 +50,16 @@ public class AuthenticationListener {
     public void onCommandEvent(CommandExecuteEvent event) {
         if (!event.getResult().isAllowed())
             return;
-        Optional<ProxyPlayer> proxyPlayerOptional = plugin.getCore().wrapPlayer(event.getCommandSource());
+        Optional<ServerPlayer> proxyPlayerOptional = plugin.getCore().wrapPlayer(event.getCommandSource());
         if (!proxyPlayerOptional.isPresent())
             return;
-        ProxyPlayer player = proxyPlayerOptional.get();
+        ServerPlayer player = proxyPlayerOptional.get();
         if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
             return;
         String command = "/" + event.getCommand();
         if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(command).find()))
             return;
-        player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-command"));
+        player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-command"));
         event.setResult(CommandExecuteEvent.CommandResult.denied());
     }
 
@@ -79,11 +79,11 @@ public class AuthenticationListener {
                 return;
             if (!event.getResult().getServer().isPresent()) {
                 event.setResult(ServerResult.allowed(
-                        plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(VelocityServer.class).getServer()));
+                        plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(VelocityProxyServer.class).getServer()));
                 return;
             }
 
-            player.sendMessage(plugin.getConfig().getProxyMessages().getMessage("disabled-server"));
+            player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-server"));
             event.setResult(ServerPreConnectEvent.ServerResult.denied());
         });
     }

@@ -8,25 +8,25 @@ import java.util.List;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
+import com.bivashy.auth.api.asset.resource.ResourceReader;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.annotation.ConfigField;
 import com.ubivashka.configuration.configurate.SpongeConfigurateProcessor;
 
-import me.mastercapexd.auth.asset.resource.ResourceReader;
-import me.mastercapexd.auth.velocity.AuthPlugin;
+import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 
 public class LimboAPIConfig {
     public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new SpongeConfigurateProcessor();
     public static final String CONFIGURATION_NAME = "limbo.yml";
-    private static final AuthPlugin PLUGIN = AuthPlugin.getInstance();
-    private static final File CONFIGURATION_FILE = new File(PLUGIN.getFolder(), CONFIGURATION_NAME);
+    private static final VelocityAuthPluginBootstrap PLUGIN = VelocityAuthPluginBootstrap.getInstance();
+    private static final File CONFIGURATION_FILE = new File(PLUGIN.getAuthPlugin().getFolder(), CONFIGURATION_NAME);
     private ConfigurationNode node;
     @ConfigField("values")
     private List<LimboConfig> limboConfigs;
 
     public LimboAPIConfig() {
         try {
-            ResourceReader.defaultReader(AuthPlugin.getInstance().getClass().getClassLoader(), CONFIGURATION_NAME)
+            ResourceReader.defaultReader(VelocityAuthPluginBootstrap.getInstance().getClass().getClassLoader(), CONFIGURATION_NAME)
                     .read()
                     .write(CONFIGURATION_FILE);
             node = YamlConfigurationLoader.builder().file(CONFIGURATION_FILE).build().load();

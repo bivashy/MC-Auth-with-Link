@@ -4,7 +4,7 @@ import com.ubivashka.vk.velocity.events.VKCallbackButtonPressEvent;
 import com.ubivashka.vk.velocity.events.VKMessageEvent;
 import com.velocitypowered.api.event.Subscribe;
 
-import me.mastercapexd.auth.vk.commands.DispatchCommandListener;
+import me.mastercapexd.auth.vk.command.DispatchCommandListener;
 
 public class VkDispatchListener extends DispatchCommandListener {
     @Subscribe

@@ -1,10 +1,9 @@
 package me.mastercapexd.auth.velocity.scheduler;
 
+import com.bivashy.auth.api.server.scheduler.ServerScheduler;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 
-import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
-
-public class VelocitySchedulerWrapper implements ProxyScheduler {
+public class VelocitySchedulerWrapper implements ServerScheduler {
     private final ScheduledTask scheduledTask;
 
     public VelocitySchedulerWrapper(ScheduledTask scheduledTask) {

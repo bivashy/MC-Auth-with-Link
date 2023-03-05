@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
 import com.velocitypowered.api.proxy.Player;
 
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.proxy.server.limbo.LimboServerWrapper;
 import net.elytrium.limboapi.api.Limbo;
 import net.elytrium.limboapi.api.LimboSessionHandler;
 
@@ -29,8 +29,8 @@ public class LimboAPIServer implements LimboServerWrapper {
     }
 
     @Override
-    public void sendPlayer(ProxyPlayer... players) {
-        for (ProxyPlayer player : players) {
+    public void sendPlayer(ServerPlayer... players) {
+        for (ServerPlayer player : players) {
             if (onlinePlayers.contains(player.getUniqueId()))
                 continue;
             onlinePlayers.add(player.getUniqueId());
@@ -45,7 +45,7 @@ public class LimboAPIServer implements LimboServerWrapper {
     }
 
     @Override
-    public List<ProxyPlayer> getPlayers() {
+    public List<ServerPlayer> getPlayers() {
         return Collections.emptyList();
     }
 

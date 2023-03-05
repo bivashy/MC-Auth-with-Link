@@ -4,20 +4,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.proxy.server.Server;
-import me.mastercapexd.auth.velocity.player.VelocityProxyPlayer;
+import me.mastercapexd.auth.velocity.player.VelocityServerPlayer;
 
-public class VelocityServer implements Server {
+public class VelocityProxyServer implements ProxyServer {
     private final RegisteredServer registeredServer;
 
-    public VelocityServer(RegisteredServer registeredServer) {
+    public VelocityProxyServer(RegisteredServer registeredServer) {
         this.registeredServer = registeredServer;
     }
 
@@ -27,9 +27,9 @@ public class VelocityServer implements Server {
     }
 
     @Override
-    public void sendPlayer(ProxyPlayer... players) {
-        for (ProxyPlayer player : players) {
-            Player proxyPlayer = player.as(VelocityProxyPlayer.class).getPlayer();
+    public void sendPlayer(ServerPlayer... players) {
+        for (ServerPlayer player : players) {
+            Player proxyPlayer = player.as(VelocityServerPlayer.class).getPlayer();
             if (registeredServer.getServerInfo()
                     .getName()
                     .equals(proxyPlayer.getCurrentServer().map(ServerConnection::getServerInfo).map(ServerInfo::getName).orElse(null)))
@@ -39,10 +39,10 @@ public class VelocityServer implements Server {
     }
 
     @Override
-    public List<ProxyPlayer> getPlayers() {
+    public List<ServerPlayer> getPlayers() {
         return registeredServer.getPlayersConnected()
                 .stream()
-                .map(ProxyPlugin.instance().getCore()::wrapPlayer)
+                .map(AuthPlugin.instance().getCore()::wrapPlayer)
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
