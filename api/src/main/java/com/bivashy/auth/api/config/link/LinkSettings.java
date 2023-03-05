@@ -28,4 +28,6 @@ public interface LinkSettings {
     LinkKeyboards getKeyboards();
 
     Messages<String> getMessages();
+
+    boolean shouldDisableConversationCommands();
 }
