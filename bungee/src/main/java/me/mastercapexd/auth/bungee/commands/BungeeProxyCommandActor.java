@@ -1,13 +1,14 @@
 package me.mastercapexd.auth.bungee.commands;
 
-import me.mastercapexd.auth.bungee.AuthPlugin;
+import com.bivashy.auth.api.server.command.ServerCommandActor;
+import com.bivashy.auth.api.server.message.AdventureServerComponent;
+import com.bivashy.auth.api.server.message.ServerComponent;
+
+import me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap;
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
-import me.mastercapexd.auth.proxy.adventure.AdventureProxyComponent;
-import me.mastercapexd.auth.proxy.commands.ProxyCommandActor;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import revxrsal.commands.bungee.BungeeCommandActor;
 
-public class BungeeProxyCommandActor implements ProxyCommandActor {
+public class BungeeProxyCommandActor implements ServerCommandActor {
     private final BungeeCommandActor actor;
 
     public BungeeProxyCommandActor(BungeeCommandActor actor) {
@@ -15,12 +16,12 @@ public class BungeeProxyCommandActor implements ProxyCommandActor {
     }
 
     @Override
-    public void reply(ProxyComponent component) {
+    public void reply(ServerComponent component) {
         component.safeAs(BungeeComponent.class).ifPresent(bungeeComponent -> actor.getSender().sendMessage(bungeeComponent.components()));
-        component.safeAs(AdventureProxyComponent.class)
-                .ifPresent(adventureProxyComponent -> AuthPlugin.getInstance()
-                        .getAudienceProvider()
+        component.safeAs(AdventureServerComponent.class)
+                .ifPresent(adventureProxyComponent -> BungeeAuthPluginBootstrap.getInstance()
+                        .getBungeeAudiences()
                         .sender(actor.getSender())
-                        .sendMessage(adventureProxyComponent.getComponent()));
+                        .sendMessage(adventureProxyComponent.component()));
     }
 }

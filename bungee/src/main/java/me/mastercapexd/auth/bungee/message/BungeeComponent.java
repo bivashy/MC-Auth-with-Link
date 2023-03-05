@@ -4,11 +4,12 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
+import com.bivashy.auth.api.server.message.ServerComponent;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-public interface BungeeComponent extends ProxyComponent {
+public interface BungeeComponent extends ServerComponent {
     Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]){6}");
 
     BaseComponent[] components();

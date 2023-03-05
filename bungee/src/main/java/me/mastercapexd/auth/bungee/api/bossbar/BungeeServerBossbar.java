@@ -7,69 +7,68 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.bivashy.auth.api.server.bossbar.ServerBossbar;
+import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.google.common.collect.Sets;
 
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
-import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.protocol.packet.BossBar;
 
-public class BungeeProxyBossbar extends ProxyBossbar {
-
+public class BungeeServerBossbar extends ServerBossbar {
     private static final AtomicInteger barID = new AtomicInteger(1);
-    private final Set<ProxyPlayer> players = Sets.newHashSet();
+    private final Set<ServerPlayer> players = Sets.newHashSet();
     private final UUID uuid;
 
-    public BungeeProxyBossbar(String title) {
+    public BungeeServerBossbar(String title) {
         this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
         this.title(ComponentSerializer.toString(new TextComponent(this.title)));
     }
 
-    public BungeeProxyBossbar(BaseComponent[] titleComponent) {
+    public BungeeServerBossbar(BaseComponent[] titleComponent) {
         this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
         this.title(ComponentSerializer.toString(titleComponent));
     }
 
     @Override
-    public ProxyBossbar removeAll() {
+    public ServerBossbar removeAll() {
         this.players.forEach(this::remove);
         this.players.clear();
         return this;
     }
 
     @Override
-    public ProxyBossbar send(ProxyPlayer... viewers) {
+    public ServerBossbar send(ServerPlayer... viewers) {
         BossBar bossBar = getAddPacket();
-        for (ProxyPlayer player : viewers) {
-            player.as(BungeeProxyPlayer.class).getBungeePlayer().unsafe().sendPacket(bossBar);
+        for (ServerPlayer player : viewers) {
+            player.as(BungeeServerPlayer.class).getBungeePlayer().unsafe().sendPacket(bossBar);
             players.add(player);
         }
         return this;
     }
 
     @Override
-    public ProxyBossbar remove(ProxyPlayer... viewers) {
+    public ServerBossbar remove(ServerPlayer... viewers) {
         BossBar bossBar = getRemovePacket();
-        for (ProxyPlayer player : viewers) {
-            player.as(BungeeProxyPlayer.class).getBungeePlayer().unsafe().sendPacket(bossBar);
+        for (ServerPlayer player : viewers) {
+            player.as(BungeeServerPlayer.class).getBungeePlayer().unsafe().sendPacket(bossBar);
             players.remove(player);
         }
         return this;
     }
 
     @Override
-    public ProxyBossbar update() {
+    public ServerBossbar update() {
         BossBar bossBar = getAddPacket();
-        for (ProxyPlayer player : players)
-            player.as(BungeeProxyPlayer.class).getBungeePlayer().unsafe().sendPacket(bossBar);
+        for (ServerPlayer player : players)
+            player.as(BungeeServerPlayer.class).getBungeePlayer().unsafe().sendPacket(bossBar);
         return this;
     }
 
     @Override
-    public Collection<ProxyPlayer> players() {
+    public Collection<ServerPlayer> players() {
         return Collections.unmodifiableCollection(players);
     }
 
@@ -86,5 +85,4 @@ public class BungeeProxyBossbar extends ProxyBossbar {
     private BossBar getRemovePacket() {
         return new BossBar(uuid, 1);
     }
-
 }

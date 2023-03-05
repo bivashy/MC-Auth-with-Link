@@ -5,14 +5,14 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-public class BungeeProxyComponent implements BungeeComponent {
+public class BungeeServerComponent implements BungeeComponent {
     private BaseComponent[] components;
 
-    public BungeeProxyComponent(BaseComponent[] components) {
+    public BungeeServerComponent(BaseComponent[] components) {
         this.components = components;
     }
 
-    public BungeeProxyComponent(String legacyText) {
+    public BungeeServerComponent(String legacyText) {
         this(TextComponent.fromLegacyText(BungeeComponent.colorText(legacyText)));
     }
 

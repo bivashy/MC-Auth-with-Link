@@ -9,22 +9,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import me.mastercapexd.auth.bungee.api.bossbar.BungeeProxyBossbar;
-import me.mastercapexd.auth.bungee.api.title.BungeeProxyTitle;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.ServerCore;
+import com.bivashy.auth.api.server.bossbar.ServerBossbar;
+import com.bivashy.auth.api.server.message.ServerComponent;
+import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
+import com.bivashy.auth.api.server.scheduler.ServerScheduler;
+import com.bivashy.auth.api.server.title.ServerTitle;
+
+import me.mastercapexd.auth.bungee.api.bossbar.BungeeServerBossbar;
+import me.mastercapexd.auth.bungee.api.title.BungeeServerTitle;
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
-import me.mastercapexd.auth.bungee.message.BungeeProxyComponent;
-import me.mastercapexd.auth.bungee.player.BungeeProxyPlayer;
+import me.mastercapexd.auth.bungee.message.BungeeServerComponent;
+import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
 import me.mastercapexd.auth.bungee.scheduler.BungeeSchedulerWrapper;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.hooks.limbo.LimboHook;
-import me.mastercapexd.auth.proxy.ProxyCore;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.api.bossbar.ProxyBossbar;
-import me.mastercapexd.auth.proxy.api.title.ProxyTitle;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.proxy.scheduler.ProxyScheduler;
-import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -33,7 +34,7 @@ import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-public enum BungeeProxyCore implements ProxyCore {
+public enum BungeeProxyCore implements ServerCore {
     INSTANCE;
     private static final ProxyServer PROXY_SERVER = ProxyServer.getInstance();
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
@@ -44,34 +45,34 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public List<ProxyPlayer> getPlayers() {
-        return PROXY_SERVER.getPlayers().stream().map(BungeeProxyPlayer::new).collect(Collectors.toList());
+    public List<ServerPlayer> getPlayers() {
+        return PROXY_SERVER.getPlayers().stream().map(BungeeServerPlayer::new).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ProxyPlayer> getPlayer(UUID uniqueId) {
+    public Optional<ServerPlayer> getPlayer(UUID uniqueId) {
         ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(uniqueId);
         if (proxiedPlayer == null)
             return Optional.empty();
-        return Optional.of(new BungeeProxyPlayer(proxiedPlayer));
+        return Optional.of(new BungeeServerPlayer(proxiedPlayer));
     }
 
     @Override
-    public Optional<ProxyPlayer> getPlayer(String name) {
+    public Optional<ServerPlayer> getPlayer(String name) {
         ProxiedPlayer proxiedPlayer = PROXY_SERVER.getPlayer(name);
         if (proxiedPlayer == null)
             return Optional.empty();
-        return Optional.of(new BungeeProxyPlayer(proxiedPlayer));
+        return Optional.of(new BungeeServerPlayer(proxiedPlayer));
     }
 
     @Override
-    public Optional<ProxyPlayer> wrapPlayer(Object player) {
+    public Optional<ServerPlayer> wrapPlayer(Object player) {
         if (player == null)
             return Optional.empty();
-        if (player instanceof ProxyPlayer)
-            return Optional.of((ProxyPlayer) player);
+        if (player instanceof ServerPlayer)
+            return Optional.of((ServerPlayer) player);
         if (player instanceof ProxiedPlayer)
-            return Optional.of(new BungeeProxyPlayer((ProxiedPlayer) player));
+            return Optional.of(new BungeeServerPlayer((ProxiedPlayer) player));
         return Optional.empty();
     }
 
@@ -81,38 +82,38 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public ProxyTitle createTitle(ProxyComponent title) {
-        return new BungeeProxyTitle(title);
+    public ServerTitle createTitle(ServerComponent title) {
+        return new BungeeServerTitle(title);
     }
 
     @Override
-    public ProxyBossbar createBossbar(ProxyComponent component) {
-        return new BungeeProxyBossbar(component.jsonText());
+    public ServerBossbar createBossbar(ServerComponent component) {
+        return new BungeeServerBossbar(component.jsonText());
     }
 
     @Override
-    public ProxyComponent componentPlain(String plain) {
-        return new BungeeProxyComponent(ChatColor.stripColor(plain));
+    public ServerComponent componentPlain(String plain) {
+        return new BungeeServerComponent(ChatColor.stripColor(plain));
     }
 
     @Override
-    public ProxyComponent componentJson(String json) {
-        return new BungeeProxyComponent(ComponentSerializer.parse(json));
+    public ServerComponent componentJson(String json) {
+        return new BungeeServerComponent(ComponentSerializer.parse(json));
     }
 
     @Override
-    public ProxyComponent componentLegacy(String legacy) {
-        return new BungeeProxyComponent(legacy);
+    public ServerComponent componentLegacy(String legacy) {
+        return new BungeeServerComponent(legacy);
     }
 
     @Override
-    public Optional<Server> serverFromName(String serverName) {
+    public Optional<com.bivashy.auth.api.server.proxy.ProxyServer> serverFromName(String serverName) {
         ServerInfo serverInfo = PROXY_SERVER.getServerInfo(serverName);
-        LimboHook limboHook = ProxyPlugin.instance().getHook(LimboHook.class);
+        LimboHook limboHook = AuthPlugin.instance().getHook(LimboHook.class);
         if (serverInfo == null && limboHook != null) {
             if (!limboHook.isLimbo(serverName))
                 return Optional.empty();
-            Server server = limboHook.createLimboWrapper(serverName);
+            LimboServerWrapper server = limboHook.createLimboWrapper(serverName);
             if (!server.isExists())
                 return Optional.empty();
             return Optional.of(server);
@@ -121,18 +122,18 @@ public enum BungeeProxyCore implements ProxyCore {
     }
 
     @Override
-    public void registerListener(ProxyPlugin plugin, Object listener) {
-        PROXY_SERVER.getPluginManager().registerListener(plugin.as(AuthPlugin.class), (Listener) listener);
+    public void registerListener(AuthPlugin plugin, Object listener) {
+        PROXY_SERVER.getPluginManager().registerListener(BungeeAuthPluginBootstrap.getInstance(), (Listener) listener);
     }
 
     @Override
-    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
-        return new BungeeSchedulerWrapper(PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, period, unit));
+    public ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
+        return new BungeeSchedulerWrapper(PROXY_SERVER.getScheduler().schedule(BungeeAuthPluginBootstrap.getInstance(), task, delay, period, unit));
     }
 
     @Override
-    public ProxyScheduler schedule(ProxyPlugin plugin, Runnable task, long delay, TimeUnit unit) {
-        return new BungeeSchedulerWrapper(PROXY_SERVER.getScheduler().schedule(plugin.as(AuthPlugin.class), task, delay, unit));
+    public ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, TimeUnit unit) {
+        return new BungeeSchedulerWrapper(PROXY_SERVER.getScheduler().schedule(BungeeAuthPluginBootstrap.getInstance(), task, delay, unit));
     }
 
     @Override

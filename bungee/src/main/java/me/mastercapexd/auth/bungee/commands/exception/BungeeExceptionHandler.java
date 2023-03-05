@@ -1,9 +1,10 @@
 package me.mastercapexd.auth.bungee.commands.exception;
 
+import com.bivashy.auth.api.config.message.MessageContext;
+import com.bivashy.auth.api.config.message.Messages;
+import com.bivashy.auth.api.server.message.ServerComponent;
+
 import me.mastercapexd.auth.bungee.commands.BungeeProxyCommandActor;
-import me.mastercapexd.auth.config.message.Messages;
-import me.mastercapexd.auth.config.message.context.MessageContext;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
 import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.exception.BungeeExceptionAdapter;
 import revxrsal.commands.bungee.exception.InvalidPlayerException;
@@ -29,9 +30,9 @@ import revxrsal.commands.exception.SendableException;
 import revxrsal.commands.exception.TooManyArgumentsException;
 
 public class BungeeExceptionHandler extends BungeeExceptionAdapter {
-    private final Messages<ProxyComponent> messages;
+    private final Messages<ServerComponent> messages;
 
-    public BungeeExceptionHandler(Messages<ProxyComponent> messages) {
+    public BungeeExceptionHandler(Messages<ServerComponent> messages) {
         this.messages = messages;
     }
 
@@ -45,12 +46,12 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void invalidPlayer(CommandActor actor, InvalidPlayerException exception) {
-        sendProxyComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player%", exception.getInput())));
+        sendComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player%", exception.getInput())));
     }
 
     @Override
     public void missingArgument(CommandActor actor, MissingArgumentException exception) {
-        sendProxyComponent(actor, messages.getMessage("unresolved-argument", MessageContext.of("%argument_name%", exception.getParameter().getName())));
+        sendComponent(actor, messages.getMessage("unresolved-argument", MessageContext.of("%argument_name%", exception.getParameter().getName())));
     }
 
     @Override
@@ -59,7 +60,7 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void invalidNumber(CommandActor actor, InvalidNumberException exception) {
-        sendProxyComponent(actor, messages.getMessage("unresolved-number", MessageContext.of("%input%", exception.getInput())));
+        sendComponent(actor, messages.getMessage("unresolved-number", MessageContext.of("%input%", exception.getInput())));
     }
 
     @Override
@@ -76,17 +77,17 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void noPermission(CommandActor actor, NoPermissionException exception) {
-        sendProxyComponent(actor, messages.getMessage("no-permission"));
+        sendComponent(actor, messages.getMessage("no-permission"));
     }
 
     @Override
     public void argumentParse(CommandActor actor, ArgumentParseException exception) {
-        sendProxyComponent(actor, messages.getMessage("command-invocation"));
+        sendComponent(actor, messages.getMessage("command-invocation"));
     }
 
     @Override
     public void commandInvocation(CommandActor actor, CommandInvocationException exception) {
-        sendProxyComponent(actor, messages.getMessage("command-invocation"));
+        sendComponent(actor, messages.getMessage("command-invocation"));
         exception.getCause().printStackTrace();
     }
 
@@ -125,11 +126,11 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void onUnhandledException(CommandActor actor, Throwable throwable) {
-        sendProxyComponent(actor, messages.getMessage("command-invocation"));
+        sendComponent(actor, messages.getMessage("command-invocation"));
         throwable.printStackTrace();
     }
 
-    private void sendProxyComponent(CommandActor actor, ProxyComponent component) {
+    private void sendComponent(CommandActor actor, ServerComponent component) {
         new BungeeProxyCommandActor(actor.as(BungeeCommandActor.class)).reply(component);
     }
 }

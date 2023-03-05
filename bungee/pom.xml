@@ -65,7 +65,7 @@
             <version>${lamp.command-library.version}</version>
         </dependency>
 
-        <!-- BungeeCord adventure -->
+        <!-- Adventure BungeeCord platform -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bungeecord</artifactId>

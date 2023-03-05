@@ -3,15 +3,16 @@ package me.mastercapexd.auth.bungee.player;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.message.SelfHandledServerComponent;
+import com.bivashy.auth.api.server.message.ServerComponent;
+import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
+
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.message.ProxyComponent;
-import me.mastercapexd.auth.proxy.message.SelfHandledProxyComponent;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
-import me.mastercapexd.auth.proxy.server.Server;
 import net.md_5.bungee.api.connection.PendingConnection;
 
-public class BungeeConnectionProxyPlayer implements ProxyPlayer {
+public class BungeeConnectionProxyPlayer implements ServerPlayer {
     private final PendingConnection pendingConnection;
 
     public BungeeConnectionProxyPlayer(PendingConnection pendingConnection) {
@@ -19,16 +20,16 @@ public class BungeeConnectionProxyPlayer implements ProxyPlayer {
     }
 
     @Override
-    public void disconnect(ProxyComponent component) {
-        if (component.safeAs(SelfHandledProxyComponent.class).isPresent()) {
-            disconnect(ProxyPlugin.instance().getCore().componentJson(component.jsonText()));
+    public void disconnect(ServerComponent component) {
+        if (component.safeAs(SelfHandledServerComponent.class).isPresent()) {
+            disconnect(AuthPlugin.instance().getCore().componentJson(component.jsonText()));
             return;
         }
         pendingConnection.disconnect(component.as(BungeeComponent.class).components());
     }
 
     @Override
-    public void sendMessage(ProxyComponent component) {
+    public void sendMessage(ServerComponent component) {
     }
 
     @Override
@@ -47,7 +48,7 @@ public class BungeeConnectionProxyPlayer implements ProxyPlayer {
     }
 
     @Override
-    public Optional<Server> getCurrentServer() {
+    public Optional<ProxyServer> getCurrentServer() {
         return Optional.empty();
     }
 
