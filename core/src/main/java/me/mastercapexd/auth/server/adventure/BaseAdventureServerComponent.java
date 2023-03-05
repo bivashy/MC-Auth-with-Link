@@ -1,18 +1,20 @@
-package me.mastercapexd.auth.proxy.adventure;
+package me.mastercapexd.auth.server.adventure;
 
-import me.mastercapexd.auth.proxy.ProxyPlugin;
-import me.mastercapexd.auth.proxy.message.SelfHandledProxyComponent;
-import me.mastercapexd.auth.proxy.player.ProxyPlayer;
+import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.server.message.AdventureServerComponent;
+import com.bivashy.auth.api.server.message.SelfHandledServerComponent;
+import com.bivashy.auth.api.server.player.ServerPlayer;
+
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
-public class AdventureProxyComponent implements SelfHandledProxyComponent {
+public class BaseAdventureServerComponent implements SelfHandledServerComponent, AdventureServerComponent {
     private final Component component;
 
-    public AdventureProxyComponent(Component component) {
+    public BaseAdventureServerComponent(Component component) {
         this.component = component;
     }
 
@@ -32,7 +34,7 @@ public class AdventureProxyComponent implements SelfHandledProxyComponent {
     }
 
     @Override
-    public void send(ProxyPlayer player) {
+    public void send(ServerPlayer player) {
         getAudience(player).sendMessage(component);
     }
 
@@ -40,7 +42,12 @@ public class AdventureProxyComponent implements SelfHandledProxyComponent {
         return component;
     }
 
-    private Audience getAudience(ProxyPlayer player){
-        return ProxyPlugin.instance().getCore().getAudience(player);
+    private Audience getAudience(ServerPlayer player) {
+        return AuthPlugin.instance().getCore().getAudience(player);
+    }
+
+    @Override
+    public Component component() {
+        return component;
     }
 }
