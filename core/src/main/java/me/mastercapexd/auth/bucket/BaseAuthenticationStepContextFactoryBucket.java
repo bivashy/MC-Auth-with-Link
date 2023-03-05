@@ -1,19 +1,24 @@
-package me.mastercapexd.auth.dealerships;
+package me.mastercapexd.auth.bucket;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.mastercapexd.auth.account.Account;
-import me.mastercapexd.auth.authentication.step.context.AuthenticationStepContext;
-import me.mastercapexd.auth.authentication.step.context.DefaultAuthenticationStepContext;
-import me.mastercapexd.auth.authentication.step.context.factory.AuthenticationStepContextFactory;
-import me.mastercapexd.auth.proxy.ProxyPlugin;
+import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
+import com.bivashy.auth.api.factory.AuthenticationStepContextFactory;
+import com.bivashy.auth.api.step.AuthenticationStepContext;
 
-public class AuthenticationStepContextFactoryDealership {
-    private static final ProxyPlugin PLUGIN = ProxyPlugin.instance();
+import me.mastercapexd.auth.step.context.BaseAuthenticationStepContext;
+
+public class BaseAuthenticationStepContextFactoryBucket implements AuthenticationStepContextFactoryBucket {
     private final Map<String, AuthenticationStepContextFactory> authenticationStepContextFactories = new HashMap<>();
+    private final List<String> stepNames;
+
+    public BaseAuthenticationStepContextFactoryBucket(List<String> stepNames) {
+        this.stepNames = stepNames;
+    }
 
     public Map<String, AuthenticationStepContextFactory> getMap() {
         return Collections.unmodifiableMap(authenticationStepContextFactories);
@@ -40,7 +45,6 @@ public class AuthenticationStepContextFactoryDealership {
     }
 
     public AuthenticationStepContext createContext(Account account) {
-        List<String> stepNames = PLUGIN.getConfig().getAuthenticationSteps();
         String stepName = stepNames.get(0); // Use first stepName by default
         if (stepNames.size() > account.getCurrentAuthenticationStepCreatorIndex()) // If current
             // authentication step
@@ -52,7 +56,7 @@ public class AuthenticationStepContextFactoryDealership {
     }
 
     public AuthenticationStepContext createContext(String stepName, Account account) {
-        return authenticationStepContextFactories.getOrDefault(stepName, AuthenticationStepContextFactory.of(new DefaultAuthenticationStepContext(account)))
+        return authenticationStepContextFactories.getOrDefault(stepName, AuthenticationStepContextFactory.of(new BaseAuthenticationStepContext(account)))
                 .createContext(account);
     }
 }
