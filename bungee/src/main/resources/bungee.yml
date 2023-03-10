@@ -1,5 +1,5 @@
 name: mcAuth
-main: me.mastercapexd.auth.bungee.AuthPlugin
+main: me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap
 version: ${project.version}-${build.version}
 softDepends: [VK-API,JavaTelegramBotApi]
 author: bivashy, MasterCapeXD
