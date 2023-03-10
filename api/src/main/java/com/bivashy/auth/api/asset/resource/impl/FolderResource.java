@@ -40,7 +40,6 @@ public class FolderResource extends DefaultResource {
                 fileSystem = FileSystems.getFileSystem(folderUri);
             }
             myPath = fileSystem.getPath(getName());
-            fileSystem.close();
         } else {
             myPath = Paths.get(folderUri);
         }
