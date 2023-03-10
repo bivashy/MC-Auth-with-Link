@@ -14,6 +14,8 @@ import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
 import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.config.duration.ConfigurationDuration;
+import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
@@ -21,6 +23,7 @@ import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.configurate.SpongeConfigurateProcessor;
 import com.ubivashka.messenger.telegram.message.TelegramMessage;
@@ -36,6 +39,11 @@ import me.mastercapexd.auth.bucket.BaseAuthenticationStepFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationTaskBucket;
 import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
+import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory;
+import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
+import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
+import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
+import me.mastercapexd.auth.config.server.BaseConfigurationServer;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.BaseLinkTypeProvider;
@@ -55,6 +63,7 @@ import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
 import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
 import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
+import me.mastercapexd.auth.util.TimeUtils;
 import net.kyori.adventure.platform.AudienceProvider;
 
 public class BaseAuthPlugin implements AuthPlugin {
@@ -79,7 +88,6 @@ public class BaseAuthPlugin implements AuthPlugin {
     private AccountDatabase accountDatabase;
     private LoginManagement loginManagement;
 
-    // manually: vk, commands, listeners
     public BaseAuthPlugin(AudienceProvider audienceProvider, String version, File pluginFolder, ServerCore core) {
         AuthPluginProvider.setPluginInstance(this);
         this.core = core;
@@ -131,7 +139,17 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void registerConfigurationProcessor() {
-
+        configurationProcessor.registerFieldResolver(ConfigurationServer.class, (context) -> new BaseConfigurationServer(context.getString()))
+                .registerFieldResolver(ConfigurationDuration.class, (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
+                .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
+                .registerFieldResolver(ServerComponent.class, new ProxyComponentFieldResolver())
+                .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
+                .registerFieldResolver(File.class, (context) -> {
+                    String path = context.getString("");
+                    if (path.isEmpty())
+                        return null;
+                    return new File(path.replace("%plugin_folder%", getFolder().getAbsolutePath()));
+                });
     }
 
     @Override
