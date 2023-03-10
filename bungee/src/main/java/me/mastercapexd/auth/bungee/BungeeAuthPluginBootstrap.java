@@ -6,7 +6,7 @@ import com.ubivashka.messenger.vk.message.VkMessage;
 import com.ubivashka.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 
-import me.mastercapexd.auth.account.BaseAuthPlugin;
+import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.bungee.listener.AuthenticationListener;

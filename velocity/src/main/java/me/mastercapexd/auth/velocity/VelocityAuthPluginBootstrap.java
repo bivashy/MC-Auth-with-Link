@@ -19,7 +19,7 @@ import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
-import me.mastercapexd.auth.account.BaseAuthPlugin;
+import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;

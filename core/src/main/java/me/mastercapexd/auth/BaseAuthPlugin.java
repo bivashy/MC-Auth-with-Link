@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.account;
+package me.mastercapexd.auth;
 
 import java.io.File;
 import java.util.HashMap;
