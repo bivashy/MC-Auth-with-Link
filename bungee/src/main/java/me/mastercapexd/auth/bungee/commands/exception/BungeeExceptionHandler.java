@@ -4,7 +4,7 @@ import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.server.message.ServerComponent;
 
-import me.mastercapexd.auth.bungee.commands.BungeeProxyCommandActor;
+import me.mastercapexd.auth.bungee.commands.BungeeServerCommandActor;
 import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.exception.BungeeExceptionAdapter;
 import revxrsal.commands.bungee.exception.InvalidPlayerException;
@@ -131,6 +131,6 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
     }
 
     private void sendComponent(CommandActor actor, ServerComponent component) {
-        new BungeeProxyCommandActor(actor.as(BungeeCommandActor.class)).reply(component);
+        new BungeeServerCommandActor(actor.as(BungeeCommandActor.class)).reply(component);
     }
 }

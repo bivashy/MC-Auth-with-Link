@@ -15,11 +15,11 @@ import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
 
-public abstract class ProxyCommandsRegistry {
+public abstract class ServerCommandsRegistry {
     protected AuthPlugin plugin = AuthPlugin.instance();
     protected CommandHandler commandHandler;
 
-    public ProxyCommandsRegistry(CommandHandler commandHandler) {
+    public ServerCommandsRegistry(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
 
         registerCommandContexts();

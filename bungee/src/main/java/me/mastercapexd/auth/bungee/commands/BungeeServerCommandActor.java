@@ -8,10 +8,10 @@ import me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap;
 import me.mastercapexd.auth.bungee.message.BungeeComponent;
 import revxrsal.commands.bungee.BungeeCommandActor;
 
-public class BungeeProxyCommandActor implements ServerCommandActor {
+public class BungeeServerCommandActor implements ServerCommandActor {
     private final BungeeCommandActor actor;
 
-    public BungeeProxyCommandActor(BungeeCommandActor actor) {
+    public BungeeServerCommandActor(BungeeCommandActor actor) {
         this.actor = actor;
     }
 

@@ -8,7 +8,7 @@ import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 
 import me.mastercapexd.auth.server.commands.annotations.Permission;
-import me.mastercapexd.auth.server.commands.parameters.ArgumentProxyPlayer;
+import me.mastercapexd.auth.server.commands.parameters.ArgumentServerPlayer;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.step.context.BaseAuthenticationStepContext;
 import me.mastercapexd.auth.step.impl.EnterServerAuthenticationStep;
@@ -39,7 +39,7 @@ public class AuthCommand {
     }
 
     @Subcommand({"force", "forcejoin", "fjoin"})
-    public void forceEnter(ServerCommandActor commandActor, ArgumentProxyPlayer proxyPlayer) {
+    public void forceEnter(ServerCommandActor commandActor, ArgumentServerPlayer proxyPlayer) {
         if (proxyPlayer == null)
             return;
         String id = config.getActiveIdentifierType().getId(proxyPlayer);
@@ -56,7 +56,7 @@ public class AuthCommand {
     }
 
     @Subcommand({"changepassword", "changepass"})
-    public void changePassword(ServerCommandActor actor, ArgumentProxyPlayer proxyPlayer, NewPassword newPlayerPassword) {
+    public void changePassword(ServerCommandActor actor, ArgumentServerPlayer proxyPlayer, NewPassword newPlayerPassword) {
         if (proxyPlayer == null)
             return;
         String id = config.getActiveIdentifierType().getId(proxyPlayer);
@@ -72,7 +72,7 @@ public class AuthCommand {
     }
 
     @Subcommand({"reset", "resetaccount", "deleteaccount"})
-    public void resetAccount(ServerCommandActor actor, ArgumentProxyPlayer proxyPlayer) {
+    public void resetAccount(ServerCommandActor actor, ArgumentServerPlayer proxyPlayer) {
         if (proxyPlayer == null)
             return;
         String id = config.getActiveIdentifierType().getId(proxyPlayer);

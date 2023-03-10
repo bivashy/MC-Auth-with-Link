@@ -7,10 +7,10 @@ import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.server.proxy.ProxyServer;
 
-public class ArgumentProxyPlayer implements ServerPlayer {
+public class ArgumentServerPlayer implements ServerPlayer {
     private final ServerPlayer player;
 
-    public ArgumentProxyPlayer(ServerPlayer player) {
+    public ArgumentServerPlayer(ServerPlayer player) {
         this.player = player;
     }
 

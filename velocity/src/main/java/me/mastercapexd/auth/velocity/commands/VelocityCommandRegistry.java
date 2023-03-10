@@ -10,12 +10,12 @@ import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.velocitypowered.api.proxy.Player;
 
-import me.mastercapexd.auth.server.commands.ProxyCommandsRegistry;
+import me.mastercapexd.auth.server.commands.ServerCommandsRegistry;
 import me.mastercapexd.auth.server.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.server.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.server.commands.annotations.Permission;
 import me.mastercapexd.auth.server.commands.exception.SendComponentException;
-import me.mastercapexd.auth.server.commands.parameters.ArgumentProxyPlayer;
+import me.mastercapexd.auth.server.commands.parameters.ArgumentServerPlayer;
 import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 import me.mastercapexd.auth.velocity.commands.exception.VelocityExceptionHandler;
 import me.mastercapexd.auth.velocity.player.VelocityServerPlayer;
@@ -24,7 +24,7 @@ import revxrsal.commands.velocity.VelocityCommandActor;
 import revxrsal.commands.velocity.annotation.CommandPermission;
 import revxrsal.commands.velocity.core.VelocityHandler;
 
-public class VelocityCommandRegistry extends ProxyCommandsRegistry {
+public class VelocityCommandRegistry extends ServerCommandsRegistry {
     public VelocityCommandRegistry(VelocityAuthPluginBootstrap pluginBootstrap, AuthPlugin authPlugin) {
         super(new VelocityHandler(pluginBootstrap, pluginBootstrap.getProxyServer()).setExceptionHandler(
                 new VelocityExceptionHandler(authPlugin.getConfig().getServerMessages())).disableStackTraceSanitizing());
@@ -37,12 +37,12 @@ public class VelocityCommandRegistry extends ProxyCommandsRegistry {
         });
         commandHandler.registerContextResolver(ServerCommandActor.class,
                 (context) -> new VelocityProxyCommandActor(context.actor().as(VelocityCommandActor.class)));
-        commandHandler.registerValueResolver(ArgumentProxyPlayer.class, (context) -> {
+        commandHandler.registerValueResolver(ArgumentServerPlayer.class, (context) -> {
             String value = context.pop();
             Optional<ServerPlayer> player = authPlugin.getCore().getPlayer(value);
             if (!player.isPresent())
                 throw new SendComponentException(config.getServerMessages().getMessage("player-offline"));
-            return new ArgumentProxyPlayer(player.get());
+            return new ArgumentServerPlayer(player.get());
         });
         commandHandler.registerCondition((actor, command, arguments) -> {
             if (!actor.as(VelocityCommandActor.class).isPlayer())

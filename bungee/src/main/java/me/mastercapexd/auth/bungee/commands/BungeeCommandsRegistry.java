@@ -11,12 +11,12 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 import me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
 import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
-import me.mastercapexd.auth.server.commands.ProxyCommandsRegistry;
+import me.mastercapexd.auth.server.commands.ServerCommandsRegistry;
 import me.mastercapexd.auth.server.commands.annotations.AuthenticationAccount;
 import me.mastercapexd.auth.server.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.server.commands.annotations.Permission;
 import me.mastercapexd.auth.server.commands.exception.SendComponentException;
-import me.mastercapexd.auth.server.commands.parameters.ArgumentProxyPlayer;
+import me.mastercapexd.auth.server.commands.parameters.ArgumentServerPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.dynamic.Annotations;
@@ -24,7 +24,7 @@ import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.core.BungeeHandler;
 
-public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
+public class BungeeCommandsRegistry extends ServerCommandsRegistry {
     public BungeeCommandsRegistry(BungeeAuthPluginBootstrap pluginBootstrap, AuthPlugin authPlugin) {
         super(new BungeeHandler(pluginBootstrap).setExceptionHandler(
                 new BungeeExceptionHandler(authPlugin.getConfig().getServerMessages())).disableStackTraceSanitizing());
@@ -36,14 +36,14 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
             return new BungeeServerPlayer(selfPlayer);
         });
         commandHandler.registerContextResolver(ServerCommandActor.class,
-                (context) -> new BungeeProxyCommandActor(context.actor().as(BungeeCommandActor.class)));
-        commandHandler.registerValueResolver(ArgumentProxyPlayer.class, (context) -> {
+                (context) -> new BungeeServerCommandActor(context.actor().as(BungeeCommandActor.class)));
+        commandHandler.registerValueResolver(ArgumentServerPlayer.class, (context) -> {
             String value = context.pop();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
             if (player == null) {
                 throw new SendComponentException(config.getServerMessages().getMessage("player-offline"));
             }
-            return new ArgumentProxyPlayer(new BungeeServerPlayer(player));
+            return new ArgumentServerPlayer(new BungeeServerPlayer(player));
         });
         commandHandler.registerCondition((actor, command, arguments) -> {
             if (!actor.as(BungeeCommandActor.class).isPlayer())
@@ -84,7 +84,7 @@ public class BungeeCommandsRegistry extends ProxyCommandsRegistry {
         });
 
         commandHandler.registerExceptionHandler(SendComponentException.class,
-                (actor, componentException) -> new BungeeProxyCommandActor(actor.as(BungeeCommandActor.class)).reply(componentException.getComponent()));
+                (actor, componentException) -> new BungeeServerCommandActor(actor.as(BungeeCommandActor.class)).reply(componentException.getComponent()));
         registerCommands();
     }
 }
