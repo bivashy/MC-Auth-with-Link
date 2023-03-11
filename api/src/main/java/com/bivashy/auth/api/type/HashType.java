@@ -22,14 +22,14 @@ public enum HashType {
         }
 
         @Override
-        public boolean checkHash(String string, String hash) {
+        public boolean matches(String string, String hash) {
             return BCrypt.checkpw(string, hash);
         }
     };
 
     public abstract String hash(String string);
 
-    public boolean checkHash(String string, String hash) {
+    public boolean matches(String string, String hash) {
         if (string == null || hash == null)
             return false;
         return hash(string).equals(hash);

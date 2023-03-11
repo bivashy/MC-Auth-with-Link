@@ -29,7 +29,7 @@ public class ChangePasswordCommand {
                 sender.sendMessage(config.getServerMessages().getMessage("account-not-found"));
                 return;
             }
-            boolean isWrongPassword = !account.getHashType().checkHash(password.getOldPassword(), account.getPasswordHash());
+            boolean isWrongPassword = !account.getHashType().matches(password.getOldPassword(), account.getPasswordHash());
             PostResult<AccountTryChangePasswordEvent> tryChangePasswordEventPostResult = plugin.getEventBus()
                     .publish(AccountTryChangePasswordEvent.class, account, false, !isWrongPassword).join();
             if (tryChangePasswordEventPostResult.getEvent().isCancelled())

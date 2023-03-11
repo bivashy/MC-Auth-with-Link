@@ -29,7 +29,7 @@ public class LoginCommand {
         String id = account.getPlayerId();
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 
-        boolean isWrongPassword = !account.getHashType().checkHash(password, account.getPasswordHash());
+        boolean isWrongPassword = !account.getHashType().matches(password, account.getPasswordHash());
         plugin.getEventBus().publish(AccountTryLoginEvent.class, account, isWrongPassword, !isWrongPassword).thenAccept(tryLoginEventPostResult -> {
             if (tryLoginEventPostResult.getEvent().isCancelled())
                 return;
