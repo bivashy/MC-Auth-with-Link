@@ -29,7 +29,6 @@ import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
 import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.server.BaseServerMessages;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
-import me.mastercapexd.auth.config.server.BaseConfigurationServer;
 import me.mastercapexd.auth.config.storage.BaseDatabaseConfiguration;
 import me.mastercapexd.auth.config.storage.BaseLegacyStorageDataSettings;
 import me.mastercapexd.auth.config.telegram.BaseTelegramSettings;
@@ -63,12 +62,12 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private ConfigurationDuration authTime = new ConfigurationDuration(60);
     @ImportantField
     @ConfigField("auth-servers")
-    private List<BaseConfigurationServer> authServers = Collections.emptyList();
+    private List<ConfigurationServer> authServers = Collections.emptyList();
     @ImportantField
     @ConfigField("game-servers")
-    private List<BaseConfigurationServer> gameServers = Collections.emptyList();
+    private List<ConfigurationServer> gameServers = Collections.emptyList();
     @ConfigField("blocked-servers")
-    private List<BaseConfigurationServer> blockedServers = Collections.emptyList();
+    private List<ConfigurationServer> blockedServers = Collections.emptyList();
     @ConfigField("allowed-commands")
     private List<String> allowedCommands = Collections.emptyList();
     @ConfigField("data")
