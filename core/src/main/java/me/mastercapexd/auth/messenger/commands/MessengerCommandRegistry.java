@@ -102,7 +102,7 @@ public abstract class MessengerCommandRegistry {
 
             Optional<LinkUser> linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
             if (!linkUser.isPresent())
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account"));
 
             if (!linkUser.get().getLinkUserInfo().getIdentificator().equals(userId) && !linkType.getSettings().isAdministrator(userId))
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
