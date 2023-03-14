@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage.dao;
+package me.mastercapexd.auth.database.dao;
 
 public class SupplierExceptionCatcher {
     public <T, V extends Throwable> T execute(SupplierWithException<T, V> supplierWithException, T def) {

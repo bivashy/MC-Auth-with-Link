@@ -57,8 +57,8 @@ import me.mastercapexd.auth.step.impl.RegisterAuthenticationStep.RegisterAuthent
 import me.mastercapexd.auth.step.impl.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepFactory;
-import me.mastercapexd.auth.storage.AuthAccountDatabaseProxy;
-import me.mastercapexd.auth.storage.DatabaseHelper;
+import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
+import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
 import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
 import me.mastercapexd.auth.task.AuthenticationTimeoutTask;

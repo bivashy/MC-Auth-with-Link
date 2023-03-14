@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage.migration;
+package me.mastercapexd.auth.database.migration;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

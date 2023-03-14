@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage.dao;
+package me.mastercapexd.auth.database.dao;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -11,10 +11,10 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import me.mastercapexd.auth.storage.DatabaseHelper;
-import me.mastercapexd.auth.storage.model.AccountLink;
-import me.mastercapexd.auth.storage.model.AuthAccount;
-import me.mastercapexd.auth.storage.model.AuthAccountProvider;
+import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.database.model.AccountLink;
+import me.mastercapexd.auth.database.model.AuthAccount;
+import me.mastercapexd.auth.database.model.AuthAccountProvider;
 
 public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     private static final SupplierExceptionCatcher DEFAULT_EXCEPTION_CATCHER = new SupplierExceptionCatcher();

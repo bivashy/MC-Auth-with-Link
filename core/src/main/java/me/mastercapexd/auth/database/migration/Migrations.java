@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage.migration;
+package me.mastercapexd.auth.database.migration;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -13,8 +13,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.support.DatabaseConnection;
 
-import me.mastercapexd.auth.storage.model.AccountLink;
-import me.mastercapexd.auth.storage.model.AuthAccount;
+import me.mastercapexd.auth.database.model.AccountLink;
+import me.mastercapexd.auth.database.model.AuthAccount;
 
 public class Migrations {
     public static final ConditionalMigrator<AuthAccount, Long> LEGACY_MC_AUTH_TO_NEW_MIGRATOR = new ConditionalMigrator<AuthAccount, Long>() {

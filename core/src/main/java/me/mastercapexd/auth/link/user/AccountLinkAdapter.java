@@ -11,7 +11,7 @@ import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 
-import me.mastercapexd.auth.storage.model.AccountLink;
+import me.mastercapexd.auth.database.model.AccountLink;
 
 public class AccountLinkAdapter extends LinkUserTemplate {
     private final LinkUserInfo linkUserInfo;

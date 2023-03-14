@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage.dao;
+package me.mastercapexd.auth.database.dao;
 
 import java.sql.SQLException;
 
@@ -8,8 +8,8 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import me.mastercapexd.auth.storage.DatabaseHelper;
-import me.mastercapexd.auth.storage.model.AccountLink;
+import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.database.model.AccountLink;
 
 public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
     private static final SupplierExceptionCatcher DEFAULT_EXCEPTION_CATCHER = new SupplierExceptionCatcher();

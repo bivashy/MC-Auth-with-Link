@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage;
+package me.mastercapexd.auth.database;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +16,12 @@ import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.support.ConnectionSource;
 
-import me.mastercapexd.auth.storage.dao.AccountLinkDao;
-import me.mastercapexd.auth.storage.dao.AuthAccountDao;
-import me.mastercapexd.auth.storage.migration.MigrationCoordinator;
-import me.mastercapexd.auth.storage.migration.Migrations;
-import me.mastercapexd.auth.storage.model.AccountLink;
-import me.mastercapexd.auth.storage.model.AuthAccount;
+import me.mastercapexd.auth.database.dao.AccountLinkDao;
+import me.mastercapexd.auth.database.dao.AuthAccountDao;
+import me.mastercapexd.auth.database.migration.MigrationCoordinator;
+import me.mastercapexd.auth.database.migration.Migrations;
+import me.mastercapexd.auth.database.model.AccountLink;
+import me.mastercapexd.auth.database.model.AuthAccount;
 
 public class DatabaseHelper {
     public static final String ID_FIELD_KEY = "id";

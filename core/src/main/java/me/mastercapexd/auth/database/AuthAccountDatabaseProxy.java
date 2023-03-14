@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage;
+package me.mastercapexd.auth.database;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;

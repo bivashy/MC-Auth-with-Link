@@ -17,9 +17,9 @@ import com.bivashy.auth.api.type.HashType;
 import com.bivashy.auth.api.type.IdentifierType;
 
 import me.mastercapexd.auth.link.user.AccountLinkAdapter;
-import me.mastercapexd.auth.storage.model.AccountLink;
-import me.mastercapexd.auth.storage.model.AuthAccount;
-import me.mastercapexd.auth.storage.model.AuthAccountProvider;
+import me.mastercapexd.auth.database.model.AccountLink;
+import me.mastercapexd.auth.database.model.AuthAccount;
+import me.mastercapexd.auth.database.model.AuthAccountProvider;
 
 public class AuthAccountAdapter extends AccountTemplate implements AuthAccountProvider {
     private final List<AccountLinkAdapter> linkUsers;
@@ -39,7 +39,7 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     /**
      * Create {@link com.bivashy.auth.api.account.Account} from {@link AuthAccount}
      * <p>
-     * This constructor will query {@link me.mastercapexd.auth.storage.model.AccountLink} from database, because of
+     * This constructor will query {@link AccountLink} from database, because of
      * {@link com.j256.ormlite.dao.ForeignCollection}
      *
      * @param authAccount - account that need to adapt

@@ -8,8 +8,8 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.type.IdentifierType;
 
 import me.mastercapexd.auth.account.AuthAccountAdapter;
-import me.mastercapexd.auth.storage.DatabaseHelper;
-import me.mastercapexd.auth.storage.model.AuthAccount;
+import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.database.model.AuthAccount;
 
 public class AuthAccountFactory extends AccountFactoryTemplate {
     private final DatabaseHelper databaseHelper;

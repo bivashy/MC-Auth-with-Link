@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.storage.model;
+package me.mastercapexd.auth.database.model;
 
 import java.util.UUID;
 
