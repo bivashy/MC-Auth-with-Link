@@ -56,6 +56,7 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         return DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where()
                 .in(AuthAccount.PLAYER_ID_FIELD_KEY, databaseHelper.getAccountLinkDao()
                         .queryBuilder()
+                        .selectColumns(AccountLink.ACCOUNT_ID_FIELD_KEY)
                         .groupBy(AccountLink.ACCOUNT_ID_FIELD_KEY)
                         .having("COUNT(DISTINCT " + AccountLink.LINK_USER_ID_FIELD_KEY + ") = 0"))
                 .query(), Collections.emptyList());
