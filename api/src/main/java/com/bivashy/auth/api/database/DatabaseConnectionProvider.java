@@ -1,11 +1,11 @@
-package com.bivashy.auth.api.type;
+package com.bivashy.auth.api.database;
 
 import java.io.File;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.LegacyStorageDataSettings;
 
-public enum StorageType {
+public enum DatabaseConnectionProvider {
     MYSQL("https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.31/mysql-connector-j-8.0.31.jar") {
         @Override
         public String getConnectionUrl(LegacyStorageDataSettings settings) {
@@ -29,7 +29,7 @@ public enum StorageType {
     };
     private final String driverDownloadUrl;
 
-    StorageType(String driverDownloadUrl) {
+    DatabaseConnectionProvider(String driverDownloadUrl) {
         this.driverDownloadUrl = driverDownloadUrl;
     }
 

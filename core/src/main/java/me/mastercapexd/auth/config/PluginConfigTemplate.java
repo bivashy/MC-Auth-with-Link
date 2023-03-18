@@ -20,7 +20,7 @@ import com.bivashy.auth.api.server.proxy.ProxyServer;
 import com.bivashy.auth.api.type.FillType;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
-import com.bivashy.auth.api.type.StorageType;
+import com.bivashy.auth.api.database.DatabaseConnectionProvider;
 import com.ubivashka.configuration.annotation.ConfigField;
 import com.ubivashka.configuration.annotation.ImportantField;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
@@ -47,7 +47,7 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @ConfigField("hash-type")
     private CryptoProvider activeCryptoProvider = CryptoProvider.SHA256;
     @ConfigField("storage-type")
-    private StorageType storageType = StorageType.SQLITE;
+    private DatabaseConnectionProvider databaseConnectionProvider = DatabaseConnectionProvider.SQLITE;
     @ConfigField("name-regex-pattern")
     private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
     @ConfigField("password-regex-pattern")
@@ -107,8 +107,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
         this.allowedPatternCommands = allowedCommands.stream().map(Pattern::compile).collect(Collectors.toList());
 
         if (databaseConfiguration == null && legacyStorageDataSettings != null)
-            databaseConfiguration = new BaseDatabaseConfiguration(RawURLProvider.of(storageType.getConnectionUrl(legacyStorageDataSettings)),
-                    storageType.getDriverDownloadUrl(), legacyStorageDataSettings.getUser(), legacyStorageDataSettings.getPassword());
+            databaseConfiguration = new BaseDatabaseConfiguration(RawURLProvider.of(databaseConnectionProvider.getConnectionUrl(legacyStorageDataSettings)),
+                    databaseConnectionProvider.getDriverDownloadUrl(), legacyStorageDataSettings.getUser(), legacyStorageDataSettings.getPassword());
     }
 
     @Override
@@ -155,8 +155,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public StorageType getStorageType() {
-        return storageType;
+    public DatabaseConnectionProvider getStorageType() {
+        return databaseConnectionProvider;
     }
 
     @Override

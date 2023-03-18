@@ -13,7 +13,7 @@ import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
-import com.bivashy.auth.api.type.StorageType;
+import com.bivashy.auth.api.database.DatabaseConnectionProvider;
 
 public interface PluginConfig {
     @Deprecated
@@ -27,7 +27,7 @@ public interface PluginConfig {
 
     CryptoProvider getActiveHashType();
 
-    StorageType getStorageType();
+    DatabaseConnectionProvider getStorageType();
 
     Pattern getNamePattern();
 
