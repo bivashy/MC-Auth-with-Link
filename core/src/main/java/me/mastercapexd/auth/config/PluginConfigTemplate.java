@@ -18,7 +18,7 @@ import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.server.proxy.ProxyServer;
 import com.bivashy.auth.api.type.FillType;
-import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.type.StorageType;
 import com.ubivashka.configuration.annotation.ConfigField;
@@ -45,7 +45,7 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @ConfigField("enable-password-confirm")
     private boolean passwordConfirmationEnabled = false;
     @ConfigField("hash-type")
-    private HashType activeHashType = HashType.SHA256;
+    private CryptoProvider activeCryptoProvider = CryptoProvider.SHA256;
     @ConfigField("storage-type")
     private StorageType storageType = StorageType.SQLITE;
     @ConfigField("name-regex-pattern")
@@ -150,8 +150,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public HashType getActiveHashType() {
-        return activeHashType;
+    public CryptoProvider getActiveHashType() {
+        return activeCryptoProvider;
     }
 
     @Override

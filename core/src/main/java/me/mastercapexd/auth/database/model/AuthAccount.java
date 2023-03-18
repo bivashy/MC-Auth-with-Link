@@ -2,7 +2,7 @@ package me.mastercapexd.auth.database.model;
 
 import java.util.UUID;
 
-import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
@@ -28,7 +28,7 @@ public class AuthAccount {
     @DatabaseField(columnName = PLAYER_ID_TYPE_FIELD_KEY, canBeNull = false, dataType = DataType.ENUM_NAME)
     private IdentifierType playerIdType;
     @DatabaseField(columnName = HASH_TYPE_FIELD_KEY, canBeNull = false, dataType = DataType.ENUM_NAME)
-    private HashType hashType;
+    private CryptoProvider cryptoProvider;
     @DatabaseField(columnName = LAST_IP_FIELD_KEY)
     private String lastIp;
     @DatabaseField(columnName = UNIQUE_ID_FIELD_KEY, canBeNull = false, dataType = DataType.UUID)
@@ -54,11 +54,11 @@ public class AuthAccount {
         this.uniqueId = uniqueId;
     }
 
-    public AuthAccount(String playerId, IdentifierType playerIdType, HashType hashType, String lastIp, UUID uniqueId, String playerName, String passwordHash,
+    public AuthAccount(String playerId, IdentifierType playerIdType, CryptoProvider cryptoProvider, String lastIp, UUID uniqueId, String playerName, String passwordHash,
             long lastQuitTimestamp, long lastSessionStartTimestamp) {
         this.playerId = playerId;
         this.playerIdType = playerIdType;
-        this.hashType = hashType;
+        this.cryptoProvider = cryptoProvider;
         this.lastIp = lastIp;
         this.uniqueId = uniqueId;
         this.playerName = playerName;
@@ -79,12 +79,12 @@ public class AuthAccount {
         return playerIdType;
     }
 
-    public HashType getHashType() {
-        return hashType;
+    public CryptoProvider getHashType() {
+        return cryptoProvider;
     }
 
-    public void setHashType(HashType hashType) {
-        this.hashType = hashType;
+    public void setHashType(CryptoProvider cryptoProvider) {
+        this.cryptoProvider = cryptoProvider;
     }
 
     public String getLastIp() {

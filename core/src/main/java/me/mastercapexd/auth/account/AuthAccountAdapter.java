@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
-import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 
 import me.mastercapexd.auth.link.user.AccountLinkAdapter;
@@ -92,13 +92,13 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     }
 
     @Override
-    public HashType getHashType() {
+    public CryptoProvider getHashType() {
         return authAccount.getHashType();
     }
 
     @Override
-    public void setHashType(HashType hashType) {
-        authAccount.setHashType(hashType);
+    public void setHashType(CryptoProvider cryptoProvider) {
+        authAccount.setHashType(cryptoProvider);
     }
 
     @Override

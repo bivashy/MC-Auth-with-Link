@@ -13,7 +13,7 @@ import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.step.AuthenticationStep;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
-import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.type.KickResultType;
 
@@ -25,9 +25,9 @@ public interface Account extends PlayerIdSupplier {
 
     IdentifierType getIdentifierType();
 
-    HashType getHashType();
+    CryptoProvider getHashType();
 
-    void setHashType(HashType hashType);
+    void setHashType(CryptoProvider cryptoProvider);
 
     UUID getUniqueId();
 

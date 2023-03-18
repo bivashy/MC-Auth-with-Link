@@ -1,10 +1,10 @@
-package com.bivashy.auth.api.type;
+package com.bivashy.auth.api.crypto;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.bivashy.auth.api.util.HashUtils;
 
-public enum HashType {
+public enum CryptoProvider {
     MD5 {
         @Override
         public String hash(String string) {

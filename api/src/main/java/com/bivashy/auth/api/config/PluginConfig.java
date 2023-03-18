@@ -11,7 +11,7 @@ import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
-import com.bivashy.auth.api.type.HashType;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.type.StorageType;
 
@@ -25,7 +25,7 @@ public interface PluginConfig {
 
     boolean isNameCaseCheckEnabled();
 
-    HashType getActiveHashType();
+    CryptoProvider getActiveHashType();
 
     StorageType getStorageType();
 
