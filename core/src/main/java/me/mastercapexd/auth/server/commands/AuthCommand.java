@@ -62,7 +62,7 @@ public class AuthCommand {
         String id = config.getActiveIdentifierType().getId(proxyPlayer);
         accountDatabase.getAccount(id).thenAccept(account -> {
             if (account == null || !account.isRegistered()) {
-                actor.reply(config.getServerMessages().getMessage("account-not-found"));
+                actor.reply(config.getServerMessages().getMessage("account-not-found", MessageContext.of("%account_name%", proxyPlayer.getNickname())));
                 return;
             }
             account.setPasswordHash(account.getHashType().hash(newPlayerPassword.getNewPassword()));
