@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
@@ -53,13 +54,14 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     }
 
     public Collection<AuthAccount> queryAllLinkedAccounts() {
-        return DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where()
-                .in(AuthAccount.PLAYER_ID_FIELD_KEY, databaseHelper.getAccountLinkDao()
-                        .queryBuilder()
-                        .selectColumns(AccountLink.ACCOUNT_ID_FIELD_KEY)
-                        .groupBy(AccountLink.ACCOUNT_ID_FIELD_KEY)
-                        .having("COUNT(DISTINCT " + AccountLink.LINK_USER_ID_FIELD_KEY + ") = 0"))
-                .query(), Collections.emptyList());
+        return DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().join(databaseHelper.getAccountLinkDao()
+                .queryBuilder()
+                .selectColumns(AccountLink.ACCOUNT_ID_FIELD_KEY)
+                .where()
+                .isNotNull(AccountLink.LINK_USER_ID_FIELD_KEY)
+                .and()
+                .notIn(AccountLink.LINK_USER_ID_FIELD_KEY, AccountFactory.DEFAULT_TELEGRAM_ID, AccountFactory.DEFAULT_VK_ID)
+                .queryBuilder()).distinct().query(), Collections.emptyList());
     }
 
     public Optional<AuthAccount> createOrUpdateAccount(Account account) {
