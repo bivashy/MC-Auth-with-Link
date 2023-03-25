@@ -7,6 +7,7 @@ import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.config.message.server.BaseServerMessages;
 import me.mastercapexd.auth.link.telegram.TelegramConfirmationUser;
@@ -56,11 +57,13 @@ public class TelegramLinkCommand {
                     return;
                 }
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
+
                 UserNumberIdentificator userIdentificator = new UserNumberIdentificator(telegramIdentificator);
                 plugin.getLinkConfirmationBucket()
                         .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                                 linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
-                plugin.getLinkConfirmationBucket().addLinkUser(new TelegramConfirmationUser(account, new BaseConfirmationInfo(userIdentificator, code)));
+                plugin.getLinkConfirmationBucket().addLinkUser(new TelegramConfirmationUser(account, new BaseConfirmationInfo(userIdentificator, code,
+                        LinkConfirmationType.FROM_LINK)));
                 player.sendMessage(messages.getSubMessages(TELEGRAM_SUBMESSAGES_KEY).getMessage("confirmation-sent", MessageContext.of("%code%", code)));
             });
         });

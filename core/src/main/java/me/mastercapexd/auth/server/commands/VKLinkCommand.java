@@ -7,6 +7,7 @@ import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
@@ -78,7 +79,8 @@ public class VKLinkCommand {
                     plugin.getLinkConfirmationBucket()
                             .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
                                     linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(userIdentificator));
-                    plugin.getLinkConfirmationBucket().addLinkUser(new VKConfirmationUser(account, new BaseConfirmationInfo(userIdentificator, code)));
+                    plugin.getLinkConfirmationBucket()
+                            .addLinkUser(new VKConfirmationUser(account, new BaseConfirmationInfo(userIdentificator, code, LinkConfirmationType.FROM_LINK)));
                     player.sendMessage(messages.getSubMessages(VK_SUBMESSAGES_KEY).getMessage("confirmation-sent", MessageContext.of("%code%", code)));
                 });
             });
