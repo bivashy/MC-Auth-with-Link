@@ -8,6 +8,7 @@ import com.bivashy.auth.api.config.link.command.LinkCustomCommands;
 import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.ubivashka.configuration.ConfigurationHolder;
 import com.ubivashka.configuration.annotation.ConfigField;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
@@ -35,13 +36,17 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-telegram-link")
-    private Integer maxTelegramLinkCount = 0;
+    private int maxTelegramLinkCount = 0;
     @ConfigField("telegram-messages")
     private TelegramMessages messages;
     @ConfigField("keyboards")
     private TelegramKeyboards keyboards;
     @ConfigField("admin-accounts")
     private List<Number> adminAccounts;
+    @ConfigField("link-confirm-ways")
+    private List<LinkConfirmationType> linkConfirmationTypes;
+    @ConfigField("link-game-commands")
+    private List<String> gameLinkCommands;
 
     public BaseTelegramSettings() {
     }
@@ -111,6 +116,16 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     @Override
     public TelegramKeyboards getKeyboards() {
         return keyboards;
+    }
+
+    @Override
+    public List<LinkConfirmationType> getLinkConfirmationTypes() {
+        return linkConfirmationTypes;
+    }
+
+    @Override
+    public List<String> getGameLinkCommands() {
+        return gameLinkCommands;
     }
 
     @Override

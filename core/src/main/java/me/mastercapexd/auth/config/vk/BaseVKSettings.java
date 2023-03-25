@@ -12,6 +12,7 @@ import com.bivashy.auth.api.config.link.stage.LinkEnterSettings;
 import com.bivashy.auth.api.config.link.stage.LinkRestoreSettings;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.ubivashka.configuration.ConfigurationHolder;
 import com.ubivashka.configuration.annotation.ConfigField;
 import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
@@ -38,7 +39,7 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-vk-link")
-    private Integer maxVkLinkCount = 0;
+    private int maxVkLinkCount = 0;
     @ConfigField("vk-messages")
     private VKMessages messages;
     @ConfigField("keyboards")
@@ -47,6 +48,10 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     private List<Integer> adminAccounts;
     @ConfigField("disable-conversation-commands")
     private boolean disableConversationCommands;
+    @ConfigField("link-confirm-ways")
+    private List<LinkConfirmationType> linkConfirmationTypes;
+    @ConfigField("link-game-commands")
+    private List<String> gameLinkCommands;
 
     public BaseVKSettings() {
     }
@@ -108,6 +113,16 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     @Override
     public LinkMessages getMessages() {
         return messages;
+    }
+
+    @Override
+    public List<LinkConfirmationType> getLinkConfirmationTypes() {
+        return linkConfirmationTypes;
+    }
+
+    @Override
+    public List<String> getGameLinkCommands() {
+        return gameLinkCommands;
     }
 
     @Override
