@@ -5,6 +5,7 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -15,6 +16,8 @@ import me.mastercapexd.auth.server.commands.exception.SendComponentException;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
+import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
+import me.mastercapexd.auth.shared.commands.VKLinkCommand;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.orphan.OrphanCommand;
@@ -116,9 +119,9 @@ public abstract class ServerCommandsRegistry {
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         if (plugin.getConfig().getVKSettings().isEnabled())
-            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand());
+            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand());
+            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand command) {

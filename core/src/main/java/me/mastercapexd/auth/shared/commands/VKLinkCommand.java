@@ -1,17 +1,18 @@
-package me.mastercapexd.auth.server.commands;
+package me.mastercapexd.auth.shared.commands;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
-import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.model.PlayerIdSupplier;
+import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 
-import me.mastercapexd.auth.config.message.server.BaseServerMessages;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.user.confirmation.BaseConfirmationInfo;
 import me.mastercapexd.auth.link.vk.VKConfirmationUser;
@@ -23,54 +24,53 @@ import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class VKLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
-    private static final String VK_MESSAGES_KEY = "vk";
     @Dependency
     private AuthPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
     private AccountDatabase accountStorage;
-    @Dependency
-    private ServerMessages messages;
+    private Messages<?> messages;
 
-    public VKLinkCommand() {
-        super(VK_MESSAGES_KEY, VKLinkType.getInstance());
+    public VKLinkCommand(LinkConfirmationType linkConfirmationType, Messages<?> messages) {
+        super(linkConfirmationType, messages, VKLinkType.getInstance());
+        this.messages = messages;
     }
 
     @Default
     @VkUse
-    public void vkLink(ServerPlayer player, @Optional String vkIdentificator) {
+    public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional String vkIdentificator) {
         if (vkIdentificator == null) {
-            player.sendMessage(messages.getSubMessages(VK_MESSAGES_KEY).getMessage("usage"));
+            commandActor.replyWithMessage(messages.getMessage("usage"));
             return;
         }
 
-        String accountId = config.getActiveIdentifierType().getId(player);
+        String accountId = idSupplier.getPlayerId();
 
         plugin.getCore().runAsync(() -> {
             GetResponse user = fetchUserFromIdentificator(vkIdentificator).orElse(null);
             if (user == null) {
-                player.sendMessage(messages.getSubMessages(VK_MESSAGES_KEY).getMessage("user-not-exists"));
+                commandActor.replyWithMessage(messages.getMessage("user-not-exists"));
                 return;
             }
 
             if (plugin.getLinkEntryBucket().hasLinkUser(accountId, VKLinkType.getInstance())) {
-                player.sendMessage(messages.getSubMessages(VK_MESSAGES_KEY).getMessage("already-sent"));
+                commandActor.replyWithMessage(messages.getMessage("already-sent"));
                 return;
             }
             int userId = user.getId();
 
             accountStorage.getAccount(accountId).thenAccept(account -> {
-                if (isInvalidAccount(account, player, VKLinkType.LINK_USER_FILTER))
+                if (isInvalidAccount(account, commandActor, VKLinkType.LINK_USER_FILTER))
                     return;
                 LinkUserIdentificator identificator = new UserNumberIdentificator(userId);
                 accountStorage.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
-                    if (isInvalidLinkAccounts(accounts, player))
+                    if (isInvalidLinkAccounts(accounts, commandActor))
                         return;
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
 
-                    sendLinkConfirmation(identificator, player,
-                            new VKConfirmationUser(account, new BaseConfirmationInfo(identificator, code, LinkConfirmationType.FROM_GAME)), accountId);
+                    sendLinkConfirmation(identificator, commandActor,
+                            new VKConfirmationUser(account, new BaseConfirmationInfo(identificator, code, getLinkConfirmationType())), accountId);
                 });
             });
         });
