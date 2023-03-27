@@ -26,25 +26,25 @@ public class MessengerLinkCommandTemplate {
         this.linkType = linkType;
     }
 
-    public boolean isValidAccount(Account account, ServerPlayer player, Predicate<LinkUser> linkFilter) {
+    public boolean isInvalidAccount(Account account, ServerPlayer player, Predicate<LinkUser> linkFilter) {
         if (account == null || !account.isRegistered()) {
             player.sendMessage(config.getServerMessages().getMessage("account-not-found"));
-            return false;
+            return true;
         }
         LinkUser linkUser = account.findFirstLinkUserOrNew(linkFilter, linkType);
         if (!linkUser.isIdentifierDefaultOrNull()) {
             player.sendMessage(messages.getSubMessages(subMessagesKey).getMessage("already-linked"));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public boolean isValidLinkAccounts(Collection<Account> accounts, ServerPlayer player) {
+    public boolean isInvalidLinkAccounts(Collection<Account> accounts, ServerPlayer player) {
         if (linkType.getSettings().getMaxLinkCount() != 0 && accounts.size() >= linkType.getSettings().getMaxLinkCount()) {
             player.sendMessage(messages.getSubMessages(subMessagesKey).getMessage("link-limit-reached"));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void sendLinkConfirmation(LinkUserIdentificator identificator, ServerPlayer player, LinkConfirmationUser confirmationUser, String accountId) {

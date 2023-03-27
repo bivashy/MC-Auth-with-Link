@@ -31,7 +31,7 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
     @Dependency
     private AccountDatabase accountStorage;
     @Dependency
-    private BaseServerMessages messages;
+    private ServerMessages messages;
 
     public VKLinkCommand() {
         super(VK_MESSAGES_KEY, VKLinkType.getInstance());
@@ -61,11 +61,11 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
             int userId = user.getId();
 
             accountStorage.getAccount(accountId).thenAccept(account -> {
-                if (!isValidAccount(account, player, VKLinkType.LINK_USER_FILTER))
+                if (isInvalidAccount(account, player, VKLinkType.LINK_USER_FILTER))
                     return;
                 LinkUserIdentificator identificator = new UserNumberIdentificator(userId);
                 accountStorage.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
-                    if (!isValidLinkAccounts(accounts, player))
+                    if (isInvalidLinkAccounts(accounts, player))
                         return;
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
 

@@ -27,7 +27,7 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
     @Dependency
     private AccountDatabase accountDatabase;
     @Dependency
-    private BaseServerMessages messages;
+    private ServerMessages messages;
 
     public TelegramLinkCommand() {
         super(TELEGRAM_MESSAGES_KEY, TelegramLinkType.getInstance());
@@ -44,11 +44,11 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
         String accountId = config.getActiveIdentifierType().getId(player);
 
         accountDatabase.getAccount(accountId).thenAccept(account -> {
-            if (!isValidAccount(account, player, TelegramLinkType.LINK_USER_FILTER))
+            if (isInvalidAccount(account, player, TelegramLinkType.LINK_USER_FILTER))
                 return;
             LinkUserIdentificator identificator = new UserNumberIdentificator(telegramIdentificator);
             accountDatabase.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
-                if (!isValidLinkAccounts(accounts, player))
+                if (isInvalidLinkAccounts(accounts, player))
                     return;
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
 
