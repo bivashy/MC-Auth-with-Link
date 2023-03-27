@@ -6,7 +6,7 @@ import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.server.message.ServerComponent;
 
-import me.mastercapexd.auth.velocity.commands.VelocityProxyCommandActor;
+import me.mastercapexd.auth.velocity.commands.VelocityServerCommandActor;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.ArgumentParseException;
 import revxrsal.commands.exception.CommandInvocationException;
