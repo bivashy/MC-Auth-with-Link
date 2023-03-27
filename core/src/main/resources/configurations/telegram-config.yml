@@ -21,7 +21,7 @@ telegram:
     - FROM_GAME
 
   # Команда в игре для привязки (Нужна для способа привязки FROM_GAME)
-  link-commands:
+  link-game-commands:
     - addtg
     - tgadd
     - linktg
