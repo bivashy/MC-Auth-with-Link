@@ -84,7 +84,7 @@ public class VelocityCommandRegistry extends ServerCommandsRegistry {
         });
 
         commandHandler.registerExceptionHandler(SendComponentException.class,
-                (actor, componentException) -> new VelocityProxyCommandActor(actor.as(VelocityCommandActor.class)).reply(componentException.getComponent()));
+                (actor, componentException) -> new VelocityServerCommandActor(actor.as(VelocityCommandActor.class)).reply(componentException.getComponent()));
         registerCommands();
     }
 }

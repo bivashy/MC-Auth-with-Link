@@ -130,6 +130,6 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
     }
 
     private void sendComponent(CommandActor actor, ServerComponent component) {
-        new VelocityProxyCommandActor(actor.as(VelocityCommandActor.class)).reply(component);
+        new VelocityServerCommandActor(actor.as(VelocityCommandActor.class)).reply(component);
     }
 }
