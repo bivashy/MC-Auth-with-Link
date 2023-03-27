@@ -4,7 +4,10 @@ import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
 
+import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
@@ -14,6 +17,8 @@ import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
+import revxrsal.commands.orphan.OrphanCommand;
+import revxrsal.commands.orphan.Orphans;
 
 public abstract class ServerCommandsRegistry {
     protected AuthPlugin plugin = AuthPlugin.instance();
@@ -111,8 +116,12 @@ public abstract class ServerCommandsRegistry {
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         if (plugin.getConfig().getVKSettings().isEnabled())
-            commandHandler.register(new VKLinkCommand());
+            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand());
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            commandHandler.register(new TelegramLinkCommand());
+            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand());
+    }
+
+    private void registerLinkCommand(LinkType linkType, OrphanCommand command) {
+        commandHandler.register(Orphans.path(linkType.getSettings().getGameLinkCommands().toArray(new String[0])).handler(command));
     }
 }
