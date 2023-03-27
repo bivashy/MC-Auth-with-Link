@@ -53,7 +53,7 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
                 String code = config.getTelegramSettings().getConfirmationSettings().generateCode();
 
                 sendLinkConfirmation(identificator, player,
-                        new TelegramConfirmationUser(account, new BaseConfirmationInfo(identificator, code, LinkConfirmationType.FROM_LINK)), accountId);
+                        new TelegramConfirmationUser(account, new BaseConfirmationInfo(identificator, code, LinkConfirmationType.FROM_GAME)), accountId);
             });
         });
     }

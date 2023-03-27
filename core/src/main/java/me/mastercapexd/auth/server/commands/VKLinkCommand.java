@@ -70,7 +70,7 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
 
                     sendLinkConfirmation(identificator, player,
-                            new VKConfirmationUser(account, new BaseConfirmationInfo(identificator, code, LinkConfirmationType.FROM_LINK)), accountId);
+                            new VKConfirmationUser(account, new BaseConfirmationInfo(identificator, code, LinkConfirmationType.FROM_GAME)), accountId);
                 });
             });
         });
