@@ -23,6 +23,7 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.BaseCustomCommandExecutionContext;
+import me.mastercapexd.auth.messenger.commands.parser.SimpleStringTokenizer;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
 
@@ -63,7 +64,7 @@ public abstract class DispatchCommandListener {
         if (LINK_TYPE.getSettings().shouldDisableConversationCommands() && isConversationPeerId(source.getPeerId()))
             return;
         CommandActor commandActor = new VKCommandActorWrapper(new BaseVkActor(source, handler));
-        ArgumentStack argumentStack = source.getArgumentStack(handler);
+        ArgumentStack argumentStack = ArgumentStack.copy(SimpleStringTokenizer.parse(source.getText()));
         if (argumentStack.isEmpty())
             return;
         handler.dispatch(commandActor, argumentStack);

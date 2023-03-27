@@ -22,6 +22,7 @@ import com.ubivaska.messenger.common.message.Message.MessageBuilder;
 import me.mastercapexd.auth.link.telegram.TelegramCommandActorWrapper;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.messenger.commands.custom.BaseCustomCommandExecutionContext;
+import me.mastercapexd.auth.messenger.commands.parser.SimpleStringTokenizer;
 import me.mastercapexd.auth.telegram.command.listener.TelegramUpdatesListener;
 import revxrsal.commands.command.ArgumentStack;
 
@@ -73,7 +74,7 @@ public class TelegramCommandUpdatesListener extends TelegramUpdatesListener {
 
     private void handleCommandDispatch(TelegramHandler handler, DispatchSource dispatchSource) {
         TelegramActor actor = new TelegramCommandActorWrapper(TelegramActor.wrap(handler, dispatchSource));
-        ArgumentStack argumentStack = handler.parseArguments(dispatchSource.getExecutionText());
+        ArgumentStack argumentStack = ArgumentStack.copy(SimpleStringTokenizer.parse(dispatchSource.getExecutionText()));
         if (argumentStack.isEmpty())
             return;
         handler.dispatch(actor, argumentStack);
