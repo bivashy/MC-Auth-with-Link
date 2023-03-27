@@ -5,7 +5,6 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
-import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
@@ -16,7 +15,6 @@ import me.mastercapexd.auth.link.user.confirmation.BaseConfirmationInfo;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
-import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
@@ -35,8 +33,8 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
 
     @Default
     @TelegramUse
-    public void telegramLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional Long telegramIdentificator) {
-        if (telegramIdentificator == null) {
+    public void telegramLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, LinkUserIdentificator identificator) {
+        if (identificator == null) {
             commandActor.replyWithMessage(messages.getMessage("usage"));
             return;
         }
@@ -46,7 +44,6 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
         accountDatabase.getAccount(accountId).thenAccept(account -> {
             if (isInvalidAccount(account, commandActor, TelegramLinkType.LINK_USER_FILTER))
                 return;
-            LinkUserIdentificator identificator = new UserNumberIdentificator(telegramIdentificator);
             accountDatabase.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
                 if (isInvalidLinkAccounts(accounts, commandActor))
                     return;

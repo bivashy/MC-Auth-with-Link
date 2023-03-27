@@ -20,7 +20,6 @@ import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
-import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class VKLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
@@ -39,8 +38,8 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
 
     @Default
     @VkUse
-    public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional String vkIdentificator) {
-        if (vkIdentificator == null) {
+    public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, LinkUserIdentificator identificator) {
+        if (identificator == null) {
             commandActor.replyWithMessage(messages.getMessage("usage"));
             return;
         }
@@ -48,29 +47,35 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
         String accountId = idSupplier.getPlayerId();
 
         plugin.getCore().runAsync(() -> {
-            GetResponse user = fetchUserFromIdentificator(vkIdentificator).orElse(null);
-            if (user == null) {
-                commandActor.replyWithMessage(messages.getMessage("user-not-exists"));
-                return;
+            long userId;
+            if (identificator.isNumber()) {
+                userId = identificator.asNumber();
+            } else {
+                GetResponse user = fetchUserFromIdentificator(identificator.asString()).orElse(null);
+                if (user == null) {
+                    commandActor.replyWithMessage(messages.getMessage("user-not-exists"));
+                    return;
+                }
+
+                if (plugin.getLinkEntryBucket().hasLinkUser(accountId, VKLinkType.getInstance())) {
+                    commandActor.replyWithMessage(messages.getMessage("already-sent"));
+                    return;
+                }
+                userId = user.getId();
             }
 
-            if (plugin.getLinkEntryBucket().hasLinkUser(accountId, VKLinkType.getInstance())) {
-                commandActor.replyWithMessage(messages.getMessage("already-sent"));
-                return;
-            }
-            int userId = user.getId();
-
+            long finalUserId = userId;
             accountStorage.getAccount(accountId).thenAccept(account -> {
                 if (isInvalidAccount(account, commandActor, VKLinkType.LINK_USER_FILTER))
                     return;
-                LinkUserIdentificator identificator = new UserNumberIdentificator(userId);
-                accountStorage.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
+                LinkUserIdentificator vkIdentificator = new UserNumberIdentificator(finalUserId);
+                accountStorage.getAccountsFromLinkIdentificator(vkIdentificator).thenAccept(accounts -> {
                     if (isInvalidLinkAccounts(accounts, commandActor))
                         return;
                     String code = config.getVKSettings().getConfirmationSettings().generateCode();
 
-                    sendLinkConfirmation(identificator, commandActor,
-                            new VKConfirmationUser(account, new BaseConfirmationInfo(identificator, code, getLinkConfirmationType())), accountId);
+                    sendLinkConfirmation(vkIdentificator, commandActor,
+                            new VKConfirmationUser(account, new BaseConfirmationInfo(vkIdentificator, code, getLinkConfirmationType())), accountId);
                 });
             });
         });
