@@ -6,10 +6,10 @@ import com.bivashy.auth.api.server.message.ServerComponent;
 
 import revxrsal.commands.velocity.VelocityCommandActor;
 
-public class VelocityProxyCommandActor implements ServerCommandActor {
+public class VelocityServerCommandActor implements ServerCommandActor {
     private final VelocityCommandActor actor;
 
-    public VelocityProxyCommandActor(VelocityCommandActor actor) {
+    public VelocityServerCommandActor(VelocityCommandActor actor) {
         this.actor = actor;
     }
 
