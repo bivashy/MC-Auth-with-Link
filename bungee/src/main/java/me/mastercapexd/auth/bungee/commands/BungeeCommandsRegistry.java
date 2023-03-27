@@ -5,8 +5,10 @@ import java.util.Collections;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 
 import me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap;
 import me.mastercapexd.auth.bungee.commands.exception.BungeeExceptionHandler;
@@ -23,20 +25,19 @@ import revxrsal.commands.annotation.dynamic.Annotations;
 import revxrsal.commands.bungee.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.core.BungeeHandler;
+import revxrsal.commands.process.ContextResolver.ContextResolverContext;
 
 public class BungeeCommandsRegistry extends ServerCommandsRegistry {
+    private final PluginConfig config;
+
     public BungeeCommandsRegistry(BungeeAuthPluginBootstrap pluginBootstrap, AuthPlugin authPlugin) {
-        super(new BungeeHandler(pluginBootstrap).setExceptionHandler(
-                new BungeeExceptionHandler(authPlugin.getConfig().getServerMessages())).disableStackTraceSanitizing());
-        PluginConfig config = authPlugin.getConfig();
-        commandHandler.registerContextResolver(ServerPlayer.class, (context) -> {
-            ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
-            if (selfPlayer == null)
-                throw new SendComponentException(config.getServerMessages().getMessage("players-only"));
-            return new BungeeServerPlayer(selfPlayer);
-        });
-        commandHandler.registerContextResolver(ServerCommandActor.class,
-                (context) -> new BungeeServerCommandActor(context.actor().as(BungeeCommandActor.class)));
+        super(new BungeeHandler(pluginBootstrap).setExceptionHandler(new BungeeExceptionHandler(authPlugin.getConfig().getServerMessages()))
+                .disableStackTraceSanitizing());
+        this.config = authPlugin.getConfig();
+        commandHandler.registerContextResolver(ServerPlayer.class, this::resolveServerPlayer);
+        commandHandler.registerContextResolver(PlayerIdSupplier.class, this::resolveServerPlayer);
+        commandHandler.registerContextResolver(MessageableCommandActor.class, this::resolveServerCommandActor);
+        commandHandler.registerContextResolver(ServerCommandActor.class, this::resolveServerCommandActor);
         commandHandler.registerValueResolver(ArgumentServerPlayer.class, (context) -> {
             String value = context.pop();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
@@ -59,9 +60,8 @@ public class BungeeCommandsRegistry extends ServerCommandsRegistry {
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
             if (account.getCurrentAuthenticationStep().getStepName().equals(stepName))
                 return;
-            throw new SendComponentException(config.getServerMessages()
-                    .getSubMessages("authentication-step-usage")
-                    .getMessage(account.getCurrentAuthenticationStep().getStepName()));
+            throw new SendComponentException(
+                    config.getServerMessages().getSubMessages("authentication-step-usage").getMessage(account.getCurrentAuthenticationStep().getStepName()));
         });
         commandHandler.registerContextResolver(Account.class, (context) -> {
             ServerPlayer player = new BungeeServerPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
@@ -86,5 +86,16 @@ public class BungeeCommandsRegistry extends ServerCommandsRegistry {
         commandHandler.registerExceptionHandler(SendComponentException.class,
                 (actor, componentException) -> new BungeeServerCommandActor(actor.as(BungeeCommandActor.class)).reply(componentException.getComponent()));
         registerCommands();
+    }
+
+    private BungeeServerCommandActor resolveServerCommandActor(ContextResolverContext context) {
+        return new BungeeServerCommandActor(context.actor().as(BungeeCommandActor.class));
+    }
+
+    private BungeeServerPlayer resolveServerPlayer(ContextResolverContext context) {
+        ProxiedPlayer selfPlayer = context.actor().as(BungeeCommandActor.class).asPlayer();
+        if (selfPlayer == null)
+            throw new SendComponentException(config.getServerMessages().getMessage("players-only"));
+        return new BungeeServerPlayer(selfPlayer);
     }
 }

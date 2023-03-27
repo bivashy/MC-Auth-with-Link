@@ -6,8 +6,10 @@ import java.util.Optional;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.velocitypowered.api.proxy.Player;
 
 import me.mastercapexd.auth.server.commands.ServerCommandsRegistry;
@@ -20,23 +22,22 @@ import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 import me.mastercapexd.auth.velocity.commands.exception.VelocityExceptionHandler;
 import me.mastercapexd.auth.velocity.player.VelocityServerPlayer;
 import revxrsal.commands.annotation.dynamic.Annotations;
+import revxrsal.commands.process.ContextResolver.ContextResolverContext;
 import revxrsal.commands.velocity.VelocityCommandActor;
 import revxrsal.commands.velocity.annotation.CommandPermission;
 import revxrsal.commands.velocity.core.VelocityHandler;
 
 public class VelocityCommandRegistry extends ServerCommandsRegistry {
+    private final PluginConfig config;
+
     public VelocityCommandRegistry(VelocityAuthPluginBootstrap pluginBootstrap, AuthPlugin authPlugin) {
         super(new VelocityHandler(pluginBootstrap, pluginBootstrap.getProxyServer()).setExceptionHandler(
                 new VelocityExceptionHandler(authPlugin.getConfig().getServerMessages())).disableStackTraceSanitizing());
-        PluginConfig config = authPlugin.getConfig();
-        commandHandler.registerContextResolver(ServerPlayer.class, (context) -> {
-            Player player = context.actor().as(VelocityCommandActor.class).getAsPlayer();
-            if (player == null)
-                throw new SendComponentException(config.getServerMessages().getMessage("players-only"));
-            return new VelocityServerPlayer(player);
-        });
-        commandHandler.registerContextResolver(ServerCommandActor.class,
-                (context) -> new VelocityProxyCommandActor(context.actor().as(VelocityCommandActor.class)));
+        this.config = authPlugin.getConfig();
+        commandHandler.registerContextResolver(ServerPlayer.class, this::resolveServerPlayer);
+        commandHandler.registerContextResolver(PlayerIdSupplier.class, this::resolveServerPlayer);
+        commandHandler.registerContextResolver(MessageableCommandActor.class, this::resolveServerCommandActor);
+        commandHandler.registerContextResolver(ServerCommandActor.class, this::resolveServerCommandActor);
         commandHandler.registerValueResolver(ArgumentServerPlayer.class, (context) -> {
             String value = context.pop();
             Optional<ServerPlayer> player = authPlugin.getCore().getPlayer(value);
@@ -86,5 +87,16 @@ public class VelocityCommandRegistry extends ServerCommandsRegistry {
         commandHandler.registerExceptionHandler(SendComponentException.class,
                 (actor, componentException) -> new VelocityServerCommandActor(actor.as(VelocityCommandActor.class)).reply(componentException.getComponent()));
         registerCommands();
+    }
+
+    private VelocityServerCommandActor resolveServerCommandActor(ContextResolverContext context) {
+        return new VelocityServerCommandActor(context.actor().as(VelocityCommandActor.class));
+    }
+
+    private VelocityServerPlayer resolveServerPlayer(ContextResolverContext context) {
+        Player player = context.actor().as(VelocityCommandActor.class).getAsPlayer();
+        if (player == null)
+            throw new SendComponentException(config.getServerMessages().getMessage("players-only"));
+        return new VelocityServerPlayer(player);
     }
 }
