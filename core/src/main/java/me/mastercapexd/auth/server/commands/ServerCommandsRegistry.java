@@ -1,13 +1,17 @@
 package me.mastercapexd.auth.server.commands;
 
+import java.util.Optional;
+
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
-import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
@@ -21,6 +25,7 @@ import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
 import me.mastercapexd.auth.shared.commands.VKLinkCommand;
+import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.orphan.OrphanCommand;
@@ -40,15 +45,33 @@ public abstract class ServerCommandsRegistry {
     private void registerCommandContexts() {
         PluginConfig config = plugin.getConfig();
 
-        commandHandler.registerValueResolver(LinkUserIdentificator.class, (context) -> {
-            String argument = context.pop();
-            if (!isInt(argument))
-                return new UserStringIdentificator(argument);
-            return new UserNumberIdentificator(Integer.parseInt(argument));
-        });
-        commandHandler.registerValueResolver(UserNumberIdentificator.class, (context) -> new UserNumberIdentificator(context.popInt()));
+        commandHandler.registerValueResolver(LinkUserIdentificator.class, context -> null);
+        commandHandler.registerValueResolver(UserNumberIdentificator.class, context -> new UserNumberIdentificator(context.popInt()));
 
-        commandHandler.registerValueResolver(DoublePassword.class, (context) -> {
+        commandHandler.registerValueResolver(MessengerLinkContext.class, context -> {
+            String code = context.popForParameter();
+
+            Optional<LinkConfirmationUser> confirmationUserOptional = plugin.getLinkConfirmationBucket()
+                    .findFirst(user -> user.getConfirmationCode().equals(code));
+
+            if (!confirmationUserOptional.isPresent())
+                throw new SendComponentException(config.getServerMessages().getSubMessages("link-code").getMessage("no-code"));
+
+            LinkConfirmationUser confirmationUser = confirmationUserOptional.get();
+
+            if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutTimestamp())
+                throw new SendComponentException(config.getServerMessages().getSubMessages("link-code").getMessage("timed-out"));
+
+            LinkUser linkUser = confirmationUser.getLinkTarget()
+                    .findFirstLinkUserOrNew(user -> user.getLinkType().equals(confirmationUser.getLinkType()), confirmationUser.getLinkType());
+
+            if (!linkUser.isIdentifierDefaultOrNull())
+                throw new SendComponentException(config.getServerMessages().getSubMessages("link-code").getMessage("already-linked"));
+
+            return new MessengerLinkContext(code, confirmationUser);
+        });
+
+        commandHandler.registerValueResolver(DoublePassword.class, context -> {
             ArgumentStack arguments = context.arguments();
             String oldPassword = arguments.pop();
             if (arguments.isEmpty())
@@ -119,6 +142,7 @@ public abstract class ServerCommandsRegistry {
     }
 
     private void registerDependencies() {
+        commandHandler.registerDependency(LinkConfirmationBucket.class, plugin.getLinkConfirmationBucket());
         commandHandler.registerDependency(PluginConfig.class, plugin.getConfig());
         commandHandler.registerDependency(ServerMessages.class, plugin.getConfig().getServerMessages());
         commandHandler.registerDependency(AccountDatabase.class, plugin.getAccountDatabase());
@@ -132,8 +156,8 @@ public abstract class ServerCommandsRegistry {
         if (plugin.getConfig().getVKSettings().isEnabled())
             registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig()
-                    .getServerMessages()));
+            registerLinkCommand(TelegramLinkType.getInstance(),
+                    new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand command) {

@@ -1,23 +1,26 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.model.PlayerIdSupplier;
+import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
-import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
+import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.Orphans;
@@ -50,6 +53,12 @@ public abstract class MessengerCommandRegistry {
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("google-disabled"));
         });
 
+        commandHandler.registerContextResolver(MessageableCommandActor.class, context -> context.actor().as(LinkCommandActorWrapper.class));
+
+        commandHandler.registerValueResolver(PlayerIdSupplier.class, context -> PlayerIdSupplier.of(context.pop()));
+
+        commandHandler.registerContextResolver(LinkUserIdentificator.class, context -> context.actor().as(LinkCommandActorWrapper.class).userId());
+
         commandHandler.registerValueResolver(NewPassword.class, context -> {
             String newRawPassword = context.pop();
             if (newRawPassword.length() < PLUGIN.getConfig().getPasswordMinLength())
@@ -62,34 +71,24 @@ public abstract class MessengerCommandRegistry {
 
         commandHandler.registerValueResolver(MessengerLinkContext.class, (context) -> {
             String code = context.popForParameter();
-            LinkCommandActorWrapper commandActor = context.actor().as(LinkCommandActorWrapper.class);
 
-            List<LinkConfirmationUser> confirmationUsers = PLUGIN.getLinkConfirmationBucket()
-                    .getLinkUsers(
-                            linkUser -> linkUser.getLinkType().equals(linkType) && linkUser.getLinkUserInfo().getIdentificator().equals(commandActor.userId()));
+            Optional<LinkConfirmationUser> confirmationUserOptional = PLUGIN.getLinkConfirmationBucket()
+                    .findFirst(user -> user.getConfirmationCode().equals(code));
 
-            if (confirmationUsers.isEmpty())
+            if (!confirmationUserOptional.isPresent())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-no-code"));
 
-            LinkConfirmationUser confirmationUser = confirmationUsers.stream()
-                    .filter(user -> user.getConfirmationInfo().getConfirmationCode().equals(code))
-                    .findFirst()
-                    .orElse(null);
+            LinkConfirmationUser confirmationUser = confirmationUserOptional.get();
 
-            if (confirmationUser == null)
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-error"));
+            if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutTimestamp())
+                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-timed-out"));
 
-            if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutMillis())
-                throw new SendMessageException(
-                        linkType.getSettings().getMessages().getMessage("confirmation-timed-out", linkType.newMessageContext(confirmationUser.getAccount())));
-
-            LinkUser linkUser = confirmationUser.getAccount()
-                    .findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType);
+            LinkUser linkUser = confirmationUser.getLinkTarget().findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType);
 
             if (!linkUser.isIdentifierDefaultOrNull())
                 throw new SendMessageException(linkType.getSettings()
                         .getMessages()
-                        .getMessage("confirmation-already-linked", linkType.newMessageContext(confirmationUser.getAccount())));
+                        .getMessage("confirmation-already-linked", linkType.newMessageContext(confirmationUser.getLinkTarget())));
 
             return new MessengerLinkContext(code, confirmationUser);
         });
@@ -112,6 +111,7 @@ public abstract class MessengerCommandRegistry {
     }
 
     private void registerDependencies() {
+        commandHandler.registerDependency(LinkConfirmationBucket.class, PLUGIN.getLinkConfirmationBucket());
         commandHandler.registerDependency(AccountDatabase.class, PLUGIN.getAccountDatabase());
         commandHandler.registerDependency(PluginConfig.class, PLUGIN.getConfig());
         commandHandler.registerDependency(AuthPlugin.class, PLUGIN);
@@ -119,7 +119,8 @@ public abstract class MessengerCommandRegistry {
     }
 
     protected void registerCommands() {
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths()).handler(new LinkCodeCommand()));
+        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths())
+                .handler(new LinkCodeCommand(LinkConfirmationType.FROM_LINK, linkType.getLinkMessages())));
         commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("confirmation-toggle").getCommandPaths())
                 .handler(new ConfirmationToggleCommand()));
         commandHandler.register(
