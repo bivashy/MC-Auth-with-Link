@@ -31,7 +31,7 @@ public class MessengerLinkCommandTemplate implements OrphanCommand {
 
     public boolean isInvalidAccount(Account account, MessageableCommandActor commandActor, Predicate<LinkUser> linkFilter) {
         if (account == null || !account.isRegistered()) {
-            commandActor.replyWithMessage(config.getServerMessages().getMessage("account-not-found"));
+            commandActor.replyWithMessage(messages.getMessage("account-not-found"));
             return true;
         }
         LinkUser linkUser = account.findFirstLinkUserOrNew(linkFilter, linkType);
