@@ -98,7 +98,7 @@ telegram:
       aliases:
         - '/restore'
     code:
-      main-command: '/код'
+      main-command: 'code'
       aliases:
         - '/code'
     confirmation-toggle:
