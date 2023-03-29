@@ -14,7 +14,9 @@ import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
-public class MessengerLinkCommandTemplate {
+import revxrsal.commands.orphan.OrphanCommand;
+
+public class MessengerLinkCommandTemplate implements OrphanCommand {
     private final AuthPlugin plugin = AuthPlugin.instance();
     private final PluginConfig config = plugin.getConfig();
     private final LinkConfirmationType linkConfirmationType;

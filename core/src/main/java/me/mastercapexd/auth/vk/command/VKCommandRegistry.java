@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.vk.command;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -10,6 +11,8 @@ import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKCommandActorWrapper;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.MessengerCommandRegistry;
+import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
+import me.mastercapexd.auth.shared.commands.VKLinkCommand;
 import revxrsal.commands.CommandHandler;
 
 public class VKCommandRegistry extends MessengerCommandRegistry {
@@ -35,5 +38,10 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
             e.printStackTrace();
             System.err.println("Give all permissions to the vk api token for the automatically settings apply.");
         }
+    }
+
+    @Override
+    protected MessengerLinkCommandTemplate createLinkCommand() {
+        return new VKLinkCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getLinkMessages());
     }
 }

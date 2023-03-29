@@ -23,6 +23,7 @@ import me.mastercapexd.auth.server.commands.exception.SendComponentException;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
+import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
 import me.mastercapexd.auth.shared.commands.VKLinkCommand;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
@@ -154,22 +155,22 @@ public abstract class ServerCommandsRegistry {
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         if (plugin.getConfig().getVKSettings().isEnabled())
-            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig().getServerMessages()));
+            registerLinkCommand(VKLinkType.getInstance(),
+                    new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
+                    new LinkCodeCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(TelegramLinkType.getInstance(),
-                    new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig().getServerMessages()));
+            registerLinkCommand(VKLinkType.getInstance(),
+                    new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, TelegramLinkType.getInstance().getServerMessages()),
+                    new LinkCodeCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getServerMessages()));
     }
 
-    private void registerLinkCommand(LinkType linkType, OrphanCommand command) {
-        commandHandler.register(Orphans.path(linkType.getSettings().getGameLinkCommands().toArray(new String[0])).handler(command));
-    }
-
-    private boolean isInt(String value) {
-        try {
-            Integer.parseInt(value);
-            return true;
-        } catch(NumberFormatException e) {
-            return false;
-        }
+    private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand, OrphanCommand codeCommand) {
+        linkType.getSettings().getLinkConfirmationTypes().forEach(confirmationType -> {
+            if (confirmationType == LinkConfirmationType.FROM_LINK)
+                commandHandler.register(
+                        Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("link-game").getCommandPaths()).handler(linkCommand));
+            if (confirmationType == LinkConfirmationType.FROM_GAME)
+                commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths()).handler(codeCommand));
+        });
     }
 }

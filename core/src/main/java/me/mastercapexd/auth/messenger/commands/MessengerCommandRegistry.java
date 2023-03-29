@@ -20,6 +20,7 @@ import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandl
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
+import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
@@ -119,8 +120,17 @@ public abstract class MessengerCommandRegistry {
     }
 
     protected void registerCommands() {
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths())
-                .handler(new LinkCodeCommand(LinkConfirmationType.FROM_LINK, linkType.getLinkMessages())));
+        linkType.getSettings()
+                .getLinkConfirmationTypes()
+                .forEach(confirmationType -> {
+                    if (confirmationType == LinkConfirmationType.FROM_LINK)
+                        commandHandler.register(
+                                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths())
+                                        .handler(new LinkCodeCommand(confirmationType, linkType.getLinkMessages())));
+                    if (confirmationType == LinkConfirmationType.FROM_GAME)
+                        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("link-game").getCommandPaths())
+                                .handler(createLinkCommand()));
+                });
         commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("confirmation-toggle").getCommandPaths())
                 .handler(new ConfirmationToggleCommand()));
         commandHandler.register(
@@ -145,4 +155,6 @@ public abstract class MessengerCommandRegistry {
         commandHandler.register(
                 Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("admin-panel").getCommandPaths()).handler(new AdminPanelCommand()));
     }
+
+    protected abstract MessengerLinkCommandTemplate createLinkCommand();
 }

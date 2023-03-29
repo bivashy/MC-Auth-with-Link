@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.telegram.command;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.ubivashka.lamp.telegram.core.TelegramHandler;
 
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
@@ -8,6 +9,8 @@ import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.telegram.TelegramCommandActorWrapper;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.messenger.commands.MessengerCommandRegistry;
+import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
+import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
 import revxrsal.commands.CommandHandler;
 
 public class TelegramCommandRegistry extends MessengerCommandRegistry {
@@ -34,5 +37,10 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
                 System.err.println("Please use another token if you need to run multiple bot instances");
             }
         });
+    }
+
+    @Override
+    protected MessengerLinkCommandTemplate createLinkCommand() {
+        return new TelegramLinkCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getLinkMessages());
     }
 }
