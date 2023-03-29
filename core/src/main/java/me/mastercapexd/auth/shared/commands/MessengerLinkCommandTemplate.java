@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.shared.commands;
 
-import java.util.Collection;
 import java.util.function.Predicate;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -11,7 +10,6 @@ import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
-import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
@@ -41,23 +39,10 @@ public class MessengerLinkCommandTemplate {
         return false;
     }
 
-    public boolean isInvalidLinkAccounts(Collection<Account> accounts, MessageableCommandActor commandActor) {
-        if (linkType.getSettings().getMaxLinkCount() != 0 && accounts.size() >= linkType.getSettings().getMaxLinkCount()) {
-            commandActor.replyWithMessage(messages.getMessage("link-limit-reached"));
-            return true;
-        }
-        return false;
-    }
-
-    public void sendLinkConfirmation(LinkUserIdentificator identificator, MessageableCommandActor commandActor, LinkConfirmationUser confirmationUser,
-            String accountId) {
-        plugin.getLinkConfirmationBucket()
-                .removeLinkUsers(linkConfirmationUser -> linkConfirmationUser.getAccount().getPlayerId().equals(accountId) &&
-                        linkConfirmationUser.getLinkUserInfo().getIdentificator().equals(identificator) &&
-                        linkConfirmationUser.getConfirmationInfo().getLinkConfirmationType() == linkConfirmationType);
-        plugin.getLinkConfirmationBucket().addLinkUser(confirmationUser);
+    public void sendLinkConfirmation(MessageableCommandActor commandActor, LinkConfirmationUser confirmationUser) {
+        plugin.getLinkConfirmationBucket().addLinkConfirmation(confirmationUser);
         commandActor.replyWithMessage(
-                messages.getMessage("confirmation-sent", MessageContext.of("%code%", confirmationUser.getConfirmationInfo().getConfirmationCode())));
+                messages.getMessage("confirmation-sent", MessageContext.of("%code%", confirmationUser.getConfirmationCode())));
     }
 
     public LinkConfirmationType getLinkConfirmationType() {
