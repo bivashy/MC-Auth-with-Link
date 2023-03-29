@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.shared.commands;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
@@ -41,11 +42,22 @@ public class MessengerLinkCommandTemplate {
 
     public void sendLinkConfirmation(MessageableCommandActor commandActor, LinkConfirmationUser confirmationUser) {
         plugin.getLinkConfirmationBucket().addLinkConfirmation(confirmationUser);
-        commandActor.replyWithMessage(
-                messages.getMessage("confirmation-sent", MessageContext.of("%code%", confirmationUser.getConfirmationCode())));
+        commandActor.replyWithMessage(messages.getMessage("confirmation-sent", MessageContext.of("%code%", confirmationUser.getConfirmationCode())));
     }
 
     public LinkConfirmationType getLinkConfirmationType() {
         return linkConfirmationType;
+    }
+
+    public String generateCode(Supplier<String> codeGenerator) {
+        String code;
+        do {
+            code = codeGenerator.get();
+        } while(codeExists(code));
+        return code;
+    }
+
+    private boolean codeExists(String code) {
+        return plugin.getLinkConfirmationBucket().findFirst(user -> user.getConfirmationCode().equals(code)).isPresent();
     }
 }
