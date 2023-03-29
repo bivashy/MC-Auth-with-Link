@@ -1,31 +1,35 @@
 package me.mastercapexd.auth.link.user.confirmation;
 
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.link.LinkType;
-import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationInfo;
 import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
-import com.bivashy.auth.api.link.user.info.LinkUserInfo;
+import com.bivashy.auth.api.type.LinkConfirmationType;
 
-import me.mastercapexd.auth.link.user.LinkUserTemplate;
-
-public class BaseLinkConfirmationUser extends LinkUserTemplate implements LinkConfirmationUser {
+public class BaseLinkConfirmationUser implements LinkConfirmationUser {
+    private final LinkConfirmationType linkConfirmationType;
     private final long linkTimeoutMillis;
-    private final LinkConfirmationInfo confirmationInfo;
+    private final Account target;
+    private final String code;
 
-    public BaseLinkConfirmationUser(LinkType linkType, Account account, LinkConfirmationInfo confirmationInfo) {
-        super(linkType, account);
-        this.linkTimeoutMillis = System.currentTimeMillis() + linkType.getSettings().getConfirmationSettings().getRemoveDelay().getMillis();
-        this.confirmationInfo = confirmationInfo;
+    public BaseLinkConfirmationUser(LinkConfirmationType linkConfirmationType, long linkTimeoutMillis, Account target, String code) {
+        this.linkConfirmationType = linkConfirmationType;
+        this.linkTimeoutMillis = linkTimeoutMillis;
+        this.target = target;
+        this.code = code;
     }
 
     @Override
-    public LinkUserInfo getLinkUserInfo() {
-        return confirmationInfo;
+    public String getConfirmationCode() {
+        return code;
     }
 
     @Override
-    public LinkConfirmationInfo getConfirmationInfo() {
-        return confirmationInfo;
+    public LinkConfirmationType getLinkConfirmationType() {
+        return linkConfirmationType;
+    }
+
+    @Override
+    public Account getLinkTarget() {
+        return target;
     }
 
     @Override
