@@ -1,8 +1,6 @@
 package com.bivashy.auth.api.link.user.confirmation;
 
-import com.bivashy.auth.api.link.user.LinkUser;
-
-public interface LinkConfirmationUser extends LinkUser {
+public interface LinkConfirmationUser {
     LinkConfirmationInfo getConfirmationInfo();
 
     long getLinkTimeoutMillis();

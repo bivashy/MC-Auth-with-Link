@@ -13,12 +13,12 @@ import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
 import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
+import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.duration.ConfigurationDuration;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
-import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
@@ -38,12 +38,15 @@ import me.mastercapexd.auth.bucket.BaseAuthenticationStepContextFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationStepFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationTaskBucket;
 import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
+import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
 import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
+import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
+import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.BaseLinkTypeProvider;
@@ -57,8 +60,6 @@ import me.mastercapexd.auth.step.impl.RegisterAuthenticationStep.RegisterAuthent
 import me.mastercapexd.auth.step.impl.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepFactory;
-import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
-import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
 import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
 import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
@@ -70,7 +71,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final ConfigurationProcessor configurationProcessor = new SpongeConfigurateProcessor();
     private final Map<Class<? extends PluginHook>, PluginHook> hooks = new HashMap<>();
     private final AuthenticationTaskBucket taskBucket = new BaseAuthenticationTaskBucket();
-    private final LinkAuthenticationBucket<LinkConfirmationUser> linkConfirmationBucket = new BaseLinkAuthenticationBucket<>();
+    private final LinkConfirmationBucket linkConfirmationBucket = new BaseLinkConfirmationBucket();
     private final LinkAuthenticationBucket<LinkEntryUser> linkEntryBucket = new BaseLinkAuthenticationBucket<>();
     private final AuthenticationStepFactoryBucket authenticationStepFactoryBucket = new BaseAuthenticationStepFactoryBucket();
     private final String version;
@@ -235,7 +236,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     @Override
-    public LinkAuthenticationBucket<LinkConfirmationUser> getLinkConfirmationBucket() {
+    public LinkConfirmationBucket getLinkConfirmationBucket() {
         return linkConfirmationBucket;
     }
 
