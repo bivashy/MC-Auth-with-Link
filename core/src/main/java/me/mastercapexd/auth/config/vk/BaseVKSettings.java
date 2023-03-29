@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.config.vk;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -49,7 +50,7 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     @ConfigField("disable-conversation-commands")
     private boolean disableConversationCommands;
     @ConfigField("link-confirm-ways")
-    private List<LinkConfirmationType> linkConfirmationTypes;
+    private List<LinkConfirmationType> linkConfirmationTypes = Collections.singletonList(LinkConfirmationType.FROM_LINK);
     @ConfigField("link-game-commands")
     private List<String> gameLinkCommands;
 
@@ -117,7 +118,7 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
 
     @Override
     public List<LinkConfirmationType> getLinkConfirmationTypes() {
-        return linkConfirmationTypes;
+        return Collections.unmodifiableList(linkConfirmationTypes);
     }
 
     @Override

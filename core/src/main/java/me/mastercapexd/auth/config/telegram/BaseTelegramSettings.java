@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.config.telegram;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -44,7 +45,7 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     @ConfigField("admin-accounts")
     private List<Number> adminAccounts;
     @ConfigField("link-confirm-ways")
-    private List<LinkConfirmationType> linkConfirmationTypes;
+    private List<LinkConfirmationType> linkConfirmationTypes = Collections.singletonList(LinkConfirmationType.FROM_LINK);
 
     public BaseTelegramSettings() {
     }
@@ -118,7 +119,7 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
 
     @Override
     public List<LinkConfirmationType> getLinkConfirmationTypes() {
-        return linkConfirmationTypes;
+        return Collections.unmodifiableList(linkConfirmationTypes);
     }
 
     @Override
