@@ -61,6 +61,8 @@ telegram:
   telegram-commands: # Основные команды
     link-game:
       main-command: 'addtg'
+      aliases:
+        - '/addtg'
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле
       aliases: # Не обязательное поле, это алиасы к команде

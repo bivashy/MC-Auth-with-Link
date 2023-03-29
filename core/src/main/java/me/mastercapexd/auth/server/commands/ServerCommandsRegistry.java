@@ -159,7 +159,7 @@ public abstract class ServerCommandsRegistry {
                     new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
                     new LinkCodeCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(VKLinkType.getInstance(),
+            registerLinkCommand(TelegramLinkType.getInstance(),
                     new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, TelegramLinkType.getInstance().getServerMessages()),
                     new LinkCodeCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getServerMessages()));
     }

@@ -62,7 +62,9 @@ vk:
 
   vk-commands: # Основные команды
     link-game:
-      main-command: '/addvk'
+      main-command: 'addvk'
+      aliases:
+        - '/addvk'
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле
       aliases: # Не обязательное поле, это алиасы к команде
