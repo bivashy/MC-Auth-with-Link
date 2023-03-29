@@ -109,10 +109,9 @@ public class BaseLoginManagement implements LoginManagement {
     public void onDisconnect(ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         plugin.getLinkEntryBucket().removeLinkUsers(entryUser -> entryUser.getAccount().getPlayerId().equals(id));
-        if (plugin.getAuthenticatingAccountBucket().isAuthorizing(player)) {
-            plugin.getAuthenticatingAccountBucket().removeAuthorizingAccount(player);
+        long loginDuration = System.currentTimeMillis() - plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(player);
+        if (plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
             return;
-        }
         accountDatabase.getAccount(id).thenAccept(account -> {
             account.setLastQuitTimestamp(System.currentTimeMillis());
             accountDatabase.saveOrUpdateAccount(account);

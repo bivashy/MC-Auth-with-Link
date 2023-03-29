@@ -36,6 +36,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
                 account.getPlayer()
                         .ifPresent(
                                 player -> player.disconnect(plugin.getConfig().getServerMessages().getMessage("time-left", new ServerMessageContext(account))));
+                plugin.getAuthenticatingAccountBucket().removeAuthorizingAccount(account);
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
