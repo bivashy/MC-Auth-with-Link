@@ -130,10 +130,10 @@ public abstract class ServerCommandsRegistry {
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         if (plugin.getConfig().getVKSettings().isEnabled())
-            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
+            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(TelegramLinkType.getInstance(),
-                    new TelegramLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
+            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, plugin.getConfig()
+                    .getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand command) {
