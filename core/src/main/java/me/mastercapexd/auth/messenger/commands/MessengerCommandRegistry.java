@@ -74,7 +74,7 @@ public abstract class MessengerCommandRegistry {
             String code = context.popForParameter();
 
             Optional<LinkConfirmationUser> confirmationUserOptional = PLUGIN.getLinkConfirmationBucket()
-                    .findFirst(user -> user.getConfirmationCode().equals(code));
+                    .findFirst(user -> user.getConfirmationCode().equals(code) && user.getLinkType().equals(linkType));
 
             if (!confirmationUserOptional.isPresent())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("confirmation-no-code"));
