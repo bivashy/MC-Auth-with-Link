@@ -48,11 +48,6 @@ public class LinkCodeCommand implements OrphanCommand {
 
                     accountDatabase.saveOrUpdateAccount(account);
 
-                    linkContext.getConfirmationUser()
-                            .getLinkTarget()
-                            .getPlayer()
-                            .ifPresent(player -> player.sendMessage(linkType.getServerMessages().getMessage("linked")));
-
                     actor.replyWithMessage(messages.getMessage("confirmation-success"));
                     linkConfirmationBucket.removeLinkConfirmation(linkContext.getConfirmationUser());
                 }));
