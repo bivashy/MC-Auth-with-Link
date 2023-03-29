@@ -13,7 +13,7 @@ public enum LinkConfirmationType {
 
         @Override
         public LinkUserIdentificator selectLinkUserIdentificator(LinkConfirmationUser confirmationUser, LinkUserIdentificator identificator) {
-            return confirmationUser.getLinkUserIdentificator().orElseThrow(NullPointerException::new);
+            return confirmationUser.getLinkUserIdentificator();
         }
     }, FROM_LINK {
         @Override
