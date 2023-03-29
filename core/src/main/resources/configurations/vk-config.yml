@@ -16,14 +16,7 @@ vk:
   # FROM_GAME - Игрок привязывает с помощью ввода команды в игре, и подтверждения в соц. сети
   # FROM_LINK - Игрок приязываает с помощью ввода команды в соц. сети, и подтверждения в игре
   link-confirm-ways:
-    - FROM_GAME
-
-  # Команда в игре для привязки (Нужна для способа привязки FROM_GAME)
-  link-game-commands:
-    - addvk
-    - vkadd
-    - linkvk
-    - vklink
+    - FROM_LINK
 
   confirmation:
     # За сколько времени игрок должен привязать аккаунт
@@ -67,7 +60,9 @@ vk:
   # Выключает сообщения из беседы
   disable-conversation-commands: true
 
-  vk-commands: # Основные команды 
+  vk-commands: # Основные команды
+    link-game:
+      main-command: '/addvk'
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле
       aliases: # Не обязательное поле, это алиасы к команде

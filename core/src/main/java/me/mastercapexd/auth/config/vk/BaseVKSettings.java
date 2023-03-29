@@ -121,11 +121,6 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     }
 
     @Override
-    public List<String> getGameLinkCommands() {
-        return gameLinkCommands;
-    }
-
-    @Override
     public LinkKeyboards getKeyboards() {
         return keyboards;
     }

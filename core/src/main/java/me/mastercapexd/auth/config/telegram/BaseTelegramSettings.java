@@ -45,8 +45,6 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     private List<Number> adminAccounts;
     @ConfigField("link-confirm-ways")
     private List<LinkConfirmationType> linkConfirmationTypes;
-    @ConfigField("link-game-commands")
-    private List<String> gameLinkCommands;
 
     public BaseTelegramSettings() {
     }
@@ -121,11 +119,6 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     @Override
     public List<LinkConfirmationType> getLinkConfirmationTypes() {
         return linkConfirmationTypes;
-    }
-
-    @Override
-    public List<String> getGameLinkCommands() {
-        return gameLinkCommands;
     }
 
     @Override

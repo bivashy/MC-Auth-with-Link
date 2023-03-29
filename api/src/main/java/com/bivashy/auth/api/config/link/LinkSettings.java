@@ -34,7 +34,5 @@ public interface LinkSettings {
 
     List<LinkConfirmationType> getLinkConfirmationTypes();
 
-    List<String> getGameLinkCommands();
-
     boolean shouldDisableConversationCommands();
 }
