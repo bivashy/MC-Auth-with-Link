@@ -5,6 +5,9 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
@@ -36,6 +39,14 @@ public abstract class ServerCommandsRegistry {
 
     private void registerCommandContexts() {
         PluginConfig config = plugin.getConfig();
+
+        commandHandler.registerValueResolver(LinkUserIdentificator.class, (context) -> {
+            String argument = context.pop();
+            if (!isInt(argument))
+                return new UserStringIdentificator(argument);
+            return new UserNumberIdentificator(Integer.parseInt(argument));
+        });
+        commandHandler.registerValueResolver(UserNumberIdentificator.class, (context) -> new UserNumberIdentificator(context.popInt()));
 
         commandHandler.registerValueResolver(DoublePassword.class, (context) -> {
             ArgumentStack arguments = context.arguments();
@@ -121,10 +132,20 @@ public abstract class ServerCommandsRegistry {
         if (plugin.getConfig().getVKSettings().isEnabled())
             registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
+            registerLinkCommand(TelegramLinkType.getInstance(),
+                    new TelegramLinkCommand(LinkConfirmationType.FROM_GAME, plugin.getConfig().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand command) {
         commandHandler.register(Orphans.path(linkType.getSettings().getGameLinkCommands().toArray(new String[0])).handler(command));
+    }
+
+    private boolean isInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch(NumberFormatException e) {
+            return false;
+        }
     }
 }
