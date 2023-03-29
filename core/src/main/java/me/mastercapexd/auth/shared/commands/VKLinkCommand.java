@@ -4,8 +4,6 @@ import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.database.AccountDatabase;
-import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
-import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
@@ -14,8 +12,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 
 import me.mastercapexd.auth.hooks.VkPluginHook;
-import me.mastercapexd.auth.link.user.confirmation.BaseConfirmationInfo;
-import me.mastercapexd.auth.link.vk.VKConfirmationUser;
+import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
 import revxrsal.commands.annotation.Default;
@@ -29,55 +26,23 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
     private PluginConfig config;
     @Dependency
     private AccountDatabase accountStorage;
-    private Messages<?> messages;
 
     public VKLinkCommand(LinkConfirmationType linkConfirmationType, Messages<?> messages) {
         super(linkConfirmationType, messages, VKLinkType.getInstance());
-        this.messages = messages;
     }
 
     @Default
     @VkUse
-    public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, LinkUserIdentificator identificator) {
-        if (identificator == null) {
-            commandActor.replyWithMessage(messages.getMessage("usage"));
-            return;
-        }
-
+    public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier) {
         String accountId = idSupplier.getPlayerId();
 
-        plugin.getCore().runAsync(() -> {
-            long userId;
-            if (identificator.isNumber()) {
-                userId = identificator.asNumber();
-            } else {
-                GetResponse user = fetchUserFromIdentificator(identificator.asString()).orElse(null);
-                if (user == null) {
-                    commandActor.replyWithMessage(messages.getMessage("user-not-exists"));
-                    return;
-                }
+        accountStorage.getAccount(accountId).thenAccept(account -> {
+            if (isInvalidAccount(account, commandActor, VKLinkType.LINK_USER_FILTER))
+                return;
+            String code = config.getVKSettings().getConfirmationSettings().generateCode();
 
-                if (plugin.getLinkEntryBucket().hasLinkUser(accountId, VKLinkType.getInstance())) {
-                    commandActor.replyWithMessage(messages.getMessage("already-sent"));
-                    return;
-                }
-                userId = user.getId();
-            }
-
-            long finalUserId = userId;
-            accountStorage.getAccount(accountId).thenAccept(account -> {
-                if (isInvalidAccount(account, commandActor, VKLinkType.LINK_USER_FILTER))
-                    return;
-                LinkUserIdentificator vkIdentificator = new UserNumberIdentificator(finalUserId);
-                accountStorage.getAccountsFromLinkIdentificator(vkIdentificator).thenAccept(accounts -> {
-                    if (isInvalidLinkAccounts(accounts, commandActor))
-                        return;
-                    String code = config.getVKSettings().getConfirmationSettings().generateCode();
-
-                    sendLinkConfirmation(vkIdentificator, commandActor,
-                            new VKConfirmationUser(account, new BaseConfirmationInfo(vkIdentificator, code, getLinkConfirmationType())), accountId);
-                });
-            });
+            long timeoutTimestamp = System.currentTimeMillis() + VKLinkType.getInstance().getSettings().getConfirmationSettings().getRemoveDelay().getMillis();
+            sendLinkConfirmation(commandActor, new BaseLinkConfirmationUser(getLinkConfirmationType(), timeoutTimestamp, account, code));
         });
     }
 
