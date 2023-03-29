@@ -35,7 +35,7 @@ public class VelocityCommandRegistry extends ServerCommandsRegistry {
                 new VelocityExceptionHandler(authPlugin.getConfig().getServerMessages())).disableStackTraceSanitizing());
         this.config = authPlugin.getConfig();
         commandHandler.registerContextResolver(ServerPlayer.class, this::resolveServerPlayer);
-        commandHandler.registerContextResolver(PlayerIdSupplier.class, this::resolveServerPlayer);
+        commandHandler.registerContextResolver(PlayerIdSupplier.class, context -> PlayerIdSupplier.of(resolveServerPlayer(context).getNickname()));
         commandHandler.registerContextResolver(MessageableCommandActor.class, this::resolveServerCommandActor);
         commandHandler.registerContextResolver(ServerCommandActor.class, this::resolveServerCommandActor);
         commandHandler.registerValueResolver(ArgumentServerPlayer.class, (context) -> {

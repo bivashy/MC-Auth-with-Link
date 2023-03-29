@@ -34,7 +34,7 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
     public void telegramLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 
-        accountDatabase.getAccount(accountId).thenAccept(account -> {
+        accountDatabase.getAccountFromName(accountId).thenAccept(account -> {
             if (isInvalidAccount(account, commandActor, TelegramLinkType.LINK_USER_FILTER))
                 return;
             String code = generateCode(() -> config.getTelegramSettings().getConfirmationSettings().generateCode());
