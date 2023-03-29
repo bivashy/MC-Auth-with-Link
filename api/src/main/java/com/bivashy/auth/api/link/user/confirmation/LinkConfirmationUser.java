@@ -10,5 +10,5 @@ public interface LinkConfirmationUser {
 
     Account getLinkTarget();
 
-    long getLinkTimeoutMillis();
+    long getLinkTimeoutTimestamp();
 }
