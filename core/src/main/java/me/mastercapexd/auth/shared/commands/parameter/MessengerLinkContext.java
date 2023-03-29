@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.messenger.commands.parameters;
+package me.mastercapexd.auth.shared.commands.parameter;
 
 import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
 
