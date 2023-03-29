@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.messenger.commands;
+package me.mastercapexd.auth.shared.commands;
 
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;

@@ -17,6 +17,7 @@ import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandl
 import me.mastercapexd.auth.messenger.commands.parameters.MessengerLinkContext;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
+import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.Orphans;
