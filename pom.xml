@@ -5,7 +5,7 @@
     <groupId>me.mastercapexd.auth</groupId>
     <artifactId>main</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.0-RC4</version>
+    <version>1.7.0-RC5</version>
     <modules>
         <module>api</module>
         <module>core</module>
@@ -22,10 +22,11 @@
         <!-- Building -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
-        <project.mainclass>me.mastercapexd.auth.account.Account</project.mainclass>
+        <maven.compiler.useIncrementalCompilation>true</maven.compiler.useIncrementalCompilation>
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <maven.assembly.plugin.version>3.3.0</maven.assembly.plugin.version>
         <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
     </properties>
 
@@ -56,10 +57,11 @@
             <!-- Maven assembly plugin -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>${project.mainclass}</mainClass>
+                            <mainClass/>
                         </manifest>
                     </archive>
                     <descriptorRefs>
