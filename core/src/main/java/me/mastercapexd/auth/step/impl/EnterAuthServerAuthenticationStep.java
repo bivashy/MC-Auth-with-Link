@@ -44,7 +44,7 @@ public class EnterAuthServerAuthenticationStep extends AuthenticationStepTemplat
         Optional<ProxyServer> currentServerOptional = player.getCurrentServer();
         if (!currentServerOptional.isPresent()) {
             if (shouldTryAgain)
-                PLUGIN.getCore().schedule(PLUGIN, () -> tryToConnect(false), 3, TimeUnit.SECONDS);
+                PLUGIN.getCore().schedule(() -> tryToConnect(false), 3, TimeUnit.SECONDS);
             return;
         }
         if (currentServerOptional.get().getServerName().equals(foundServer.getId()))

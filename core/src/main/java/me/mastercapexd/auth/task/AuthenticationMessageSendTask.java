@@ -13,7 +13,7 @@ public class AuthenticationMessageSendTask implements AuthenticationTask {
     private final ServerScheduler proxyScheduler;
 
     public AuthenticationMessageSendTask(AuthPlugin plugin) {
-        this.proxyScheduler = plugin.getCore().schedule(plugin, () -> {
+        this.proxyScheduler = plugin.getCore().schedule(() -> {
             for (String accountPlayerId : plugin.getAuthenticatingAccountBucket().getAccountIdEntries()) {
                 Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
                 if (!(account.getCurrentAuthenticationStep() instanceof MessageableAuthenticationStep))

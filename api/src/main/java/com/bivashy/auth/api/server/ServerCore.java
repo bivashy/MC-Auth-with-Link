@@ -44,9 +44,9 @@ public interface ServerCore extends Castable<ServerCore> {
 
     void registerListener(AuthPlugin plugin, Object listener);
 
-    ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, long period, TimeUnit unit);
+    ServerScheduler schedule(Runnable task, long delay, long period, TimeUnit unit);
 
-    ServerScheduler schedule(AuthPlugin instance, Runnable task, long delay, TimeUnit milliseconds);
+    ServerScheduler schedule(Runnable task, long delay, TimeUnit milliseconds);
 
     void runAsync(Runnable task);
 

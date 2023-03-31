@@ -41,7 +41,7 @@ public class AuthenticationListener implements Listener {
             if (account == null)
                 return;
             // Using dirty way because we cannot send message in LoginEvent
-            plugin.getCore().schedule(plugin, () -> {
+            plugin.getCore().schedule(() -> {
                 if (plugin.getAuthenticatingAccountBucket().isAuthorizing(connectionPlayer))
                     return;
                 account.getPlayer()

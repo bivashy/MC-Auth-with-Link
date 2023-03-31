@@ -15,7 +15,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
     private final ServerScheduler scheduler;
 
     public AuthenticationTimeoutTask(AuthPlugin plugin) {
-        this.scheduler = plugin.getCore().schedule(plugin, () -> {
+        this.scheduler = plugin.getCore().schedule(() -> {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 

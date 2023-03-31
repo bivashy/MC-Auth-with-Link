@@ -90,7 +90,7 @@ public class BaseLoginManagement implements LoginManagement {
                     if (config.getJoinDelay() == 0) {
                         account.nextAuthenticationStep(context);
                     } else {
-                        core.schedule(AuthPlugin.instance(), () -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+                        core.schedule(() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
                     }
                     return account;
                 }

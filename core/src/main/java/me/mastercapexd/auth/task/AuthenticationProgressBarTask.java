@@ -22,7 +22,7 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
 
     public AuthenticationProgressBarTask(AuthPlugin plugin) {
         this.plugin = plugin;
-        this.proxyScheduler = plugin.getCore().schedule(plugin, () -> {
+        this.proxyScheduler = plugin.getCore().schedule(() -> {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 

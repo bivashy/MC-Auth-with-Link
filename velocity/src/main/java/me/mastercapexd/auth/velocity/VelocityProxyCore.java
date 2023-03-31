@@ -121,13 +121,13 @@ public class VelocityProxyCore implements ServerCore {
     }
 
     @Override
-    public ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, long period, TimeUnit unit) {
+    public ServerScheduler schedule(Runnable task, long delay, long period, TimeUnit unit) {
         return new VelocitySchedulerWrapper(
                 server.getScheduler().buildTask(VelocityAuthPluginBootstrap.getInstance(), task).delay(delay, unit).repeat(period, unit).schedule());
     }
 
     @Override
-    public ServerScheduler schedule(AuthPlugin plugin, Runnable task, long delay, TimeUnit unit) {
+    public ServerScheduler schedule(Runnable task, long delay, TimeUnit unit) {
         return new VelocitySchedulerWrapper(server.getScheduler().buildTask(VelocityAuthPluginBootstrap.getInstance(), task).delay(delay, unit).schedule());
     }
 
