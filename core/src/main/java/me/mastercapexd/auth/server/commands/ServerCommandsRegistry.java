@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.server.commands;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -155,8 +156,7 @@ public abstract class ServerCommandsRegistry {
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         if (plugin.getConfig().getVKSettings().isEnabled())
-            registerLinkCommand(VKLinkType.getInstance(),
-                    new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
+            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
                     new LinkCodeCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
             registerLinkCommand(TelegramLinkType.getInstance(),
@@ -167,10 +167,15 @@ public abstract class ServerCommandsRegistry {
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand, OrphanCommand codeCommand) {
         linkType.getSettings().getLinkConfirmationTypes().forEach(confirmationType -> {
             if (confirmationType == LinkConfirmationType.FROM_LINK)
-                commandHandler.register(
-                        Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("link-game").getCommandPaths()).handler(linkCommand));
+                commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, "link-game")).handler(linkCommand));
             if (confirmationType == LinkConfirmationType.FROM_GAME)
-                commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths()).handler(codeCommand));
+                commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, "code")).handler(codeCommand));
         });
+    }
+
+    private String[] makeServerCommandPaths(LinkType linkType, String commandPathKey) {
+        return Arrays.stream(linkType.getSettings().getCommandPaths().getCommandPath(commandPathKey).getCommandPaths())
+                .map(s -> s.replace("/", ""))
+                .toArray(String[]::new);
     }
 }

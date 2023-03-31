@@ -60,9 +60,7 @@ telegram:
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   telegram-commands: # Основные команды
     link-game:
-      main-command: 'addtg'
-      aliases:
-        - '/addtg'
+      main-command: '/addtg'
     enter-accept: # Id команды, не менять!
       main-command: '/принять' # Обязательное поле
       aliases: # Не обязательное поле, это алиасы к команде
@@ -98,9 +96,7 @@ telegram:
       aliases:
         - '/restore'
     code:
-      main-command: 'code'
-      aliases:
-        - '/code'
+      main-command: '/code'
     confirmation-toggle:
       main-command: '/подтверждение'
       aliases:
