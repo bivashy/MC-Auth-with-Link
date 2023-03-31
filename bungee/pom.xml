@@ -17,7 +17,6 @@
         <configuration-library.version>3.0.3</configuration-library.version>
         <telegram.api.version>6.1.0</telegram.api.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
-        <build.version>6</build.version>
     </properties>
 
     <repositories>
