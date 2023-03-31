@@ -12,8 +12,6 @@ import com.ubivashka.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.velocity.VelocityVkApiPlugin;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
-import com.velocitypowered.api.plugin.Dependency;
-import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
@@ -29,8 +27,6 @@ import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
 import net.kyori.adventure.platform.AudienceProvider;
 
-@Plugin(id = "mcauth", name = "McAuth", version = "1.7.0-RC4", authors = "bivashy", dependencies = {@Dependency(id = "vk-api", optional = true),
-        @Dependency(id = "telegram-bot-api", optional = true), @Dependency(id = "limboapi", optional = true)})
 public class VelocityAuthPluginBootstrap {
     private static VelocityAuthPluginBootstrap instance;
     private final AudienceProvider audienceProvider;

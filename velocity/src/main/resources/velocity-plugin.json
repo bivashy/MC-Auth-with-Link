@@ -1,0 +1,23 @@
+{
+  "id": "mcauth",
+  "name": "McAuth",
+  "version": "${project.version}",
+  "authors": [
+    "bivashy"
+  ],
+  "dependencies": [
+    {
+      "id": "vk-api",
+      "optional": true
+    },
+    {
+      "id": "telegram-bot-api",
+      "optional": true
+    },
+    {
+      "id": "limboapi",
+      "optional": true
+    }
+  ],
+  "main": "me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap"
+}
