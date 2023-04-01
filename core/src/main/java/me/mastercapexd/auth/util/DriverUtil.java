@@ -11,7 +11,9 @@ import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
@@ -32,9 +34,17 @@ public class DriverUtil {
         try {
             URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{driverUrl}, classLoader);
             ServiceLoader<Driver> drivers = ServiceLoader.load(Driver.class, urlClassLoader);
-            for (Driver driver : drivers) {
-                Driver newDriver = (Driver) Class.forName(driver.getClass().getName(), true, urlClassLoader).getDeclaredConstructor().newInstance();
-                DriverManager.registerDriver(new DelegatingDriver(newDriver)); // register using the Delegating Driver
+            Iterator<Driver> iterator = drivers.iterator();
+            while(true) {
+                try {
+                    if (!iterator.hasNext())
+                        break;
+                    Driver driver = iterator.next();
+                    Driver newDriver = (Driver) Class.forName(driver.getClass().getName(), true, urlClassLoader).getDeclaredConstructor()
+                            .newInstance();
+                    DriverManager.registerDriver(new DelegatingDriver(newDriver));
+                } catch(ServiceConfigurationError ignored) {
+                }
             }
             return true;
         } catch(SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
