@@ -60,6 +60,14 @@ vk:
   # Выключает сообщения из беседы
   disable-conversation-commands: true
 
+  # Команды которые будут в игре, к примеру /addvk, или же /code
+  proxy-commands:
+    link-game: # Указывайте команды БЕЗ знака '/'
+      main-command: 'addvk'
+    code:
+      main-command: 'code'
+
+  # Команды которые в ВК
   vk-commands: # Основные команды
     link-game:
       main-command: '/addvk'

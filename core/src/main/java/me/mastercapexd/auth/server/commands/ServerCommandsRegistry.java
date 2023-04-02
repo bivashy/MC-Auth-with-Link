@@ -155,16 +155,16 @@ public abstract class ServerCommandsRegistry {
         commandHandler.register(new AuthCommand(), new LoginCommand(), new RegisterCommand(), new ChangePasswordCommand(), new GoogleCodeCommand(),
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
-        if (plugin.getConfig().getVKSettings().isEnabled())
-            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
-                    new LinkCodeCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getServerMessages()));
-        if (plugin.getConfig().getTelegramSettings().isEnabled())
-            registerLinkCommand(TelegramLinkType.getInstance(),
-                    new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, TelegramLinkType.getInstance().getServerMessages()),
-                    new LinkCodeCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getServerMessages()));
+        registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
+                new LinkCodeCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getServerMessages()));
+        registerLinkCommand(TelegramLinkType.getInstance(),
+                new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, TelegramLinkType.getInstance().getServerMessages()),
+                new LinkCodeCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand, OrphanCommand codeCommand) {
+        if (!linkType.getSettings().isEnabled())
+            return;
         linkType.getSettings().getLinkConfirmationTypes().forEach(confirmationType -> {
             if (confirmationType == LinkConfirmationType.FROM_LINK)
                 commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, "link-game")).handler(linkCommand));
@@ -174,8 +174,6 @@ public abstract class ServerCommandsRegistry {
     }
 
     private String[] makeServerCommandPaths(LinkType linkType, String commandPathKey) {
-        return Arrays.stream(linkType.getSettings().getCommandPaths().getCommandPath(commandPathKey).getCommandPaths())
-                .map(s -> s.replace("/", ""))
-                .toArray(String[]::new);
+        return Arrays.stream(linkType.getSettings().getProxyCommandPaths().getCommandPath(commandPathKey).getCommandPaths()).toArray(String[]::new);
     }
 }

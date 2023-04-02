@@ -34,6 +34,8 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     private BaseEnterSettings enterSettings;
     @ConfigField("telegram-commands")
     private BaseCommandPaths commandPaths;
+    @ConfigField("proxy-commands")
+    private BaseCommandPaths proxyCommandPaths;
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-telegram-link")
@@ -100,6 +102,11 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     @Override
     public BaseCommandPaths getCommandPaths() {
         return commandPaths;
+    }
+
+    @Override
+    public BaseCommandPaths getProxyCommandPaths() {
+        return proxyCommandPaths;
     }
 
     @Override

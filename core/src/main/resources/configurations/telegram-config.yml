@@ -58,6 +58,15 @@ telegram:
     code-length: 7 # Длина кода
     # Символы которые будут использованы в коде
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+  # Команды которые будут в игре, к примеру /addtg, или же /code
+  proxy-commands:
+    link-game: # Указывайте команды БЕЗ знака '/'
+      main-command: 'addtg'
+    code:
+      main-command: 'code'
+
+  # Команды в телеграме
   telegram-commands: # Основные команды
     link-game:
       main-command: '/addtg'

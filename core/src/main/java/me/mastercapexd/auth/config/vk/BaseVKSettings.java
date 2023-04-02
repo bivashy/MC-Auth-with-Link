@@ -37,6 +37,8 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     private BaseEnterSettings enterSettings;
     @ConfigField("vk-commands")
     private BaseCommandPaths commandPaths;
+    @ConfigField("proxy-commands")
+    private BaseCommandPaths proxyCommandPaths;
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-vk-link")
@@ -104,6 +106,11 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     @Override
     public LinkCommandPaths getCommandPaths() {
         return commandPaths;
+    }
+
+    @Override
+    public LinkCommandPaths getProxyCommandPaths() {
+        return proxyCommandPaths;
     }
 
     @Override

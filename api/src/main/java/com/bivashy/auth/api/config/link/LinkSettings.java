@@ -28,6 +28,8 @@ public interface LinkSettings {
 
     LinkCommandPaths getCommandPaths();
 
+    LinkCommandPaths getProxyCommandPaths();
+
     LinkKeyboards getKeyboards();
 
     Messages<String> getMessages();
