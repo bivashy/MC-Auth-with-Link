@@ -16,6 +16,8 @@
         <telegram.api.version>6.1.0</telegram.api.version>
         <lamp.command-library.version>3.1.3</lamp.command-library.version>
         <limbo.api.version>1.1.7</limbo.api.version>
+
+        <java.version>11</java.version>
     </properties>
 
     <repositories>
