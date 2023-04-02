@@ -38,7 +38,6 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
     public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 
-        System.out.println("account: "+accountId);
         accountStorage.getAccountFromName(accountId).thenAccept(account -> {
             if (isInvalidAccount(account, commandActor, VKLinkType.LINK_USER_FILTER))
                 return;
