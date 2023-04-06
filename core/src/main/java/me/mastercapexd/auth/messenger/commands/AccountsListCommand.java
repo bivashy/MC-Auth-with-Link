@@ -21,6 +21,7 @@ import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountsListCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "accounts";
     @Dependency
     private AccountDatabase accountDatabase;
 

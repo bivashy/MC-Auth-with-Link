@@ -13,7 +13,6 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
-import me.mastercapexd.auth.util.GoogleAuthenticatorQRGenerator;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -27,12 +26,14 @@ import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.util.GoogleAuthenticatorQRGenerator;
 import me.mastercapexd.auth.util.RandomCodeFactory;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class GoogleCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "google";
     @Dependency
     private AuthPlugin plugin;
     @Dependency

@@ -14,6 +14,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class ChangePasswordCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "change-pass";
     @Dependency
     private AuthPlugin plugin;
     @Dependency

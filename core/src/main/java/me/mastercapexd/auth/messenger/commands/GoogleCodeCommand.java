@@ -18,6 +18,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class GoogleCodeCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "google-code";
     @Dependency
     private AuthPlugin plugin;
     @Dependency

@@ -12,6 +12,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class RestoreCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "restore";
     @Dependency
     private PluginConfig config;
     @Dependency

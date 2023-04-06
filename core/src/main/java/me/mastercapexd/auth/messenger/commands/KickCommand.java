@@ -10,6 +10,8 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class KickCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "kick";
+
     @Default
     @ConfigurationArgumentError("kick-not-enough-arguments")
     public void onKick(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {

@@ -18,6 +18,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class GoogleUnlinkCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "google-remove";
     @Dependency
     private PluginConfig config;
     @Dependency

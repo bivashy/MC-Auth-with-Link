@@ -11,6 +11,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class UnlinkCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "unlink";
     @Dependency
     private AccountDatabase accountDatabase;
 

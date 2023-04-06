@@ -17,6 +17,7 @@ import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class LinkCodeCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "code";
     private final LinkConfirmationType linkConfirmationType;
     private final Messages<?> messages;
     @Dependency

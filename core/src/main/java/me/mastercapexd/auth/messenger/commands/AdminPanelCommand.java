@@ -8,6 +8,8 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AdminPanelCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "admin-panel";
+
     @Default
     public void adminPanelMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId())) {

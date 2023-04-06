@@ -9,6 +9,8 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "account-control";
+
     @Default
     public void accountMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         Keyboard accountKeyboard = linkType.getSettings().getKeyboards().createKeyboard("account", "%account_name%", account.getName());

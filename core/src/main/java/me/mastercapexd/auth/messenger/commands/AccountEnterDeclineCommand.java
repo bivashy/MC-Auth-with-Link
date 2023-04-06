@@ -14,6 +14,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountEnterDeclineCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "enter-decline";
     @Dependency
     private AuthPlugin plugin;
 

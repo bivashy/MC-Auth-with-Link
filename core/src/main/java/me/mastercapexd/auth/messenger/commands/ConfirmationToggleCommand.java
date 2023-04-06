@@ -12,6 +12,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class ConfirmationToggleCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "confirmation-toggle";
     @Dependency
     private AccountDatabase accountDatabase;
 

@@ -15,6 +15,7 @@ import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class AccountEnterAcceptCommand implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "enter-accept";
     @Dependency
     private AuthPlugin plugin;
 
