@@ -11,7 +11,7 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
+import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;

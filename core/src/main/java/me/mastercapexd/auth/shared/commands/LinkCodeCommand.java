@@ -9,7 +9,7 @@ import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
-import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
+import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;

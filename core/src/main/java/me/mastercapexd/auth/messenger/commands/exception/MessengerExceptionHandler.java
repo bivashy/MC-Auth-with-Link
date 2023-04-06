@@ -2,7 +2,7 @@ package me.mastercapexd.auth.messenger.commands.exception;
 
 import com.bivashy.auth.api.link.LinkType;
 
-import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
+import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.ArgumentParseException;
 import revxrsal.commands.exception.CommandInvocationException;

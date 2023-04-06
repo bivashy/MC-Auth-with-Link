@@ -24,7 +24,7 @@ import com.ubivaska.messenger.common.message.Message;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.messenger.commands.annotations.ConfigurationArgumentError;
+import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.util.GoogleAuthenticatorQRGenerator;
 import me.mastercapexd.auth.util.RandomCodeFactory;

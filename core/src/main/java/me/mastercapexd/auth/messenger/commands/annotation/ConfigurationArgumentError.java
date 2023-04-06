@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.messenger.commands.annotations;
+package me.mastercapexd.auth.messenger.commands.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
