@@ -14,7 +14,7 @@ import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 
-@Command({"login", "l"})
+@Command({"l", "login"})
 public class LoginCommand {
     @Dependency
     private AuthPlugin plugin;

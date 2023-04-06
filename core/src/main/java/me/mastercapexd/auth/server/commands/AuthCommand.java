@@ -17,7 +17,7 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Subcommand;
 
-@Command({"auth", "authadmin", "adminauth"})
+@Command({"authadmin", "adminauth", "auth"})
 @Permission("auth.admin")
 public class AuthCommand {
     @Dependency
