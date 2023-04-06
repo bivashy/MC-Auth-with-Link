@@ -24,6 +24,7 @@ import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.exception.SendMessageException;
+import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
 
 public abstract class MessengerCommandRegistry {
@@ -120,40 +121,37 @@ public abstract class MessengerCommandRegistry {
     }
 
     protected void registerCommands() {
-        linkType.getSettings()
-                .getLinkConfirmationTypes()
-                .forEach(confirmationType -> {
-                    if (confirmationType == LinkConfirmationType.FROM_LINK)
-                        commandHandler.register(
-                                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("code").getCommandPaths())
-                                        .handler(new LinkCodeCommand(confirmationType, linkType.getLinkMessages())));
-                    if (confirmationType == LinkConfirmationType.FROM_GAME)
-                        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("link-game").getCommandPaths())
-                                .handler(createLinkCommand()));
-                });
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("confirmation-toggle").getCommandPaths())
-                .handler(new ConfirmationToggleCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("accounts").getCommandPaths()).handler(new AccountsListCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("account-control").getCommandPaths()).handler(new AccountCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-accept").getCommandPaths())
-                .handler(new AccountEnterAcceptCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("enter-decline").getCommandPaths())
-                .handler(new AccountEnterDeclineCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("kick").getCommandPaths()).handler(new KickCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("restore").getCommandPaths()).handler(new RestoreCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("unlink").getCommandPaths()).handler(new UnlinkCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("change-pass").getCommandPaths()).handler(new ChangePasswordCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-remove").getCommandPaths()).handler(new GoogleUnlinkCommand()));
-        commandHandler.register(Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google").getCommandPaths()).handler(new GoogleCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("google-code").getCommandPaths()).handler(new GoogleCodeCommand()));
-        commandHandler.register(
-                Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath("admin-panel").getCommandPaths()).handler(new AdminPanelCommand()));
+        linkType.getSettings().getLinkConfirmationTypes().forEach(confirmationType -> {
+            if (confirmationType == LinkConfirmationType.FROM_LINK)
+                registerCommand(linkPath(LinkCodeCommand.CONFIGURATION_KEY), new LinkCodeCommand(confirmationType, linkType.getLinkMessages()));
+            if (confirmationType == LinkConfirmationType.FROM_GAME)
+                registerCommand(linkPath("link-games"), createLinkCommand());
+        });
+        registerCommand(linkPath(ConfirmationToggleCommand.CONFIGURATION_KEY), new ConfirmationToggleCommand());
+        registerCommand(linkPath(AccountsListCommand.CONFIGURATION_KEY), new AccountsListCommand());
+        registerCommand(linkPath(AccountCommand.CONFIGURATION_KEY), new AccountCommand());
+        registerCommand(linkPath(AccountEnterAcceptCommand.CONFIGURATION_KEY), new AccountEnterAcceptCommand());
+        registerCommand(linkPath(AccountEnterDeclineCommand.CONFIGURATION_KEY), new AccountEnterDeclineCommand());
+        registerCommand(linkPath(KickCommand.CONFIGURATION_KEY), new KickCommand());
+        registerCommand(linkPath(RestoreCommand.CONFIGURATION_KEY), new RestoreCommand());
+        registerCommand(linkPath(UnlinkCommand.CONFIGURATION_KEY), new UnlinkCommand());
+        registerCommand(linkPath(ChangePasswordCommand.CONFIGURATION_KEY), new ChangePasswordCommand());
+        registerCommand(linkPath(GoogleUnlinkCommand.CONFIGURATION_KEY), new GoogleUnlinkCommand());
+        registerCommand(linkPath(GoogleCommand.CONFIGURATION_KEY), new GoogleCommand());
+        registerCommand(linkPath(GoogleCodeCommand.CONFIGURATION_KEY), new GoogleCodeCommand());
+        registerCommand(linkPath(AdminPanelCommand.CONFIGURATION_KEY), new AdminPanelCommand());
+    }
+
+    private void registerCommand(Orphans path, OrphanCommand commandInstance) {
+        commandHandler.register(path.handler(commandInstance));
+    }
+
+    private Orphans linkPath(String key) {
+        return Orphans.path(linkType.getSettings().getCommandPaths().getCommandPath(key).getCommandPaths());
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
     }
 
     protected abstract MessengerLinkCommandTemplate createLinkCommand();
