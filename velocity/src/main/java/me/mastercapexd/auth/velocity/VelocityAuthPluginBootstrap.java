@@ -2,6 +2,7 @@ package me.mastercapexd.auth.velocity;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -17,6 +18,7 @@ import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+import io.github.revxrsal.eventbus.EventBusBuilder;
 import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
@@ -52,7 +54,7 @@ public class VelocityAuthPluginBootstrap {
     public void onProxyInitialize(ProxyInitializeEvent event) {
         this.authPlugin = new BaseAuthPlugin(audienceProvider,
                 proxyServer.getPluginManager().fromInstance(this).map(PluginContainer::getDescription).flatMap(PluginDescription::getVersion).orElse("unknown"),
-                dataFolder, core);
+                dataFolder, core).eventBus(EventBusBuilder.methodHandles().executor(Executors.newFixedThreadPool(4)).build());
         initializeListener();
         initializeCommand();
         if (authPlugin.getConfig().getVKSettings().isEnabled())

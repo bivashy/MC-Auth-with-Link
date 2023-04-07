@@ -153,6 +153,11 @@ public class BaseAuthPlugin implements AuthPlugin {
                 });
     }
 
+    public BaseAuthPlugin eventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+        return this;
+    }
+
     @Override
     public ServerCore getCore() {
         return core;
