@@ -11,12 +11,14 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(GoogleCodeCommand.CONFIGURATION_KEY)
 public class GoogleCodeCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "google-code";
     @Dependency
@@ -27,8 +29,8 @@ public class GoogleCodeCommand implements OrphanCommand {
     private AccountDatabase accountStorage;
 
     @GoogleUse
-    @Default
     @ConfigurationArgumentError("google-code-not-enough-arguments")
+    @DefaultForOrphan
     public void googleCode(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account, Integer code) {
         LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
             GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY);

@@ -13,7 +13,7 @@ import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command("google")
@@ -26,8 +26,8 @@ public class GoogleCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
     @GoogleUse
+    @DefaultFor("google")
     public void linkGoogle(ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {

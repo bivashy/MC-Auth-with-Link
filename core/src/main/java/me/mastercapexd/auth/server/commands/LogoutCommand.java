@@ -6,7 +6,7 @@ import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command("logout")
@@ -18,7 +18,7 @@ public class LogoutCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
+    @DefaultFor("logout")
     public void logout(ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         if (plugin.getAuthenticatingAccountBucket().isAuthorizing(player)) {

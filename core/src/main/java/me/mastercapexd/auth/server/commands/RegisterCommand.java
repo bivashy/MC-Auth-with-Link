@@ -13,7 +13,7 @@ import me.mastercapexd.auth.server.commands.annotations.AuthenticationStepComman
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
 import me.mastercapexd.auth.step.impl.RegisterAuthenticationStep;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command({"reg", "register"})
@@ -25,8 +25,8 @@ public class RegisterCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
     @AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
+    @DefaultFor({"reg", "register"})
     public void register(ServerPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
         plugin.getEventBus().publish(AccountRegisterEvent.class, account, false).thenAccept(registerEventPostResult -> {

@@ -11,13 +11,18 @@ import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
+import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(MessengerLinkCommandTemplate.CONFIGURATION_KEY)
+@LinkCommand(TelegramLinkCommand.LINK_NAME)
 public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
+    public static final String LINK_NAME = "TELEGRAM";
     @Dependency
     private AuthPlugin plugin;
     @Dependency
@@ -29,8 +34,8 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
         super(linkConfirmationType, messages, TelegramLinkType.getInstance());
     }
 
-    @Default
     @TelegramUse
+    @DefaultForOrphan
     public void telegramLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 

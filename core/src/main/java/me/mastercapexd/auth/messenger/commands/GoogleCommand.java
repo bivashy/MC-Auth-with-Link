@@ -24,14 +24,16 @@ import com.ubivaska.messenger.common.message.Message;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkUser;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import me.mastercapexd.auth.util.GoogleAuthenticatorQRGenerator;
 import me.mastercapexd.auth.util.RandomCodeFactory;
-import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(GoogleCommand.CONFIGURATION_KEY)
 public class GoogleCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "google";
     @Dependency
@@ -41,9 +43,9 @@ public class GoogleCommand implements OrphanCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
     @GoogleUse
     @ConfigurationArgumentError("google-not-enough-arguments")
+    @DefaultForOrphan
     public void linkGoogle(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         String rawKey = plugin.getGoogleAuthenticator().createCredentials().getKey();
         String nickname = account.getName();

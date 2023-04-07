@@ -17,6 +17,7 @@ import com.bivashy.auth.api.type.LinkConfirmationType;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class MessengerLinkCommandTemplate implements OrphanCommand {
+    public static final String CONFIGURATION_KEY = "link-game";
     private final AuthPlugin plugin = AuthPlugin.instance();
     private final PluginConfig config = plugin.getConfig();
     private final LinkConfirmationType linkConfirmationType;

@@ -3,8 +3,6 @@ package me.mastercapexd.auth.messenger.commands.parser;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.exception.ArgumentParseException;
 
@@ -14,7 +12,7 @@ import revxrsal.commands.exception.ArgumentParseException;
 public class SimpleStringTokenizer {
     private static final List<String> EMPTY_TEXT = Collections.singletonList("");
 
-    public static ArgumentStack parse(@NotNull String arguments) throws ArgumentParseException {
+    public static ArgumentStack parse(String arguments) throws ArgumentParseException {
         if (arguments.length() == 0) {
             return ArgumentStack.empty();
         }
@@ -28,9 +26,9 @@ public class SimpleStringTokenizer {
         return returnedArgs;
     }
 
-    public static ArgumentStack parseForAutoCompletion(@NotNull String args) {
+    public static ArgumentStack parseForAutoCompletion(String args) {
         if (args.isEmpty())
-            return ArgumentStack.copy(EMPTY_TEXT);
+            return ArgumentStack.copyExact(EMPTY_TEXT);
         return parse(args);
     }
 

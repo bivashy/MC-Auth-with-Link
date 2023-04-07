@@ -2,8 +2,6 @@ package me.mastercapexd.auth.link;
 
 import java.util.UUID;
 
-import org.jetbrains.annotations.NotNull;
-
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.CommandActor;
 
@@ -15,22 +13,22 @@ public abstract class LinkCommandActorWrapperTemplate<T extends CommandActor> im
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return actor.getName();
     }
 
     @Override
-    public @NotNull UUID getUniqueId() {
+    public UUID getUniqueId() {
         return actor.getUniqueId();
     }
 
     @Override
-    public void reply(@NotNull String message) {
+    public void reply(String message) {
         actor.reply(message);
     }
 
     @Override
-    public void error(@NotNull String message) {
+    public void error(String message) {
         actor.error(message);
     }
 

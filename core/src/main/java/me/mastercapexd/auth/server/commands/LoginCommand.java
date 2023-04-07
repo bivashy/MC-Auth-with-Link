@@ -11,7 +11,7 @@ import com.bivashy.auth.api.step.AuthenticationStep;
 import me.mastercapexd.auth.server.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.step.impl.LoginAuthenticationStep;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command({"l", "login"})
@@ -23,8 +23,8 @@ public class LoginCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
     @AuthenticationStepCommand(stepName = LoginAuthenticationStep.STEP_NAME)
+    @DefaultFor({"l", "login"})
     public void login(ServerPlayer player, Account account, String password) {
         String id = account.getPlayerId();
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();

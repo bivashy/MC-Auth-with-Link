@@ -9,16 +9,19 @@ import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(AccountEnterDeclineCommand.CONFIGURATION_KEY)
 public class AccountEnterDeclineCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "enter-decline";
     @Dependency
     private AuthPlugin plugin;
 
-    @Default
+    @DefaultForOrphan
     public void onDecline(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
         List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().getLinkUsers(entryUser -> {
             if (!entryUser.getLinkType().equals(linkType))

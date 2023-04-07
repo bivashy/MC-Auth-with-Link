@@ -1,6 +1,8 @@
 package me.mastercapexd.auth.server.commands;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -17,6 +19,7 @@ import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
@@ -25,10 +28,15 @@ import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
+import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
 import me.mastercapexd.auth.shared.commands.VKLinkCommand;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
+import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
+import revxrsal.commands.annotation.DefaultFor;
+import revxrsal.commands.annotation.dynamic.Annotations;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
@@ -141,6 +149,24 @@ public abstract class ServerCommandsRegistry {
             if (!config.getTelegramSettings().isEnabled())
                 throw new SendComponentException(config.getServerMessages().getSubMessages("telegram").getMessage("disabled"));
         });
+
+        commandHandler.registerAnnotationReplacer(DefaultForOrphan.class, (annotatedElement, annotation) -> {
+            if (!(annotatedElement instanceof Method))
+                return Collections.emptyList();
+            Method annotatedMethod = (Method) annotatedElement;
+            Class<?> declaringClass = annotatedMethod.getDeclaringClass();
+            if (!declaringClass.isAnnotationPresent(CommandKey.class))
+                return Collections.emptyList();
+            if (!declaringClass.isAnnotationPresent(LinkCommand.class))
+                return Collections.emptyList();
+            LinkType linkType = plugin.getLinkTypeProvider()
+                    .getLinkType(declaringClass.getAnnotation(LinkCommand.class).value())
+                    .orElseThrow(NullPointerException::new);
+            CommandKey commandKey = declaringClass.getAnnotation(CommandKey.class);
+            DefaultFor defaultForAnnotation = Annotations.create(DefaultFor.class, "value",
+                    linkType.getSettings().getProxyCommandPaths().getCommandPath(commandKey.value()).getCommandPaths());
+            return Collections.singletonList(defaultForAnnotation);
+        });
     }
 
     private void registerDependencies() {
@@ -156,10 +182,10 @@ public abstract class ServerCommandsRegistry {
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
         registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(LinkConfirmationType.FROM_LINK, VKLinkType.getInstance().getServerMessages()),
-                new LinkCodeCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getServerMessages()));
+                new VkLinkCodeCommand(LinkConfirmationType.FROM_GAME));
         registerLinkCommand(TelegramLinkType.getInstance(),
                 new TelegramLinkCommand(LinkConfirmationType.FROM_LINK, TelegramLinkType.getInstance().getServerMessages()),
-                new LinkCodeCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getServerMessages()));
+                new TelegramLinkCodeCommand(LinkConfirmationType.FROM_GAME));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand, OrphanCommand codeCommand) {
@@ -167,9 +193,9 @@ public abstract class ServerCommandsRegistry {
             return;
         linkType.getSettings().getLinkConfirmationTypes().forEach(confirmationType -> {
             if (confirmationType == LinkConfirmationType.FROM_LINK)
-                commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, "link-game")).handler(linkCommand));
+                commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, MessengerLinkCommandTemplate.CONFIGURATION_KEY)).handler(linkCommand));
             if (confirmationType == LinkConfirmationType.FROM_GAME)
-                commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, "code")).handler(codeCommand));
+                commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, LinkCodeCommand.CONFIGURATION_KEY)).handler(codeCommand));
         });
     }
 

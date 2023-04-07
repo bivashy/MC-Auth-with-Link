@@ -15,13 +15,18 @@ import com.vk.api.sdk.objects.users.responses.GetResponse;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
+import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(MessengerLinkCommandTemplate.CONFIGURATION_KEY)
+@LinkCommand(VKLinkCommand.LINK_NAME)
 public class VKLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
+    public static final String LINK_NAME = "VK";
     @Dependency
     private AuthPlugin plugin;
     @Dependency
@@ -33,8 +38,8 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
         super(linkConfirmationType, messages, VKLinkType.getInstance());
     }
 
-    @Default
     @VkUse
+    @DefaultForOrphan
     public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 

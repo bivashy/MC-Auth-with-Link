@@ -13,7 +13,7 @@ import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.step.context.BaseAuthenticationStepContext;
 import me.mastercapexd.auth.step.impl.EnterServerAuthenticationStep;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Subcommand;
 
@@ -27,7 +27,7 @@ public class AuthCommand {
     @Dependency
     private AccountDatabase accountDatabase;
 
-    @Default
+    @DefaultFor({"authadmin", "adminauth", "auth"})
     public void accountInfos(ServerCommandActor commandActor) {
         accountDatabase.getAllAccounts().thenAccept(accounts -> {
             commandActor.reply(config.getServerMessages().getMessage("info-registered", MessageContext.of("%players%", Integer.toString(accounts.size()))));

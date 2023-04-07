@@ -64,7 +64,7 @@ public abstract class DispatchCommandListener {
         if (LINK_TYPE.getSettings().shouldDisableConversationCommands() && isConversationPeerId(source.getPeerId()))
             return;
         CommandActor commandActor = new VKCommandActorWrapper(new BaseVkActor(source, handler));
-        ArgumentStack argumentStack = ArgumentStack.copy(SimpleStringTokenizer.parse(source.getText()));
+        ArgumentStack argumentStack = ArgumentStack.copyExact(SimpleStringTokenizer.parse(source.getText()));
         if (argumentStack.isEmpty())
             return;
         handler.dispatch(commandActor, argumentStack);

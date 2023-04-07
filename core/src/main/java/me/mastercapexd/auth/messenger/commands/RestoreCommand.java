@@ -6,11 +6,13 @@ import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(RestoreCommand.CONFIGURATION_KEY)
 public class RestoreCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "restore";
     @Dependency
@@ -18,8 +20,8 @@ public class RestoreCommand implements OrphanCommand {
     @Dependency
     private AccountDatabase accountDatabase;
 
-    @Default
     @ConfigurationArgumentError("restore-not-enough-arguments")
+    @DefaultForOrphan
     public void onRestore(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         String generatedPassword = linkType.getSettings().getRestoreSettings().generateCode();
         account.setPasswordHash(account.getHashType().hash(generatedPassword));

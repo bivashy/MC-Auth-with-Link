@@ -5,18 +5,20 @@ import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(UnlinkCommand.CONFIGURATION_KEY)
 public class UnlinkCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "unlink";
     @Dependency
     private AccountDatabase accountDatabase;
 
-    @Default
     @ConfigurationArgumentError("unlink-not-enough-arguments")
+    @DefaultForOrphan
     public void onUnlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         account.findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType)
                 .getLinkUserInfo()

@@ -6,18 +6,20 @@ import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(ConfirmationToggleCommand.CONFIGURATION_KEY)
 public class ConfirmationToggleCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "confirmation-toggle";
     @Dependency
     private AccountDatabase accountDatabase;
 
-    @Default
     @ConfigurationArgumentError("confirmation-no-player")
+    @DefaultForOrphan
     public void onKick(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         if (!linkType.getSettings().getConfirmationSettings().canToggleConfirmation()) {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggle-disabled", linkType.newMessageContext(account)));

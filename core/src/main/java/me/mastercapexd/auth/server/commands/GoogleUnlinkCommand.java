@@ -11,7 +11,7 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command({"googleunlink", "google unlink", "gunlink"})
@@ -23,7 +23,7 @@ public class GoogleUnlinkCommand {
     private AccountDatabase accountStorage;
 
     @GoogleUse
-    @Default
+    @DefaultFor({"googleunlink", "google unlink", "gunlink"})
     public void unlink(ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {

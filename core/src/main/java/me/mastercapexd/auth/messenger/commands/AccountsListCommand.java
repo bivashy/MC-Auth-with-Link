@@ -15,17 +15,20 @@ import com.ubivaska.messenger.common.button.ButtonColor;
 import com.ubivaska.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(AccountsListCommand.CONFIGURATION_KEY)
 public class AccountsListCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "accounts";
     @Dependency
     private AccountDatabase accountDatabase;
 
-    @Default
+    @DefaultForOrphan
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page, @Flag("pageSize") @Default(
             "5") Integer accountsPerPage, @Flag("type") @Default("my") String type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("linked"))) {

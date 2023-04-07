@@ -11,7 +11,7 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command({"googlecode", "gcode"})
@@ -24,7 +24,7 @@ public class GoogleCodeCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
+    @DefaultFor({"googlecode", "gcode"})
     public void defaultCommand(ServerPlayer player) {
         player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-enough-arguments"));
     }

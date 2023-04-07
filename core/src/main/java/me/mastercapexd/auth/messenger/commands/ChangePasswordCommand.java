@@ -7,12 +7,14 @@ import com.bivashy.auth.api.event.AccountTryChangePasswordEvent;
 import com.bivashy.auth.api.link.LinkType;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(ChangePasswordCommand.CONFIGURATION_KEY)
 public class ChangePasswordCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "change-pass";
     @Dependency
@@ -20,8 +22,8 @@ public class ChangePasswordCommand implements OrphanCommand {
     @Dependency
     private AccountDatabase accountStorage;
 
-    @Default
     @ConfigurationArgumentError("changepass-not-enough-arguments")
+    @DefaultForOrphan
     public void onPasswordChange(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account, NewPassword newPassword) {
         plugin.getEventBus().publish(AccountTryChangePasswordEvent.class, account, false, true).thenAccept(tryChangePasswordEventPostResult -> {
             if (tryChangePasswordEventPostResult.getEvent().isCancelled())
