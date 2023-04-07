@@ -81,6 +81,7 @@
                             </excludes>
                         </filter>
                     </filters>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>
             </plugin>
             <!-- Maven source plugin -->
