@@ -26,7 +26,7 @@
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.assembly.plugin.version>3.3.0</maven.assembly.plugin.version>
+        <maven.shade.plugin.version>3.4.1</maven.shade.plugin.version>
         <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
     </properties>
 
@@ -54,29 +54,34 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <!-- Maven assembly plugin -->
+            <!-- Maven shade plugin -->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven.assembly.plugin.version}</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass/>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven.shade.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"/>
+                    </transformers>
+
+                    <filters>
+                        <filter>
+                            <artifact>org.spongepowered:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/SPONGEPO.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
             </plugin>
             <!-- Maven source plugin -->
             <plugin>
