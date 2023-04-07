@@ -9,6 +9,7 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -82,7 +83,12 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         }, Optional.empty());
     }
 
-    public Collection<AuthAccount> deleteAccountById(String id) {
-        return DEFAULT_EXCEPTION_CATCHER.execute(() -> deleteBuilder().where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, id).query(), Collections.emptyList());
+    public Collection<Void> deleteAccountById(String id) {
+        return DEFAULT_EXCEPTION_CATCHER.execute(() -> {
+            DeleteBuilder<AuthAccount, Long> deleteBuilder = deleteBuilder();
+            deleteBuilder.where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, id);
+            deleteBuilder.delete();
+            return null;
+        }, Collections.emptyList());
     }
 }
