@@ -11,12 +11,14 @@ import com.bivashy.auth.api.link.user.LinkUser;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
-import revxrsal.commands.annotation.Default;
+import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
+@CommandKey(GoogleUnlinkCommand.CONFIGURATION_KEY)
 public class GoogleUnlinkCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "google-remove";
     @Dependency
@@ -25,8 +27,8 @@ public class GoogleUnlinkCommand implements OrphanCommand {
     private AccountDatabase accountDatabase;
 
     @GoogleUse
-    @Default
     @ConfigurationArgumentError("google-unlink-not-enough-arguments")
+    @DefaultForOrphan
     public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         LinkUser linkUser = account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance());
 
