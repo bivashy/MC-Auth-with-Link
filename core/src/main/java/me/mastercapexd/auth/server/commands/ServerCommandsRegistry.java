@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.server.commands;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -200,6 +199,6 @@ public abstract class ServerCommandsRegistry {
     }
 
     private String[] makeServerCommandPaths(LinkType linkType, String commandPathKey) {
-        return Arrays.stream(linkType.getSettings().getProxyCommandPaths().getCommandPath(commandPathKey).getCommandPaths()).toArray(String[]::new);
+        return linkType.getSettings().getProxyCommandPaths().getCommandPath(commandPathKey).getCommandPaths();
     }
 }
