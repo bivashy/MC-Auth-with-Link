@@ -5,6 +5,7 @@ import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
@@ -13,6 +14,7 @@ import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.annotation.Optional;
 
 @LinkCommand(TelegramLinkCodeCommand.LINK_NAME)
+@CommandKey(LinkCodeCommand.CONFIGURATION_KEY)
 public class TelegramLinkCodeCommand extends LinkCodeCommand {
     public static final String LINK_NAME = "TELEGRAM";
 

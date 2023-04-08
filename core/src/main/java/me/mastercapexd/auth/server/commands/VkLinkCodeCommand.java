@@ -5,6 +5,7 @@ import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
@@ -13,6 +14,7 @@ import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.annotation.Optional;
 
 @LinkCommand(VkLinkCodeCommand.LINK_NAME)
+@CommandKey(LinkCodeCommand.CONFIGURATION_KEY)
 public class VkLinkCodeCommand extends LinkCodeCommand {
     public static final String LINK_NAME = "VK";
     public VkLinkCodeCommand(LinkConfirmationType linkConfirmationType) {
