@@ -4,24 +4,7 @@ import com.bivashy.auth.api.link.LinkType;
 
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import revxrsal.commands.command.CommandActor;
-import revxrsal.commands.exception.ArgumentParseException;
-import revxrsal.commands.exception.CommandInvocationException;
-import revxrsal.commands.exception.CooldownException;
-import revxrsal.commands.exception.DefaultExceptionHandler;
-import revxrsal.commands.exception.EnumNotFoundException;
-import revxrsal.commands.exception.InvalidBooleanException;
-import revxrsal.commands.exception.InvalidCommandException;
-import revxrsal.commands.exception.InvalidHelpPageException;
-import revxrsal.commands.exception.InvalidNumberException;
-import revxrsal.commands.exception.InvalidSubcommandException;
-import revxrsal.commands.exception.InvalidURLException;
-import revxrsal.commands.exception.InvalidUUIDException;
-import revxrsal.commands.exception.MissingArgumentException;
-import revxrsal.commands.exception.NoPermissionException;
-import revxrsal.commands.exception.NoSubcommandSpecifiedException;
-import revxrsal.commands.exception.NumberNotInRangeException;
-import revxrsal.commands.exception.SendableException;
-import revxrsal.commands.exception.TooManyArgumentsException;
+import revxrsal.commands.exception.*;
 
 public class MessengerExceptionHandler extends DefaultExceptionHandler {
     private final LinkType linkType;

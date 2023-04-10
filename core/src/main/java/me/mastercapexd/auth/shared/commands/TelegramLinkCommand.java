@@ -13,14 +13,12 @@ import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
-import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
-import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
 @CommandKey(MessengerLinkCommandTemplate.CONFIGURATION_KEY)
-@LinkCommand(TelegramLinkCommand.LINK_NAME)
 public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
     public static final String LINK_NAME = "TELEGRAM";
     @Dependency
@@ -30,12 +28,12 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
     @Dependency
     private AccountDatabase accountDatabase;
 
-    public TelegramLinkCommand(LinkConfirmationType linkConfirmationType, Messages<?> messages) {
-        super(linkConfirmationType, messages, TelegramLinkType.getInstance());
+    public TelegramLinkCommand(Messages<?> messages) {
+        super(messages, TelegramLinkType.getInstance());
     }
 
     @TelegramUse
-    @DefaultForOrphan
+    @DefaultFor("~")
     public void telegramLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 
@@ -44,10 +42,11 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
                 return;
             String code = generateCode(() -> config.getTelegramSettings().getConfirmationSettings().generateCode());
 
+            LinkConfirmationType linkConfirmationType = getLinkConfirmationType(commandActor);
             long timeoutTimestamp =
                     System.currentTimeMillis() + TelegramLinkType.getInstance().getSettings().getConfirmationSettings().getRemoveDelay().getMillis();
-            sendLinkConfirmation(commandActor, getLinkConfirmationType().bindLinkConfirmationUser(
-                    new BaseLinkConfirmationUser(getLinkConfirmationType(), timeoutTimestamp, TelegramLinkType.getInstance(), account, code),
+            sendLinkConfirmation(commandActor, linkConfirmationType.bindLinkConfirmationUser(
+                    new BaseLinkConfirmationUser(linkConfirmationType, timeoutTimestamp, TelegramLinkType.getInstance(), account, code),
                     linkUserIdentificator));
         });
     }

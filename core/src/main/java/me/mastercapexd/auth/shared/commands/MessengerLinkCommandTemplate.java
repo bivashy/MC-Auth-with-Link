@@ -11,21 +11,21 @@ import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.confirmation.LinkConfirmationUser;
+import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import revxrsal.commands.orphan.OrphanCommand;
 
 public class MessengerLinkCommandTemplate implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "link-game";
     private final AuthPlugin plugin = AuthPlugin.instance();
     private final PluginConfig config = plugin.getConfig();
-    private final LinkConfirmationType linkConfirmationType;
     private final Messages<?> messages;
     private final LinkType linkType;
 
-    public MessengerLinkCommandTemplate(LinkConfirmationType linkConfirmationType, Messages<?> messages, LinkType linkType) {
-        this.linkConfirmationType = linkConfirmationType;
+    public MessengerLinkCommandTemplate(Messages<?> messages, LinkType linkType) {
         this.messages = messages;
         this.linkType = linkType;
     }
@@ -48,16 +48,20 @@ public class MessengerLinkCommandTemplate implements OrphanCommand {
         commandActor.replyWithMessage(messages.getMessage("confirmation-sent", MessageContext.of("%code%", confirmationUser.getConfirmationCode())));
     }
 
-    public LinkConfirmationType getLinkConfirmationType() {
-        return linkConfirmationType;
-    }
-
     public String generateCode(Supplier<String> codeGenerator) {
         String code;
         do {
             code = codeGenerator.get();
-        } while(codeExists(code));
+        } while (codeExists(code));
         return code;
+    }
+
+    public LinkConfirmationType getLinkConfirmationType(MessageableCommandActor actor) {
+        if (actor instanceof ServerCommandActor)
+            return LinkConfirmationType.FROM_LINK;
+        if (actor instanceof LinkCommandActorWrapper)
+            return LinkConfirmationType.FROM_GAME;
+        throw new IllegalArgumentException("Cannot resolve confirmation type for actor: " + actor);
     }
 
     private boolean codeExists(String code) {

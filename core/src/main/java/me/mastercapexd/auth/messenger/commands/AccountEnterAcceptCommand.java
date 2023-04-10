@@ -11,8 +11,8 @@ import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
-import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
@@ -22,7 +22,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
     @Dependency
     private AuthPlugin plugin;
 
-    @DefaultForOrphan
+    @DefaultFor("~")
     public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
         List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().getLinkUsers(entryUser -> {
             if (!entryUser.getLinkType().equals(linkType))

@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.vk.command;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.ubivashka.lamp.commands.vk.core.VkHandler;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -42,6 +41,6 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
 
     @Override
     protected MessengerLinkCommandTemplate createLinkCommand() {
-        return new VKLinkCommand(LinkConfirmationType.FROM_GAME, VKLinkType.getInstance().getLinkMessages());
+        return new VKLinkCommand(VKLinkType.getInstance().getLinkMessages());
     }
 }

@@ -14,7 +14,7 @@
         <velocity.version>3.1.1</velocity.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
         <telegram.api.version>6.1.0</telegram.api.version>
-        <lamp.command-library.version>3.1.5</lamp.command-library.version>
+        <lamp.command-library.version>3.1.6</lamp.command-library.version>
         <limbo.api.version>1.1.7</limbo.api.version>
 
         <java.version>11</java.version>
@@ -47,7 +47,7 @@
 
         <!-- Lamp Bungee Module -->
         <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <groupId>com.github.bivashy.Lamp</groupId>
             <artifactId>velocity</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>

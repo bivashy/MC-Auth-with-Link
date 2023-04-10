@@ -12,7 +12,7 @@
 
     <properties>
         <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
-        <lamp.command-library.version>3.1.5</lamp.command-library.version>
+        <lamp.command-library.version>3.1.6</lamp.command-library.version>
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
         <telegram.api.version>6.5.0</telegram.api.version>
         <vk.api.version>0.3.2-Snapshot</vk.api.version>
@@ -58,7 +58,7 @@
 
         <!-- Lamp Bungee Module -->
         <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <groupId>com.github.bivashy.Lamp</groupId>
             <artifactId>bungee</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>

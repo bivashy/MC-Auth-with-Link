@@ -63,8 +63,6 @@ telegram:
   proxy-commands:
     link-game: # Указывайте команды БЕЗ знака '/'
       main-command: 'addtg'
-    code:
-      main-command: 'code'
 
   # Команды в телеграме
   telegram-commands: # Основные команды

@@ -17,14 +17,12 @@ import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
-import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
-import me.mastercapexd.auth.shared.commands.annotation.LinkCommand;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.orphan.OrphanCommand;
 
 @CommandKey(MessengerLinkCommandTemplate.CONFIGURATION_KEY)
-@LinkCommand(VKLinkCommand.LINK_NAME)
 public class VKLinkCommand extends MessengerLinkCommandTemplate implements OrphanCommand {
     public static final String LINK_NAME = "VK";
     @Dependency
@@ -34,12 +32,12 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
     @Dependency
     private AccountDatabase accountStorage;
 
-    public VKLinkCommand(LinkConfirmationType linkConfirmationType, Messages<?> messages) {
-        super(linkConfirmationType, messages, VKLinkType.getInstance());
+    public VKLinkCommand(Messages<?> messages) {
+        super(messages, VKLinkType.getInstance());
     }
 
     @VkUse
-    @DefaultForOrphan
+    @DefaultFor("~")
     public void vkLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 
@@ -48,9 +46,10 @@ public class VKLinkCommand extends MessengerLinkCommandTemplate implements Orpha
                 return;
             String code = generateCode(() -> config.getVKSettings().getConfirmationSettings().generateCode());
 
+            LinkConfirmationType linkConfirmationType = getLinkConfirmationType(commandActor);
             long timeoutTimestamp = System.currentTimeMillis() + VKLinkType.getInstance().getSettings().getConfirmationSettings().getRemoveDelay().getMillis();
-            sendLinkConfirmation(commandActor, getLinkConfirmationType().bindLinkConfirmationUser(
-                    new BaseLinkConfirmationUser(getLinkConfirmationType(), timeoutTimestamp, VKLinkType.getInstance(), account, code), linkUserIdentificator));
+            sendLinkConfirmation(commandActor, linkConfirmationType.bindLinkConfirmationUser(
+                    new BaseLinkConfirmationUser(linkConfirmationType, timeoutTimestamp, VKLinkType.getInstance(), account, code), linkUserIdentificator));
         });
     }
 

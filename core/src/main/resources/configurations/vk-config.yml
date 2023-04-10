@@ -64,8 +64,6 @@ vk:
   proxy-commands:
     link-game: # Указывайте команды БЕЗ знака '/'
       main-command: 'addvk'
-    code:
-      main-command: 'code'
 
   # Команды которые в ВК
   vk-commands: # Основные команды

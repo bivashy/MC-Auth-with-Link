@@ -16,8 +16,8 @@ import com.ubivaska.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
-import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.orphan.OrphanCommand;
@@ -28,7 +28,7 @@ public class AccountsListCommand implements OrphanCommand {
     @Dependency
     private AccountDatabase accountDatabase;
 
-    @DefaultForOrphan
+    @DefaultFor("~")
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page, @Flag("pageSize") @Default(
             "5") Integer accountsPerPage, @Flag("type") @Default("my") String type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("linked"))) {

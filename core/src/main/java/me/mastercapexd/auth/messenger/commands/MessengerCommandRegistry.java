@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -18,17 +16,13 @@ import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
-import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
-import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
-import revxrsal.commands.annotation.DefaultFor;
-import revxrsal.commands.annotation.dynamic.Annotations;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
@@ -116,18 +110,6 @@ public abstract class MessengerCommandRegistry {
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
             return account;
         });
-
-        commandHandler.registerAnnotationReplacer(DefaultForOrphan.class, (annotatedElement, annotation) -> {
-            if (!(annotatedElement instanceof Method))
-                return Collections.emptyList();
-            Method annotatedMethod = (Method) annotatedElement;
-            Class<?> declaringClass = annotatedMethod.getDeclaringClass();
-            if (!declaringClass.isAnnotationPresent(CommandKey.class))
-                return Collections.emptyList();
-            CommandKey commandKey = declaringClass.getAnnotation(CommandKey.class);
-            DefaultFor defaultForAnnotation = Annotations.create(DefaultFor.class, "value", commandPath(commandKey.value()));
-            return Collections.singletonList(defaultForAnnotation);
-        });
     }
 
     private void registerDependencies() {
@@ -139,12 +121,11 @@ public abstract class MessengerCommandRegistry {
     }
 
     protected void registerCommands() {
-        linkType.getSettings().getLinkConfirmationTypes().forEach(confirmationType -> {
-            if (confirmationType == LinkConfirmationType.FROM_LINK)
-                registerCommand(linkPath(LinkCodeCommand.CONFIGURATION_KEY), new LinkCodeCommand(confirmationType, linkType.getLinkMessages()));
-            if (confirmationType == LinkConfirmationType.FROM_GAME)
-                registerCommand(linkPath(MessengerLinkCommandTemplate.CONFIGURATION_KEY), createLinkCommand());
-        });
+        if (confirmationTypeEnabled(LinkConfirmationType.FROM_LINK))
+            registerCommand(linkPath(LinkCodeCommand.CONFIGURATION_KEY), new LinkCodeCommand());
+        if (confirmationTypeEnabled(LinkConfirmationType.FROM_GAME))
+            registerCommand(linkPath(MessengerLinkCommandTemplate.CONFIGURATION_KEY), createLinkCommand());
+
         registerCommand(linkPath(ConfirmationToggleCommand.CONFIGURATION_KEY), new ConfirmationToggleCommand());
         registerCommand(linkPath(AccountsListCommand.CONFIGURATION_KEY), new AccountsListCommand());
         registerCommand(linkPath(AccountCommand.CONFIGURATION_KEY), new AccountCommand());
@@ -162,6 +143,10 @@ public abstract class MessengerCommandRegistry {
 
     private void registerCommand(Orphans path, OrphanCommand commandInstance) {
         commandHandler.register(path.handler(commandInstance));
+    }
+
+    private boolean confirmationTypeEnabled(LinkConfirmationType confirmationType) {
+        return linkType.getSettings().getLinkConfirmationTypes().contains(confirmationType);
     }
 
     private Orphans linkPath(String key) {

@@ -1,7 +1,6 @@
 package me.mastercapexd.auth.telegram.command;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.bivashy.auth.api.type.LinkConfirmationType;
 import com.ubivashka.lamp.telegram.core.TelegramHandler;
 
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
@@ -41,6 +40,6 @@ public class TelegramCommandRegistry extends MessengerCommandRegistry {
 
     @Override
     protected MessengerLinkCommandTemplate createLinkCommand() {
-        return new TelegramLinkCommand(LinkConfirmationType.FROM_GAME, TelegramLinkType.getInstance().getLinkMessages());
+        return new TelegramLinkCommand(TelegramLinkType.getInstance().getLinkMessages());
     }
 }

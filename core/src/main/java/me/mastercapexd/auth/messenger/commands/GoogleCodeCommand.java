@@ -14,7 +14,7 @@ import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
-import me.mastercapexd.auth.shared.commands.annotation.DefaultForOrphan;
+import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
@@ -30,7 +30,7 @@ public class GoogleCodeCommand implements OrphanCommand {
 
     @GoogleUse
     @ConfigurationArgumentError("google-code-not-enough-arguments")
-    @DefaultForOrphan
+    @DefaultFor("~")
     public void googleCode(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account, Integer code) {
         LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
             GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY);
