@@ -13,7 +13,7 @@ public class SimpleStringTokenizer {
     private static final List<String> EMPTY_TEXT = Collections.singletonList("");
 
     public static ArgumentStack parse(String arguments) throws ArgumentParseException {
-        if (arguments.length() == 0) {
+        if (arguments == null || arguments.length() == 0) {
             return ArgumentStack.empty();
         }
         TokenizerState state = new TokenizerState(arguments);
