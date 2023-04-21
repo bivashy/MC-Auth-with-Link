@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.config.link.LinkSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
@@ -155,23 +156,23 @@ public abstract class ServerCommandsRegistry {
         commandHandler.register(new AuthCommand(), new LoginCommand(), new RegisterCommand(), new ChangePasswordCommand(), new GoogleCodeCommand(),
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
-        if (confirmationTypeEnabled(VKLinkType.getInstance(), LinkConfirmationType.FROM_GAME) ||
-                confirmationTypeEnabled(TelegramLinkType.getInstance(), LinkConfirmationType.FROM_GAME))
+        if (confirmationTypeEnabled(plugin.getConfig().getVKSettings(), LinkConfirmationType.FROM_GAME) ||
+                confirmationTypeEnabled(plugin.getConfig().getTelegramSettings(), LinkConfirmationType.FROM_GAME))
             commandHandler.register(Orphans.path("code").handler(new LinkCodeCommand()));
-        registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(VKLinkType.getInstance().getServerMessages()));
-        registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(TelegramLinkType.getInstance().getServerMessages()));
+        if (plugin.getConfig().getVKSettings().isEnabled())
+            registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(VKLinkType.getInstance().getServerMessages()));
+        if (plugin.getConfig().getTelegramSettings().isEnabled())
+            registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(TelegramLinkType.getInstance().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand) {
-        if (!linkType.getSettings().isEnabled())
-            return;
-        if (!confirmationTypeEnabled(linkType, LinkConfirmationType.FROM_LINK))
+        if (!confirmationTypeEnabled(linkType.getSettings(), LinkConfirmationType.FROM_LINK))
             return;
         commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, MessengerLinkCommandTemplate.CONFIGURATION_KEY)).handler(linkCommand));
     }
 
-    private boolean confirmationTypeEnabled(LinkType linkType, LinkConfirmationType confirmationType) {
-        return linkType.getSettings().getLinkConfirmationTypes().contains(confirmationType);
+    private boolean confirmationTypeEnabled(LinkSettings settings, LinkConfirmationType confirmationType) {
+        return settings.getLinkConfirmationTypes().contains(confirmationType);
     }
 
     private String[] makeServerCommandPaths(LinkType linkType, String commandPathKey) {
