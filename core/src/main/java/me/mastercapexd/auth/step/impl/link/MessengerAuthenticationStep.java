@@ -11,8 +11,8 @@ import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 import com.bivashy.auth.api.step.MessageableAuthenticationStep;
-import com.ubivaska.messenger.common.identificator.Identificator;
-import com.ubivaska.messenger.common.keyboard.Keyboard;
+import com.bivashy.messenger.common.identificator.Identificator;
+import com.bivashy.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
 import me.mastercapexd.auth.step.AuthenticationStepTemplate;

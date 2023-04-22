@@ -12,7 +12,7 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivashka.messenger.vk.MessengerVk;
+import com.bivashy.messenger.vk.MessengerVk;
 
 import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
 import me.mastercapexd.auth.config.message.vk.VKMessagePlaceholderContext;

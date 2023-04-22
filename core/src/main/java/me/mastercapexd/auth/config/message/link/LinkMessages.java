@@ -2,7 +2,7 @@ package me.mastercapexd.auth.config.message.link;
 
 import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.config.message.Messages;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.message.MessagesTemplate;
 

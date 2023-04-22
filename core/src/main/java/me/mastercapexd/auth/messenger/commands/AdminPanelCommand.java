@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.messenger.commands;
 
 import com.bivashy.auth.api.link.LinkType;
-import com.ubivaska.messenger.common.keyboard.Keyboard;
+import com.bivashy.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;

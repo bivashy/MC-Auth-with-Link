@@ -2,8 +2,8 @@ package me.mastercapexd.auth.bungee;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.management.LoginManagement;
-import com.ubivashka.messenger.vk.message.VkMessage;
-import com.ubivashka.messenger.vk.provider.VkApiProvider;
+import com.bivashy.messenger.vk.message.VkMessage;
+import com.bivashy.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 
 import me.mastercapexd.auth.BaseAuthPlugin;

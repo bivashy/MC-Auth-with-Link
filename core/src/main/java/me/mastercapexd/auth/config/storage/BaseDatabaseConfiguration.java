@@ -4,10 +4,10 @@ import java.io.File;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.annotation.ImportantField;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.annotation.ImportantField;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.SqlConnectionUrl;

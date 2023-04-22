@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.ubivashka.configuration.context.ConfigurationFieldFactoryContext;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
-import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolver;
-import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolverFactory;
+import com.bivashy.configuration.context.ConfigurationFieldFactoryContext;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.resolver.field.ConfigurationFieldResolver;
+import com.bivashy.configuration.resolver.field.ConfigurationFieldResolverFactory;
 
 public class ConfigurationHolderMapResolverFactory implements ConfigurationFieldResolverFactory {
     @Override

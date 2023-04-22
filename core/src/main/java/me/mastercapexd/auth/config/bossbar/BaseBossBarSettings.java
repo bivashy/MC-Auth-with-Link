@@ -6,9 +6,9 @@ import com.bivashy.auth.api.server.bossbar.ServerBossbar;
 import com.bivashy.auth.api.server.bossbar.ServerBossbar.Color;
 import com.bivashy.auth.api.server.bossbar.ServerBossbar.Style;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 public class BaseBossBarSettings implements ConfigurationHolder, BossBarSettings {
     @ConfigField("use")

@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.vk.command;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.ubivashka.lamp.commands.vk.core.VkHandler;
+import com.bivashy.lamp.commands.vk.core.VkHandler;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 

@@ -2,8 +2,8 @@ package me.mastercapexd.auth.config;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.asset.resource.impl.FolderResourceReader;
-import com.ubivashka.configuration.configurate.holder.ConfigurationNodeHolder;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.configurate.holder.ConfigurationNodeHolder;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 public class BasePluginConfig extends SpongeConfiguratePluginConfig {
     public BasePluginConfig(AuthPlugin proxyPlugin) {

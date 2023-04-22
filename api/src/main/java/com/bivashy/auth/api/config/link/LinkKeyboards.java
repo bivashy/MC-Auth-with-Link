@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.bivashy.auth.api.util.CollectionUtil.ArrayPairHashMapAdapter;
+import com.bivashy.messenger.common.keyboard.Keyboard;
 import com.google.gson.Gson;
-import com.ubivaska.messenger.common.keyboard.Keyboard;
 
 public interface LinkKeyboards {
     Gson GSON = new Gson();

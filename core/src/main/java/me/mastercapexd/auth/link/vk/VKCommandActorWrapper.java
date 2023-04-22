@@ -2,10 +2,10 @@ package me.mastercapexd.auth.link.vk;
 
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
-import com.ubivashka.lamp.commands.vk.VkActor;
-import com.ubivashka.lamp.commands.vk.message.DispatchSource;
-import com.ubivaska.messenger.common.identificator.Identificator;
-import com.ubivaska.messenger.common.message.Message;
+import com.bivashy.lamp.commands.vk.message.DispatchSource;
+import com.bivashy.messenger.common.identificator.Identificator;
+import com.bivashy.messenger.common.message.Message;
+import com.bivashy.lamp.commands.vk.VkActor;
 import com.vk.api.sdk.objects.messages.Conversation;
 import com.vk.api.sdk.objects.messages.ConversationPeerType;
 import com.vk.api.sdk.objects.users.UserFull;

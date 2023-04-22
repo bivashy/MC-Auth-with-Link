@@ -12,11 +12,11 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivaska.messenger.common.button.Button.ButtonBuilder;
-import com.ubivaska.messenger.common.button.ButtonAction.ButtonActionBuilder;
-import com.ubivaska.messenger.common.button.ButtonColor.ButtonColorBuilder;
-import com.ubivaska.messenger.common.keyboard.Keyboard.KeyboardBuilder;
-import com.ubivaska.messenger.common.message.Message.MessageBuilder;
+import com.bivashy.messenger.common.button.Button.ButtonBuilder;
+import com.bivashy.messenger.common.button.ButtonAction.ButtonActionBuilder;
+import com.bivashy.messenger.common.button.ButtonColor.ButtonColorBuilder;
+import com.bivashy.messenger.common.keyboard.Keyboard.KeyboardBuilder;
+import com.bivashy.messenger.common.message.Message.MessageBuilder;
 
 import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
 

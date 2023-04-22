@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.config.message.Messages;
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 public abstract class MessagesTemplate<T> implements Messages<T>, ConfigurationHolder {
     public static final String DEFAULT_DELIMITER = "\n";

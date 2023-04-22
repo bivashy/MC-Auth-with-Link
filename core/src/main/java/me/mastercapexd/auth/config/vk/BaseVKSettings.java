@@ -14,9 +14,9 @@ import com.bivashy.auth.api.config.link.stage.LinkRestoreSettings;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.link.BaseCommandPaths;
 import me.mastercapexd.auth.config.link.BaseConfirmationSettings;

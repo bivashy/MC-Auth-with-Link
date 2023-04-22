@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import com.ubivashka.functions.Castable;
+import com.bivashy.auth.api.util.Castable;
 
 public interface Resource extends Castable<Resource> {
     String getName();

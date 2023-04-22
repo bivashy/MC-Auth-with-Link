@@ -13,13 +13,13 @@
 
     <properties>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <multimessenger.version>0.0.7</multimessenger.version>
+        <multimessenger.version>1.0.1</multimessenger.version>
         <adventure.serializer.version>4.13.0</adventure.serializer.version>
         <adventure.platform.version>4.3.0</adventure.platform.version>
         <ormlite.version>6.1</ormlite.version>
         <google.authenticator.version>1.5.0</google.authenticator.version>
         <event-bus.version>1.2</event-bus.version>
-        <configuration-library.version>3.0.6</configuration-library.version>
+        <configuration-library.version>4.0.2</configuration-library.version>
     </properties>
 
     <repositories>
@@ -39,17 +39,17 @@
 
         <!-- MultiMessenger library -->
         <dependency>
-            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>common</artifactId>
             <version>${multimessenger.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>vk</artifactId>
             <version>${multimessenger.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.U61vashka.MultiMessenger</groupId>
+            <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>telegram</artifactId>
             <version>${multimessenger.version}</version>
             <exclusions>
@@ -107,7 +107,7 @@
 
         <!-- Configuration library core -->
         <dependency>
-            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
             <artifactId>core</artifactId>
             <version>${configuration-library.version}</version>
         </dependency>

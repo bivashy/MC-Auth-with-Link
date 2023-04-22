@@ -24,10 +24,10 @@ import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivashka.configuration.ConfigurationProcessor;
-import com.ubivashka.configuration.configurate.SpongeConfigurateProcessor;
-import com.ubivashka.messenger.telegram.message.TelegramMessage;
-import com.ubivashka.messenger.telegram.providers.TelegramApiProvider;
+import com.bivashy.configuration.ConfigurationProcessor;
+import com.bivashy.configuration.configurate.SpongeConfigurateProcessor;
+import com.bivashy.messenger.telegram.message.TelegramMessage;
+import com.bivashy.messenger.telegram.providers.TelegramApiProvider;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import io.github.revxrsal.eventbus.EventBus;

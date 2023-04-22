@@ -11,8 +11,8 @@ import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.server.message.SelfHandledServerComponent;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.message.MessagesTemplate;
 import me.mastercapexd.auth.server.adventure.BaseComponentDeserializer;

@@ -1,8 +1,8 @@
 package me.mastercapexd.auth.velocity.hooks.limbo.config;
 
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import net.elytrium.limboapi.api.Limbo;
 import net.elytrium.limboapi.api.LimboFactory;

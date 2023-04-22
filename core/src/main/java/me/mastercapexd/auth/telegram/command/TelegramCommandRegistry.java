@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.telegram.command;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.ubivashka.lamp.telegram.core.TelegramHandler;
+import com.bivashy.lamp.telegram.core.TelegramHandler;
 
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;

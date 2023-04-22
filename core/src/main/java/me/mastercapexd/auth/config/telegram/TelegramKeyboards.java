@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.config.link.LinkKeyboards;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
-import com.ubivashka.messenger.telegram.message.keyboard.TelegramKeyboard;
-import com.ubivaska.messenger.common.keyboard.Keyboard;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.messenger.telegram.message.keyboard.TelegramKeyboard;
+import com.bivashy.messenger.common.keyboard.Keyboard;
 
 public class TelegramKeyboards implements ConfigurationHolder, LinkKeyboards {
     private final Map<String, String> jsonKeyboards;

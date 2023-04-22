@@ -4,8 +4,8 @@ import java.util.regex.Pattern;
 
 import com.bivashy.auth.api.config.link.command.LinkCustomCommandSettings;
 import com.bivashy.auth.api.link.command.context.CustomCommandExecutionContext;
-import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.ConfigurationHolder;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 public class BaseCustomCommandSettings implements LinkCustomCommandSettings, ConfigurationHolder {
     private final ConfigurationSectionHolder sectionHolder;

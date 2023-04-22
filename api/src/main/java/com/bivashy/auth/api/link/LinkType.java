@@ -6,7 +6,7 @@ import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivaska.messenger.common.Messenger;
+import com.bivashy.messenger.common.Messenger;
 
 public interface LinkType extends Messenger {
     /**

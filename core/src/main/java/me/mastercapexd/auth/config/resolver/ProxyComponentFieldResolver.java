@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivashka.configuration.context.ConfigurationFieldResolverContext;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
-import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolver;
+import com.bivashy.configuration.context.ConfigurationFieldResolverContext;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.resolver.field.ConfigurationFieldResolver;
 
 public class ProxyComponentFieldResolver implements ConfigurationFieldResolver<ServerComponent> {
     @Override

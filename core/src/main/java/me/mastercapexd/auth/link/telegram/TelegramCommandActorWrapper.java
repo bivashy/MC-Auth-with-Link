@@ -2,11 +2,11 @@ package me.mastercapexd.auth.link.telegram;
 
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
-import com.ubivashka.lamp.telegram.TelegramActor;
-import com.ubivashka.lamp.telegram.dispatch.DispatchSource;
-import com.ubivashka.messenger.telegram.message.TelegramMessage;
-import com.ubivaska.messenger.common.identificator.Identificator;
-import com.ubivaska.messenger.common.message.Message;
+import com.bivashy.lamp.telegram.TelegramActor;
+import com.bivashy.lamp.telegram.dispatch.DispatchSource;
+import com.bivashy.messenger.common.identificator.Identificator;
+import com.bivashy.messenger.common.message.Message;
+import com.bivashy.messenger.telegram.message.TelegramMessage;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapperTemplate;
 

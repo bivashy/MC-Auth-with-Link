@@ -17,7 +17,7 @@ import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.util.Castable;
-import com.ubivashka.configuration.ConfigurationProcessor;
+import com.bivashy.configuration.ConfigurationProcessor;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import io.github.revxrsal.eventbus.EventBus;

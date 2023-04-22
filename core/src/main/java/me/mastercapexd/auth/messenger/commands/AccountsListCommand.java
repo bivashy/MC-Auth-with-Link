@@ -11,8 +11,8 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.util.CollectionUtil.ArrayPairHashMapAdapter.PaginatedList;
-import com.ubivaska.messenger.common.button.ButtonColor;
-import com.ubivaska.messenger.common.keyboard.Keyboard;
+import com.bivashy.messenger.common.button.ButtonColor;
+import com.bivashy.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;

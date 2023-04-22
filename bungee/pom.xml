@@ -15,7 +15,7 @@
         <lamp.command-library.version>3.1.6</lamp.command-library.version>
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
         <telegram.api.version>6.5.0</telegram.api.version>
-        <vk.api.version>0.3.2-Snapshot</vk.api.version>
+        <vk.api.version>0.4.2</vk.api.version>
     </properties>
 
     <repositories>
@@ -72,8 +72,8 @@
 
         <!-- VK API -->
         <dependency>
-            <groupId>com.github.U61vashka</groupId>
-            <artifactId>VK-API-Spigot-Bungee</artifactId>
+            <groupId>com.github.bivashy</groupId>
+            <artifactId>VK-API-PluginAdapter</artifactId>
             <version>${vk.api.version}</version>
             <scope>provided</scope>
         </dependency>

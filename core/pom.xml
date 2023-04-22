@@ -14,14 +14,14 @@
         <auth.api.version>${project.version}</auth.api.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <zxing.library.version>3.5.1</zxing.library.version>
-        <configuration-library.version>3.0.6</configuration-library.version>
+        <configuration-library.version>4.0.2</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
         <lamp.command-library.version>3.1.6</lamp.command-library.version>
-        <vk-lamp-module.version>0.1.2</vk-lamp-module.version>
-        <telegram-lamp-module.version>0.0.7</telegram-lamp-module.version>
+        <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
+        <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
         <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
         <minimessage.version>4.13.0</minimessage.version>
-        <vk.api.version>0.3.2-Snapshot</vk.api.version>
+        <vk.api.version>0.4.2</vk.api.version>
     </properties>
 
     <repositories>
@@ -60,7 +60,7 @@
 
         <!-- Configuration library for Configurate -->
         <dependency>
-            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
             <artifactId>configurate</artifactId>
             <version>${configuration-library.version}</version>
         </dependency>
@@ -88,7 +88,7 @@
 
         <!-- Lamp Vk Module -->
         <dependency>
-            <groupId>com.github.U61vashka</groupId>
+            <groupId>com.github.bivashy</groupId>
             <artifactId>VkLampModule</artifactId>
             <version>${vk-lamp-module.version}</version>
             <exclusions>
@@ -101,15 +101,15 @@
 
         <!-- Lamp telegram module -->
         <dependency>
-            <groupId>com.github.U61vashka</groupId>
+            <groupId>com.github.bivashy</groupId>
             <artifactId>TelegramLampModule</artifactId>
             <version>${telegram-lamp-module.version}</version>
         </dependency>
 
         <!-- VK API -->
         <dependency>
-            <groupId>com.github.U61vashka</groupId>
-            <artifactId>VK-API-Spigot-Bungee</artifactId>
+            <groupId>com.github.bivashy</groupId>
+            <artifactId>VK-API-PluginAdapter</artifactId>
             <version>${vk.api.version}</version>
             <scope>provided</scope>
         </dependency>

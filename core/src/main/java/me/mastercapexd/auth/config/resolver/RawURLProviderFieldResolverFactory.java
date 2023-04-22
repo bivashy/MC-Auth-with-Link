@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.ubivashka.configuration.context.ConfigurationFieldFactoryContext;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
-import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolver;
-import com.ubivashka.configuration.resolver.field.ConfigurationFieldResolverFactory;
+import com.bivashy.configuration.context.ConfigurationFieldFactoryContext;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.resolver.field.ConfigurationFieldResolver;
+import com.bivashy.configuration.resolver.field.ConfigurationFieldResolverFactory;
 
 public class RawURLProviderFieldResolverFactory implements ConfigurationFieldResolverFactory {
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();

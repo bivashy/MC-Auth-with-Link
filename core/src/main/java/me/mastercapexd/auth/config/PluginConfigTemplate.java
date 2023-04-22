@@ -21,9 +21,9 @@ import com.bivashy.auth.api.type.FillType;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.annotation.ImportantField;
-import com.ubivashka.configuration.holder.ConfigurationSectionHolder;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.annotation.ImportantField;
+import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
 import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;

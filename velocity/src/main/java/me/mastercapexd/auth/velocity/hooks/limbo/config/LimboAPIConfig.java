@@ -9,9 +9,9 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import com.bivashy.auth.api.asset.resource.ResourceReader;
-import com.ubivashka.configuration.ConfigurationProcessor;
-import com.ubivashka.configuration.annotation.ConfigField;
-import com.ubivashka.configuration.configurate.SpongeConfigurateProcessor;
+import com.bivashy.configuration.ConfigurationProcessor;
+import com.bivashy.configuration.annotation.ConfigField;
+import com.bivashy.configuration.configurate.SpongeConfigurateProcessor;
 
 import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 

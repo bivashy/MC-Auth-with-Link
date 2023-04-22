@@ -11,7 +11,7 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.ubivashka.messenger.telegram.MessengerTelegram;
+import com.bivashy.messenger.telegram.MessengerTelegram;
 
 import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
 import me.mastercapexd.auth.config.message.telegram.TelegramMessagePlaceholderContext;
