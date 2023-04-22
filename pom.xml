@@ -81,6 +81,96 @@
                             </excludes>
                         </filter>
                     </filters>
+
+                    <relocations combine.children="append">
+                        <relocation>
+                            <pattern>revxrsal.commands</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.revxrsal.commands</shadedPattern>
+                        </relocation>
+
+                        <relocation>
+                            <pattern>org.objectweb.asm</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.objectweb.asm</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.yaml.snakeyaml</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.yaml.snakeyaml</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.spongepowered.configurate</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.spongepowered.configurate</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.mindrot.jbcrypt</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.spongepowered.configurate</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.intellij</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.jetbrains</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.checkerframework</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.checkerframework</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.http</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.apache.http</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.org.apache.commons</shadedPattern>
+                        </relocation>
+
+                        <relocation>
+                            <pattern>io.leangen.geantyref</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.io.leangen.geantyref</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.github.revxrsal</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.io.github.revxrsal</shadedPattern>
+                        </relocation>
+
+                        <relocation>
+                            <pattern>com.warrenstrange.googleauth</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.warrenstrange.googleauth</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.bivashy.messenger</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.messenger</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.bivashy.lamp</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.lamp</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.bivashy.function</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.function</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.bivashy.functions</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.functions</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.bivashy.configuration</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.configuration</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.bivashy</pattern> <!-- I didn`t even notice this, lol -->
+                            <shadedPattern>com.bivashy.auth.lib.com.bivashy</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.j256.ormlite</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.j256.ormlite</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.google</shadedPattern>
+                        </relocation>
+                    </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>
             </plugin>
