@@ -139,36 +139,16 @@
                             <shadedPattern>com.bivashy.auth.lib.com.warrenstrange.googleauth</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.bivashy.messenger</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.messenger</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.bivashy.lamp</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.lamp</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.bivashy.function</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.function</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.bivashy.functions</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.functions</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.bivashy.configuration</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.bivashy.configuration</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.bivashy</pattern> <!-- I didn`t even notice this, lol -->
-                            <shadedPattern>com.bivashy.auth.lib.com.bivashy</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.j256.ormlite</pattern>
                             <shadedPattern>com.bivashy.auth.lib.com.j256.ormlite</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.google</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.google</shadedPattern>
+                            <pattern>com.google.zxing</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.google.zxing</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.errorprone</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.com.google.errorprone</shadedPattern>
                         </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
