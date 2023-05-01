@@ -69,11 +69,6 @@ public class BaseServerMessages extends MessagesTemplate<ServerComponent> implem
     }
 
     @Override
-    public String formatString(String message) {
-        return PLUGIN.getCore().colorize(message);
-    }
-
-    @Override
     protected Messages<ServerComponent> createMessages(ConfigurationSectionHolder configurationSection) {
         return new BaseServerMessages(configurationSection, deserializer);
     }
