@@ -19,9 +19,11 @@ import com.velocitypowered.api.proxy.ProxyServer;
 
 import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.hooks.VkPluginHook;
+import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
 import me.mastercapexd.auth.velocity.hooks.VelocityVkPluginHook;
+import me.mastercapexd.auth.velocity.hooks.limbo.LimboAPIHook;
 import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
@@ -55,6 +57,7 @@ public class VelocityAuthPluginBootstrap {
                 dataFolder, core);
         initializeListener();
         initializeCommand();
+        initializeLimbo();
         if (authPlugin.getConfig().getVKSettings().isEnabled())
             initializeVk();
     }
@@ -74,6 +77,13 @@ public class VelocityAuthPluginBootstrap {
 
     private void initializeCommand() {
         new VelocityCommandRegistry(this, authPlugin);
+    }
+
+    private void initializeLimbo() {
+        LimboAPIHook limboAPIHook = new LimboAPIHook();
+        if (!limboAPIHook.canHook())
+            return;
+        authPlugin.putHook(LimboHook.class, limboAPIHook);
     }
 
     public ProxyServer getProxyServer() {
