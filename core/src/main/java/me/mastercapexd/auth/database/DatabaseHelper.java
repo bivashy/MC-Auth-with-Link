@@ -8,20 +8,22 @@ import java.util.concurrent.Executors;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
-import me.mastercapexd.auth.util.DownloadUtil;
-import me.mastercapexd.auth.util.DriverUtil;
+import com.bivashy.auth.api.config.database.schema.SchemaSettings;
 import com.bivashy.auth.api.util.HashUtils;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.support.ConnectionSource;
 
+import me.mastercapexd.auth.config.storage.schema.BaseTableSettings;
 import me.mastercapexd.auth.database.dao.AccountLinkDao;
 import me.mastercapexd.auth.database.dao.AuthAccountDao;
 import me.mastercapexd.auth.database.migration.MigrationCoordinator;
 import me.mastercapexd.auth.database.migration.Migrations;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
+import me.mastercapexd.auth.util.DownloadUtil;
+import me.mastercapexd.auth.util.DriverUtil;
 
 public class DatabaseHelper {
     public static final String ID_FIELD_KEY = "id";
@@ -33,6 +35,7 @@ public class DatabaseHelper {
 
     public DatabaseHelper(AuthPlugin plugin) {
         DatabaseSettings databaseConfiguration = plugin.getConfig().getDatabaseConfiguration();
+        SchemaSettings schemaSettings = databaseConfiguration.getSchemaSettings();
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
@@ -48,8 +51,10 @@ public class DatabaseHelper {
                 this.connectionSource = new JdbcPooledConnectionSource(databaseConfiguration.getConnectionUrl(), databaseConfiguration.getUsername(),
                         databaseConfiguration.getPassword());
 
-                this.accountLinkDao = new AccountLinkDao(connectionSource, this);
-                this.authAccountDao = new AuthAccountDao(connectionSource, this);
+                this.accountLinkDao = new AccountLinkDao(connectionSource,
+                        schemaSettings.getTableSettings("link").orElse(new BaseTableSettings("account_links")));
+                this.authAccountDao = new AuthAccountDao(connectionSource,
+                        schemaSettings.getTableSettings("auth").orElse(new BaseTableSettings("mc_auth_accounts")), this);
 
                 authAccountMigrationCoordinator.add(Migrations.LEGACY_MC_AUTH_TO_NEW_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_5_0_LINKS_MIGRATOR);

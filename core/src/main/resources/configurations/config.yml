@@ -32,7 +32,26 @@ data:
 #  # PostgreSQL 42.4.0: https://repo1.maven.org/maven2/org/postgresql/postgresql/42.5.1/postgresql-42.5.1.jar
 #  # MariaDB 3.0.6:     https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.0.8/mariadb-java-client-3.0.8.jar
 #  download-url: 'https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar'
-#
+#  scheme:
+#    auth:
+#      table-name: 'mc_auth_accounts'
+#      columns:
+#        playerId: 'player_id'
+#        playerIdType: 'unique_id'
+#        hashType; 'hash_type'
+#        lastIp: 'last_ip'
+#        uniqueId: 'unique_id'
+#        playerName: 'player_name'
+#        passwordHash: 'password_hash'
+#        lastQuitTimestamp: 'last_quit'
+#        lastSessionStartTimestamp: 'last_session_start'
+#    link:
+#      table-name: 'auth_links'
+#      columns:
+#        linkType: 'link_type'
+#        linkUserId: 'link_user_id'
+#        linkEnabled: 'link_enabled'
+#        account: 'account_id'
 #  # Если интересно что такое драйвер (Просто для ознакомления, не более):
 #  #     #*
 #  #    %(#&%@    */(&,/                    Да кто этот ваш драйвер?

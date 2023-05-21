@@ -2,6 +2,8 @@ package com.bivashy.auth.api.config.database;
 
 import java.io.File;
 
+import com.bivashy.auth.api.config.database.schema.SchemaSettings;
+
 public interface DatabaseSettings {
     String getConnectionUrl();
 
@@ -12,4 +14,6 @@ public interface DatabaseSettings {
     String getDriverDownloadUrl();
 
     File getCacheDriverPath();
+
+    SchemaSettings getSchemaSettings();
 }

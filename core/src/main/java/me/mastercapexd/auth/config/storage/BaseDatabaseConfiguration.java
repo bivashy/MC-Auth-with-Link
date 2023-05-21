@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
+import com.bivashy.auth.api.config.database.schema.SchemaSettings;
 import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.annotation.ImportantField;
@@ -11,6 +12,7 @@ import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.SqlConnectionUrl;
+import me.mastercapexd.auth.config.storage.schema.BaseSchemaSettings;
 
 public class BaseDatabaseConfiguration implements ConfigurationHolder, DatabaseSettings {
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
@@ -27,6 +29,8 @@ public class BaseDatabaseConfiguration implements ConfigurationHolder, DatabaseS
     private String password;
     @ConfigField("cache-driver-path")
     private File cacheDriverPath = new File(PLUGIN.getFolder(), "database-driver.jar");
+    @ConfigField("scheme")
+    private BaseSchemaSettings schemaSettings = new BaseSchemaSettings();
 
     public BaseDatabaseConfiguration(ConfigurationSectionHolder sectionHolder) {
         AuthPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
@@ -62,5 +66,10 @@ public class BaseDatabaseConfiguration implements ConfigurationHolder, DatabaseS
     @Override
     public File getCacheDriverPath() {
         return cacheDriverPath;
+    }
+
+    @Override
+    public SchemaSettings getSchemaSettings() {
+        return schemaSettings;
     }
 }
