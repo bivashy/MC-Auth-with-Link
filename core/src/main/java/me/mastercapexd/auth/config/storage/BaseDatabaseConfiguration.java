@@ -29,6 +29,8 @@ public class BaseDatabaseConfiguration implements ConfigurationHolder, DatabaseS
     private String password;
     @ConfigField("cache-driver-path")
     private File cacheDriverPath = new File(PLUGIN.getFolder(), "database-driver.jar");
+    @ConfigField("migration")
+    private boolean migration = true;
     @ConfigField("scheme")
     private BaseSchemaSettings schemaSettings = new BaseSchemaSettings();
 
@@ -66,6 +68,11 @@ public class BaseDatabaseConfiguration implements ConfigurationHolder, DatabaseS
     @Override
     public File getCacheDriverPath() {
         return cacheDriverPath;
+    }
+
+    @Override
+    public boolean isMigrationEnabled() {
+        return migration;
     }
 
     @Override

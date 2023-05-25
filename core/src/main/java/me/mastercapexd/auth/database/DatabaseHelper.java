@@ -60,8 +60,10 @@ public class DatabaseHelper {
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_5_0_LINKS_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_6_0_LINKS_MIGRATOR);
 
-                authAccountMigrationCoordinator.migrate(connectionSource, authAccountDao);
-                accountLinkMigrationCoordinator.migrate(connectionSource, accountLinkDao);
+                if(databaseConfiguration.isMigrationEnabled()) {
+                    authAccountMigrationCoordinator.migrate(connectionSource, authAccountDao);
+                    accountLinkMigrationCoordinator.migrate(connectionSource, accountLinkDao);
+                }
             } catch(SQLException | IOException e) {
                 e.printStackTrace();
             }

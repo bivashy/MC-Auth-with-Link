@@ -15,5 +15,7 @@ public interface DatabaseSettings {
 
     File getCacheDriverPath();
 
+    boolean isMigrationEnabled();
+
     SchemaSettings getSchemaSettings();
 }
