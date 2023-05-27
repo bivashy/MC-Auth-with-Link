@@ -13,8 +13,11 @@ public abstract class BaseCryptoProvider implements CryptoProvider1 {
 
     @Override
     public HashedPassword hash(HashInput input) {
+        return hash(input, generateSalt());
+    }
+
+    protected HashedPassword hash(HashInput input, String salt){
         String password = input.getRawInput();
-        String salt = generateSalt();
         String hash = password + salt;
         for (int i = 0; i < input.getHashIteration(); i++) {
             hash = hashInput(HashInput.of(hash + password + salt), salt).getHash();
@@ -23,6 +26,11 @@ public abstract class BaseCryptoProvider implements CryptoProvider1 {
     }
 
     protected abstract HashedPassword hashInput(HashInput input, String salt);
+
+    @Override
+    public boolean matches(HashInput input, HashedPassword password) {
+        return hash(input, password.getSalt()).getHash().equals(password.getHash());
+    }
 
     protected String generateSalt() {
         return null;
