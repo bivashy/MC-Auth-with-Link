@@ -3,6 +3,7 @@ package me.mastercapexd.auth.server.commands;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.MessageContext;
+import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
@@ -65,7 +66,7 @@ public class AuthCommand {
                 actor.reply(config.getServerMessages().getMessage("account-not-found", MessageContext.of("%account_name%", proxyPlayer.getNickname())));
                 return;
             }
-            account.setPasswordHash(account.getHashType().hash(newPlayerPassword.getNewPassword()));
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPlayerPassword.getNewPassword())));
             accountDatabase.saveOrUpdateAccount(account);
             actor.reply(config.getServerMessages().getMessage("auth-change-success"));
         });

@@ -16,9 +16,9 @@ public interface AccountFactory {
     Long DEFAULT_TELEGRAM_ID = (long) -1;
     Integer DEFAULT_VK_ID = -1;
 
-    Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String password, String googleKey, int vkID,
-            boolean vkConfirmationEnabled, long telegramId, boolean telegramConfirmationEnabled, long lastQuit, String lastIp, long lastSessionStart,
-            long sessionTime);
+    Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String googleKey, int vkID,
+                          boolean vkConfirmationEnabled, long telegramId, boolean telegramConfirmationEnabled, long lastQuit, String lastIp, long lastSessionStart,
+                          long sessionTime);
 
     default Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, long sessionTime) {
         return createAccount(id, identifierType, uuid, name, cryptoProvider, DEFAULT_PASSWORD, DEFAULT_GOOGLE_KEY, DEFAULT_VK_ID, DEFAULT_VK_CONFIRMATION_STATE,

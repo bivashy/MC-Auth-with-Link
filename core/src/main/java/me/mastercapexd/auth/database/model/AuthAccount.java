@@ -10,6 +10,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
+
 @DatabaseTable(tableName = "mc_auth_accounts")
 public class AuthAccount {
     public static final String PLAYER_ID_FIELD_KEY = "player_id";
@@ -27,7 +29,7 @@ public class AuthAccount {
     private String playerId;
     @DatabaseField(columnName = PLAYER_ID_TYPE_FIELD_KEY, canBeNull = false, dataType = DataType.ENUM_NAME)
     private IdentifierType playerIdType;
-    @DatabaseField(columnName = HASH_TYPE_FIELD_KEY, canBeNull = false, dataType = DataType.ENUM_NAME)
+    @DatabaseField(columnName = HASH_TYPE_FIELD_KEY, canBeNull = false, persisterClass = CryptoProviderPersister.class)
     private CryptoProvider cryptoProvider;
     @DatabaseField(columnName = LAST_IP_FIELD_KEY)
     private String lastIp;
@@ -55,7 +57,7 @@ public class AuthAccount {
     }
 
     public AuthAccount(String playerId, IdentifierType playerIdType, CryptoProvider cryptoProvider, String lastIp, UUID uniqueId, String playerName, String passwordHash,
-            long lastQuitTimestamp, long lastSessionStartTimestamp) {
+                       long lastQuitTimestamp, long lastSessionStartTimestamp) {
         this.playerId = playerId;
         this.playerIdType = playerIdType;
         this.cryptoProvider = cryptoProvider;

@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 
 import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.crypto.HashedPassword;
-import com.bivashy.auth.api.util.HashUtils;
+import me.mastercapexd.auth.util.HashUtils;
 
 public class MessageDigestCryptoProvider extends BaseCryptoProvider {
     private final MessageDigest digest;

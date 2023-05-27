@@ -1,10 +1,10 @@
 package me.mastercapexd.auth.crypto;
 
-import com.bivashy.auth.api.crypto.CryptoProvider1;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.crypto.HashedPassword;
 
-public abstract class BaseCryptoProvider implements CryptoProvider1 {
+public abstract class BaseCryptoProvider implements CryptoProvider {
     private final String identifier;
 
     public BaseCryptoProvider(String identifier) {

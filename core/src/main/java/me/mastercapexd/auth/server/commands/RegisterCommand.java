@@ -3,6 +3,7 @@ package me.mastercapexd.auth.server.commands;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.event.AccountRegisterEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
@@ -34,9 +35,9 @@ public class RegisterCommand {
                 return;
             currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
 
-            if (account.getHashType() != config.getActiveHashType())
-                account.setHashType(config.getActiveHashType());
-            account.setPasswordHash(account.getHashType().hash(password.getPassword()));
+            if (!account.getCryptoProvider().getIdentifier().equals(config.getActiveHashType().getIdentifier()))
+                account.setCryptoProvider(config.getActiveHashType());
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(password.getPassword())));
 
             accountStorage.saveOrUpdateAccount(account);
 

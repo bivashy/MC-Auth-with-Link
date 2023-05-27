@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import com.bivashy.auth.api.crypto.HashedPassword;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.LinkUserTemplate;
@@ -25,17 +26,27 @@ public interface Account extends PlayerIdSupplier {
 
     IdentifierType getIdentifierType();
 
-    CryptoProvider getHashType();
+    @Deprecated
+    default CryptoProvider getHashType(){
+        return getCryptoProvider();
+    }
 
-    void setHashType(CryptoProvider cryptoProvider);
+    @Deprecated
+    default void setHashType(CryptoProvider cryptoProvider){
+        setCryptoProvider(cryptoProvider);
+    }
+
+    CryptoProvider getCryptoProvider();
+
+    void setCryptoProvider(CryptoProvider cryptoProvider);
 
     UUID getUniqueId();
 
     String getName();
 
-    String getPasswordHash();
+    HashedPassword getPasswordHash();
 
-    void setPasswordHash(String passwordHash);
+    void setPasswordHash(HashedPassword passwordHash);
 
     /**
      * @return List of link users for example VK link user that holds vk id and etc.
