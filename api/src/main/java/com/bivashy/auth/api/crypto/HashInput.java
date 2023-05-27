@@ -1,7 +1,7 @@
 package com.bivashy.auth.api.crypto;
 
 public interface HashInput {
-    static HashInput of(String rawInput, String salt) {
+    static HashInput of(String rawInput, int hashIteration) {
         return new HashInput() {
             @Override
             public String getRawInput() {
@@ -9,17 +9,17 @@ public interface HashInput {
             }
 
             @Override
-            public String getSalt() {
-                return salt;
+            public int getHashIteration() {
+                return hashIteration;
             }
         };
     }
 
     static HashInput of(String rawInput) {
-        return of(rawInput, null);
+        return of(rawInput, 1);
     }
 
     String getRawInput();
 
-    String getSalt();
+    int getHashIteration();
 }
