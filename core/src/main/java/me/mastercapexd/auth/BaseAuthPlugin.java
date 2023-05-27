@@ -12,6 +12,7 @@ import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
+import com.bivashy.auth.api.bucket.CryptoProviderBucket;
 import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
 import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
@@ -24,6 +25,7 @@ import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.message.ServerComponent;
+import com.bivashy.auth.api.util.HashUtils;
 import com.bivashy.configuration.ConfigurationProcessor;
 import com.bivashy.configuration.configurate.SpongeConfigurateProcessor;
 import com.bivashy.messenger.telegram.message.TelegramMessage;
@@ -37,6 +39,7 @@ import me.mastercapexd.auth.bucket.BaseAuthenticatingAccountBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationStepContextFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationStepFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationTaskBucket;
+import me.mastercapexd.auth.bucket.BaseCryptoProviderBucket;
 import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
 import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
@@ -45,6 +48,8 @@ import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
+import me.mastercapexd.auth.crypto.BcryptCryptoProvider;
+import me.mastercapexd.auth.crypto.MessageDigestCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
@@ -74,6 +79,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final LinkConfirmationBucket linkConfirmationBucket = new BaseLinkConfirmationBucket();
     private final LinkAuthenticationBucket<LinkEntryUser> linkEntryBucket = new BaseLinkAuthenticationBucket<>();
     private final AuthenticationStepFactoryBucket authenticationStepFactoryBucket = new BaseAuthenticationStepFactoryBucket();
+    private final CryptoProviderBucket cryptoProviderBucket = new BaseCryptoProviderBucket();
     private final String version;
     private final File pluginFolder;
     private AuthenticationStepContextFactoryBucket authenticationStepContextFactoryBucket;
@@ -119,6 +125,8 @@ public class BaseAuthPlugin implements AuthPlugin {
 
         this.registerTasks();
 
+        this.registerCryptoProviders();
+
         this.eventBus.register(new AuthenticationAttemptListener(this));
     }
 
@@ -137,6 +145,12 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
         this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
         this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
+    }
+
+    private void registerCryptoProviders() {
+        this.cryptoProviderBucket.addCryptoProvider(new BcryptCryptoProvider());
+        this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("SHA256", HashUtils.getSHA256()));
+        this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("MD5", HashUtils.getMD5()));
     }
 
     private void initializeTelegram() {
@@ -256,6 +270,11 @@ public class BaseAuthPlugin implements AuthPlugin {
     @Override
     public LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket() {
         return linkEntryBucket;
+    }
+
+    @Override
+    public CryptoProviderBucket getCryptoProviderBucket() {
+        return cryptoProviderBucket;
     }
 
     @Override
