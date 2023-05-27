@@ -1,4 +1,4 @@
-package com.bivashy.auth.api.util;
+package me.mastercapexd.auth.util;
 
 import java.io.File;
 import java.io.IOException;
