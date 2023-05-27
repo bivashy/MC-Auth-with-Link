@@ -18,7 +18,7 @@ public interface ColumnAppendMigrator<T, ID> extends ConditionalMigrator<T, ID> 
 
     @Override
     default void migrate(ConnectionSource connectionSource, Dao<? extends T, ID> dao) throws SQLException {
-        dao.executeRawNoArgs("ALTER TABLE users ADD COLUMN " + getColumnName() + " " + getColumnType(connectionSource));
+        dao.executeRawNoArgs("ALTER TABLE " + dao.getTableName() + " ADD COLUMN " + getColumnName() + " " + getColumnType(connectionSource));
     }
 
     String getColumnName();
