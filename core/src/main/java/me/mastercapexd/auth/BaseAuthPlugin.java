@@ -117,9 +117,7 @@ public class BaseAuthPlugin implements AuthPlugin {
 
         this.registerAuthenticationSteps();
 
-        this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
-        this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
-        this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
+        this.registerTasks();
 
         this.eventBus.register(new AuthenticationAttemptListener(this));
     }
@@ -133,6 +131,12 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.authenticationStepFactoryBucket.add(new TelegramLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new EnterServerAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new EnterAuthServerAuthenticationStepFactory());
+    }
+
+    private void registerTasks() {
+        this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
+        this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
+        this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
     }
 
     private void initializeTelegram() {
