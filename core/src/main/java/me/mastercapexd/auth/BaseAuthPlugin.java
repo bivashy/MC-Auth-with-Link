@@ -18,6 +18,7 @@ import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.duration.ConfigurationDuration;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
@@ -25,7 +26,6 @@ import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.bivashy.auth.api.util.HashUtils;
 import com.bivashy.configuration.ConfigurationProcessor;
 import com.bivashy.configuration.configurate.SpongeConfigurateProcessor;
 import com.bivashy.messenger.telegram.message.TelegramMessage;
@@ -69,6 +69,7 @@ import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
 import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
 import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
+import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
 import net.kyori.adventure.platform.AudienceProvider;
 
@@ -165,6 +166,8 @@ public class BaseAuthPlugin implements AuthPlugin {
         configurationProcessor.registerFieldResolver(ConfigurationServer.class, (context) -> new BaseConfigurationServer(context.getString()))
                 .registerFieldResolver(ConfigurationDuration.class, (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
+                .registerFieldResolver(CryptoProvider.class, (context) -> cryptoProviderBucket.findCryptoProvider(context.getString())
+                        .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
                 .registerFieldResolver(ServerComponent.class, new ProxyComponentFieldResolver())
                 .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
                 .registerFieldResolver(File.class, (context) -> {

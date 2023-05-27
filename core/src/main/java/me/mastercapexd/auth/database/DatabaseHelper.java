@@ -9,7 +9,11 @@ import java.util.concurrent.Executors;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.schema.SchemaSettings;
-import com.bivashy.auth.api.util.HashUtils;
+
+import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
+import me.mastercapexd.auth.util.HashUtils;
+
+import com.j256.ormlite.field.DataPersisterManager;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
@@ -47,6 +51,8 @@ public class DatabaseHelper {
                 if (!cacheDriverFile.exists() || cacheDriverCheckSum != null && !DownloadUtil.checkSum(HashUtils.mapToMd5URL(downloadUrl), cacheDriverCheckSum))
                     DownloadUtil.downloadFile(downloadUrl, cacheDriverFile);
                 DriverUtil.loadDriver(cacheDriverFile, plugin.getClass().getClassLoader());
+
+                DataPersisterManager.registerDataPersisters(new CryptoProviderPersister());
 
                 this.connectionSource = new JdbcPooledConnectionSource(databaseConfiguration.getConnectionUrl(), databaseConfiguration.getUsername(),
                         databaseConfiguration.getPassword());
