@@ -35,6 +35,8 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     public AuthAccountAdapter(AuthAccount authAccount, Collection<AccountLink> accountLinks) {
         this.authAccount = authAccount;
         this.linkUsers = accountLinks.stream().map(accountLink -> new AccountLinkAdapter(accountLink, this)).collect(Collectors.toList());
+        if(authAccount.getHashIterationCount() == 0)
+            authAccount.setHashIterationCount(1);
     }
 
     /**
