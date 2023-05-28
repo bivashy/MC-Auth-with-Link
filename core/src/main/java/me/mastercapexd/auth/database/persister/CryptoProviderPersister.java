@@ -10,6 +10,10 @@ import com.j256.ormlite.field.types.BaseDataType;
 import com.j256.ormlite.support.DatabaseResults;
 
 public class CryptoProviderPersister extends BaseDataType {
+    private static final CryptoProviderPersister SINGLETON = new CryptoProviderPersister();
+    public static CryptoProviderPersister getSingleton() {
+        return SINGLETON;
+    }
     public CryptoProviderPersister() {
         super(SqlType.STRING, new Class<?>[]{CryptoProvider.class});
     }
@@ -26,7 +30,7 @@ public class CryptoProviderPersister extends BaseDataType {
             return AuthPlugin.instance()
                     .getCryptoProviderBucket()
                     .findCryptoProvider(value)
-                    .orElseThrow(() -> new SQLException("Cannot get enum value of '" + value + "' for field " + fieldType));
+                    .orElseThrow(() -> new SQLException("Cannot get crypto provider value of '" + value + "' for field " + fieldType));
         }
     }
 
