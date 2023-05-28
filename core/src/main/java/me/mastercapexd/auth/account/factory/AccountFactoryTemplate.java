@@ -16,7 +16,7 @@ public abstract class AccountFactoryTemplate implements AccountFactory {
     @Override
     public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String googleKey,
                                  int vkId, boolean vkConfirmationEnabled, long telegramId, boolean telegramConfirmationEnabled, long lastQuit, String lastIp, long lastSessionStart,
-                                 long sessionTime) {
+                                 int hashIterationCount, long sessionTime) {
 
         Account account = newAccount(identifierType.fromRawString(id), identifierType, uuid, name);
 

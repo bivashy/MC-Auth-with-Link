@@ -172,6 +172,16 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     }
 
     @Override
+    public int getHashIterationCount() {
+        return authAccount.getHashIterationCount();
+    }
+
+    @Override
+    public void setHashIterationCount(int hashIterationCount) {
+        authAccount.setHashIterationCount(hashIterationCount);
+    }
+
+    @Override
     public int compareTo(AccountTemplate accountTemplate) {
         return accountTemplate.getName().compareTo(getName());
     }
