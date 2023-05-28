@@ -23,11 +23,13 @@ import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
 import me.mastercapexd.auth.database.model.AuthAccountProvider;
+import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
 
 public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     private static final String PLAYER_ID_CONFIGURATION_KEY = "playerId";
     private static final String PLAYER_ID_TYPE_CONFIGURATION_KEY = "playerIdType";
-    private static final String HASH_TYPE_CONFIGURATION_KEY = "cryptoProvider";
+    private static final String CRYPTO_PROVIDER_CONFIGURATION_KEY = "cryptoProvider";
+    private static final String HASH_ITERATION_COUNT_CONFIGURATION_KEY = "hashIterationCount";
     private static final String LAST_IP_CONFIGURATION_KEY = "lastIp";
     private static final String UNIQUE_ID_CONFIGURATION_KEY = "uniqueId";
     private static final String PLAYER_NAME_CONFIGURATION_KEY = "playerName";
@@ -61,10 +63,15 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         playerIdTypeFieldConfig.setDataType(DataType.ENUM_NAME);
         fields.add(playerIdTypeFieldConfig);
 
-        DatabaseFieldConfig hashTypeFieldConfig = createFieldConfig(settings,HASH_TYPE_CONFIGURATION_KEY, AuthAccount.HASH_TYPE_FIELD_KEY);
+        DatabaseFieldConfig hashTypeFieldConfig = createFieldConfig(settings, CRYPTO_PROVIDER_CONFIGURATION_KEY, AuthAccount.HASH_TYPE_FIELD_KEY);
         hashTypeFieldConfig.setCanBeNull(false);
-        hashTypeFieldConfig.setDataType(DataType.ENUM_NAME);
+        hashTypeFieldConfig.setDataPersister(CryptoProviderPersister.getSingleton());
         fields.add(hashTypeFieldConfig);
+
+        DatabaseFieldConfig hashIterationCountFieldConfig = createFieldConfig(settings, HASH_ITERATION_COUNT_CONFIGURATION_KEY, AuthAccount.HASH_ITERATION_COUNT_FIELD_KEY);
+        hashIterationCountFieldConfig.setCanBeNull(false);
+        hashIterationCountFieldConfig.setDefaultValue("1");
+        fields.add(hashIterationCountFieldConfig);
 
         fields.add(createFieldConfig(settings, LAST_IP_CONFIGURATION_KEY, AuthAccount.LAST_IP_FIELD_KEY));
 
