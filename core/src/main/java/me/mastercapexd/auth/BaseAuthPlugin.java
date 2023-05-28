@@ -112,6 +112,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private void initializeBasic() {
         this.accountBucket = new BaseAuthenticatingAccountBucket(this);
 
+        this.registerCryptoProviders();
         this.registerConfigurationProcessor();
         this.config = new BasePluginConfig(this);
 
@@ -125,8 +126,6 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.registerAuthenticationSteps();
 
         this.registerTasks();
-
-        this.registerCryptoProviders();
 
         this.eventBus.register(new AuthenticationAttemptListener(this));
     }
