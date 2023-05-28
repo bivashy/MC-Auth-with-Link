@@ -25,7 +25,7 @@ public class RestoreCommand implements OrphanCommand {
     @DefaultFor("~")
     public void onRestore(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         String generatedPassword = linkType.getSettings().getRestoreSettings().generateCode();
-        account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(generatedPassword)));
+        account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(generatedPassword, account.getHashIterationCount())));
         account.logout(config.getSessionDurability());
         account.kick(linkType.getServerMessages().getStringMessage("kicked", linkType.newMessageContext(account)));
         actorWrapper.reply(linkType.getLinkMessages().getMessage("restored", linkType.newMessageContext(account)).replaceAll("(?i)%password%",

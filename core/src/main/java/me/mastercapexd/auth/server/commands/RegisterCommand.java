@@ -37,7 +37,7 @@ public class RegisterCommand {
 
             if (!account.getCryptoProvider().getIdentifier().equals(config.getActiveHashType().getIdentifier()))
                 account.setCryptoProvider(config.getActiveHashType());
-            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(password.getPassword())));
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(password.getPassword(), account.getHashIterationCount())));
 
             accountStorage.saveOrUpdateAccount(account);
 

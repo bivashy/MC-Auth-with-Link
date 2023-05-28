@@ -30,7 +30,7 @@ public class ChangePasswordCommand {
                 sender.sendMessage(config.getServerMessages().getMessage("account-not-found"));
                 return;
             }
-            boolean isWrongPassword = !account.getCryptoProvider().matches(HashInput.of(password.getOldPassword()), account.getPasswordHash());
+            boolean isWrongPassword = !account.getCryptoProvider().matches(HashInput.of(password.getOldPassword(), account.getHashIterationCount()), account.getPasswordHash());
             PostResult<AccountTryChangePasswordEvent> tryChangePasswordEventPostResult = plugin.getEventBus()
                     .publish(AccountTryChangePasswordEvent.class, account, false, !isWrongPassword).join();
             if (tryChangePasswordEventPostResult.getEvent().isCancelled())
@@ -44,7 +44,7 @@ public class ChangePasswordCommand {
             if (!account.getCryptoProvider().getIdentifier().equals(config.getActiveHashType().getIdentifier()))
                 account.setCryptoProvider(config.getActiveHashType());
 
-            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(password.getNewPassword())));
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(password.getNewPassword(), account.getHashIterationCount())));
             accountStorage.saveOrUpdateAccount(account);
             sender.sendMessage(config.getServerMessages().getMessage("change-success"));
         });
