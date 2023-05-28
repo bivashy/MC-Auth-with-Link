@@ -62,8 +62,8 @@ public class DatabaseHelper {
                 this.authAccountDao = new AuthAccountDao(connectionSource,
                         schemaSettings.getTableSettings("auth").orElse(new BaseTableSettings("mc_auth_accounts")), this);
 
-                authAccountMigrationCoordinator.add(Migrations.LEGACY_MC_AUTH_TO_NEW_MIGRATOR);
                 authAccountMigrationCoordinator.add(Migrations.HASH_ITERATION_COLUMN_MIGRATOR);
+                authAccountMigrationCoordinator.add(Migrations.LEGACY_MC_AUTH_TO_NEW_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_5_0_LINKS_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_6_0_LINKS_MIGRATOR);
 
