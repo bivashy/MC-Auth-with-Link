@@ -48,8 +48,10 @@ import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
+import me.mastercapexd.auth.crypto.Argon2CryptoProvider;
 import me.mastercapexd.auth.crypto.BcryptCryptoProvider;
 import me.mastercapexd.auth.crypto.MessageDigestCryptoProvider;
+import me.mastercapexd.auth.crypto.ScryptCryptoProvider;
 import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
@@ -153,6 +155,8 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("SHA256", HashUtils.getSHA256()));
         this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("MD5", HashUtils.getMD5()));
         this.cryptoProviderBucket.addCryptoProvider(new AuthMeSha256CryptoProvider());
+        this.cryptoProviderBucket.addCryptoProvider(new Argon2CryptoProvider());
+        this.cryptoProviderBucket.addCryptoProvider(new ScryptCryptoProvider());
     }
 
     private void initializeTelegram() {
