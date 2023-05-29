@@ -1,5 +1,8 @@
 package me.mastercapexd.auth.crypto;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.crypto.HashedPassword;
@@ -16,7 +19,7 @@ public abstract class BaseCryptoProvider implements CryptoProvider {
         return hash(input, generateSalt());
     }
 
-    protected HashedPassword hash(HashInput input, String salt){
+    protected HashedPassword hash(HashInput input, String salt) {
         String password = input.getRawInput();
         String hash = password + salt;
         for (int i = 0; i < input.getHashIteration(); i++) {
@@ -29,7 +32,8 @@ public abstract class BaseCryptoProvider implements CryptoProvider {
 
     @Override
     public boolean matches(HashInput input, HashedPassword password) {
-        return hash(input, password.getSalt()).getHash().equals(password.getHash());
+        return MessageDigest.isEqual(hash(input, password.getSalt()).getHash().getBytes(StandardCharsets.UTF_8),
+                password.getHash().getBytes(StandardCharsets.UTF_8));
     }
 
     protected String generateSalt() {
