@@ -24,6 +24,10 @@ public interface HashedPassword {
         return of(hash, null, cryptoProvider);
     }
 
+    default HashedPassword withSalt(String salt) {
+        return HashedPassword.of(getHash(), salt, getCryptoProvider());
+    }
+
     String getHash();
 
     String getSalt();
