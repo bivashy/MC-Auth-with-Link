@@ -2,12 +2,15 @@ package me.mastercapexd.auth.crypto;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.crypto.HashedPassword;
 
-public class BcryptCryptoProvider extends BaseCryptoProvider {
-    public BcryptCryptoProvider() {
-        super("BCRYPT");
+public class BcryptCryptoProvider implements CryptoProvider {
+    @Override
+    public HashedPassword hash(HashInput input) {
+        String salt = BCrypt.gensalt();
+        return HashedPassword.of(BCrypt.hashpw(input.getRawInput(), salt), salt, this);
     }
 
     @Override
@@ -16,12 +19,7 @@ public class BcryptCryptoProvider extends BaseCryptoProvider {
     }
 
     @Override
-    protected HashedPassword hashInput(HashInput input, String salt) {
-        return HashedPassword.of(BCrypt.hashpw(input.getRawInput(), salt), salt, this);
-    }
-
-    @Override
-    protected String generateSalt() {
-        return BCrypt.gensalt();
+    public String getIdentifier() {
+        return "BCRYPT";
     }
 }
