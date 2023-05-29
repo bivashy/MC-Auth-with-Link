@@ -16,7 +16,7 @@ public interface LinkUserInfo extends Castable<LinkUserInfo> {
 
         @Override
         public boolean isConfirmationEnabled() {
-            return false;
+            return true;
         }
 
         @Override

@@ -59,7 +59,7 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
             return true;
         }
 
-        if (!linkUserInfo.isConfirmationEnabled())
+        if (linkType.getSettings().getConfirmationSettings().canToggleConfirmation() && !linkUserInfo.isConfirmationEnabled())
             return true;
 
         PLUGIN.getLinkEntryBucket().addLinkUser(linkEntryUser);
