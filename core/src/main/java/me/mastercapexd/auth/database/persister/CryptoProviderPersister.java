@@ -18,19 +18,27 @@ public class CryptoProviderPersister extends BaseDataType {
         super(SqlType.STRING, new Class<?>[]{CryptoProvider.class});
     }
 
+    @Override
     public Object resultToSqlArg(FieldType fieldType, DatabaseResults results, int columnPos) throws SQLException {
         return results.getString(columnPos);
     }
 
+    @Override
+    public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
+        CryptoProvider cryptoProvider = (CryptoProvider) javaObject;
+        return cryptoProvider.getIdentifier();
+    }
+
+    @Override
     public Object sqlArgToJava(FieldType fieldType, Object sqlArg, int columnPos) throws SQLException {
         if (fieldType == null) {
             return sqlArg;
         } else {
-            String value = (String) sqlArg;
+            String identifier = (String) sqlArg;
             return AuthPlugin.instance()
                     .getCryptoProviderBucket()
-                    .findCryptoProvider(value)
-                    .orElseThrow(() -> new SQLException("Cannot get crypto provider value of '" + value + "' for field " + fieldType));
+                    .findCryptoProvider(identifier)
+                    .orElseThrow(() -> new SQLException("Cannot get crypto provider value of '" + identifier + "' for field " + fieldType));
         }
     }
 
