@@ -129,11 +129,12 @@
             <artifactId>adventure-text-minimessage</artifactId>
             <version>${minimessage.version}</version>
         </dependency>
+
         <!-- Password4j -->
         <dependency>
             <groupId>com.password4j</groupId>
             <artifactId>password4j</artifactId>
-            <version>1.7.0</version>
+            <version>${password4j.version}</version>
         </dependency>
     </dependencies>
 </project>
