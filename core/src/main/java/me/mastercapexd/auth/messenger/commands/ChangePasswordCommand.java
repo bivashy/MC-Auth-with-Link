@@ -2,6 +2,7 @@ package me.mastercapexd.auth.messenger.commands;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.event.AccountTryChangePasswordEvent;
 import com.bivashy.auth.api.link.LinkType;
@@ -28,7 +29,7 @@ public class ChangePasswordCommand implements OrphanCommand {
         plugin.getEventBus().publish(AccountTryChangePasswordEvent.class, account, false, true).thenAccept(tryChangePasswordEventPostResult -> {
             if (tryChangePasswordEventPostResult.getEvent().isCancelled())
                 return;
-            account.setPasswordHash(account.getHashType().hash(newPassword.getNewPassword()));
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPassword.getNewPassword(), account.getHashIterationCount())));
             accountStorage.saveOrUpdateAccount(account);
             actorWrapper.reply(linkType.getLinkMessages()
                     .getStringMessage("changepass-success", linkType.newMessageContext(account))

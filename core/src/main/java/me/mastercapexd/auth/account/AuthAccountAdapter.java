@@ -11,15 +11,16 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.bivashy.auth.api.crypto.CryptoProvider;
+import com.bivashy.auth.api.crypto.HashedPassword;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
-import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 
-import me.mastercapexd.auth.link.user.AccountLinkAdapter;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
 import me.mastercapexd.auth.database.model.AuthAccountProvider;
+import me.mastercapexd.auth.link.user.AccountLinkAdapter;
 
 public class AuthAccountAdapter extends AccountTemplate implements AuthAccountProvider {
     private final List<AccountLinkAdapter> linkUsers;
@@ -34,6 +35,8 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     public AuthAccountAdapter(AuthAccount authAccount, Collection<AccountLink> accountLinks) {
         this.authAccount = authAccount;
         this.linkUsers = accountLinks.stream().map(accountLink -> new AccountLinkAdapter(accountLink, this)).collect(Collectors.toList());
+        if(authAccount.getHashIterationCount() == 0)
+            authAccount.setHashIterationCount(1);
     }
 
     /**
@@ -92,12 +95,12 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     }
 
     @Override
-    public CryptoProvider getHashType() {
+    public CryptoProvider getCryptoProvider() {
         return authAccount.getHashType();
     }
 
     @Override
-    public void setHashType(CryptoProvider cryptoProvider) {
+    public void setCryptoProvider(CryptoProvider cryptoProvider) {
         authAccount.setHashType(cryptoProvider);
     }
 
@@ -112,13 +115,13 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     }
 
     @Override
-    public String getPasswordHash() {
-        return authAccount.getPasswordHash();
+    public HashedPassword getPasswordHash() {
+        return HashedPassword.of(authAccount.getPasswordHash(), null, authAccount.getHashType());
     }
 
     @Override
-    public void setPasswordHash(String passwordHash) {
-        authAccount.setPasswordHash(passwordHash);
+    public void setPasswordHash(HashedPassword hashedPassword) {
+        authAccount.setPasswordHash(hashedPassword.getHash());
     }
 
     @Override
@@ -168,6 +171,16 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     @Override
     public void setLastSessionStartTimestamp(long currentTimeMillis) {
         authAccount.setLastSessionStartTimestamp(currentTimeMillis);
+    }
+
+    @Override
+    public int getHashIterationCount() {
+        return authAccount.getHashIterationCount();
+    }
+
+    @Override
+    public void setHashIterationCount(int hashIterationCount) {
+        authAccount.setHashIterationCount(hashIterationCount);
     }
 
     @Override

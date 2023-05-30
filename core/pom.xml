@@ -22,6 +22,7 @@
         <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
         <minimessage.version>4.13.0</minimessage.version>
         <vk.api.version>0.4.2</vk.api.version>
+        <password4j.version>1.7.0</password4j.version>
     </properties>
 
     <repositories>
@@ -127,6 +128,12 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>${minimessage.version}</version>
+        </dependency>
+        <!-- Password4j -->
+        <dependency>
+            <groupId>com.password4j</groupId>
+            <artifactId>password4j</artifactId>
+            <version>1.7.0</version>
         </dependency>
     </dependencies>
 </project>

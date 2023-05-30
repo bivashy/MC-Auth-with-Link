@@ -3,6 +3,7 @@ package me.mastercapexd.auth.server.commands;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.event.AccountTryLoginEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
@@ -29,14 +30,15 @@ public class LoginCommand {
         String id = account.getPlayerId();
         AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
 
-        boolean isWrongPassword = !account.getHashType().matches(password, account.getPasswordHash());
+        HashInput passwordInput = HashInput.of(password, account.getHashIterationCount());
+        boolean isWrongPassword = !account.getCryptoProvider().matches(passwordInput, account.getPasswordHash());
         plugin.getEventBus().publish(AccountTryLoginEvent.class, account, isWrongPassword, !isWrongPassword).thenAccept(tryLoginEventPostResult -> {
             if (tryLoginEventPostResult.getEvent().isCancelled())
                 return;
 
-            if (account.getHashType() != config.getActiveHashType()) {
-                account.setHashType(config.getActiveHashType());
-                account.setPasswordHash(config.getActiveHashType().hash(password));
+            if (!account.getCryptoProvider().getIdentifier().equals(config.getActiveHashType().getIdentifier())) {
+                account.setCryptoProvider(config.getActiveHashType());
+                account.setPasswordHash(config.getActiveHashType().hash(passwordInput));
             }
 
             currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);

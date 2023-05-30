@@ -7,6 +7,7 @@ import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
+import com.bivashy.auth.api.bucket.CryptoProviderBucket;
 import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
 import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
@@ -63,6 +64,8 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
     LinkConfirmationBucket getLinkConfirmationBucket();
 
     LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket();
+
+    CryptoProviderBucket getCryptoProviderBucket();
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 

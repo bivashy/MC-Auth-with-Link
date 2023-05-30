@@ -9,7 +9,11 @@ import java.util.concurrent.Executors;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.schema.SchemaSettings;
-import com.bivashy.auth.api.util.HashUtils;
+
+import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
+import me.mastercapexd.auth.util.HashUtils;
+
+import com.j256.ormlite.field.DataPersisterManager;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
@@ -48,6 +52,8 @@ public class DatabaseHelper {
                     DownloadUtil.downloadFile(downloadUrl, cacheDriverFile);
                 DriverUtil.loadDriver(cacheDriverFile, plugin.getClass().getClassLoader());
 
+                DataPersisterManager.registerDataPersisters(new CryptoProviderPersister());
+
                 this.connectionSource = new JdbcPooledConnectionSource(databaseConfiguration.getConnectionUrl(), databaseConfiguration.getUsername(),
                         databaseConfiguration.getPassword());
 
@@ -56,6 +62,7 @@ public class DatabaseHelper {
                 this.authAccountDao = new AuthAccountDao(connectionSource,
                         schemaSettings.getTableSettings("auth").orElse(new BaseTableSettings("mc_auth_accounts")), this);
 
+                authAccountMigrationCoordinator.add(Migrations.HASH_ITERATION_COLUMN_MIGRATOR);
                 authAccountMigrationCoordinator.add(Migrations.LEGACY_MC_AUTH_TO_NEW_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_5_0_LINKS_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_6_0_LINKS_MIGRATOR);

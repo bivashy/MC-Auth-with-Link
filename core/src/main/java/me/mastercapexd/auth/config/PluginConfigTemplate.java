@@ -45,7 +45,7 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @ConfigField("enable-password-confirm")
     private boolean passwordConfirmationEnabled = false;
     @ConfigField("hash-type")
-    private CryptoProvider activeCryptoProvider = CryptoProvider.SHA256;
+    private CryptoProvider activeCryptoProvider;
     @ConfigField("storage-type")
     private DatabaseConnectionProvider databaseConnectionProvider = DatabaseConnectionProvider.SQLITE;
     @ConfigField("name-regex-pattern")

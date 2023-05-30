@@ -61,7 +61,8 @@ public class BaseLoginManagement implements LoginManagement {
                 Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(), player.getUniqueId(), nickname,
                         config.getActiveHashType(), AccountFactory.DEFAULT_PASSWORD, AccountFactory.DEFAULT_GOOGLE_KEY, AccountFactory.DEFAULT_VK_ID,
                         AccountFactory.DEFAULT_VK_CONFIRMATION_STATE, AccountFactory.DEFAULT_TELEGRAM_ID, AccountFactory.DEFAULT_TELEGRAM_CONFIRMATION_STATE,
-                        AccountFactory.DEFAULT_LAST_QUIT, player.getPlayerIp(), AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
+                        AccountFactory.DEFAULT_LAST_QUIT, player.getPlayerIp(), AccountFactory.DEFAULT_LAST_SESSION_START,
+                        AccountFactory.DEFAULT_HASH_ITERATION_COUNT, config.getSessionDurability());
 
                 AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket().createContext(newAccount);
                 plugin.getAuthenticatingAccountBucket().addAuthorizingAccount(newAccount);

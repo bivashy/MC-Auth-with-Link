@@ -12,11 +12,13 @@ import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
+import com.bivashy.auth.api.bucket.CryptoProviderBucket;
 import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
 import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.duration.ConfigurationDuration;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
@@ -37,6 +39,7 @@ import me.mastercapexd.auth.bucket.BaseAuthenticatingAccountBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationStepContextFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationStepFactoryBucket;
 import me.mastercapexd.auth.bucket.BaseAuthenticationTaskBucket;
+import me.mastercapexd.auth.bucket.BaseCryptoProviderBucket;
 import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
 import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
@@ -45,6 +48,11 @@ import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
+import me.mastercapexd.auth.crypto.Argon2CryptoProvider;
+import me.mastercapexd.auth.crypto.BcryptCryptoProvider;
+import me.mastercapexd.auth.crypto.MessageDigestCryptoProvider;
+import me.mastercapexd.auth.crypto.ScryptCryptoProvider;
+import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
@@ -64,6 +72,7 @@ import me.mastercapexd.auth.task.AuthenticationMessageSendTask;
 import me.mastercapexd.auth.task.AuthenticationProgressBarTask;
 import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
+import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
 import net.kyori.adventure.platform.AudienceProvider;
 
@@ -74,6 +83,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final LinkConfirmationBucket linkConfirmationBucket = new BaseLinkConfirmationBucket();
     private final LinkAuthenticationBucket<LinkEntryUser> linkEntryBucket = new BaseLinkAuthenticationBucket<>();
     private final AuthenticationStepFactoryBucket authenticationStepFactoryBucket = new BaseAuthenticationStepFactoryBucket();
+    private final CryptoProviderBucket cryptoProviderBucket = new BaseCryptoProviderBucket();
     private final String version;
     private final File pluginFolder;
     private AuthenticationStepContextFactoryBucket authenticationStepContextFactoryBucket;
@@ -105,6 +115,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private void initializeBasic() {
         this.accountBucket = new BaseAuthenticatingAccountBucket(this);
 
+        this.registerCryptoProviders();
         this.registerConfigurationProcessor();
         this.config = new BasePluginConfig(this);
 
@@ -139,6 +150,15 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
     }
 
+    private void registerCryptoProviders() {
+        this.cryptoProviderBucket.addCryptoProvider(new BcryptCryptoProvider());
+        this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("SHA256", HashUtils.getSHA256()));
+        this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("MD5", HashUtils.getMD5()));
+        this.cryptoProviderBucket.addCryptoProvider(new AuthMeSha256CryptoProvider());
+        this.cryptoProviderBucket.addCryptoProvider(new Argon2CryptoProvider());
+        this.cryptoProviderBucket.addCryptoProvider(new ScryptCryptoProvider());
+    }
+
     private void initializeTelegram() {
         hooks.put(TelegramPluginHook.class, new BaseTelegramPluginHook());
 
@@ -151,6 +171,8 @@ public class BaseAuthPlugin implements AuthPlugin {
         configurationProcessor.registerFieldResolver(ConfigurationServer.class, (context) -> new BaseConfigurationServer(context.getString()))
                 .registerFieldResolver(ConfigurationDuration.class, (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
+                .registerFieldResolver(CryptoProvider.class, (context) -> cryptoProviderBucket.findCryptoProvider(context.getString())
+                        .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
                 .registerFieldResolver(ServerComponent.class, new ProxyComponentFieldResolver())
                 .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
                 .registerFieldResolver(File.class, (context) -> {
@@ -256,6 +278,11 @@ public class BaseAuthPlugin implements AuthPlugin {
     @Override
     public LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket() {
         return linkEntryBucket;
+    }
+
+    @Override
+    public CryptoProviderBucket getCryptoProviderBucket() {
+        return cryptoProviderBucket;
     }
 
     @Override
