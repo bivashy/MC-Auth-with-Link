@@ -23,6 +23,7 @@
         <minimessage.version>4.13.0</minimessage.version>
         <vk.api.version>0.4.2</vk.api.version>
         <password4j.version>1.7.0</password4j.version>
+        <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
     </properties>
 
     <repositories>
@@ -135,6 +136,13 @@
             <groupId>com.password4j</groupId>
             <artifactId>password4j</artifactId>
             <version>${password4j.version}</version>
+        </dependency>
+
+        <!-- Yaml Config Updater -->
+        <dependency>
+            <groupId>ru.vyarus</groupId>
+            <artifactId>yaml-config-updater</artifactId>
+            <version>${yaml-config-updater.version}</version>
         </dependency>
     </dependencies>
 </project>

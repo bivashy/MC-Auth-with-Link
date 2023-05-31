@@ -1,6 +1,13 @@
 package me.mastercapexd.auth.server.commands;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.asset.resource.Resource;
+import com.bivashy.auth.api.asset.resource.impl.FolderResource;
+import com.bivashy.auth.api.asset.resource.impl.FolderResourceReader;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.crypto.HashInput;
@@ -17,6 +24,7 @@ import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Subcommand;
+import ru.vyarus.yaml.updater.YamlUpdater;
 
 @Command({"authadmin", "adminauth", "auth"})
 @Permission("auth.admin")
@@ -85,5 +93,18 @@ public class AuthCommand {
     public void reload(ServerCommandActor actor) {
         plugin.getConfig().reload();
         actor.reply(config.getServerMessages().getMessage("auth-reloaded"));
+    }
+
+    @Subcommand("migrateconfig")
+    public void migrateConfig(ServerCommandActor actor) throws IOException, URISyntaxException {
+        FolderResource folderResource = new FolderResourceReader(plugin.getClass().getClassLoader(), "configurations").read();
+        for (Resource resource : folderResource.getResources()) {
+            String realConfigurationName = resource.getName().substring(folderResource.getName().length() + 1);
+            File resourceConfiguration = new File(plugin.getFolder(), realConfigurationName);
+            if (!resourceConfiguration.exists())
+                continue;
+            YamlUpdater.create(resourceConfiguration, resource.getStream()).backup(true).update();
+        }
+        actor.reply(config.getServerMessages().getMessage("config-migrated"));
     }
 }

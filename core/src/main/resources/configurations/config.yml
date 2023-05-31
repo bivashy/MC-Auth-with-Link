@@ -1,3 +1,6 @@
+# Автоматическая миграция конфигурации. Плагин мигрриует все конфигурации при включении.
+# При миграции плагин создает бекап.
+auto-migrate-config: false
 # Как должен хранить данные плагин
 # Возможные варианты: MYSQL, SQLITE, POSTGRESQL, MARIADB
 storage-type: SQLITE
@@ -343,6 +346,7 @@ messages:
   auth-change-success: '&aУспешно изменен пароль игрока'
   auth-delete-success: '&aАккаунт успешно &cудалён'
   auth-reloaded: '&aПлагин успешно перезагрузил конфигурацию'
+  config-migrated: '&aКонфигурация успешно мигрирована'
   # Ошибки в командах
   player-offline: '&cИгрок с ником %account_name% оффлайн!'
   
