@@ -1,6 +1,8 @@
 package me.mastercapexd.auth;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -8,6 +10,9 @@ import java.util.concurrent.Executors;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.AuthPluginProvider;
 import com.bivashy.auth.api.account.AccountFactory;
+import com.bivashy.auth.api.asset.resource.Resource;
+import com.bivashy.auth.api.asset.resource.impl.FolderResource;
+import com.bivashy.auth.api.asset.resource.impl.FolderResourceReader;
 import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
 import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
@@ -75,6 +80,7 @@ import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
 import net.kyori.adventure.platform.AudienceProvider;
+import ru.vyarus.yaml.updater.YamlUpdater;
 
 public class BaseAuthPlugin implements AuthPlugin {
     private final ConfigurationProcessor configurationProcessor = new SpongeConfigurateProcessor();
@@ -118,6 +124,13 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.registerCryptoProviders();
         this.registerConfigurationProcessor();
         this.config = new BasePluginConfig(this);
+        if (config.isAutoMigrateConfigEnabled()) {
+            try {
+                this.migrateConfig();
+            } catch(IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
 
         this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps());
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
@@ -165,6 +178,17 @@ public class BaseAuthPlugin implements AuthPlugin {
         TelegramMessage.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
 
         new TelegramCommandRegistry();
+    }
+
+    private void migrateConfig() throws IOException, URISyntaxException {
+        FolderResource folderResource = new FolderResourceReader(getClass().getClassLoader(), "configurations").read();
+        for (Resource resource : folderResource.getResources()) {
+            String realConfigurationName = resource.getName().substring(folderResource.getName().length() + 1);
+            File resourceConfiguration = new File(getFolder(), realConfigurationName);
+            if (!resourceConfiguration.exists())
+                continue;
+            YamlUpdater.create(resourceConfiguration, resource.getStream()).backup(true).update();
+        }
     }
 
     private void registerConfigurationProcessor() {
