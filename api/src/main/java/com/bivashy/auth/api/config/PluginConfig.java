@@ -25,6 +25,8 @@ public interface PluginConfig {
 
     boolean isNameCaseCheckEnabled();
 
+    boolean isAutoMigrateConfigEnabled();
+
     CryptoProvider getActiveHashType();
 
     DatabaseConnectionProvider getStorageType();

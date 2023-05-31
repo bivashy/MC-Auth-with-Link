@@ -38,6 +38,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     protected final AuthPlugin plugin;
     private final List<Pattern> allowedPatternCommands;
     protected ConfigurationSectionHolder configurationRoot;
+    @ConfigField("auto-migrate-config")
+    private boolean autoMigrateConfig;
     @ConfigField("id-type")
     private IdentifierType activeIdentifierType = IdentifierType.NAME;
     @ConfigField("check-name-case")
@@ -142,6 +144,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public boolean isNameCaseCheckEnabled() {
         return nameCaseCheckEnabled;
+    }
+
+    @Override
+    public boolean isAutoMigrateConfigEnabled() {
+        return autoMigrateConfig;
     }
 
     @Override
