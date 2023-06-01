@@ -150,6 +150,6 @@ public interface Account extends PlayerIdSupplier {
     }
 
     default boolean isRegistered() {
-        return getPasswordHash() != null;
+        return getPasswordHash().getHash() != null;
     }
 }
