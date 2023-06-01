@@ -10,6 +10,7 @@ import com.j256.ormlite.field.types.BaseDataType;
 import com.j256.ormlite.support.DatabaseResults;
 
 public class CryptoProviderPersister extends BaseDataType {
+    private static final int DEFAULT_WIDTH = 100;
     private static final CryptoProviderPersister SINGLETON = new CryptoProviderPersister();
     public static CryptoProviderPersister getSingleton() {
         return SINGLETON;
@@ -44,5 +45,10 @@ public class CryptoProviderPersister extends BaseDataType {
 
     public Object parseDefaultString(FieldType fieldType, String defaultStr) {
         return defaultStr;
+    }
+
+    @Override
+    public int getDefaultWidth() {
+        return DEFAULT_WIDTH;
     }
 }
