@@ -24,6 +24,8 @@
         <vk.api.version>0.4.2</vk.api.version>
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
+        <junit.jupiter.version>5.9.3</junit.jupiter.version>
+        <mockito.version>5.3.1</mockito.version>
     </properties>
 
     <repositories>
@@ -143,6 +145,23 @@
             <groupId>ru.vyarus</groupId>
             <artifactId>yaml-config-updater</artifactId>
             <version>${yaml-config-updater.version}</version>
+        </dependency>
+
+
+        <!-- JUnit Jupiter API-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+            <version>${mockito.version}</version>
         </dependency>
     </dependencies>
 </project>
