@@ -75,7 +75,7 @@ public class Migrations {
             return Collections.unmodifiableCollection(migrationQueries);
         }
     };
-    public static final ColumnDropMigrator<AuthAccount, Long> HASH_ITERATION_COLUMN_MIGRATOR = ColumnDropMigrator.of("hash_iteration_count", "INTEGER");
+    public static final ColumnDropMigrator<AuthAccount, Long> HASH_ITERATION_COLUMN_MIGRATOR = ColumnDropMigrator.of("hash_iteration_count");
 
     private Migrations() {
     }

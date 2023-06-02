@@ -8,22 +8,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 
 public interface ColumnDropMigrator<T, ID> extends ConditionalMigrator<T, ID> {
-    static <T, ID> ColumnDropMigrator<T, ID> of(String columnName, Function<ConnectionSource, String> columnTypeFunction) {
-        return new ColumnDropMigrator<T, ID>() {
-            @Override
-            public String getColumnName() {
-                return columnName;
-            }
-
-            @Override
-            public String getColumnType(ConnectionSource connectionSource) {
-                return columnTypeFunction.apply(connectionSource);
-            }
-        };
-    }
-
-    static <T, ID> ColumnDropMigrator<T, ID> of(String columnName, String columnType) {
-        return of(columnName, ignored -> columnType);
+    static <T, ID> ColumnDropMigrator<T, ID> of(String columnName) {
+        return () -> columnName;
     }
 
     @Override
@@ -37,11 +23,9 @@ public interface ColumnDropMigrator<T, ID> extends ConditionalMigrator<T, ID> {
 
     @Override
     default void migrate(ConnectionSource connectionSource, Dao<? extends T, ID> dao) throws SQLException {
-        dao.executeRawNoArgs("ALTER TABLE " + dao.getTableName() + " DROP COLUMN " + getColumnName() + " " + getColumnType(connectionSource));
+        dao.executeRawNoArgs("ALTER TABLE " + dao.getTableName() + " DROP COLUMN " + getColumnName());
     }
 
     String getColumnName();
-
-    String getColumnType(ConnectionSource connectionSource);
 }
 
