@@ -35,8 +35,6 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     public AuthAccountAdapter(AuthAccount authAccount, Collection<AccountLink> accountLinks) {
         this.authAccount = authAccount;
         this.linkUsers = accountLinks.stream().map(accountLink -> new AccountLinkAdapter(accountLink, this)).collect(Collectors.toList());
-        if(authAccount.getHashIterationCount() == 0)
-            authAccount.setHashIterationCount(1);
     }
 
     /**
@@ -171,16 +169,6 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     @Override
     public void setLastSessionStartTimestamp(long currentTimeMillis) {
         authAccount.setLastSessionStartTimestamp(currentTimeMillis);
-    }
-
-    @Override
-    public int getHashIterationCount() {
-        return authAccount.getHashIterationCount();
-    }
-
-    @Override
-    public void setHashIterationCount(int hashIterationCount) {
-        authAccount.setHashIterationCount(hashIterationCount);
     }
 
     @Override

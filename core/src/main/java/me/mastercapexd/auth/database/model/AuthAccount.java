@@ -23,7 +23,6 @@ public class AuthAccount {
     public static final String LAST_SESSION_TIMESTAMP_START_FIELD_KEY = "last_session_start";
     public static final String PLAYER_ID_TYPE_FIELD_KEY = "player_id_type";
     public static final String HASH_TYPE_FIELD_KEY = "hash_type";
-    public static final String HASH_ITERATION_COUNT_FIELD_KEY = "hash_iteration_count";
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField(columnName = PLAYER_ID_FIELD_KEY, unique = true, canBeNull = false)
@@ -32,8 +31,6 @@ public class AuthAccount {
     private IdentifierType playerIdType;
     @DatabaseField(columnName = HASH_TYPE_FIELD_KEY, canBeNull = false, persisterClass = CryptoProviderPersister.class)
     private CryptoProvider cryptoProvider;
-    @DatabaseField(columnName = HASH_ITERATION_COUNT_FIELD_KEY, canBeNull = false, defaultValue = "1")
-    private int hashIterationCount = 1;
     @DatabaseField(columnName = LAST_IP_FIELD_KEY)
     private String lastIp;
     @DatabaseField(columnName = UNIQUE_ID_FIELD_KEY, canBeNull = false, dataType = DataType.UUID)
@@ -115,14 +112,6 @@ public class AuthAccount {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
-    }
-
-    public int getHashIterationCount() {
-        return hashIterationCount;
-    }
-
-    public void setHashIterationCount(int hashIterationCount) {
-        this.hashIterationCount = hashIterationCount;
     }
 
     public long getLastQuitTimestamp() {

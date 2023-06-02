@@ -29,7 +29,6 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     private static final String PLAYER_ID_CONFIGURATION_KEY = "playerId";
     private static final String PLAYER_ID_TYPE_CONFIGURATION_KEY = "playerIdType";
     private static final String CRYPTO_PROVIDER_CONFIGURATION_KEY = "cryptoProvider";
-    private static final String HASH_ITERATION_COUNT_CONFIGURATION_KEY = "hashIterationCount";
     private static final String LAST_IP_CONFIGURATION_KEY = "lastIp";
     private static final String UNIQUE_ID_CONFIGURATION_KEY = "uniqueId";
     private static final String PLAYER_NAME_CONFIGURATION_KEY = "playerName";
@@ -67,11 +66,6 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         hashTypeFieldConfig.setCanBeNull(false);
         hashTypeFieldConfig.setDataPersister(CryptoProviderPersister.getSingleton());
         fields.add(hashTypeFieldConfig);
-
-        DatabaseFieldConfig hashIterationCountFieldConfig = createFieldConfig(settings, HASH_ITERATION_COUNT_CONFIGURATION_KEY, AuthAccount.HASH_ITERATION_COUNT_FIELD_KEY);
-        hashIterationCountFieldConfig.setCanBeNull(false);
-        hashIterationCountFieldConfig.setDefaultValue("1");
-        fields.add(hashIterationCountFieldConfig);
 
         fields.add(createFieldConfig(settings, LAST_IP_CONFIGURATION_KEY, AuthAccount.LAST_IP_FIELD_KEY));
 

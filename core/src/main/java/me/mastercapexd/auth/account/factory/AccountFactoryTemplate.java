@@ -15,8 +15,7 @@ import me.mastercapexd.auth.link.vk.VKLinkUser;
 public abstract class AccountFactoryTemplate implements AccountFactory {
     @Override
     public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String googleKey,
-                                 int vkId, boolean vkConfirmationEnabled, long telegramId, boolean telegramConfirmationEnabled, long lastQuit, String lastIp, long lastSessionStart,
-                                 int hashIterationCount, long sessionTime) {
+                                 int vkId, boolean vkConfirmationEnabled, long telegramId, boolean telegramConfirmationEnabled, long lastQuit, String lastIp, long lastSessionStart, long sessionTime) {
 
         Account account = newAccount(identifierType.fromRawString(id), identifierType, uuid, name);
 

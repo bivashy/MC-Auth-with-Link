@@ -74,7 +74,7 @@ public class AuthCommand {
                 actor.reply(config.getServerMessages().getMessage("account-not-found", MessageContext.of("%account_name%", proxyPlayer.getNickname())));
                 return;
             }
-            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPlayerPassword.getNewPassword(), account.getHashIterationCount())));
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPlayerPassword.getNewPassword())));
             accountDatabase.saveOrUpdateAccount(account);
             actor.reply(config.getServerMessages().getMessage("auth-change-success"));
         });

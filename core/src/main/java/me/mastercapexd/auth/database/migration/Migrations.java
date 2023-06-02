@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.bivashy.auth.api.database.migration.ColumnAppendMigrator;
+import com.bivashy.auth.api.database.migration.ColumnDropMigrator;
 import com.bivashy.auth.api.database.migration.ConditionalBatchTaskMigrator;
 import com.bivashy.auth.api.database.migration.ConditionalMigrator;
 import com.bivashy.auth.api.database.migration.Migrator;
@@ -75,7 +75,7 @@ public class Migrations {
             return Collections.unmodifiableCollection(migrationQueries);
         }
     };
-    public static final ColumnAppendMigrator<AuthAccount, Long> HASH_ITERATION_COLUMN_MIGRATOR = ColumnAppendMigrator.of(AuthAccount.HASH_ITERATION_COUNT_FIELD_KEY, "INTEGER");
+    public static final ColumnDropMigrator<AuthAccount, Long> HASH_ITERATION_COLUMN_MIGRATOR = ColumnDropMigrator.of("hash_iteration_count", "INTEGER");
 
     private Migrations() {
     }

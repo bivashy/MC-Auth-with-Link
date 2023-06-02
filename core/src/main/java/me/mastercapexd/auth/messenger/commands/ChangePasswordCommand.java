@@ -29,7 +29,7 @@ public class ChangePasswordCommand implements OrphanCommand {
         plugin.getEventBus().publish(AccountTryChangePasswordEvent.class, account, false, true).thenAccept(tryChangePasswordEventPostResult -> {
             if (tryChangePasswordEventPostResult.getEvent().isCancelled())
                 return;
-            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPassword.getNewPassword(), account.getHashIterationCount())));
+            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPassword.getNewPassword())));
             accountStorage.saveOrUpdateAccount(account);
             actorWrapper.reply(linkType.getLinkMessages()
                     .getStringMessage("changepass-success", linkType.newMessageContext(account))

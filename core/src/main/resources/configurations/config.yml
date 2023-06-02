@@ -43,7 +43,6 @@ data:
 #        playerId: 'player_id'
 #        playerIdType: 'unique_id'
 #        cryptoProvider: 'hash_type'
-#        hashIterationCount: 'hash_iteration_count'
 #        lastIp: 'last_ip'
 #        uniqueId: 'unique_id'
 #        playerName: 'player_name'

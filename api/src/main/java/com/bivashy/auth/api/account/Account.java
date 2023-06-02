@@ -107,10 +107,6 @@ public interface Account extends PlayerIdSupplier {
 
     void setLastSessionStartTimestamp(long timestamp);
 
-    int getHashIterationCount();
-
-    void setHashIterationCount(int hashIterationCount);
-
     @Deprecated
     default int getCurrentConfigurationAuthenticationStepCreatorIndex() {
         return getCurrentAuthenticationStepCreatorIndex();
