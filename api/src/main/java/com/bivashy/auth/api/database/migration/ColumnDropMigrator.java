@@ -18,7 +18,7 @@ public interface ColumnDropMigrator<T, ID> extends ConditionalMigrator<T, ID> {
                 .getUnderlyingConnection()
                 .getMetaData()
                 .getColumns(null, null, dao.getTableName(), getColumnName());
-        return !balanceColumnResultSet.next();
+        return balanceColumnResultSet.next();
     }
 
     @Override
