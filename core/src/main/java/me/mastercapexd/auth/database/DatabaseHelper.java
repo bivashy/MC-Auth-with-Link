@@ -58,7 +58,7 @@ public class DatabaseHelper {
                         databaseConfiguration.getPassword());
 
                 this.accountLinkDao = new AccountLinkDao(connectionSource,
-                        schemaSettings.getTableSettings("link").orElse(new BaseTableSettings("account_links")));
+                        schemaSettings.getTableSettings("link").orElse(new BaseTableSettings("auth_links")));
                 this.authAccountDao = new AuthAccountDao(connectionSource,
                         schemaSettings.getTableSettings("auth").orElse(new BaseTableSettings("mc_auth_accounts")), this);
 
