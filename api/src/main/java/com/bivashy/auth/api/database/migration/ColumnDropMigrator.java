@@ -2,7 +2,6 @@ package com.bivashy.auth.api.database.migration;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.function.Function;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
