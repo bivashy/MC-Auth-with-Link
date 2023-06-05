@@ -42,11 +42,14 @@ public class FolderResource extends DefaultResource {
             myPath = fileSystem.getPath(getName());
         } else {
             myPath = Paths.get(folderUri);
+
         }
         try (Stream<Path> pathStream = Files.walk(myPath, 1)) {
-            return pathStream.filter(path -> !path.toString().equals(getName()))
-                    .map(path -> path.toString().replaceAll("^[/\\\\]", ""))
-                    .map(resourcePath -> ResourceReader.defaultReader(classLoader, resourcePath).read())
+            return pathStream
+                    .filter(path -> !path.equals(myPath))
+                    .filter(path -> !Files.isDirectory(path))
+                    .map(Path::getFileName)
+                    .map(path -> ResourceReader.defaultReader(classLoader, getName() + "/" + path).read())
                     .collect(Collectors.toList());
         }
     }
