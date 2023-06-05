@@ -37,6 +37,7 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
 
         DatabaseFieldConfig linkTypeFieldConfig = createFieldConfig(settings, LINK_TYPE_CONFIGURATION_KEY, AccountLink.LINK_TYPE_FIELD_KEY);
         linkTypeFieldConfig.setCanBeNull(false);
+        linkTypeFieldConfig.setUniqueCombo(true);
         fields.add(linkTypeFieldConfig);
 
         fields.add(createFieldConfig(settings, LINK_USER_ID_CONFIGURATION_KEY, AccountLink.LINK_USER_ID_FIELD_KEY));
@@ -49,6 +50,7 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
 
         DatabaseFieldConfig accountIdFieldConfig = createFieldConfig(settings, ACCOUNT_ID_CONFIGURATION_KEY, AccountLink.ACCOUNT_ID_FIELD_KEY);
         accountIdFieldConfig.setForeign(true);
+        accountIdFieldConfig.setUniqueCombo(true);
         fields.add(accountIdFieldConfig);
         return new DatabaseTableConfig<>(AccountLink.class, settings.getTableName(), fields);
     }
