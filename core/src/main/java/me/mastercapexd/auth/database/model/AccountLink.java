@@ -12,13 +12,13 @@ public class AccountLink {
     public static final String ACCOUNT_ID_FIELD_KEY = "account_id";
     @DatabaseField(generatedId = true)
     private long id;
-    @DatabaseField(columnName = LINK_TYPE_FIELD_KEY, canBeNull = false)
+    @DatabaseField(columnName = LINK_TYPE_FIELD_KEY, canBeNull = false, uniqueCombo = true)
     private String linkType;
     @DatabaseField(columnName = LINK_USER_ID_FIELD_KEY)
     private String linkUserId;
     @DatabaseField(columnName = LINK_ENABLED_FIELD_KEY, dataType = DataType.BOOLEAN_INTEGER, canBeNull = false, defaultValue = "true")
     private boolean linkEnabled;
-    @DatabaseField(foreign = true, columnName = ACCOUNT_ID_FIELD_KEY)
+    @DatabaseField(foreign = true, columnName = ACCOUNT_ID_FIELD_KEY, uniqueCombo = true)
     private AuthAccount account;
 
     AccountLink() {

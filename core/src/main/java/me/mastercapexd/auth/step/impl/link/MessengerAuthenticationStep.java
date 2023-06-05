@@ -54,7 +54,7 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
 
         LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-        if (linkUserInfo == null || linkUser.isIdentifierDefaultOrNull()) {
+        if (linkUser.isIdentifierDefaultOrNull()) {
             linkEntryUser.getAccount().getPlayer().ifPresent(player -> player.sendMessage(linkType.getServerMessages().getMessage("not-linked")));
             return true;
         }
