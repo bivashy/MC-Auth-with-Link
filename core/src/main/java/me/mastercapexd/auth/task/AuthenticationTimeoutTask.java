@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.task;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -19,7 +20,10 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 
-            for (String accountPlayerId : plugin.getAuthenticatingAccountBucket().getAccountIdEntries()) {
+            // Iterator for preventing ConcurrentModificationException, because we are removing element on specific condition
+            Iterator<String> accountIdIterator = plugin.getAuthenticatingAccountBucket().getAccountIdEntries().iterator();
+            while (accountIdIterator.hasNext()) {
+                String accountPlayerId = accountIdIterator.next();
                 Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
                 int accountEnterElapsedMillis = (int) (now -
                         plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
@@ -36,7 +40,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
                 account.getPlayer()
                         .ifPresent(
                                 player -> player.disconnect(plugin.getConfig().getServerMessages().getMessage("time-left", new ServerMessageContext(account))));
-                plugin.getAuthenticatingAccountBucket().removeAuthorizingAccount(account);
+                accountIdIterator.remove();
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
