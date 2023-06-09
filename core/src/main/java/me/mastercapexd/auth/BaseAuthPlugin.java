@@ -49,7 +49,7 @@ import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
 import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
 import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory;
-import me.mastercapexd.auth.config.resolver.ProxyComponentFieldResolver;
+import me.mastercapexd.auth.config.resolver.ServerComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
@@ -200,7 +200,7 @@ public class BaseAuthPlugin implements AuthPlugin {
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
                 .registerFieldResolver(CryptoProvider.class, (context) -> cryptoProviderBucket.findCryptoProvider(context.getString())
                         .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
-                .registerFieldResolver(ServerComponent.class, new ProxyComponentFieldResolver())
+                .registerFieldResolver(ServerComponent.class, new ServerComponentFieldResolver())
                 .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
                 .registerFieldResolver(File.class, (context) -> {
                     String path = context.getString("");
