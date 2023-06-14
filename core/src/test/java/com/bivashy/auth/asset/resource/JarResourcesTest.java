@@ -6,6 +6,6 @@ import java.net.URLClassLoader;
 
 public class JarResourcesTest extends ResourcesTest {
     public JarResourcesTest() throws MalformedURLException {
-        super(new URLClassLoader(new URL[]{new URL("jar", "", "test.jar!/")}));
+        super(new URLClassLoader(new URL[]{new URL("jar", "", "test/test.jar!/")}));
     }
 }

@@ -34,7 +34,7 @@ public abstract class ResourcesTest {
     @Test
     public void shouldReturnValidResources() throws IOException, URISyntaxException {
         FolderResourceReader folderResourceReader = new FolderResourceReader(classLoader, "test");
-        testFolderResourceReader(folderResourceReader, Arrays.asList("test/bar.txt", "test/foo.txt"));
+        testFolderResourceReader(folderResourceReader, Arrays.asList("test/bar.txt", "test/foo.txt", "test/test.jar"));
 
         FolderResourceReader subfolderResourceReader = new FolderResourceReader(classLoader, "test/subfolder");
         testFolderResourceReader(subfolderResourceReader, Arrays.asList("test/subfolder/text.txt"));
