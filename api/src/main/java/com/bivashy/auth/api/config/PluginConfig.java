@@ -6,14 +6,15 @@ import java.util.regex.Pattern;
 import com.bivashy.auth.api.config.bossbar.BossBarSettings;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.LegacyStorageDataSettings;
+import com.bivashy.auth.api.config.link.DiscordSettings;
 import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
-import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
+import com.bivashy.auth.api.type.IdentifierType;
 
 public interface PluginConfig {
     @Deprecated
@@ -80,4 +81,6 @@ public interface PluginConfig {
     TelegramSettings getTelegramSettings();
 
     VKSettings getVKSettings();
+
+    DiscordSettings getDiscordSettings();
 }
