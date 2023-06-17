@@ -13,8 +13,8 @@ import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.messenger.telegram.MessengerTelegram;
 
+import me.mastercapexd.auth.config.message.discord.DiscordMessagePlaceholderContext;
 import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
-import me.mastercapexd.auth.config.message.telegram.TelegramMessagePlaceholderContext;
 
 public class DiscordLinkType implements LinkType, MessengerTelegram {
     private static final DiscordLinkType INSTANCE = new DiscordLinkType();
