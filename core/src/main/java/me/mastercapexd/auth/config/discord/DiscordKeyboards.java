@@ -9,8 +9,7 @@ import com.bivashy.auth.api.config.link.LinkKeyboards;
 import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 import com.bivashy.messenger.common.keyboard.Keyboard;
-import com.bivashy.messenger.telegram.message.keyboard.TelegramKeyboard;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.bivashy.messenger.discord.message.keyboard.DiscordKeyboard;
 
 public class DiscordKeyboards implements ConfigurationHolder, LinkKeyboards {
     private final Map<String, String> jsonKeyboards;
@@ -26,6 +25,6 @@ public class DiscordKeyboards implements ConfigurationHolder, LinkKeyboards {
 
     @Override
     public Keyboard createKeyboardModel(String rawJson) {
-        return new DiscordKeyboard(GSON.fromJson(rawJson, InlineKeyboardMarkup.class));
+        return new DiscordKeyboard(GSON.fromJson(rawJson, new TypeToken<List<ActionRow>>()));
     }
 }
