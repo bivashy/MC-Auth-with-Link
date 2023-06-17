@@ -1,0 +1,30 @@
+auto-migrate-config: false
+storage-type: MYSQL
+allowed-commands:
+  - '^\/l ' # Если команда начинается на /l
+  - '^\/login'
+  - '^\/reg'
+  - '^\/register'
+  - '^\/googlecode'
+  - '^\/gcode'
+boss-bar:
+  use: false
+password-regex-pattern: '[a-zA-Z0-9_$#@^-]*'
+session-durability: 4h
+messages:
+  deserializer: LEGACY_AMPERSAND
+  test-message: 'Hello'
+  colored-message: '&ctest'
+  test-submessage:
+    message: 'hi'
+
+  complex-minimessage: '[MINIMESSAGE]<click:run_command:/test>Clickable</click> and <hover:show_text:Hi>Hoverable with <rainbow>rainbow'
+
+
+# Important fields
+game-servers:
+  - ''
+auth-servers:
+  - ''
+name-regex-pattern: '.*'
+hash-type: BCRYPT
