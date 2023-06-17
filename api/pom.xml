@@ -13,7 +13,7 @@
 
     <properties>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <multimessenger.version>1.0.1</multimessenger.version>
+        <multimessenger.version>1.0.3</multimessenger.version>
         <adventure.serializer.version>4.13.0</adventure.serializer.version>
         <adventure.platform.version>4.3.0</adventure.platform.version>
         <ormlite.version>6.1</ormlite.version>
@@ -59,6 +59,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.github.bivashy.MultiMessenger</groupId>
+            <artifactId>discord</artifactId>
+            <version>${multimessenger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>JDA</artifactId>
+                    <groupId>net.dv8tion</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
 
         <!-- Adventure platform -->
         <dependency>
