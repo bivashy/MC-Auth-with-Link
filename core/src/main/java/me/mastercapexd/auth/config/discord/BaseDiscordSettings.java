@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.bivashy.auth.api.config.link.TelegramSettings;
+import com.bivashy.auth.api.config.link.DiscordSettings;
 import com.bivashy.auth.api.config.link.command.LinkCustomCommands;
 import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
@@ -19,7 +19,7 @@ import me.mastercapexd.auth.config.link.BaseConfirmationSettings;
 import me.mastercapexd.auth.config.link.BaseEnterSettings;
 import me.mastercapexd.auth.config.link.BaseMessengerCustomCommands;
 import me.mastercapexd.auth.config.link.BaseRestoreSettings;
-import me.mastercapexd.auth.config.message.telegram.TelegramMessages;
+import me.mastercapexd.auth.config.message.discord.DiscordMessages;
 
 public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings {
     @ConfigField("enabled")
@@ -32,14 +32,14 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     private BaseRestoreSettings restoreSettings;
     @ConfigField("enter")
     private BaseEnterSettings enterSettings;
-    @ConfigField("telegram-commands")
+    @ConfigField("discord-commands")
     private BaseCommandPaths commandPaths;
     @ConfigField("proxy-commands")
     private BaseCommandPaths proxyCommandPaths;
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
-    @ConfigField("max-telegram-link")
-    private int maxTelegramLinkCount = 0;
+    @ConfigField("max-discord-link")
+    private int maxDiscordLinkCount = 0;
     @ConfigField("discord-messages")
     private DiscordMessages messages;
     @ConfigField("keyboards")
@@ -55,7 +55,7 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     public BaseDiscordSettings(ConfigurationSectionHolder sectionHolder) {
         AuthPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
         if (token == null && enabled)
-            System.err.println("Telegram bot token not found!");
+            System.err.println("Discord bot token not found!");
     }
 
     @Override
@@ -111,7 +111,7 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
 
     @Override
     public int getMaxLinkCount() {
-        return maxTelegramLinkCount;
+        return maxDiscordLinkCount;
     }
 
     @Override
