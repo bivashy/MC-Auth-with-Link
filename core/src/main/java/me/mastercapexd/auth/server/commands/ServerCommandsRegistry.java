@@ -31,6 +31,7 @@ import me.mastercapexd.auth.shared.commands.VKLinkCommand;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
+import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
 
@@ -64,6 +65,10 @@ public abstract class ServerCommandsRegistry {
 
             if (System.currentTimeMillis() > confirmationUser.getLinkTimeoutTimestamp())
                 throw new SendComponentException(config.getServerMessages().getSubMessages("link-code").getMessage("timed-out"));
+
+            CommandActor actor = context.actor();
+            if (!actor.getUniqueId().equals(confirmationUser.getLinkTarget().getUniqueId()))
+                throw new SendComponentException(config.getServerMessages().getSubMessages("link-code").getMessage("no-code"));
 
             LinkUser linkUser = confirmationUser.getLinkTarget()
                     .findFirstLinkUserOrNew(user -> user.getLinkType().equals(confirmationUser.getLinkType()), confirmationUser.getLinkType());

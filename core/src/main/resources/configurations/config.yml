@@ -328,6 +328,11 @@ messages:
     code-entered: '&aВы успешно прошли аутентификацию с Google-Authenticator'
     unlink-not-exists: '&cВы не привязали Google-Authenticator!'
     unlinked: '&cВы успешно отвязали Google-Authenticator!'
+  # Привязка с помощью команды /code на сервере
+  link-code:
+    no-code: '&cУ вас нет кода привязки!'
+    timed-out: '&cВремя привязки вышло!'
+    already-linked: '&cУ вас аккаунт уже привязан'
   # Подключение
   autoconnect: '&aСессия восстановлена. Присоединяем Вас к серверу...'
   check-name-case-failed: '&cНеправильное имя. Аккаунт зарегистрирован под ником %correct%.'

@@ -49,7 +49,10 @@ public class GoogleCodeAuthenticationStep extends AuthenticationStepTemplate imp
         return account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).map(linkUser -> {
             LinkUserInfo linkUserInfo = linkUser.getLinkUserInfo();
 
-            if ((!linkUserInfo.isConfirmationEnabled() && GoogleLinkType.getInstance().getSettings().getConfirmationSettings().canToggleConfirmation()) || linkUser.isIdentifierDefaultOrNull())
+            if (linkUser.isIdentifierDefaultOrNull())
+                return true;
+
+            if (!linkUserInfo.isConfirmationEnabled() && GoogleLinkType.getInstance().getSettings().getConfirmationSettings().canToggleConfirmation())
                 return true;
 
             PLUGIN.getLinkEntryBucket().addLinkUser(entryUser);
