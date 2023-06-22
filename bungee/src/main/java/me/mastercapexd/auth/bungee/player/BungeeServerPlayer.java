@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.bungee.player;
 
-import java.net.InetAddress;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,7 +50,7 @@ public class BungeeServerPlayer implements ServerPlayer {
 
     @Override
     public String getPlayerIp() {
-        return Optional.ofNullable(player.getAddress().getAddress()).map(InetAddress::getHostAddress).orElse(null);
+        return player.getAddress().getAddress().getHostAddress();
     }
 
     @Override

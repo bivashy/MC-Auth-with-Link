@@ -1,6 +1,5 @@
 package me.mastercapexd.auth.velocity.player;
 
-import java.net.InetAddress;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,7 +58,7 @@ public class VelocityServerPlayer implements ServerPlayer {
 
     @Override
     public String getPlayerIp() {
-        return Optional.ofNullable(player.getRemoteAddress().getAddress()).map(InetAddress::getHostAddress).orElse(null);
+        return player.getRemoteAddress().getAddress().getHostAddress();
     }
 
     @Override
