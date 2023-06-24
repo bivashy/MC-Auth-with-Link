@@ -11,12 +11,12 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.server.message.ServerComponent;
-import com.bivashy.messenger.telegram.MessengerTelegram;
+import com.bivashy.messenger.discord.MessengerDiscord;
 
 import me.mastercapexd.auth.config.message.discord.DiscordMessagePlaceholderContext;
 import me.mastercapexd.auth.config.message.link.context.LinkPlaceholderContext;
 
-public class DiscordLinkType implements LinkType, MessengerTelegram {
+public class DiscordLinkType implements LinkType, MessengerDiscord {
     private static final DiscordLinkType INSTANCE = new DiscordLinkType();
     public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
