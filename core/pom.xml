@@ -24,6 +24,7 @@
         <vk.api.version>0.4.2</vk.api.version>
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
+        <jda.version>5.0.0-beta.11</jda.version>
     </properties>
 
     <repositories>
@@ -108,6 +109,13 @@
             <version>${telegram-lamp-module.version}</version>
         </dependency>
 
+        <!-- Lamp discord module -->
+        <dependency>
+            <groupId>com.github.bivashy.Lamp</groupId>
+            <artifactId>jda</artifactId>
+            <version>${lamp.command-library.version}</version>
+        </dependency>
+
         <!-- VK API -->
         <dependency>
             <groupId>com.github.bivashy</groupId>
@@ -143,6 +151,14 @@
             <groupId>ru.vyarus</groupId>
             <artifactId>yaml-config-updater</artifactId>
             <version>${yaml-config-updater.version}</version>
+        </dependency>
+
+        <!-- Java Discord API -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>${jda.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
