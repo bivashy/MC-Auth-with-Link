@@ -17,6 +17,7 @@ import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
@@ -146,6 +147,13 @@ public abstract class ServerCommandsRegistry {
                 return;
             if (!config.getTelegramSettings().isEnabled())
                 throw new SendComponentException(config.getServerMessages().getSubMessages("telegram").getMessage("disabled"));
+        });
+
+        commandHandler.registerCondition((actor, command, arguments) -> {
+            if (!command.hasAnnotation(DiscordUse.class))
+                return;
+            if (!config.getDiscordSettings().isEnabled())
+                throw new SendComponentException(config.getServerMessages().getSubMessages("discord").getMessage("disabled"));
         });
     }
 
