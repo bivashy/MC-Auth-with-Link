@@ -20,12 +20,18 @@
         <google.authenticator.version>1.5.0</google.authenticator.version>
         <event-bus.version>1.2</event-bus.version>
         <configuration-library.version>4.0.2</configuration-library.version>
+        <libby.version>1.1.5</libby.version>
     </properties>
 
     <repositories>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <!-- Libby (AlessioDP) Repository -->
+        <repository>
+            <id>AlessioDP</id>
+            <url>https://repo.alessiodp.com/releases/</url>
         </repository>
     </repositories>
 
@@ -122,6 +128,13 @@
             <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
             <artifactId>core</artifactId>
             <version>${configuration-library.version}</version>
+        </dependency>
+
+        <!-- Libby runtime dependency management -->
+        <dependency>
+            <groupId>net.byteflux</groupId>
+            <artifactId>libby-core</artifactId>
+            <version>${libby.version}</version>
         </dependency>
     </dependencies>
 </project>

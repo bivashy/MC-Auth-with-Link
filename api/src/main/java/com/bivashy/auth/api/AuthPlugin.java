@@ -14,6 +14,7 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
+import com.bivashy.auth.api.management.LibraryManagement;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
@@ -66,6 +67,8 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
     LinkAuthenticationBucket<LinkEntryUser> getLinkEntryBucket();
 
     CryptoProviderBucket getCryptoProviderBucket();
+
+    LibraryManagement getLibraryManagement();
 
     <T extends PluginHook> T getHook(Class<T> clazz);
 

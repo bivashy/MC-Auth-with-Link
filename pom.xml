@@ -162,6 +162,10 @@
                             <pattern>ru.vyarus.yaml.updater</pattern>
                             <shadedPattern>com.bivashy.auth.lib.ru.vyarus.yaml.updater</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.byteflux.libby</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.net.byteflux.libby</shadedPattern>
+                        </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>

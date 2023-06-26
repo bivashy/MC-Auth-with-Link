@@ -27,12 +27,15 @@ import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
+import com.bivashy.auth.api.management.LibraryManagement;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.configuration.ConfigurationProcessor;
 import com.bivashy.configuration.configurate.SpongeConfigurateProcessor;
+import com.bivashy.messenger.discord.message.DiscordMessage;
+import com.bivashy.messenger.discord.provider.DiscordApiProvider;
 import com.bivashy.messenger.telegram.message.TelegramMessage;
 import com.bivashy.messenger.telegram.providers.TelegramApiProvider;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
@@ -49,9 +52,9 @@ import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
 import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
 import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory;
-import me.mastercapexd.auth.config.resolver.ServerComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
+import me.mastercapexd.auth.config.resolver.ServerComponentFieldResolver;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
 import me.mastercapexd.auth.crypto.Argon2CryptoProvider;
 import me.mastercapexd.auth.crypto.BcryptCryptoProvider;
@@ -61,10 +64,14 @@ import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.crypto.belkaauth.UAuthCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.discord.command.DiscordCommandRegistry;
+import me.mastercapexd.auth.hooks.BaseDiscordHook;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
+import me.mastercapexd.auth.hooks.DiscordHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.BaseLinkTypeProvider;
 import me.mastercapexd.auth.listener.AuthenticationAttemptListener;
+import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.management.BaseLoginManagement;
 import me.mastercapexd.auth.step.impl.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.EnterServerAuthenticationStep.EnterServerAuthenticationStepFactory;
@@ -95,6 +102,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final File pluginFolder;
     private AuthenticationStepContextFactoryBucket authenticationStepContextFactoryBucket;
     private AudienceProvider audienceProvider;
+    private LibraryManagement libraryManagement;
     private ServerCore core;
     private File dataFolder;
     private AuthenticatingAccountBucket accountBucket;
@@ -106,12 +114,15 @@ public class BaseAuthPlugin implements AuthPlugin {
     private AccountDatabase accountDatabase;
     private LoginManagement loginManagement;
 
-    public BaseAuthPlugin(AudienceProvider audienceProvider, String version, File pluginFolder, ServerCore core) {
+    public BaseAuthPlugin(AudienceProvider audienceProvider, String version, File pluginFolder, ServerCore core, LibraryManagement libraryManagement) {
         AuthPluginProvider.setPluginInstance(this);
         this.core = core;
         this.audienceProvider = audienceProvider;
         this.version = version;
         this.pluginFolder = pluginFolder;
+        this.libraryManagement = libraryManagement;
+
+        libraryManagement.loadLibraries();
         initializeBasic();
         if (config.getTelegramSettings().isEnabled())
             initializeTelegram();
@@ -310,6 +321,11 @@ public class BaseAuthPlugin implements AuthPlugin {
     @Override
     public CryptoProviderBucket getCryptoProviderBucket() {
         return cryptoProviderBucket;
+    }
+
+    @Override
+    public LibraryManagement getLibraryManagement() {
+        return libraryManagement;
     }
 
     @Override
