@@ -126,6 +126,8 @@ public class BaseAuthPlugin implements AuthPlugin {
         initializeBasic();
         if (config.getTelegramSettings().isEnabled())
             initializeTelegram();
+        if (config.getDiscordSettings().isEnabled())
+            initializeDiscord();
         if (config.getGoogleAuthenticatorSettings().isEnabled())
             googleAuthenticator = new GoogleAuthenticator();
     }
@@ -192,6 +194,16 @@ public class BaseAuthPlugin implements AuthPlugin {
         TelegramMessage.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
 
         new TelegramCommandRegistry();
+    }
+
+    private void initializeDiscord() {
+        libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY);
+
+        hooks.put(DiscordHook.class, new BaseDiscordHook());
+
+        DiscordMessage.setDefaultApiProvider(DiscordApiProvider.of(getHook(DiscordHook.class).getJDA()));
+
+        new DiscordCommandRegistry();
     }
 
     private void migrateConfig() throws IOException, URISyntaxException {
