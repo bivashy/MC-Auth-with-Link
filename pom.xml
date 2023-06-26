@@ -158,6 +158,10 @@
                             <pattern>org.slf4j</pattern>
                             <shadedPattern>com.bivashy.auth.lib.org.slf4j</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>ru.vyarus.yaml.updater</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.ru.vyarus.yaml.updater</shadedPattern>
+                        </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>
