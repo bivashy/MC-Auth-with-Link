@@ -27,7 +27,7 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 
             for (String accountPlayerId : plugin.getAuthenticatingAccountBucket().getAccountIdEntries()) {
-                Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
+                Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
                 int accountEnterElapsedMillis = (int) (now -
                         plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
                 ServerBossbar progressBar = progressBars.get(account.getPlayerId());

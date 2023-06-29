@@ -52,7 +52,7 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
     @Override
     public boolean isSessionActive(long sessionDurability) {
         long sessionEndTime = getLastSessionStartTimestamp() + sessionDurability;
-        return sessionEndTime >= System.currentTimeMillis() && !PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(this);
+        return sessionEndTime >= System.currentTimeMillis() && !PLUGIN.getAuthenticatingAccountBucket().isAuthenticating(this);
     }
 
     @Override

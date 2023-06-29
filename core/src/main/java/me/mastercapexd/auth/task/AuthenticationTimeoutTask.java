@@ -24,7 +24,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
             Iterator<String> accountIdIterator = plugin.getAuthenticatingAccountBucket().getAccountIdEntries().iterator();
             while (accountIdIterator.hasNext()) {
                 String accountPlayerId = accountIdIterator.next();
-                Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
+                Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
                 int accountEnterElapsedMillis = (int) (now -
                         plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
 

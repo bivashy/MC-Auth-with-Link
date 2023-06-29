@@ -21,14 +21,14 @@ public class LogoutCommand {
     @DefaultFor("logout")
     public void logout(ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
-        if (plugin.getAuthenticatingAccountBucket().isAuthorizing(player)) {
+        if (plugin.getAuthenticatingAccountBucket().isAuthenticating(player)) {
             player.sendMessage(config.getServerMessages().getMessage("already-logged-out"));
             return;
         }
         accountStorage.getAccount(id).thenAccept(account -> {
             account.logout(config.getSessionDurability());
             accountStorage.saveOrUpdateAccount(account);
-            plugin.getAuthenticatingAccountBucket().addAuthorizingAccount(account);
+            plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(account);
             player.sendMessage(config.getServerMessages().getMessage("logout-success"));
             config.findServerInfo(config.getAuthServers()).asProxyServer().sendPlayer(player);
         });

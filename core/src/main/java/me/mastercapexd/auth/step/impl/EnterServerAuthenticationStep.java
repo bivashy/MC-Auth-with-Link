@@ -31,7 +31,7 @@ public class EnterServerAuthenticationStep extends AuthenticationStepTemplate {
 
     public void enterServer() {
         Account account = authenticationStepContext.getAccount();
-        PLUGIN.getAuthenticatingAccountBucket().removeAuthorizingAccount(account);
+        PLUGIN.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
         Optional<ServerPlayer> playerOptional = account.getPlayer();
         account.setLastSessionStartTimestamp(System.currentTimeMillis());
         playerOptional.map(ServerPlayer::getPlayerIp).ifPresent(account::setLastIpAddress);
