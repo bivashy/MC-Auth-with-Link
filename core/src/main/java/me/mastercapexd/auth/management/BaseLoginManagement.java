@@ -64,7 +64,7 @@ public class BaseLoginManagement implements LoginManagement {
                         AccountFactory.DEFAULT_LAST_QUIT, player.getPlayerIp(), AccountFactory.DEFAULT_LAST_SESSION_START, config.getSessionDurability());
 
                 AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket().createContext(newAccount);
-                plugin.getAuthenticatingAccountBucket().addAuthorizingAccount(newAccount);
+                plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(newAccount);
                 newAccount.nextAuthenticationStep(context);
                 return CompletableFuture.completedFuture(null);
             }
@@ -95,10 +95,10 @@ public class BaseLoginManagement implements LoginManagement {
                     return account;
                 }
 
-                if (plugin.getAuthenticatingAccountBucket().isAuthorizing(account))
+                if (plugin.getAuthenticatingAccountBucket().isAuthenticating(account))
                     throw new IllegalStateException("Cannot have two authenticating account at the same time!");
 
-                plugin.getAuthenticatingAccountBucket().addAuthorizingAccount(account);
+                plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(account);
                 account.nextAuthenticationStep(context);
                 return account;
             });
@@ -110,7 +110,7 @@ public class BaseLoginManagement implements LoginManagement {
         String id = config.getActiveIdentifierType().getId(player);
         plugin.getLinkEntryBucket().removeLinkUsers(entryUser -> entryUser.getAccount().getPlayerId().equals(id));
         long loginDuration = System.currentTimeMillis() - plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(player);
-        if (plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+        if (plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
             return;
         accountDatabase.getAccount(id).thenAccept(account -> {
             account.setLastQuitTimestamp(System.currentTimeMillis());

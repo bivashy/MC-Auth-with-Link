@@ -42,7 +42,7 @@ public class AuthenticationListener implements Listener {
                 return;
             // Using dirty way because we cannot send message in LoginEvent
             plugin.getCore().schedule(() -> {
-                if (plugin.getAuthenticatingAccountBucket().isAuthorizing(connectionPlayer))
+                if (plugin.getAuthenticatingAccountBucket().isAuthenticating(connectionPlayer))
                     return;
                 account.getPlayer()
                         .ifPresent(player -> player.sendMessage(
@@ -66,7 +66,7 @@ public class AuthenticationListener implements Listener {
         if (!playerOptional.isPresent())
             return;
         ServerPlayer player = playerOptional.get();
-        if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+        if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
             return;
         if (plugin.getConfig().shouldBlockChat() && !event.isCommand()) {
             player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-chat"));
@@ -82,7 +82,7 @@ public class AuthenticationListener implements Listener {
     @EventHandler
     public void onBlockedServerConnect(ServerConnectEvent event) {
         ServerPlayer player = new BungeeServerPlayer(event.getPlayer());
-        if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+        if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
             return;
         if (plugin.getConfig().getBlockedServers().stream().noneMatch(server -> event.getTarget().getName().equals(server.getId()))) {
             event.setTarget(plugin.getConfig().findServerInfo(plugin.getConfig().getAuthServers()).asProxyServer().as(BungeeServer.class).getServerInfo());

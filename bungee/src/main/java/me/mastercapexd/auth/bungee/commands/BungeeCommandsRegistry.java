@@ -50,11 +50,11 @@ public class BungeeCommandsRegistry extends ServerCommandsRegistry {
             if (!actor.as(BungeeCommandActor.class).isPlayer())
                 return;
             ServerPlayer player = new BungeeServerPlayer(actor.as(BungeeCommandActor.class).asPlayer());
-            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 return;
             if (!command.hasAnnotation(AuthenticationStepCommand.class))
                 return;
-            Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(player);
+            Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(player);
             if (account.getCurrentAuthenticationStep() == null)
                 return;
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
@@ -67,10 +67,10 @@ public class BungeeCommandsRegistry extends ServerCommandsRegistry {
             ServerPlayer player = new BungeeServerPlayer(context.actor().as(BungeeCommandActor.class).asPlayer());
             if (player.getRealPlayer() == null)
                 throw new SendComponentException(config.getServerMessages().getMessage("players-only"));
-            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 throw new SendComponentException(config.getServerMessages().getMessage("already-logged-in"));
 
-            Account account = plugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(player);
+            Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(player);
             if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
                 throw new SendComponentException(config.getServerMessages().getMessage("account-not-found"));
             if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))
