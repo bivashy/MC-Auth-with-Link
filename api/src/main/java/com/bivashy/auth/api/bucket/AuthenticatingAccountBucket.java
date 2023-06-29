@@ -9,15 +9,36 @@ import com.bivashy.auth.api.model.PlayerIdSupplier;
 public interface AuthenticatingAccountBucket {
     Collection<String> getAccountIdEntries();
 
+    /**
+     * @deprecated Use {@link #isAuthenticating(PlayerIdSupplier)}
+     */
     @Deprecated
-    boolean isAuthorizing(PlayerIdSupplier playerIdSupplier);
+    default boolean isAuthorizing(PlayerIdSupplier playerIdSupplier) {
+        return isAuthenticating(playerIdSupplier);
+    }
 
+    /**
+     * @deprecated Use {@link #getAuthenticatingAccount(PlayerIdSupplier)}
+     */
     @Deprecated
-    Optional<Account> getAuthorizingAccount(PlayerIdSupplier playerIdSupplier);
+    default Optional<Account> getAuthorizingAccount(PlayerIdSupplier playerIdSupplier) {
+        return getAuthenticatingAccount(playerIdSupplier);
+    }
 
+    /**
+     * @deprecated Use {@link #getAuthenticatingAccount(PlayerIdSupplier)}
+     */
     @Deprecated
     default Account getAuthorizingAccountNullable(PlayerIdSupplier playerIdSupplier) {
-        return getAuthorizingAccount(playerIdSupplier).orElse(null);
+        return getAuthenticatingAccountNullable(playerIdSupplier);
+    }
+
+    boolean isAuthenticating(PlayerIdSupplier playerIdSupplier);
+
+    Optional<Account> getAuthenticatingAccount(PlayerIdSupplier playerIdSupplier);
+
+    default Account getAuthenticatingAccountNullable(PlayerIdSupplier playerIdSupplier) {
+        return getAuthenticatingAccount(playerIdSupplier).orElse(null);
     }
 
     Optional<Long> getEnterTimestamp(PlayerIdSupplier playerIdSupplier);
@@ -26,9 +47,23 @@ public interface AuthenticatingAccountBucket {
         return getEnterTimestamp(playerIdSupplier).orElse(0L);
     }
 
+    /**
+     * @deprecated Use {@link #addAuthenticatingAccount(Account)}
+     */
     @Deprecated
-    void addAuthorizingAccount(Account account);
+    default void addAuthorizingAccount(Account account) {
+        addAuthenticatingAccount(account);
+    }
 
+    /**
+     * @deprecated Use {@link #removeAuthenticatingAccount(PlayerIdSupplier)}
+     */
     @Deprecated
-    void removeAuthorizingAccount(PlayerIdSupplier playerIdSupplier);
+    default void removeAuthorizingAccount(PlayerIdSupplier playerIdSupplier) {
+        removeAuthenticatingAccount(playerIdSupplier);
+    }
+
+    void addAuthenticatingAccount(Account account);
+
+    void removeAuthenticatingAccount(PlayerIdSupplier playerIdSupplier);
 }

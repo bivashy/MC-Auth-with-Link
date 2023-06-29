@@ -25,12 +25,12 @@ public class BaseAuthenticatingAccountBucket implements AuthenticatingAccountBuc
     }
 
     @Override
-    public boolean isAuthorizing(PlayerIdSupplier playerIdSupplier) {
+    public boolean isAuthenticating(PlayerIdSupplier playerIdSupplier) {
         return authenticatingAccounts.containsKey(playerIdSupplier.getPlayerId());
     }
 
     @Override
-    public Optional<Account> getAuthorizingAccount(PlayerIdSupplier playerIdSupplier) {
+    public Optional<Account> getAuthenticatingAccount(PlayerIdSupplier playerIdSupplier) {
         return Optional.ofNullable(authenticatingAccounts.getOrDefault(playerIdSupplier.getPlayerId(), null)).map(AuthenticatingAccountState::getAccount);
     }
 
@@ -41,13 +41,13 @@ public class BaseAuthenticatingAccountBucket implements AuthenticatingAccountBuc
     }
 
     @Override
-    public void addAuthorizingAccount(Account account) {
+    public void addAuthenticatingAccount(Account account) {
         authenticatingAccounts.put(account.getPlayerId(), new AuthenticatingAccountState(account, System.currentTimeMillis()));
     }
 
     @Override
-    public void removeAuthorizingAccount(PlayerIdSupplier playerIdSupplier) {
-        plugin.getEventBus().post(AccountStateClearEvent.class, getAuthorizingAccount(playerIdSupplier));
+    public void removeAuthenticatingAccount(PlayerIdSupplier playerIdSupplier) {
+        plugin.getEventBus().post(AccountStateClearEvent.class, getAuthenticatingAccount(playerIdSupplier));
         authenticatingAccounts.remove(playerIdSupplier.getPlayerId());
     }
 
