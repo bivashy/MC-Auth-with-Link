@@ -3,6 +3,7 @@ package me.mastercapexd.auth;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -87,6 +88,7 @@ import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
+import net.byteflux.libby.Library;
 import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
@@ -197,7 +199,8 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void initializeDiscord() {
-        libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY);
+        libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY,
+                Collections.singletonList(Library.builder().groupId("club{}minnced").artifactId("opus-java").version("0").build()));
 
         hooks.put(DiscordHook.class, new BaseDiscordHook());
 
