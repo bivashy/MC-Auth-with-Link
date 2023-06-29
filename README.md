@@ -129,7 +129,7 @@ public class ExampleAuthenticationStep extends AuthenticationStepTemplate {
     public boolean shouldSkip() {
         // Executed when this AuthenticationStep applied to the player
         // If player has session, or some plugin removed him from authentication bucket ignore
-        if (!PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(authenticationStepContext.getAccount()) ||
+        if (!PLUGIN.getAuthenticatingAccountBucket().isAuthenticating(authenticationStepContext.getAccount()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
         // Do additional validation if you want
@@ -170,13 +170,13 @@ public class ExampleClass {
     // You should take Account from bucket, not database!
     public Account getRegisteringAccount(String name) {
         AuthPlugin plugin;
-        return plugin.getAuthenticatingAccountBucket().getAuthorizingAccount(PlayerIdSupplier.of(name.toLowerCase())).orElseThrow(NullPointerException::new);
+        return plugin.getAuthenticatingAccountBucket().getAuthenticatingAccount(PlayerIdSupplier.of(name.toLowerCase())).orElseThrow(NullPointerException::new);
     }
 
     // If you have ProxiedPlayer or Player instance:
     public Account getRegisteringAccount(ProxiedPlayer player) {
         AuthPlugin plugin;
-        return plugin.getAuthenticatingAccountBucket().getAuthorizingAccount(plugin.getCore().wrapPlayer(player)).orElseThrow(NullPointerException::new);
+        return plugin.getAuthenticatingAccountBucket().getAuthenticatingAccount(plugin.getCore().wrapPlayer(player)).orElseThrow(NullPointerException::new);
     }
 }
 ```
