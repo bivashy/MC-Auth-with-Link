@@ -166,6 +166,10 @@
                             <pattern>net.byteflux.libby</pattern>
                             <shadedPattern>com.bivashy.auth.lib.net.byteflux.libby</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.dv8tion</pattern>
+                            <shadedPattern>com.bivashy.auth.lib.net.dv8tion</shadedPattern>
+                        </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>
