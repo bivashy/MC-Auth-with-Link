@@ -4,13 +4,15 @@
 
 # MC-Auth-with-Link
 
-Enhanced Fork of mc-auth, boasting the inclusion of multiple link pathways, bolstered by velocity support, amplified by a wider range of configuration settings and an enriched API.
+## Basic features
+- Authentication flow control using authentication steps
+- MultiFactor authorization (VK, Telegram, GoogleAuthenticator)
+- Session system
 
-With this plugin you can link: **Telegram**, **VK** You can use this plugin on platforms like **Velocity** and BungeeCord.
-
-You can also choose how you want to link your account to these messaging platforms.
-
-This plugin has configurable "Authentication steps" that give you control over how the authentication process will proceed, or you can let a developer add their own confirmation steps.
+## Platforms
+- [X] **BungeeCord**
+- [X] **Velocity**
+- [ ] Spigot
 
 ## Requirements
 
@@ -19,7 +21,7 @@ This plugin has configurable "Authentication steps" that give you control over h
 
 ## Documentation
 
-<div align="center">
+<div style="text-align: center;">
 
 [![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](https://bivashy.gitbook.io/mcauth/)
 
