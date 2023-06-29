@@ -37,7 +37,7 @@ public class AuthenticationListener {
         if (!event.getResult().isAllowed())
             return;
         plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
-            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 return;
             if (!plugin.getConfig().shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
                 return;
@@ -54,7 +54,7 @@ public class AuthenticationListener {
         if (!proxyPlayerOptional.isPresent())
             return;
         ServerPlayer player = proxyPlayerOptional.get();
-        if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+        if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
             return;
         String command = "/" + event.getCommand();
         if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(command).find()))
@@ -67,7 +67,7 @@ public class AuthenticationListener {
     public void onBlockedServerConnect(ServerPreConnectEvent event) {
         plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
             String id = plugin.getConfig().getActiveIdentifierType().getId(player);
-            if (!plugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+            if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 return;
             Optional<RegisteredServer> resultServerOptional = event.getResult().getServer();
             if (!resultServerOptional.isPresent())

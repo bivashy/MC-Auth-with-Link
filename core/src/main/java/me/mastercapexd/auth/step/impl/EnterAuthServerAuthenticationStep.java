@@ -28,7 +28,7 @@ public class EnterAuthServerAuthenticationStep extends AuthenticationStepTemplat
 
     @Override
     public boolean shouldSkip() {
-        if (!PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(authenticationStepContext.getAccount()) ||
+        if (!PLUGIN.getAuthenticatingAccountBucket().isAuthenticating(authenticationStepContext.getAccount()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
         tryToConnect(true);

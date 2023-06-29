@@ -50,11 +50,11 @@ public class VelocityCommandRegistry extends ServerCommandsRegistry {
                 return;
             ServerPlayer player = new VelocityServerPlayer(actor.as(VelocityCommandActor.class).getAsPlayer());
             String accountId = config.getActiveIdentifierType().getId(player);
-            if (!authPlugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+            if (!authPlugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 return;
             if (!command.hasAnnotation(AuthenticationStepCommand.class))
                 return;
-            Account account = authPlugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(player);
+            Account account = authPlugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(player);
             if (account.getCurrentAuthenticationStep() == null)
                 return;
             String stepName = command.getAnnotation(AuthenticationStepCommand.class).stepName();
@@ -68,10 +68,10 @@ public class VelocityCommandRegistry extends ServerCommandsRegistry {
             if (player.getRealPlayer() == null)
                 throw new SendComponentException(config.getServerMessages().getMessage("players-only"));
             String id = config.getActiveIdentifierType().getId(player);
-            if (!authPlugin.getAuthenticatingAccountBucket().isAuthorizing(player))
+            if (!authPlugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 throw new SendComponentException(config.getServerMessages().getMessage("already-logged-in"));
 
-            Account account = authPlugin.getAuthenticatingAccountBucket().getAuthorizingAccountNullable(player);
+            Account account = authPlugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(player);
             if (!account.isRegistered() && !context.parameter().hasAnnotation(AuthenticationAccount.class))
                 throw new SendComponentException(config.getServerMessages().getMessage("account-not-found"));
             if (account.isRegistered() && context.parameter().hasAnnotation(AuthenticationAccount.class))

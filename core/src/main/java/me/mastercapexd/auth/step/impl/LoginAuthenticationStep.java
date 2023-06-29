@@ -26,7 +26,7 @@ public class LoginAuthenticationStep extends AuthenticationStepTemplate implemen
 
     @Override
     public boolean shouldSkip() {
-        return !PLUGIN.getAuthenticatingAccountBucket().isAuthorizing(authenticationStepContext.getAccount()) ||
+        return !PLUGIN.getAuthenticatingAccountBucket().isAuthenticating(authenticationStepContext.getAccount()) ||
                 authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
     }
 
