@@ -144,7 +144,6 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         AuthAccount authAccount = authAccountProvider.getAuthAccount();
 
         DEFAULT_EXCEPTION_CATCHER.execute(() -> createIfNotExists(authAccount));
-        authAccountProvider.syncLinkAdaptersWithLinks().join();
         return updateAccount(authAccount);
     }
 
