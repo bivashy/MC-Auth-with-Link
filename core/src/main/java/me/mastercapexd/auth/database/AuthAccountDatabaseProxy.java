@@ -64,6 +64,11 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
     }
 
     @Override
+    public void updateAccountLinks(Account account) {
+        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAccountLinkDao().updateAccountLinks(account));
+    }
+
+    @Override
     public void deleteAccount(String id) {
         EXECUTOR_SERVICE.execute(() -> databaseHelper.getAuthAccountDao().deleteAccountById(id));
     }

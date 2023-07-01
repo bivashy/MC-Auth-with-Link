@@ -22,5 +22,7 @@ public interface AccountDatabase {
 
     void saveOrUpdateAccount(Account account);
 
+    void updateAccountLinks(Account account);
+
     void deleteAccount(String id);
 }
