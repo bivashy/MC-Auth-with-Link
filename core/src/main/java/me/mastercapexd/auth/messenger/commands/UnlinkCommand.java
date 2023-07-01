@@ -23,7 +23,7 @@ public class UnlinkCommand implements OrphanCommand {
         account.findFirstLinkUserOrNew(user -> user.getLinkType().equals(linkType), linkType)
                 .getLinkUserInfo()
                 .setIdentificator(linkType.getDefaultIdentificator());
-        accountDatabase.saveOrUpdateAccount(account);
+        accountDatabase.updateAccountLinks(account);
         actorWrapper.reply(linkType.getLinkMessages().getMessage("unlinked", linkType.newMessageContext(account)));
     }
 }

@@ -50,7 +50,7 @@ public class LinkCodeCommand implements OrphanCommand {
                             .getLinkUserInfo()
                             .setIdentificator(identificator);
 
-                    accountDatabase.saveOrUpdateAccount(account);
+                    accountDatabase.updateAccountLinks(account);
 
                     actor.replyWithMessage(messages.getMessage("confirmation-success"));
                     linkConfirmationBucket.removeLinkConfirmation(linkContext.getConfirmationUser());
