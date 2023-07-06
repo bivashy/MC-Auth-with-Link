@@ -28,3 +28,10 @@ auth-servers:
   - ''
 name-regex-pattern: '.*'
 hash-type: BCRYPT
+
+telegram:
+  telegram-commands:
+    first:
+      main-command: '/first'
+      aliases:
+        - '/first-alias'

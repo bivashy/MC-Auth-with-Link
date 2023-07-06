@@ -11,6 +11,7 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.config.link.command.LinkCommandPathSettings;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
@@ -57,6 +58,12 @@ public class ConfiguratePluginConfigTest extends PluginConfigTemplate {
 
         assertTrue(getPasswordPattern().matcher("Simple_Name-^@-").matches());
         assertFalse(getPasswordPattern().matcher("I̷n̷v̷a̷l̷i̷d̷N̷a̷m̷e̷").matches());
+
+        LinkCommandPathSettings firstCommandPath = getTelegramSettings().getCommandPaths().getCommandPath("first");
+        assertEquals(firstCommandPath.getCommandPath(), "/first");
+        String[] aliases = firstCommandPath.getAliases();
+        assertArrayEquals(firstCommandPath.getAliases(), new String[]{"/first-alias"});
+        assertArrayEquals(firstCommandPath.getCommandPaths(), new String[]{"/first-alias", "/first"});
     }
 
     @Test
