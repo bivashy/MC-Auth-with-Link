@@ -59,10 +59,12 @@ discord:
     # Символы которые будут использованы в коде
     code-characters: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-  # Команды которые будут в игре, к примеру /addtg, или же /code
+  # Команды которые будут в игре, к примеру /adddiscord, или же /code
   proxy-commands:
     link-game: # Указывайте команды БЕЗ знака '/'
-      main-command: 'addtg'
+      main-command: 'adddiscord'
+    code:
+      main-command: 'code'
 
   # Команды в дискорде
   discord-commands: # Основные команды

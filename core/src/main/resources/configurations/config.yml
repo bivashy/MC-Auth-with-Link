@@ -310,6 +310,23 @@ messages:
     enter-confirmed: '&aВы подтвердили аккаунт в Telegram'
     enter-declined: '&cВы отклонили вход с аккаунта Telegram'
     not-linked: '&bВы не привязали свой аккаунт к Telegram. Для дополнительной защиты советуем привязать свой аккаунт через команду /addtg' # Чтобы отключить данное сообщение просто удалите эту линию
+  discord:
+    # Подтверждение входа через Дискорд
+    enter-confirm-need-chat: '&fПодтвердите вход в &bDiscord &fдля того чтобы войти в игру'
+    enter-confirm-need-title: '&fПодтверждение &bDiscord'
+    enter-confirm-need-subtitle: '&fПожалуйста подтвердите в &bDiscord'
+
+    disabled: '&cПривязка к Discord отключена'
+    usage: '&a/adddiscord'
+    link-limit-reached: 'Слишком много привязанных аккаунтов на данный Discord'
+    already-linked: '&cВы уже привязали аккаунт Discord'
+    confirmation-sent: '&aВсё почти готово. Напиши в личные сообщения боту в дискорде: /code %code% После ввода бот Discord ответит вам что всё прошло успешно'
+    confirmation-success: '&aАккаунт успешно привязан'
+    already-sent: '&cВы уже отправили код в Discord. Пожалуйста проверьте ваши сообщения Discord'
+    kicked: '&cВы были кикнуты из сервера по запросу Discord'
+    enter-confirmed: '&aВы подтвердили аккаунт в Discord'
+    enter-declined: '&cВы отклонили вход с аккаунта Discord'
+    not-linked: '&bВы не привязали свой аккаунт к Discord. Для дополнительной защиты советуем привязать свой аккаунт через команду /adddiscord' # Чтобы отключить данное сообщение просто удалите эту линию
   vk-send-code-error: '&cПроизошла ошибка при отправке сообщения на данный id, свяжитесь с администрацией'
   # Гугл-Аутентификация
   google:
