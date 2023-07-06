@@ -13,13 +13,13 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.messenger.common.file.MessengerFile;
+import com.bivashy.messenger.common.message.Message;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.bivashy.messenger.common.file.MessengerFile;
-import com.bivashy.messenger.common.message.Message;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
@@ -76,7 +76,7 @@ public class GoogleCommand implements OrphanCommand {
         }
 
         linkUser.getLinkUserInfo().getIdentificator().setString(rawKey);
-        accountStorage.saveOrUpdateAccount(account);
+        accountStorage.updateAccountLinks(account);
     }
 
     private Message buildGoogleQRMessage(String key, String messageRawContent, LinkType linkType) {

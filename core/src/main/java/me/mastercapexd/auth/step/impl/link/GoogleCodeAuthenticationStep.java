@@ -30,7 +30,7 @@ public class GoogleCodeAuthenticationStep extends AuthenticationStepTemplate imp
 
     @Override
     public boolean shouldPassToNextStep() {
-        return entryUser.isConfirmed();
+        return authenticationStepContext.canPassToNextStep();
     }
 
     @Override

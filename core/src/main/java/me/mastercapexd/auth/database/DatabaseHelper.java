@@ -9,10 +9,6 @@ import java.util.concurrent.Executors;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.schema.SchemaSettings;
-
-import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
-import me.mastercapexd.auth.util.HashUtils;
-
 import com.j256.ormlite.field.DataPersisterManager;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.logger.Level;
@@ -26,8 +22,10 @@ import me.mastercapexd.auth.database.migration.MigrationCoordinator;
 import me.mastercapexd.auth.database.migration.Migrations;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
+import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
 import me.mastercapexd.auth.util.DownloadUtil;
 import me.mastercapexd.auth.util.DriverUtil;
+import me.mastercapexd.auth.util.HashUtils;
 
 public class DatabaseHelper {
     public static final String ID_FIELD_KEY = "id";
@@ -58,7 +56,7 @@ public class DatabaseHelper {
                         databaseConfiguration.getPassword());
 
                 this.accountLinkDao = new AccountLinkDao(connectionSource,
-                        schemaSettings.getTableSettings("link").orElse(new BaseTableSettings("auth_links")));
+                        schemaSettings.getTableSettings("link").orElse(new BaseTableSettings("auth_links")), this);
                 this.authAccountDao = new AuthAccountDao(connectionSource,
                         schemaSettings.getTableSettings("auth").orElse(new BaseTableSettings("mc_auth_accounts")), this);
 
@@ -67,7 +65,7 @@ public class DatabaseHelper {
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_5_0_LINKS_MIGRATOR);
                 accountLinkMigrationCoordinator.add(Migrations.AUTH_1_6_0_LINKS_MIGRATOR);
 
-                if(databaseConfiguration.isMigrationEnabled()) {
+                if (databaseConfiguration.isMigrationEnabled()) {
                     authAccountMigrationCoordinator.migrate(connectionSource, authAccountDao);
                     accountLinkMigrationCoordinator.migrate(connectionSource, accountLinkDao);
                 }

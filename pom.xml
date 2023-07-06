@@ -5,7 +5,7 @@
     <groupId>me.mastercapexd.auth</groupId>
     <artifactId>main</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.7</version>
+    <version>1.7.9</version>
     <modules>
         <module>api</module>
         <module>core</module>
@@ -23,6 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
         <maven.compiler.useIncrementalCompilation>true</maven.compiler.useIncrementalCompilation>
+        <dependencies.relocation.package>com.bivashy.auth.lib</dependencies.relocation.package>
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -85,82 +86,82 @@
                     <relocations combine.children="append">
                         <relocation>
                             <pattern>revxrsal.commands</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.revxrsal.commands</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.revxrsal.commands</shadedPattern>
                         </relocation>
 
                         <relocation>
                             <pattern>org.objectweb.asm</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.objectweb.asm</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.objectweb.asm</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.yaml.snakeyaml</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.yaml.snakeyaml</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.yaml.snakeyaml</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.spongepowered.configurate</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.spongepowered.configurate</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.spongepowered.configurate</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.mindrot.jbcrypt</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.spongepowered.configurate</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.spongepowered.configurate</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.intellij</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.intellij</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.intellij</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.jetbrains</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.jetbrains</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.jetbrains</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.checkerframework</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.checkerframework</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.checkerframework</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.http</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.apache.http</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.apache.http</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.commons</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.apache.commons</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.apache.commons</shadedPattern>
                         </relocation>
 
                         <relocation>
                             <pattern>io.leangen.geantyref</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.io.leangen.geantyref</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.io.leangen.geantyref</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io.github.revxrsal</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.io.github.revxrsal</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.io.github.revxrsal</shadedPattern>
                         </relocation>
 
                         <relocation>
                             <pattern>com.warrenstrange.googleauth</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.warrenstrange.googleauth</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.warrenstrange.googleauth</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.j256.ormlite</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.j256.ormlite</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.j256.ormlite</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.google.zxing</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.google.zxing</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.google.zxing</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.google.errorprone</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.google.errorprone</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.google.errorprone</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.password4j</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.com.password4j</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.password4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.slf4j</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.org.slf4j</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.slf4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>ru.vyarus.yaml.updater</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.ru.vyarus.yaml.updater</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.ru.vyarus.yaml.updater</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.byteflux.libby</pattern>
