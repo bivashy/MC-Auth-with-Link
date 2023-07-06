@@ -9,6 +9,7 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.database.schema.TableSettings;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseFieldConfig;
@@ -78,7 +79,10 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
             List<AccountLink> existingAccountLinks = new ArrayList<>(authAccount.getLinks());
             for (LinkUser linkUser : account.getLinkUsers()) {
                 String linkTypeName = linkUser.getLinkType().getName();
-                String linkUserId = linkUser.getLinkUserInfo().getIdentificator().asString();
+                String linkUserId = Optional.ofNullable(linkUser.getLinkUserInfo())
+                        .map(LinkUserInfo::getIdentificator)
+                        .map(LinkUserIdentificator::asString)
+                        .orElse(linkUser.getLinkType().getDefaultIdentificator().asString());
                 boolean linkEnabled = linkUser.getLinkUserInfo().isConfirmationEnabled();
                 Optional<AccountLink> accountLinkOptional = existingAccountLinks.stream()
                         .filter(accountLink -> accountLink.getLinkType().equals(linkTypeName))
