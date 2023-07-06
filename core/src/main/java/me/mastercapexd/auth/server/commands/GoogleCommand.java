@@ -47,7 +47,7 @@ public class GoogleCommand {
                 player.sendMessage(GOOGLE_MESSAGES.getMessage("regenerated", MessageContext.of("%google_key%", key)));
             }
             linkUser.getLinkUserInfo().getIdentificator().setString(key);
-            accountStorage.saveOrUpdateAccount(account);
+            accountStorage.updateAccountLinks(account);
         });
     }
 }

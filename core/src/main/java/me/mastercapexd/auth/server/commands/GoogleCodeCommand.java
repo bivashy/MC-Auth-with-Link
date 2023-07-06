@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.server.commands;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.database.AccountDatabase;
@@ -9,7 +10,9 @@ import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.server.commands.annotations.AuthenticationStepCommand;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.step.impl.link.GoogleCodeAuthenticationStep;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
@@ -30,30 +33,25 @@ public class GoogleCodeCommand {
     }
 
     @GoogleUse
+    @AuthenticationStepCommand(stepName = GoogleCodeAuthenticationStep.STEP_NAME)
     @Command({"googlecode", "gcode", "google code"})
-    public void googleCode(ServerPlayer player, Integer code) {
+    public void googleCode(ServerPlayer player, Account account, Integer code) {
         String playerId = config.getActiveIdentifierType().getId(player);
-        accountStorage.getAccount(playerId).thenAccept(account -> {
-            if (account == null || !account.isRegistered()) {
-                player.sendMessage(config.getServerMessages().getMessage("account-not-found"));
-                return;
-            }
-            LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
-            if (linkUser == null || linkUser.isIdentifierDefaultOrNull()) {
-                player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-exists"));
-                return;
-            }
-            if (!plugin.getLinkEntryBucket().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
-                player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-need-enter"));
-                return;
-            }
-            if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
-                player.sendMessage(GOOGLE_MESSAGES.getMessage("code-entered"));
-                account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
-                account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
-                return;
-            }
-            player.sendMessage(GOOGLE_MESSAGES.getMessage("code-wrong-code"));
-        });
+        LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElse(null);
+        if (linkUser == null || linkUser.isIdentifierDefaultOrNull()) {
+            player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-exists"));
+            return;
+        }
+        if (!plugin.getLinkEntryBucket().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
+            player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-need-enter"));
+            return;
+        }
+        if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
+            player.sendMessage(GOOGLE_MESSAGES.getMessage("code-entered"));
+            account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
+            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            return;
+        }
+        player.sendMessage(GOOGLE_MESSAGES.getMessage("code-wrong-code"));
     }
 }

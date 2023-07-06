@@ -1,12 +1,10 @@
 package me.mastercapexd.auth.account;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -14,7 +12,6 @@ import java.util.stream.Collectors;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
 import com.bivashy.auth.api.link.user.LinkUser;
-import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.type.IdentifierType;
 
 import me.mastercapexd.auth.database.model.AccountLink;
@@ -53,33 +50,6 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     @Override
     public AuthAccount getAuthAccount() {
         return authAccount;
-    }
-
-    @Override
-    public CompletableFuture<Void> syncLinkAdaptersWithLinks() {
-        return CompletableFuture.supplyAsync(() -> {
-            for (AccountLinkAdapter linkUser : linkUsers) {
-                String linkUserRawId = Optional.ofNullable(linkUser.getLinkUserInfo().getIdentificator())
-                        .map(LinkUserIdentificator::asString)
-                        .orElse(linkUser.getLinkType().getDefaultIdentificator().asString());
-                boolean linkUserConfirmationEnabled = linkUser.getLinkUserInfo().isConfirmationEnabled();
-
-                Optional<AccountLink> boundAccountLinkOptional = linkUser.getAccountLink();
-                if (boundAccountLinkOptional.isPresent()) {
-                    AccountLink boundAccountLink = boundAccountLinkOptional.get();
-                    boundAccountLink.setLinkUserId(linkUserRawId);
-                    boundAccountLink.setLinkEnabled(linkUserConfirmationEnabled);
-                    try {
-                        authAccount.getLinks().update(boundAccountLink);
-                    } catch(SQLException e) {
-                        e.printStackTrace();
-                    }
-                    continue;
-                }
-                authAccount.getLinks().add(new AccountLink(linkUser.getLinkType().getName(), linkUserRawId, linkUserConfirmationEnabled, authAccount));
-            }
-            return null;
-        });
     }
 
     @Override
