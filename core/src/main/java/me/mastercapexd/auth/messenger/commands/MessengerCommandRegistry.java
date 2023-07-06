@@ -23,6 +23,7 @@ import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
+import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
@@ -55,11 +56,11 @@ public abstract class MessengerCommandRegistry {
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("google-disabled"));
         });
 
-        commandHandler.registerContextResolver(MessageableCommandActor.class, context -> context.actor().as(LinkCommandActorWrapper.class));
+        commandHandler.registerContextResolver(MessageableCommandActor.class, context -> wrapActor(context.actor()));
 
         commandHandler.registerValueResolver(PlayerIdSupplier.class, context -> PlayerIdSupplier.of(context.pop()));
 
-        commandHandler.registerContextResolver(LinkUserIdentificator.class, context -> context.actor().as(LinkCommandActorWrapper.class).userId());
+        commandHandler.registerContextResolver(LinkUserIdentificator.class, context -> wrapActor(context.actor()).userId());
 
         commandHandler.registerValueResolver(NewPassword.class, context -> {
             String newRawPassword = context.pop();
@@ -97,7 +98,7 @@ public abstract class MessengerCommandRegistry {
 
         commandHandler.registerValueResolver(Account.class, (context) -> {
             String playerName = context.popForParameter();
-            LinkUserIdentificator userId = context.actor().as(LinkCommandActorWrapper.class).userId();
+            LinkUserIdentificator userId = wrapActor(context.actor()).userId();
             Account account = PLUGIN.getAccountDatabase().getAccountFromName(playerName).get();
             if (account == null || !account.isRegistered())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
@@ -159,6 +160,10 @@ public abstract class MessengerCommandRegistry {
 
     public CommandHandler getCommandHandler() {
         return commandHandler;
+    }
+
+    protected LinkCommandActorWrapper wrapActor(CommandActor actor) {
+        return actor.as(LinkCommandActorWrapper.class);
     }
 
     protected abstract MessengerLinkCommandTemplate createLinkCommand();

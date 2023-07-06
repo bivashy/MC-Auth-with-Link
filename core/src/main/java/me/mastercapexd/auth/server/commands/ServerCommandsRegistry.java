@@ -15,6 +15,7 @@ import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
@@ -25,6 +26,7 @@ import me.mastercapexd.auth.server.commands.exception.SendComponentException;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
+import me.mastercapexd.auth.shared.commands.DiscordLinkCommand;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
@@ -176,6 +178,8 @@ public abstract class ServerCommandsRegistry {
             registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(VKLinkType.getInstance().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
             registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(TelegramLinkType.getInstance().getServerMessages()));
+        if (plugin.getConfig().getDiscordSettings().isEnabled())
+            registerLinkCommand(DiscordLinkType.getInstance(), new DiscordLinkCommand(DiscordLinkType.getInstance().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand) {

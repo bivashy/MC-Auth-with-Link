@@ -30,6 +30,13 @@ public class DiscordCommandRegistry extends MessengerCommandRegistry {
                 Annotations.create(OptionData.class, "value", OptionType.valueOf(parameter.type()), "name", parameter.value())));
 
         registerCommands();
+
+        COMMAND_HANDLER.registerSlashCommands();
+    }
+
+    @Override
+    protected LinkCommandActorWrapper wrapActor(CommandActor actor) {
+        return new DiscordCommandActorWrapper(actor.as(JDAActor.class));
     }
 
     @Override
