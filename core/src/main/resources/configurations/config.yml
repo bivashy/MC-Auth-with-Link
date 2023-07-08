@@ -345,6 +345,3 @@ messages:
   unresolved-argument: '&cВы не указали аргумент: %argument_name%'
   unresolved-number: '&cОжидалось число, но вы указали %input%'
   command-invocation: '&cПри вводе команды произошла ошибка, сообщите администрации'
-
-# Не трогайте данное значение!
-configuration-version: 1 
