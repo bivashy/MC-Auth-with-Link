@@ -67,6 +67,12 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
             return true;
 
         PLUGIN.getLinkEntryBucket().addLinkUser(linkEntryUser);
+
+        sendConfirmationMessage(account, linkType, linkUserInfo);
+        return false;
+    }
+
+    protected void sendConfirmationMessage(Account account, LinkType linkType, LinkUserInfo linkUserInfo) {
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("confirmation", "%name%", account.getName());
 
         Identificator userIdentificator = linkUserInfo.getIdentificator().isNumber() ? Identificator.of(linkUserInfo.getIdentificator().asNumber()) :
@@ -75,7 +81,6 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
                 .keyboard(keyboard)
                 .build()
                 .send(userIdentificator);
-        return false;
     }
 
     @Override
