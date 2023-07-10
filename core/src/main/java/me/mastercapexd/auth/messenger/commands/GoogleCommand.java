@@ -59,9 +59,7 @@ public class GoogleCommand implements OrphanCommand {
             return googleLinkUser;
         });
 
-        String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
-
-        if (Objects.equals(linkUserKey, AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
+        if (linkUser.isIdentifierDefaultOrNull()) {
             String rawContent = linkType.getLinkMessages()
                     .getStringMessage("google-generated", linkType.newMessageContext(account))
                     .replaceAll("(?i)%google_key%", rawKey);
