@@ -1,9 +1,6 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import java.util.Objects;
-
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;

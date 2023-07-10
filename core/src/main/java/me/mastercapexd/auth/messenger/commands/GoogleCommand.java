@@ -2,13 +2,11 @@ package me.mastercapexd.auth.messenger.commands;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
@@ -23,7 +21,6 @@ import com.google.zxing.common.BitMatrix;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
-import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
@@ -53,11 +50,7 @@ public class GoogleCommand implements OrphanCommand {
 
         String totpKey = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL(nickname, randomCode, rawKey);
 
-        LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
-            GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY);
-            account.addLinkUser(googleLinkUser);
-            return googleLinkUser;
-        });
+        LinkUser linkUser = account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance());
 
         if (linkUser.isIdentifierDefaultOrNull()) {
             String rawContent = linkType.getLinkMessages()
