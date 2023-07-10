@@ -1,29 +1,12 @@
 package com.bivashy.auth.api.link.user.info;
 
+import com.bivashy.auth.api.link.user.info.impl.BaseLinkUserInfo;
 import com.bivashy.auth.api.util.Castable;
 
 public interface LinkUserInfo extends Castable<LinkUserInfo> {
-    LinkUserInfo NULL_USER_INFO = new LinkUserInfo() {
-        @Override
-        public LinkUserIdentificator getIdentificator() {
-            return null;
-        }
-
-        @Override
-        public LinkUserInfo setIdentificator(LinkUserIdentificator userIdentificator) {
-            return this;
-        }
-
-        @Override
-        public boolean isConfirmationEnabled() {
-            return true;
-        }
-
-        @Override
-        public LinkUserInfo setConfirmationEnabled(boolean confirmationEnabled) {
-            return this;
-        }
-    };
+    static LinkUserInfo of(LinkUserIdentificator userId) {
+        return new BaseLinkUserInfo(userId);
+    }
 
     /**
      * Returns used identificator as {@link LinkUserIdentificator}. It uses

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
@@ -14,7 +15,6 @@ import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.step.AuthenticationStep;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
-import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.type.KickResultType;
 
@@ -27,12 +27,12 @@ public interface Account extends PlayerIdSupplier {
     IdentifierType getIdentifierType();
 
     @Deprecated
-    default CryptoProvider getHashType(){
+    default CryptoProvider getHashType() {
         return getCryptoProvider();
     }
 
     @Deprecated
-    default void setHashType(CryptoProvider cryptoProvider){
+    default void setHashType(CryptoProvider cryptoProvider) {
         setCryptoProvider(cryptoProvider);
     }
 
@@ -72,7 +72,7 @@ public interface Account extends PlayerIdSupplier {
     }
 
     default LinkUser findFirstLinkUserOrNew(Predicate<LinkUser> filter, LinkType linkType) {
-        return findFirstLinkUserOrCreate(filter, LinkUserTemplate.of(linkType, this, LinkUserInfo.NULL_USER_INFO));
+        return findFirstLinkUserOrCreate(filter, LinkUserTemplate.of(linkType, this, LinkUserInfo.of(linkType.getDefaultIdentificator())));
     }
 
     @Deprecated
