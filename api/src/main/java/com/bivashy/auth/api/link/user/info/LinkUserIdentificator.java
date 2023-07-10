@@ -14,10 +14,28 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
      */
     static LinkUserIdentificator ofParsed(String linkUserId) {
         try {
-            return new UserNumberIdentificator(Long.parseLong(linkUserId));
+            return of(Long.parseLong(linkUserId));
         } catch(NumberFormatException e) {
-            return new UserStringIdentificator(linkUserId);
+            return of(linkUserId);
         }
+    }
+
+    /**
+     * Wraps {@link Long}
+     *
+     * @return {@link UserNumberIdentificator}
+     */
+    static LinkUserIdentificator of(long userId) {
+        return new UserNumberIdentificator(userId);
+    }
+
+    /**
+     * Wraps {@link String}
+     *
+     * @return {@link UserStringIdentificator}
+     */
+    static LinkUserIdentificator of(String userId) {
+        return new UserStringIdentificator(userId);
     }
 
     /**
