@@ -4,6 +4,10 @@ import com.bivashy.auth.api.link.user.info.impl.BaseLinkUserInfo;
 import com.bivashy.auth.api.util.Castable;
 
 public interface LinkUserInfo extends Castable<LinkUserInfo> {
+    static LinkUserInfo of(LinkUserIdentificator userId, boolean confirmationEnabled) {
+        return new BaseLinkUserInfo(userId, confirmationEnabled);
+    }
+
     static LinkUserInfo of(LinkUserIdentificator userId) {
         return new BaseLinkUserInfo(userId);
     }
