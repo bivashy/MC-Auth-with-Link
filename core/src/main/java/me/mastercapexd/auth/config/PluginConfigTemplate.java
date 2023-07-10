@@ -54,8 +54,6 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private DatabaseConnectionProvider databaseConnectionProvider = DatabaseConnectionProvider.SQLITE;
     @ConfigField("name-regex-pattern")
     private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
-    @ConfigField("password-regex-pattern")
-    private Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9_$#@^-]*");
     @ConfigField("password-min-length")
     private int passwordMinLength = 5;
     @ConfigField("password-max-length")
@@ -173,11 +171,6 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public Pattern getNamePattern() {
         return namePattern;
-    }
-
-    @Override
-    public Pattern getPasswordPattern() {
-        return passwordPattern;
     }
 
     public int getPasswordMinLength() {

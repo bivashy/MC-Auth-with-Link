@@ -34,8 +34,6 @@ public interface PluginConfig {
 
     Pattern getNamePattern();
 
-    Pattern getPasswordPattern();
-
     List<ConfigurationServer> getAuthServers();
 
     List<ConfigurationServer> getGameServers();

@@ -1,9 +1,6 @@
 package me.mastercapexd.auth.messenger.commands;
 
-import java.util.Objects;
-
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
@@ -32,8 +29,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
     public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         LinkUser linkUser = account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance());
 
-        String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
-        if (Objects.equals(linkUserKey, AccountFactory.DEFAULT_GOOGLE_KEY) || linkUserKey.isEmpty()) {
+        if (linkUser.isIdentifierDefaultOrNull()) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlink-not-have-google", linkType.newMessageContext(account)));
             return;
         }

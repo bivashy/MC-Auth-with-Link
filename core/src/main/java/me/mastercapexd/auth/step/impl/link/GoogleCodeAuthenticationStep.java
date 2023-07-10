@@ -13,8 +13,8 @@ import com.bivashy.auth.api.step.AuthenticationStepContext;
 import com.bivashy.auth.api.step.MessageableAuthenticationStep;
 
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
-import me.mastercapexd.auth.link.google.GoogleLinkEntryUser;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.user.entry.BaseLinkEntryUser;
 import me.mastercapexd.auth.step.AuthenticationStepTemplate;
 import me.mastercapexd.auth.step.creators.AuthenticationStepFactoryTemplate;
 
@@ -25,7 +25,9 @@ public class GoogleCodeAuthenticationStep extends AuthenticationStepTemplate imp
 
     public GoogleCodeAuthenticationStep(AuthenticationStepContext context) {
         super(STEP_NAME, context);
-        entryUser = new GoogleLinkEntryUser(context.getAccount());
+        Account account = context.getAccount();
+        entryUser = new BaseLinkEntryUser(GoogleLinkType.getInstance(), account,
+                account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance()).getLinkUserInfo());
     }
 
     @Override

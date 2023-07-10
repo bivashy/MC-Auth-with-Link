@@ -20,7 +20,7 @@ public class TelegramLinkType implements LinkType, MessengerTelegram {
     private static final TelegramLinkType INSTANCE = new TelegramLinkType();
     public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
-    private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserNumberIdentificator(Long.valueOf(-1));
+    private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserNumberIdentificator(-1L);
 
     private TelegramLinkType() {
     }

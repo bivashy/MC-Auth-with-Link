@@ -2,7 +2,6 @@ package me.mastercapexd.auth.messenger.commands;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
@@ -10,7 +9,6 @@ import com.bivashy.auth.api.link.user.LinkUser;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
-import me.mastercapexd.auth.link.google.GoogleLinkUser;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
@@ -32,11 +30,7 @@ public class GoogleCodeCommand implements OrphanCommand {
     @ConfigurationArgumentError("google-code-not-enough-arguments")
     @DefaultFor("~")
     public void googleCode(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account, Integer code) {
-        LinkUser linkUser = account.findFirstLinkUser(GoogleLinkType.LINK_USER_FILTER).orElseGet(() -> {
-            GoogleLinkUser googleLinkUser = new GoogleLinkUser(account, AccountFactory.DEFAULT_GOOGLE_KEY);
-            account.addLinkUser(googleLinkUser);
-            return googleLinkUser;
-        });
+        LinkUser linkUser = account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance());
 
         String linkUserKey = linkUser.getLinkUserInfo().getIdentificator().asString();
         if (linkUserKey == null || linkUser.isIdentifierDefaultOrNull()) {

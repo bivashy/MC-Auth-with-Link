@@ -6,29 +6,34 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.type.IdentifierType;
 
-import me.mastercapexd.auth.link.google.GoogleLinkUser;
-import me.mastercapexd.auth.link.telegram.TelegramLinkUser;
-import me.mastercapexd.auth.link.vk.VKLinkUser;
+import me.mastercapexd.auth.link.google.GoogleLinkType;
+import me.mastercapexd.auth.link.telegram.TelegramLinkType;
+import me.mastercapexd.auth.link.user.LinkUserTemplate;
+import me.mastercapexd.auth.link.vk.VKLinkType;
 
 public abstract class AccountFactoryTemplate implements AccountFactory {
     @Override
-    public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String googleKey,
-                                 int vkId, boolean vkConfirmationEnabled, long telegramId, boolean telegramConfirmationEnabled, long lastQuit, String lastIp, long lastSessionStart, long sessionTime) {
-
+    public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash,
+                                 String lastIp) {
         Account account = newAccount(identifierType.fromRawString(id), identifierType, uuid, name);
 
         account.setCryptoProvider(cryptoProvider);
         account.setPasswordHash(HashedPassword.of(passwordHash, cryptoProvider));
-        account.setLastQuitTimestamp(lastQuit);
         account.setLastIpAddress(lastIp);
-        account.setLastSessionStartTimestamp(lastSessionStart);
 
-        account.addLinkUser(new VKLinkUser(account, vkId, vkConfirmationEnabled));
-        account.addLinkUser(new TelegramLinkUser(account, telegramId, telegramConfirmationEnabled));
-        account.addLinkUser(new GoogleLinkUser(account, googleKey));
+        account.addLinkUser(createUser(VKLinkType.getInstance(), account));
+        account.addLinkUser(createUser(TelegramLinkType.getInstance(), account));
+        account.addLinkUser(createUser(GoogleLinkType.getInstance(), account));
         return account;
+    }
+
+    private LinkUser createUser(LinkType linkType, Account account) {
+        return LinkUserTemplate.of(linkType, account, LinkUserInfo.of(linkType.getDefaultIdentificator()));
     }
 
     protected abstract Account newAccount(String id, IdentifierType identifierType, UUID uniqueId, String name);

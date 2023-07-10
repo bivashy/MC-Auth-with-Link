@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.step.impl.link;
 
+import java.util.function.Predicate;
+
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.message.Messages;
@@ -15,15 +17,17 @@ import com.bivashy.messenger.common.identificator.Identificator;
 import com.bivashy.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
+import me.mastercapexd.auth.link.user.entry.BaseLinkEntryUser;
 import me.mastercapexd.auth.step.AuthenticationStepTemplate;
 
 public class MessengerAuthenticationStep extends AuthenticationStepTemplate implements MessageableAuthenticationStep {
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private final LinkEntryUser linkEntryUser;
 
-    public MessengerAuthenticationStep(String stepName, AuthenticationStepContext authenticationStepContext, LinkEntryUser linkEntryUser) {
+    public MessengerAuthenticationStep(String stepName, AuthenticationStepContext authenticationStepContext, LinkType linkType, Predicate<LinkUser> filter) {
         super(stepName, authenticationStepContext);
-        this.linkEntryUser = linkEntryUser;
+        Account account = authenticationStepContext.getAccount();
+        this.linkEntryUser = new BaseLinkEntryUser(linkType, account, account.findFirstLinkUserOrNew(filter, linkType).getLinkUserInfo());
     }
 
     @Override
