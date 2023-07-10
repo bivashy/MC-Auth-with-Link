@@ -12,7 +12,7 @@ public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
      * @param linkUserId raw user id
      * @return {@link UserNumberIdentificator} if id can be parsed by {@link Long#parseLong(String)} or else {@link UserStringIdentificator}
      */
-    static LinkUserIdentificator of(String linkUserId) {
+    static LinkUserIdentificator ofParsed(String linkUserId) {
         try {
             return new UserNumberIdentificator(Long.parseLong(linkUserId));
         } catch(NumberFormatException e) {
