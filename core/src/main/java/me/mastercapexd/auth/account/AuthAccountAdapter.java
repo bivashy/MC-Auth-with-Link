@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,7 @@ import me.mastercapexd.auth.database.model.AuthAccountProvider;
 import me.mastercapexd.auth.link.user.AccountLinkAdapter;
 
 public class AuthAccountAdapter extends AccountTemplate implements AuthAccountProvider {
-    private final List<AccountLinkAdapter> linkUsers;
+    private final List<LinkUser> linkUsers;
     private final AuthAccount authAccount;
 
     /**
@@ -103,12 +102,12 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
             return;
         if (linkUsers.stream().anyMatch(listLinkUser -> listLinkUser.getLinkType().equals(linkUser.getLinkType())))
             return;
-        linkUsers.add(new AccountLinkAdapter(linkUser));
+        linkUsers.add(linkUser);
     }
 
     @Override
     public Optional<LinkUser> findFirstLinkUser(Predicate<LinkUser> filter) {
-        return linkUsers.stream().filter(filter).findFirst().map(Function.identity());
+        return linkUsers.stream().filter(filter).findFirst();
     }
 
     @Override
