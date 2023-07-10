@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.link;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,5 +36,10 @@ public class BaseLinkTypeProvider implements LinkTypeProvider {
     @Override
     public Optional<LinkType> getLinkType(String name) {
         return Optional.ofNullable(linkTypeMap.getOrDefault(name, null));
+    }
+
+    @Override
+    public Collection<LinkType> getLinkTypes() {
+        return linkTypeMap.values();
     }
 }
