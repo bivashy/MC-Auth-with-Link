@@ -4,7 +4,6 @@ import java.util.function.Predicate;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.link.LinkSettings;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.link.LinkType;
@@ -21,7 +20,7 @@ public class VKLinkType implements LinkType, MessengerVk {
     private static final VKLinkType INSTANCE = new VKLinkType();
     public static final Predicate<LinkUser> LINK_USER_FILTER = (linkUser) -> linkUser.getLinkType() == getInstance();
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
-    private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserNumberIdentificator(AccountFactory.DEFAULT_VK_ID);
+    private static final LinkUserIdentificator DEFAULT_IDENTIFICATOR = new UserNumberIdentificator(-1L);
 
     private VKLinkType() {
     }
