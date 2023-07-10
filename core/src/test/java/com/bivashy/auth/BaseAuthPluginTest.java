@@ -8,9 +8,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.io.*;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.asset.resource.ResourceReader;
@@ -23,6 +24,7 @@ import net.kyori.adventure.text.Component;
 
 // Order this test first to initialize AuthPlugin.instance()
 @Order(1)
+@ExtendWith(MockitoExtension.class)
 public class BaseAuthPluginTest {
     private static final String DUMMY_VERSION = "0.0.0";
     @Mock
@@ -35,8 +37,6 @@ public class BaseAuthPluginTest {
 
     @BeforeEach
     public void setup() throws IOException {
-        MockitoAnnotations.openMocks(this);
-
         when(serverCore.componentPlain(anyString())).thenAnswer(
                 invocation -> new BaseAdventureServerComponent(Component.text(invocation.<String>getArgument(0))));
 
