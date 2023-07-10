@@ -1,29 +1,29 @@
-package me.mastercapexd.auth.link.user;
+package com.bivashy.auth.api.link.user.info.impl;
 
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
 public class BaseLinkUserInfo implements LinkUserInfo {
-    protected LinkUserIdentificator userIdentificator;
-    protected boolean confirmationEnabled;
+    private LinkUserIdentificator identificator;
+    private boolean confirmationEnabled = true;
 
-    public BaseLinkUserInfo(LinkUserIdentificator userIdentificator, boolean confirmationEnabled) {
-        this.userIdentificator = userIdentificator;
+    public BaseLinkUserInfo(LinkUserIdentificator identificator, boolean confirmationEnabled) {
+        this.identificator = identificator;
         this.confirmationEnabled = confirmationEnabled;
     }
 
-    public BaseLinkUserInfo(LinkUserIdentificator userIdentificator) {
-        this(userIdentificator, true);
+    public BaseLinkUserInfo(LinkUserIdentificator identificator) {
+        this.identificator = identificator;
     }
 
     @Override
     public LinkUserIdentificator getIdentificator() {
-        return userIdentificator;
+        return identificator;
     }
 
     @Override
-    public LinkUserInfo setIdentificator(LinkUserIdentificator userIdentificator) {
-        this.userIdentificator = userIdentificator;
+    public LinkUserInfo setIdentificator(LinkUserIdentificator identificator) {
+        this.identificator = identificator;
         return this;
     }
 

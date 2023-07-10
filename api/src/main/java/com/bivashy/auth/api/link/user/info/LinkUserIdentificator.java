@@ -1,8 +1,43 @@
 package com.bivashy.auth.api.link.user.info;
 
+import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
+import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 import com.bivashy.auth.api.util.Castable;
 
 public interface LinkUserIdentificator extends Castable<LinkUserIdentificator> {
+    /**
+     * Wraps raw id to {@link LinkUserIdentificator}. If raw id is can be parsed by {@link Long#parseLong(String)}, this method will return
+     * {@link UserNumberIdentificator}, or else {@link UserStringIdentificator}.
+     *
+     * @param linkUserId raw user id
+     * @return {@link UserNumberIdentificator} if id can be parsed by {@link Long#parseLong(String)} or else {@link UserStringIdentificator}
+     */
+    static LinkUserIdentificator ofParsed(String linkUserId) {
+        try {
+            return of(Long.parseLong(linkUserId));
+        } catch(NumberFormatException e) {
+            return of(linkUserId);
+        }
+    }
+
+    /**
+     * Wraps {@link Long}
+     *
+     * @return {@link UserNumberIdentificator}
+     */
+    static LinkUserIdentificator of(long userId) {
+        return new UserNumberIdentificator(userId);
+    }
+
+    /**
+     * Wraps {@link String}
+     *
+     * @return {@link UserStringIdentificator}
+     */
+    static LinkUserIdentificator of(String userId) {
+        return new UserStringIdentificator(userId);
+    }
+
     /**
      * Returns identificator of user as number, may throw
      * {@link UnsupportedOperationException} if it stores id as {@link String} or
