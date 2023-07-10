@@ -1,8 +1,7 @@
 package me.mastercapexd.auth.link.telegram;
 
+import com.bivashy.auth.api.link.user.info.impl.BaseLinkUserInfo;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
-
-import me.mastercapexd.auth.link.user.BaseLinkUserInfo;
 
 public class TelegramLinkUserInfo extends BaseLinkUserInfo {
     public TelegramLinkUserInfo(Long linkUserId, boolean confirmationEnabled) {
