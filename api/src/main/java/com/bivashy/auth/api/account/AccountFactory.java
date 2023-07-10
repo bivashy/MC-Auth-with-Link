@@ -6,7 +6,6 @@ import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
 
 public interface AccountFactory {
-    String DEFAULT_GOOGLE_KEY = null;
     long DEFAULT_TELEGRAM_ID = -1;
     int DEFAULT_VK_ID = -1;
 
