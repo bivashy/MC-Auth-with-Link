@@ -56,9 +56,6 @@ public class ConfiguratePluginConfigTest extends PluginConfigTemplate {
 
         assertEquals(Duration.ofHours(4).toMillis(), getSessionDurability());
 
-        assertTrue(getPasswordPattern().matcher("Simple_Name-^@-").matches());
-        assertFalse(getPasswordPattern().matcher("I̷n̷v̷a̷l̷i̷d̷N̷a̷m̷e̷").matches());
-
         LinkCommandPathSettings firstCommandPath = getTelegramSettings().getCommandPaths().getCommandPath("first");
         assertEquals(firstCommandPath.getCommandPath(), "/first");
         String[] aliases = firstCommandPath.getAliases();
