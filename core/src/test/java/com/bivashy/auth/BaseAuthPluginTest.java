@@ -37,9 +37,6 @@ public class BaseAuthPluginTest {
 
     @BeforeEach
     public void setup() throws IOException {
-        when(serverCore.componentPlain(anyString())).thenAnswer(
-                invocation -> new BaseAdventureServerComponent(Component.text(invocation.<String>getArgument(0))));
-
         plugin = AuthPlugin.instance();
         if (plugin != null)
             createCachedJdbcDriver();
