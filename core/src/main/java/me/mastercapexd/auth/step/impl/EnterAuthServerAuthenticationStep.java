@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.server.proxy.ProxyServer;
@@ -28,10 +29,16 @@ public class EnterAuthServerAuthenticationStep extends AuthenticationStepTemplat
 
     @Override
     public boolean shouldSkip() {
-        if (authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability()))
+        if (haveSession())
             return true;
         tryToConnect(true);
         return true;
+    }
+
+    private boolean haveSession() {
+        Account account = authenticationStepContext.getAccount();
+        long sessionEndTime = account.getLastSessionStartTimestamp() + PLUGIN.getConfig().getSessionDurability();
+        return sessionEndTime >= System.currentTimeMillis();
     }
 
     private void tryToConnect(boolean shouldTryAgain) {
