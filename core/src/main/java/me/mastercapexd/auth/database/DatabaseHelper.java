@@ -2,15 +2,21 @@ package me.mastercapexd.auth.database;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.schema.SchemaSettings;
+import com.j256.ormlite.db.DatabaseType;
 import com.j256.ormlite.field.DataPersisterManager;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
+import com.j256.ormlite.jdbc.db.DatabaseTypeUtils;
+import com.j256.ormlite.jdbc.db.PostgresDatabaseType;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.support.ConnectionSource;
@@ -23,6 +29,7 @@ import me.mastercapexd.auth.database.migration.Migrations;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
 import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
+import me.mastercapexd.auth.database.type.IdentityPostgresDatabaseType;
 import me.mastercapexd.auth.util.DownloadUtil;
 import me.mastercapexd.auth.util.DriverUtil;
 import me.mastercapexd.auth.util.HashUtils;
@@ -38,6 +45,12 @@ public class DatabaseHelper {
     public DatabaseHelper(AuthPlugin plugin) {
         DatabaseSettings databaseConfiguration = plugin.getConfig().getDatabaseConfiguration();
         SchemaSettings schemaSettings = databaseConfiguration.getSchemaSettings();
+
+        // Related to https://github.com/j256/ormlite-core/issues/20
+        modifyDatabaseType(databaseTypes -> {
+            databaseTypes.removeIf(databaseType -> databaseType instanceof PostgresDatabaseType);
+            databaseTypes.add(new IdentityPostgresDatabaseType());
+        });
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
@@ -73,6 +86,17 @@ public class DatabaseHelper {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void modifyDatabaseType(Consumer<List<DatabaseType>> consumer) {
+        try {
+            Field field = DatabaseTypeUtils.class.getDeclaredField("databaseTypes");
+            field.setAccessible(true);
+            List<DatabaseType> databaseTypes = (List<DatabaseType>) field.get(null);
+            consumer.accept(databaseTypes);
+            field.setAccessible(false);
+        } catch(NoSuchFieldException | IllegalAccessException ignored) {
+        }
     }
 
     public ConnectionSource getConnectionSource() {
