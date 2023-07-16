@@ -2,8 +2,6 @@ package me.mastercapexd.auth.database;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.account.Account;
@@ -15,7 +13,6 @@ import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 import me.mastercapexd.auth.account.AuthAccountAdapter;
 
 public class AuthAccountDatabaseProxy implements AccountDatabase {
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     private final DatabaseHelper databaseHelper;
 
     public AuthAccountDatabaseProxy(DatabaseHelper databaseHelper) {
@@ -66,8 +63,8 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
     }
 
     @Override
-    public void saveOrUpdateAccount(Account account) {
-        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAuthAccountDao().createOrUpdateAccount(account));
+    public CompletableFuture<Account> saveOrUpdateAccount(Account account) {
+        return CompletableFuture.supplyAsync(() -> new AuthAccountAdapter(databaseHelper.getAuthAccountDao().createOrUpdateAccount(account).get()));
     }
 
     @Override

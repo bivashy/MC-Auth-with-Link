@@ -23,7 +23,7 @@ public interface AccountDatabase {
 
     CompletableFuture<Collection<Account>> getAllLinkedAccounts(LinkType linkType);
 
-    void saveOrUpdateAccount(Account account);
+    CompletableFuture<Account> saveOrUpdateAccount(Account account);
 
     CompletableFuture<Void> updateAccountLinks(Account account);
 
