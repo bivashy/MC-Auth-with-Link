@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 
@@ -56,6 +57,12 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
     public CompletableFuture<Collection<Account>> getAllLinkedAccounts() {
         return CompletableFuture.supplyAsync(
                 () -> databaseHelper.getAuthAccountDao().queryAllLinkedAccounts().stream().map(AuthAccountAdapter::new).collect(Collectors.toList()));
+    }
+
+    @Override
+    public CompletableFuture<Collection<Account>> getAllLinkedAccounts(LinkType linkType) {
+        return CompletableFuture.supplyAsync(
+                () -> databaseHelper.getAuthAccountDao().queryAllLinkedAccounts(linkType).stream().map(AuthAccountAdapter::new).collect(Collectors.toList()));
     }
 
     @Override

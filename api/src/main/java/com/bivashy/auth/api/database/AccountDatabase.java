@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 
 public interface AccountDatabase {
@@ -19,6 +20,8 @@ public interface AccountDatabase {
     CompletableFuture<Collection<Account>> getAllAccounts();
 
     CompletableFuture<Collection<Account>> getAllLinkedAccounts();
+
+    CompletableFuture<Collection<Account>> getAllLinkedAccounts(LinkType linkType);
 
     void saveOrUpdateAccount(Account account);
 
