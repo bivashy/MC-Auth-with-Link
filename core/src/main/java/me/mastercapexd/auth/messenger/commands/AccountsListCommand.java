@@ -77,6 +77,7 @@ public class AccountsListCommand implements OrphanCommand {
         }
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts", placeholdersList.toArray(new String[0]));
 
+        // Remove buttons that doesn't affected by placeholders (For example if player has linked accounts count is less than accounts.size())
         keyboard.removeIf(button -> button.getActionData().contains("%account"));
         return keyboard;
     }
