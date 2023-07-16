@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.account;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.event.AccountNewStepRequestEvent;
@@ -18,8 +20,8 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
     private AuthenticationStep currentAuthenticationStep = new NullAuthenticationStep();
 
     @Override
-    public void nextAuthenticationStep(AuthenticationStepContext stepContext) {
-        PLUGIN.getEventBus().publish(AccountNewStepRequestEvent.class, this, false, stepContext).thenAcceptAsync(stepRequestEventPostResult -> {
+    public CompletableFuture<Void> nextAuthenticationStep(AuthenticationStepContext stepContext) {
+        return PLUGIN.getEventBus().publish(AccountNewStepRequestEvent.class, this, false, stepContext).thenAcceptAsync(stepRequestEventPostResult -> {
             if (stepRequestEventPostResult.getEvent().isCancelled())
                 return;
             if (stepContext == null)

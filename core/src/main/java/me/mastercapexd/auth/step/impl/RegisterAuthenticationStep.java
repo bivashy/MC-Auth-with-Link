@@ -15,23 +15,19 @@ import me.mastercapexd.auth.step.creators.AuthenticationStepFactoryTemplate;
 public class RegisterAuthenticationStep extends AuthenticationStepTemplate implements MessageableAuthenticationStep {
     public static final String STEP_NAME = "REGISTER";
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
-    private final boolean isRegistered;
 
     public RegisterAuthenticationStep(AuthenticationStepContext context) {
         super(STEP_NAME, context);
-        isRegistered = context.getAccount().isRegistered();
     }
 
     @Override
     public boolean shouldPassToNextStep() {
         boolean isCurrentAccountRegistered = authenticationStepContext.getAccount().isRegistered();
-        if (!isRegistered && isCurrentAccountRegistered) {
+        if (isCurrentAccountRegistered) {
             Account account = authenticationStepContext.getAccount();
-            account.getPlayer().ifPresent(player -> {
-                PLUGIN.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
-                account.setLastIpAddress(player.getPlayerIp());
-                account.setLastSessionStartTimestamp(System.currentTimeMillis());
-            });
+            PLUGIN.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
+            account.setLastSessionStartTimestamp(System.currentTimeMillis());
+            account.getPlayer().map(ServerPlayer::getPlayerIp).ifPresent(account::setLastIpAddress);
         }
         return isCurrentAccountRegistered;
     }

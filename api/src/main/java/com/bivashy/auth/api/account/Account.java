@@ -3,6 +3,7 @@ package com.bivashy.auth.api.account;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import com.bivashy.auth.api.crypto.CryptoProvider;
@@ -123,7 +124,7 @@ public interface Account extends PlayerIdSupplier {
 
     AuthenticationStep getCurrentAuthenticationStep();
 
-    void nextAuthenticationStep(AuthenticationStepContext stepContext);
+    CompletableFuture<Void> nextAuthenticationStep(AuthenticationStepContext stepContext);
 
     default void logout(long sessionDurability) {
         if (!isSessionActive(sessionDurability))
