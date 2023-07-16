@@ -35,7 +35,7 @@ public class BaseAuthPluginTest {
     }
 
     @Test
-    public void testInit() {
+    public void shouldInitializeAuthPlugin() {
         AuthPlugin plugin = new BaseAuthPlugin(audienceProvider, DUMMY_VERSION, pluginFolder, serverCore);
 
         assertNotNull(plugin.getCore());
@@ -61,13 +61,13 @@ public class BaseAuthPluginTest {
     }
 
     @Test
-    public void validateBucketSizes() {
+    public void shouldHaveValidBucketSize() {
         assertEquals(plugin.getAuthenticationStepFactoryBucket().getList().size(), 8);
         assertEquals(plugin.getAuthenticationTaskBucket().getTasks().size(), 3);
     }
 
     @Test
-    public void validateDriver() {
+    public void shouldHaveDriver() {
         File cacheDriverFile = plugin.getConfig().getDatabaseConfiguration().getCacheDriverPath();
         assertTrue(cacheDriverFile.exists());
     }
