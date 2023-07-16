@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 
+import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -20,6 +21,7 @@ public class BaseLinkTypeProvider implements LinkTypeProvider {
         provider.putLinkType(GoogleLinkType.getInstance());
         provider.putLinkType(VKLinkType.getInstance());
         provider.putLinkType(TelegramLinkType.getInstance());
+        provider.putLinkType(DiscordLinkType.getInstance());
         return provider;
     }
 
