@@ -25,7 +25,7 @@ public class BaseAuthPluginTest {
     private AudienceProvider audienceProvider;
     @Mock
     private ServerCore serverCore;
-    @TempDir
+    @TempDir(cleanup = CleanupMode.NEVER)
     private File pluginFolder;
     private AuthPlugin plugin;
 
