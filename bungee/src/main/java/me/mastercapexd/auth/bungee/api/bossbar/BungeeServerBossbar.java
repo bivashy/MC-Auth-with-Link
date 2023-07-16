@@ -1,20 +1,15 @@
 package me.mastercapexd.auth.bungee.api.bossbar;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.google.common.collect.Sets;
 
 import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.protocol.packet.BossBar;
 
 public class BungeeServerBossbar extends ServerBossbar {
@@ -22,7 +17,7 @@ public class BungeeServerBossbar extends ServerBossbar {
     private final UUID uuid = UUID.randomUUID();
 
     public BungeeServerBossbar(String title) {
-        this.title(ComponentSerializer.toString(new TextComponent(title)));
+        this.title(title);
     }
 
     @Override
