@@ -25,7 +25,7 @@ public interface AccountDatabase {
 
     void saveOrUpdateAccount(Account account);
 
-    void updateAccountLinks(Account account);
+    CompletableFuture<Void> updateAccountLinks(Account account);
 
-    void deleteAccount(String id);
+    CompletableFuture<Void> deleteAccount(String id);
 }

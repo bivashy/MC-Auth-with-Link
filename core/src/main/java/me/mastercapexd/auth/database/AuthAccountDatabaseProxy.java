@@ -71,12 +71,18 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
     }
 
     @Override
-    public void updateAccountLinks(Account account) {
-        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAccountLinkDao().updateAccountLinks(account));
+    public CompletableFuture<Void> updateAccountLinks(Account account) {
+        return CompletableFuture.supplyAsync(() -> {
+            databaseHelper.getAccountLinkDao().updateAccountLinks(account);
+            return null;
+        });
     }
 
     @Override
-    public void deleteAccount(String id) {
-        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAuthAccountDao().deleteAccountById(id));
+    public CompletableFuture<Void> deleteAccount(String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            databaseHelper.getAuthAccountDao().deleteAccountById(id);
+            return null;
+        });
     }
 }
