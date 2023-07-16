@@ -39,6 +39,7 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
                 progressBar.update();
             }
         }, 0, 1, TimeUnit.SECONDS);
+        plugin.getEventBus().register(this);
     }
 
     @Override

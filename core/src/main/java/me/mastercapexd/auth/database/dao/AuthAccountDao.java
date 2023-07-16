@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.database.schema.TableSettings;
+import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.field.DataType;
@@ -52,12 +53,12 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         idFieldConfig.setGeneratedId(true);
         fields.add(idFieldConfig);
 
-        DatabaseFieldConfig playerIdFieldConfig = createFieldConfig(settings,PLAYER_ID_CONFIGURATION_KEY, AuthAccount.PLAYER_ID_FIELD_KEY);
+        DatabaseFieldConfig playerIdFieldConfig = createFieldConfig(settings, PLAYER_ID_CONFIGURATION_KEY, AuthAccount.PLAYER_ID_FIELD_KEY);
         playerIdFieldConfig.setUnique(true);
         playerIdFieldConfig.setCanBeNull(false);
         fields.add(playerIdFieldConfig);
 
-        DatabaseFieldConfig playerIdTypeFieldConfig = createFieldConfig(settings,PLAYER_ID_TYPE_CONFIGURATION_KEY, AuthAccount.PLAYER_ID_TYPE_FIELD_KEY);
+        DatabaseFieldConfig playerIdTypeFieldConfig = createFieldConfig(settings, PLAYER_ID_TYPE_CONFIGURATION_KEY, AuthAccount.PLAYER_ID_TYPE_FIELD_KEY);
         playerIdTypeFieldConfig.setCanBeNull(false);
         playerIdTypeFieldConfig.setDataType(DataType.ENUM_NAME);
         fields.add(playerIdTypeFieldConfig);
@@ -69,22 +70,24 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
 
         fields.add(createFieldConfig(settings, LAST_IP_CONFIGURATION_KEY, AuthAccount.LAST_IP_FIELD_KEY));
 
-        DatabaseFieldConfig uniqueIdFieldConfig = createFieldConfig(settings,UNIQUE_ID_CONFIGURATION_KEY,  AuthAccount.UNIQUE_ID_FIELD_KEY);
+        DatabaseFieldConfig uniqueIdFieldConfig = createFieldConfig(settings, UNIQUE_ID_CONFIGURATION_KEY, AuthAccount.UNIQUE_ID_FIELD_KEY);
         uniqueIdFieldConfig.setCanBeNull(false);
         uniqueIdFieldConfig.setDataType(DataType.UUID);
         fields.add(uniqueIdFieldConfig);
 
-        DatabaseFieldConfig playerNameFieldConfig = createFieldConfig(settings,PLAYER_NAME_CONFIGURATION_KEY, AuthAccount.PLAYER_NAME_FIELD_KEY);
+        DatabaseFieldConfig playerNameFieldConfig = createFieldConfig(settings, PLAYER_NAME_CONFIGURATION_KEY, AuthAccount.PLAYER_NAME_FIELD_KEY);
         playerNameFieldConfig.setCanBeNull(false);
         fields.add(playerNameFieldConfig);
 
-        fields.add(createFieldConfig(settings,PASSWORD_HASH_CONFIGURATION_KEY, AuthAccount.PASSWORD_HASH_FIELD_KEY));
+        fields.add(createFieldConfig(settings, PASSWORD_HASH_CONFIGURATION_KEY, AuthAccount.PASSWORD_HASH_FIELD_KEY));
 
-        DatabaseFieldConfig lastQuitTimestampFieldConfig = createFieldConfig(settings,LAST_QUIT_TIMESTAMP_CONFIGURATION_KEY, AuthAccount.LAST_QUIT_TIMESTAMP_FIELD_KEY);
+        DatabaseFieldConfig lastQuitTimestampFieldConfig = createFieldConfig(settings, LAST_QUIT_TIMESTAMP_CONFIGURATION_KEY,
+                AuthAccount.LAST_QUIT_TIMESTAMP_FIELD_KEY);
         lastQuitTimestampFieldConfig.setDataType(DataType.LONG);
         fields.add(lastQuitTimestampFieldConfig);
 
-        DatabaseFieldConfig lastSessionStartTimestampFieldConfig = createFieldConfig(settings,LAST_SESSION_TIMESTAMP_START_CONFIGURATION_KEY, AuthAccount.LAST_SESSION_TIMESTAMP_START_FIELD_KEY);
+        DatabaseFieldConfig lastSessionStartTimestampFieldConfig = createFieldConfig(settings, LAST_SESSION_TIMESTAMP_START_CONFIGURATION_KEY,
+                AuthAccount.LAST_SESSION_TIMESTAMP_START_FIELD_KEY);
         lastSessionStartTimestampFieldConfig.setDataType(DataType.LONG);
         fields.add(lastSessionStartTimestampFieldConfig);
 
@@ -134,6 +137,18 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
                 .isNotNull(AccountLink.LINK_USER_ID_FIELD_KEY)
                 .and()
                 .notIn(AccountLink.LINK_USER_ID_FIELD_KEY, AccountFactory.DEFAULT_TELEGRAM_ID, AccountFactory.DEFAULT_VK_ID)
+                .queryBuilder()).distinct().query(), Collections.emptyList());
+    }
+
+    public Collection<AuthAccount> queryAllLinkedAccounts(LinkType linkType) {
+        return DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().join(databaseHelper.getAccountLinkDao()
+                .queryBuilder()
+                .selectColumns(AccountLink.ACCOUNT_ID_FIELD_KEY)
+                .where()
+                .isNotNull(AccountLink.LINK_USER_ID_FIELD_KEY)
+                .and()
+                .notIn(AccountLink.LINK_USER_ID_FIELD_KEY, AccountFactory.DEFAULT_TELEGRAM_ID, AccountFactory.DEFAULT_VK_ID)
+                .and().eq(AccountLink.LINK_TYPE_FIELD_KEY, linkType.getName())
                 .queryBuilder()).distinct().query(), Collections.emptyList());
     }
 
