@@ -26,13 +26,7 @@ public class LoginAuthenticationStep extends AuthenticationStepTemplate implemen
 
     @Override
     public boolean shouldSkip() {
-        return haveSession();
-    }
-
-    private boolean haveSession() {
-        Account account = authenticationStepContext.getAccount();
-        long sessionEndTime = account.getLastSessionStartTimestamp() + PLUGIN.getConfig().getSessionDurability();
-        return sessionEndTime >= System.currentTimeMillis();
+        return authenticationStepContext.getAccount().isSessionActive(PLUGIN.getConfig().getSessionDurability());
     }
 
     @Override
