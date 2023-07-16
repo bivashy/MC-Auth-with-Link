@@ -2,6 +2,7 @@ package me.mastercapexd.auth.account.factory;
 
 import java.util.UUID;
 
+import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.crypto.CryptoProvider;
@@ -11,7 +12,6 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.type.IdentifierType;
 
-import me.mastercapexd.auth.link.BaseLinkTypeProvider;
 import me.mastercapexd.auth.link.user.LinkUserTemplate;
 
 public abstract class AccountFactoryTemplate implements AccountFactory {
@@ -24,7 +24,7 @@ public abstract class AccountFactoryTemplate implements AccountFactory {
         account.setPasswordHash(HashedPassword.of(passwordHash, cryptoProvider));
         account.setLastIpAddress(lastIp);
 
-        for (LinkType linkType : BaseLinkTypeProvider.allLinks().getLinkTypes())
+        for (LinkType linkType : AuthPlugin.instance().getLinkTypeProvider().getLinkTypes())
             account.addLinkUser(createUser(linkType, account));
         return account;
     }
