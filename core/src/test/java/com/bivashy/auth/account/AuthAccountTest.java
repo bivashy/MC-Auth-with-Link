@@ -13,12 +13,15 @@ import org.junit.jupiter.api.extension.*;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.bucket.CryptoProviderBucket;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.step.AuthenticationStep;
 import com.bivashy.auth.api.type.IdentifierType;
 
 import me.mastercapexd.auth.account.factory.AuthAccountFactory;
@@ -29,6 +32,9 @@ public class AuthAccountTest {
     private static final IdentifierType ACCOUNT_ID_TYPE = IdentifierType.NAME;
     private static final String ACCOUNT_NAME = "Player";
     private static final UUID ACCOUNT_UUID = UUID.randomUUID();
+    private static final String REGISTER_AUTHENTICATION_STEP_NAME = "REGISTER";
+    private static final String LOGIN_AUTHENTICATION_STEP_NAME = "LOGIN";
+    private static final String NULL_AUTHENTICATION_STEP_NAME = "NULL";
     private final AuthAccountFactory factory = new AuthAccountFactory();
     private Account account;
     @Mock
@@ -40,7 +46,15 @@ public class AuthAccountTest {
 
     @BeforeEach
     public void setup() {
+        when(cryptoProvider.getIdentifier()).thenReturn("TEST");
+
         account = factory.createAccount(ACCOUNT_ID, ACCOUNT_ID_TYPE, ACCOUNT_UUID, ACCOUNT_NAME, cryptoProvider, null, null);
+
+        CryptoProviderBucket cryptoProviderBucket = AuthPlugin.instance().getCryptoProviderBucket();
+        if (!cryptoProviderBucket.findCryptoProvider(cryptoProvider.getIdentifier()).isPresent())
+            cryptoProviderBucket.addCryptoProvider(cryptoProvider);
+
+        AuthPlugin.instance().getAccountDatabase().deleteAccount(ACCOUNT_ID).join();
     }
 
     @Test
@@ -160,5 +174,57 @@ public class AuthAccountTest {
         Optional<LinkUser> foundLinkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
         assertTrue(foundLinkUser.isPresent());
         assertEquals(linkUserOrNew, foundLinkUser.get());
+    }
+
+    @Test
+    public void shouldPassRegisterAuthenticationStep() {
+        AuthPlugin plugin = AuthPlugin.instance();
+        plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(account);
+
+        account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account)).join();
+
+        AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
+        assertEquals(REGISTER_AUTHENTICATION_STEP_NAME, currentAuthenticationStep.getStepName());
+        assertFalse(currentAuthenticationStep.shouldPassToNextStep());
+        assertFalse(currentAuthenticationStep.shouldSkip());
+
+        account.setPasswordHash(HashedPassword.of("test", cryptoProvider));
+
+        account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account)).join();
+
+        assertEquals(0, account.getCurrentAuthenticationStepCreatorIndex());
+        AuthenticationStep nextAuthenticationStep = account.getCurrentAuthenticationStep();
+        assertEquals(NULL_AUTHENTICATION_STEP_NAME, nextAuthenticationStep.getStepName());
+        assertTrue(currentAuthenticationStep.shouldPassToNextStep());
+        assertTrue(currentAuthenticationStep.shouldSkip());
+
+        plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
+    }
+
+    @Test
+    public void shouldPassLoginAuthenticationStep() {
+        AuthPlugin plugin = AuthPlugin.instance();
+        plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(account);
+
+        account.setPasswordHash(HashedPassword.of("test", cryptoProvider));
+
+        account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account)).join();
+
+        AuthenticationStep currentAuthenticationStep = account.getCurrentAuthenticationStep();
+        assertEquals(LOGIN_AUTHENTICATION_STEP_NAME, currentAuthenticationStep.getStepName());
+        assertFalse(currentAuthenticationStep.shouldPassToNextStep());
+        assertFalse(currentAuthenticationStep.shouldSkip());
+
+        account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
+
+        account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account)).join();
+
+        assertEquals(0, account.getCurrentAuthenticationStepCreatorIndex());
+        AuthenticationStep nextAuthenticationStep = account.getCurrentAuthenticationStep();
+        assertEquals(NULL_AUTHENTICATION_STEP_NAME, nextAuthenticationStep.getStepName());
+        assertTrue(currentAuthenticationStep.shouldPassToNextStep());
+        assertTrue(currentAuthenticationStep.shouldSkip());
+
+        plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
     }
 }
