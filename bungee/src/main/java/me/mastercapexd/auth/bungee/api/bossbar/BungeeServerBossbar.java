@@ -18,18 +18,11 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.protocol.packet.BossBar;
 
 public class BungeeServerBossbar extends ServerBossbar {
-    private static final AtomicInteger barID = new AtomicInteger(1);
     private final Set<ServerPlayer> players = Sets.newHashSet();
-    private final UUID uuid;
+    private final UUID uuid = UUID.randomUUID();
 
     public BungeeServerBossbar(String title) {
-        this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
-        this.title(ComponentSerializer.toString(new TextComponent(this.title)));
-    }
-
-    public BungeeServerBossbar(BaseComponent[] titleComponent) {
-        this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
-        this.title(ComponentSerializer.toString(titleComponent));
+        this.title(ComponentSerializer.toString(new TextComponent(title)));
     }
 
     @Override
