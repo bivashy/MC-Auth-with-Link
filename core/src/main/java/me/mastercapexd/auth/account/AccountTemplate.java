@@ -46,7 +46,7 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
             currentConfigurationAuthenticationStepCreatorIndex += 1;
             if (currentAuthenticationStep.shouldSkip()) {
                 currentAuthenticationStep = new NullAuthenticationStep();
-                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this));
+                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this)).join();
             }
         });
     }
