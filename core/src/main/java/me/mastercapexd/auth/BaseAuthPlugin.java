@@ -79,6 +79,7 @@ import me.mastercapexd.auth.step.impl.EnterServerAuthenticationStep.EnterServerA
 import me.mastercapexd.auth.step.impl.LoginAuthenticationStep.LoginAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.NullAuthenticationStep.NullAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.RegisterAuthenticationStep.RegisterAuthenticationStepFactory;
+import me.mastercapexd.auth.step.impl.link.DiscordLinkAuthenticationStep.DiscordLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepFactory;
@@ -168,6 +169,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.authenticationStepFactoryBucket.add(new VKLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new GoogleLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new TelegramLinkAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.add(new DiscordLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new EnterServerAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new EnterAuthServerAuthenticationStepFactory());
     }

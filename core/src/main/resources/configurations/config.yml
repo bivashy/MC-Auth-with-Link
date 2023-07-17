@@ -104,6 +104,7 @@ authentication-steps:
   - LOGIN
   - VK_LINK
   - TELEGRAM_LINK
+  - DISCORD_LINK
   - GOOGLE_LINK
   - ENTER_SERVER
 
