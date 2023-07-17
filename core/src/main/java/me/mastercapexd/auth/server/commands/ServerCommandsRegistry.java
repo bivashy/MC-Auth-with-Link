@@ -3,6 +3,7 @@ package me.mastercapexd.auth.server.commands;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.link.LinkSettings;
@@ -16,6 +17,7 @@ import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import me.mastercapexd.auth.link.discord.DiscordLinkType;
+import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
@@ -160,7 +162,9 @@ public abstract class ServerCommandsRegistry {
     }
 
     private void registerDependencies() {
+        commandHandler.registerDependency(AuthenticatingAccountBucket.class, plugin.getAuthenticatingAccountBucket());
         commandHandler.registerDependency(LinkConfirmationBucket.class, plugin.getLinkConfirmationBucket());
+        commandHandler.registerDependency(EventBus.class, plugin.getEventBus());
         commandHandler.registerDependency(PluginConfig.class, plugin.getConfig());
         commandHandler.registerDependency(ServerMessages.class, plugin.getConfig().getServerMessages());
         commandHandler.registerDependency(AccountDatabase.class, plugin.getAccountDatabase());

@@ -2,6 +2,7 @@ package me.mastercapexd.auth.account.factory;
 
 import java.util.UUID;
 
+import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.crypto.CryptoProvider;
@@ -11,11 +12,7 @@ import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.type.IdentifierType;
 
-import me.mastercapexd.auth.link.discord.DiscordLinkType;
-import me.mastercapexd.auth.link.google.GoogleLinkType;
-import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.user.LinkUserTemplate;
-import me.mastercapexd.auth.link.vk.VKLinkType;
 
 public abstract class AccountFactoryTemplate implements AccountFactory {
     @Override
@@ -27,10 +24,8 @@ public abstract class AccountFactoryTemplate implements AccountFactory {
         account.setPasswordHash(HashedPassword.of(passwordHash, cryptoProvider));
         account.setLastIpAddress(lastIp);
 
-        account.addLinkUser(createUser(VKLinkType.getInstance(), account));
-        account.addLinkUser(createUser(TelegramLinkType.getInstance(), account));
-        account.addLinkUser(createUser(GoogleLinkType.getInstance(), account));
-        account.addLinkUser(createUser(DiscordLinkType.getInstance(), account));
+        for (LinkType linkType : AuthPlugin.instance().getLinkTypeProvider().getLinkTypes())
+            account.addLinkUser(createUser(linkType, account));
         return account;
     }
 
