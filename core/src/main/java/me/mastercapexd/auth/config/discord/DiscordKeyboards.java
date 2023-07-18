@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.config.discord;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,10 @@ import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 import com.bivashy.messenger.common.keyboard.Keyboard;
 import com.bivashy.messenger.discord.message.keyboard.DiscordKeyboard;
-import com.google.gson.reflect.TypeToken;
 
 import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.utils.data.DataArray;
+import net.dv8tion.jda.api.utils.data.DataObject;
 
 public class DiscordKeyboards implements ConfigurationHolder, LinkKeyboards {
     private final Map<String, String> jsonKeyboards;
@@ -29,7 +31,11 @@ public class DiscordKeyboards implements ConfigurationHolder, LinkKeyboards {
 
     @Override
     public Keyboard createKeyboardModel(String rawJson) {
-        return new DiscordKeyboard(GSON.fromJson(rawJson, new TypeToken<List<ActionRow>>() {
-        }.getType()));
+        DataObject dataObject = DataObject.fromJson(rawJson);
+        DataArray rowsDataArray = dataObject.getArray("rows");
+        List<ActionRow> actionRows = new ArrayList<>();
+        for (int i = 0; i < rowsDataArray.length(); i++)
+            actionRows.add(ActionRow.fromData(rowsDataArray.getObject(i)));
+        return new DiscordKeyboard(actionRows);
     }
 }
