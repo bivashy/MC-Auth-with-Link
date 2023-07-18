@@ -83,7 +83,7 @@
                         </filter>
                     </filters>
 
-                    <relocations>
+                    <relocations combine.children="append">
                         <relocation>
                             <pattern>revxrsal.commands</pattern>
                             <shadedPattern>${dependencies.relocation.package}.revxrsal.commands</shadedPattern>

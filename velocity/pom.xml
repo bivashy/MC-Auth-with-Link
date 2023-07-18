@@ -111,7 +111,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <configuration>
-                    <relocations>
+                    <relocations combine.self="override">
                         <relocation>
                             <pattern>org.slf4j</pattern>
                             <shadedPattern>org.slf4j</shadedPattern>
