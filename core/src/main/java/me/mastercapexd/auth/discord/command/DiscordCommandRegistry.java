@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import com.bivashy.auth.api.AuthPlugin;
 
+import me.mastercapexd.auth.discord.command.listener.JDACommandListener;
 import me.mastercapexd.auth.hooks.DiscordHook;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.discord.DiscordCommandActorWrapper;
@@ -21,17 +22,29 @@ import revxrsal.commands.jda.annotation.OptionData;
 
 public class DiscordCommandRegistry extends MessengerCommandRegistry {
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
-    private static final JDACommandHandler COMMAND_HANDLER = JDACommandHandler.create(PLUGIN.getHook(DiscordHook.class).getJDA(), "");
+    private static final DiscordHook DISCORD_HOOK = PLUGIN.getHook(DiscordHook.class);
+    private static final JDACommandHandler COMMAND_HANDLER = JDACommandHandler.create(DISCORD_HOOK.getJDA(), "");
 
     public DiscordCommandRegistry() {
         super(COMMAND_HANDLER, DiscordLinkType.getInstance());
+        COMMAND_HANDLER.disableStackTraceSanitizing();
         COMMAND_HANDLER.registerContextResolver(LinkCommandActorWrapper.class, context -> new DiscordCommandActorWrapper(context.actor()));
         COMMAND_HANDLER.registerAnnotationReplacer(RenameTo.class, (element, parameter) -> Collections.singletonList(
                 Annotations.create(OptionData.class, "value", OptionType.valueOf(parameter.type()), "name", parameter.value())));
+        replaceNativeListener();
 
         registerCommands();
 
         COMMAND_HANDLER.registerSlashCommands();
+    }
+
+    private void replaceNativeListener() {
+        DISCORD_HOOK.getJDA()
+                .getRegisteredListeners()
+                .stream()
+                .filter(listener -> listener.getClass().getName().equals("revxrsal.commands.jda.core.JDACommandListener"))
+                .forEach(listener -> DISCORD_HOOK.getJDA().removeEventListener(listener));
+        DISCORD_HOOK.getJDA().addEventListener(new JDACommandListener(COMMAND_HANDLER, this::wrapActor));
     }
 
     @Override
