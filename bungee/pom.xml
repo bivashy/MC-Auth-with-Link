@@ -93,7 +93,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Libby version -->
+        <!-- Libby -->
         <dependency>
             <groupId>net.byteflux</groupId>
             <artifactId>libby-bungee</artifactId>

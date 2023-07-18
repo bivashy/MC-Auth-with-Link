@@ -92,8 +92,6 @@
         </dependency>
 
         <!-- Libby -->
-
-        <!-- Libby version -->
         <dependency>
             <groupId>net.byteflux</groupId>
             <artifactId>libby-velocity</artifactId>
