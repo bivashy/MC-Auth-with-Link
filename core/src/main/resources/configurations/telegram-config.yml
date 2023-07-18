@@ -226,6 +226,10 @@ telegram:
             {
               "text": "Мои аккаунты",
               "callback_data": "/accounts"
+            },
+            {
+              "text": "Все аккаунты Телеграм",
+              "callback_data": "/accounts -type local_linked"
             }
           ]
         ]
