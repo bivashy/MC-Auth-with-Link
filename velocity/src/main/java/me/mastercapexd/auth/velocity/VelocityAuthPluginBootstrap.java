@@ -3,14 +3,13 @@ package me.mastercapexd.auth.velocity;
 import java.io.File;
 import java.nio.file.Path;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.messenger.vk.message.VkMessage;
 import com.bivashy.messenger.vk.provider.VkApiProvider;
+import com.google.inject.Inject;
 import com.ubivashka.vk.velocity.VelocityVkApiPlugin;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
