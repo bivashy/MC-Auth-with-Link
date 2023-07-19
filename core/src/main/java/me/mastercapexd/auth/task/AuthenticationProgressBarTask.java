@@ -79,11 +79,18 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
 
     @SubscribeEvent
     public void onJoin(AccountJoinEvent e) {
-        progressBars.put(e.getAccount().getPlayerId(), plugin.getConfig().getBossBarSettings().createBossbar());
+        registerBossbar(e.getAccount());
     }
 
     @SubscribeEvent
     public void onLogout(PlayerLogoutEvent e) {
-        progressBars.put(e.getPlayer().getPlayerId(), plugin.getConfig().getBossBarSettings().createBossbar());
+        registerBossbar(e.getPlayer());
+    }
+
+    private void registerBossbar(PlayerIdSupplier playerIdSupplier) {
+        ServerBossbar bossbar = plugin.getConfig().getBossBarSettings().createBossbar();
+        if (bossbar == null)
+            return;
+        progressBars.put(playerIdSupplier.getPlayerId(), bossbar);
     }
 }
