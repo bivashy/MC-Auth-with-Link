@@ -33,7 +33,7 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     @ConfigField("enter")
     private BaseEnterSettings enterSettings;
     @ConfigField("discord-commands")
-    private BaseCommandPaths commandPaths;
+    private DiscordCommandPaths commandPaths;
     @ConfigField("proxy-commands")
     private BaseCommandPaths proxyCommandPaths;
     @ConfigField("custom-commands")
@@ -100,7 +100,7 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     }
 
     @Override
-    public BaseCommandPaths getCommandPaths() {
+    public DiscordCommandPaths getCommandPaths() {
         return commandPaths;
     }
 

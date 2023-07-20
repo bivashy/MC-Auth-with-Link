@@ -70,32 +70,90 @@ discord:
   discord-commands: # Основные команды
     link-game:
       main-command: 'adddiscord'
+      arguments:
+        arg1:
+          name: 'name'
+          description: 'Player name that we should link'
     enter-accept: # Id команды, не менять!
       main-command: 'accept'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be entered'
     enter-decline:
       main-command: 'decline'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be kicked and declined to enter'
     change-pass:
       main-command: 'changepassword'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that would have changed password'
+        arg3:
+          name: 'password'
+          description: 'New player account password'
     unlink:
       main-command: 'unlink'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be unlinked from Discord'
     accounts:
       main-command: 'accounts'
     account-control:
       main-command: 'control'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be controlled through shown panel'
     kick:
       main-command: 'kick'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be kicked'
     restore:
       main-command: 'restore'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be kicked, and changed password to random one'
     code:
       main-command: 'code'
+      arguments:
+        arg1:
+          name: 'code'
+          description: 'Confirmation code for linking account'
     confirmation-toggle:
       main-command: 'toggleconfirmation'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should have toggled confirmation'
     google:
       main-command: 'google'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should have enabled or regenerated TOTP'
     google-code:
       main-command: 'googlecode'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be confirmed'
+        arg3:
+          name: 'code'
+          description: 'TOTP code'
     google-remove:
       main-command: 'googleunlink'
+      arguments:
+        arg2:
+          name: 'name'
+          description: 'Player name that should be unlinked from TOTP'
     admin-panel:
       main-command: 'adminpanel'
   # Создание комманд в Discord, пригодится для создания таких команд как: /информация, /help

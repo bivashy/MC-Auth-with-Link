@@ -31,6 +31,7 @@ public class DiscordCommandRegistry extends MessengerCommandRegistry {
         COMMAND_HANDLER.registerContextResolver(LinkCommandActorWrapper.class, context -> new DiscordCommandActorWrapper(context.actor()));
         COMMAND_HANDLER.registerAnnotationReplacer(RenameTo.class, (element, parameter) -> Collections.singletonList(
                 Annotations.create(OptionData.class, "value", OptionType.valueOf(parameter.type()), "name", parameter.value())));
+        COMMAND_HANDLER.registerSlashCommandMapper(new DiscordOptionMapper());
         replaceNativeListener();
 
         registerCommands();
