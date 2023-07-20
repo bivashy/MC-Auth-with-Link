@@ -10,7 +10,7 @@ import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.discord.DiscordCommandActorWrapper;
 import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.messenger.commands.MessengerCommandRegistry;
-import me.mastercapexd.auth.messenger.commands.annotation.RenameTo;
+import me.mastercapexd.auth.discord.command.annotation.RenameTo;
 import me.mastercapexd.auth.shared.commands.DiscordLinkCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import net.dv8tion.jda.api.interactions.commands.OptionType;

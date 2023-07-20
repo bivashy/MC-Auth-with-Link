@@ -15,7 +15,7 @@ import com.bivashy.messenger.common.keyboard.Keyboard;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
-import me.mastercapexd.auth.messenger.commands.annotation.RenameTo;
+import me.mastercapexd.auth.discord.command.annotation.RenameTo;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
