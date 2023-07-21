@@ -72,7 +72,7 @@ public class AccountsListCommand implements OrphanCommand {
             placeholdersList.add("%account_" + i + "_color%");
             ButtonColor buttonColor = account.getPlayer().isPresent() ?
                     linkType.newButtonColorBuilder().green() : linkType.newButtonColorBuilder().red();
-            placeholdersList.add(buttonColor.toString());
+            placeholdersList.add(buttonColor.asJsonValue());
         }
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts", placeholdersList.toArray(new String[0]));
 
