@@ -175,88 +175,107 @@ discord:
   keyboards:
     confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"/принять %name%"},{"text":"Отклонить","callback_data":"/отклонить %name%"}]]}'
     accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
-      {                    
-      "inline_keyboard": [
-        [
-          {
-            "text": "%account_1%",
-            "callback_data": "/control %account_1%"
-          }
-        ],
-        [
-          {
-            "text": "%account_2%",
-            "callback_data": "/control %account_2%"
-          }
-        ],
-        [
-          {
-            "text": "%account_3%",
-            "callback_data": "/control %account_3%"
-          }
-        ],
-        [
-          {
-            "text": "%account_4%",
-            "callback_data": "/control %account_4%"
-          }
-        ],
-        [
-          {
-            "text": "%account_5%",
-            "callback_data": "/control %account_5%"
-          }
-        ],
-        [
-          {
-            "text": "<-",
-            "callback_data": "/accounts -page %prev_page% -pageSize %pageSize% -type %type%"
-          },
-          {
-            "text": "->",
-            "callback_data": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
-          }
-        ]
-      ]}
+      {
+      	"type": 1,
+      	"components": [
+      		[{
+      			"type": 2,
+      			"label": "%account_1%",
+      			"style": "%account_1_color%",
+      			"custom_id": "/control %account_1%"
+      		}],
+      		[{
+      			"type": 2,
+      			"label": "%account_2%",
+      			"style": "%account_2_color%",
+      			"custom_id": "/control %account_2%"
+      		}],
+      		[{
+      			"type": 2,
+      			"label": "%account_3%",
+      			"style": "%account_3_color%",
+      			"custom_id": "/control %account_3%"
+      		}],
+      		[{
+      			"type": 2,
+      			"label": "%account_4%",
+      			"style": "%account_4_color%",
+      			"custom_id": "/control %account_4%"
+      		}],
+      		[{
+      			"type": 2,
+      			"label": "%account_5%",
+      			"style": "%account_5_color%",
+      			"custom_id": "/control %account_5%"
+      		}],
+      		[{
+      				"type": 2,
+      				"label": "<-",
+      				"style": "primary",
+      				"custom_id": "/accounts -page %previous_page% -pageSize %pageSize% -type %type%"
+      			},
+      			{
+      				"type": 2,
+      				"label": "->",
+      				"style": "primary",
+      				"custom_id": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
+      			}
+      		]
+      	]
+      }
     account: >
       {
-        "inline_keyboard": [
-          [
-            {
-              "text": "Восстановить",
-              "callback_data": "/restore %account_name%"
-            },
-            {
-              "text": "Кикнуть",
-              "callback_data": "/kick %account_name%"
-            },
-            {
-              "text": "Отвязать",
-              "callback_data": "/unlink %account_name%"
-            }
-          ]
-        ]
+      	"rows": [{
+      		"type": 1,
+      		"components": [{
+      				"type": 2,
+      				"label": "Восстановить",
+      				"custom_id": "/restore %account_name%"
+      			},
+      			{
+      				"type": 2,
+      				"label": "Кикнуть",
+      				"custom_id": "/kick %account_name%"
+      			},
+      			{
+      				"type": 2,
+      				"label": "Отвязать",
+      				"custom_id": "/unlink %account_name%"
+      			}
+      		]
+      	}]
       }
     admin-panel: >
       {
-        "inline_keyboard": [
-          [
-            {
-              "text": "Все аккаунты",
-              "callback_data": "/accounts -type all"
-            },
-            {
-              "text": "Все привязанные аккаунты",
-              "callback_data": "/accounts -type linked"
-            }
-          ],
-          [
-            {
-              "text": "Мои аккаунты",
-              "callback_data": "/accounts"
-            }
-          ]
-        ]
+      	"rows": [{
+      			"type": 1,
+      			"components": [{
+      					"type": 2,
+      					"label": "Все аккаунты",
+      					"custom_id": "/accounts -type all"
+      				},
+      				{
+      					"type": 2,
+      					"label": "Все привязанные аккаунты",
+      					"custom_id": "/accounts -type linked"
+      				}
+      			]
+      		},
+      		{
+      			"type": 1,
+      			"components": [{
+      					"type": 2,
+      					"label": "Мои аккаунты",
+      					"custom_id": "/accounts"
+      				},
+      				{
+      					"type": 2,
+      					"label": "Дискорд аккаунты",
+      					"custom_id": "/accounts -type local_linked"
+      				}
+      			]
+      		}
+      	]
       }
   discord-messages: #Для переноса строк используйте "\n" без кавычек.
     account-not-found: 'Аккаунт с таким не найден!'
