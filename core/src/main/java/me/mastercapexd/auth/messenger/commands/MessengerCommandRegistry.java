@@ -15,6 +15,7 @@ import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
@@ -116,6 +117,7 @@ public abstract class MessengerCommandRegistry {
 
     private void registerDependencies() {
         commandHandler.registerDependency(LinkConfirmationBucket.class, PLUGIN.getLinkConfirmationBucket());
+        commandHandler.registerDependency(EventBus.class, PLUGIN.getEventBus());
         commandHandler.registerDependency(AccountDatabase.class, PLUGIN.getAccountDatabase());
         commandHandler.registerDependency(PluginConfig.class, PLUGIN.getConfig());
         commandHandler.registerDependency(AuthPlugin.class, PLUGIN);
