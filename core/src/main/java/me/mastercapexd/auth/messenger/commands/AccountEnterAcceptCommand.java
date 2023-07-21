@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.event.AccountEnterAcceptEvent;
+import com.bivashy.auth.api.event.AccountLinkEnterAcceptEvent;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 
@@ -48,7 +48,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-no-accounts"));
             return;
         }
-        accounts.forEach((entryUser) -> eventBus.publish(AccountEnterAcceptEvent.class, entryUser.getAccount(), false, linkType, entryUser, entryUser,
+        accounts.forEach((entryUser) -> eventBus.publish(AccountLinkEnterAcceptEvent.class, entryUser.getAccount(), false, linkType, entryUser, entryUser,
                 actorWrapper).thenAccept(result -> {
             if (result.getEvent().isCancelled())
                 return;

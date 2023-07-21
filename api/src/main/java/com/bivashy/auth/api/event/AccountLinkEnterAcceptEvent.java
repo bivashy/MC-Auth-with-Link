@@ -11,7 +11,7 @@ import io.github.revxrsal.eventbus.gen.Index;
 /**
  * Called when /accept executed. Cancel prevents enter accepting.
  */
-public interface AccountEnterAcceptEvent extends AccountEvent, CancellableEvent, LinkEvent {
+public interface AccountLinkEnterAcceptEvent extends AccountEvent, CancellableEvent, LinkEvent {
     @Index(4)
     LinkEntryUser getEntryUser();
 
