@@ -11,7 +11,7 @@ import io.github.revxrsal.eventbus.gen.Index;
 /**
  * Called when /decline executed. Cancel prevents enter decline.
  */
-public interface AccountEnterDeclineEvent extends AccountEvent, CancellableEvent, LinkEvent {
+public interface AccountLinkEnterDeclineEvent extends AccountEvent, CancellableEvent, LinkEvent {
     @Index(4)
     LinkEntryUser getEntryUser();
 
