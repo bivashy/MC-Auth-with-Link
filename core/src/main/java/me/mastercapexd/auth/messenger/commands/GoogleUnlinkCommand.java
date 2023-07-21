@@ -3,9 +3,11 @@ package me.mastercapexd.auth.messenger.commands;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.event.AccountUnlinkEvent;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 
+import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
@@ -22,6 +24,8 @@ public class GoogleUnlinkCommand implements OrphanCommand {
     private PluginConfig config;
     @Dependency
     private AccountDatabase accountDatabase;
+    @Dependency
+    private EventBus eventBus;
 
     @GoogleUse
     @ConfigurationArgumentError("google-unlink-not-enough-arguments")
@@ -34,7 +38,12 @@ public class GoogleUnlinkCommand implements OrphanCommand {
             return;
         }
         actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-unlinked", linkType.newMessageContext(account)));
-        linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
-        accountDatabase.updateAccountLinks(account);
+        eventBus.publish(AccountUnlinkEvent.class, account, false, GoogleLinkType.getInstance(), linkUser, linkUser.getLinkUserInfo().getIdentificator(),
+                actorWrapper).thenAccept(result -> {
+            if (result.getEvent().isCancelled())
+                return;
+            linkUser.getLinkUserInfo().setIdentificator(GoogleLinkType.getInstance().getDefaultIdentificator());
+            accountDatabase.updateAccountLinks(account);
+        });
     }
 }
