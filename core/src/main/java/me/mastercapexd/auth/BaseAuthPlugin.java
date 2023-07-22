@@ -90,6 +90,7 @@ import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
 import net.byteflux.libby.Library;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
@@ -203,11 +204,14 @@ public class BaseAuthPlugin implements AuthPlugin {
         libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY,
                 Collections.singletonList(Library.builder().groupId("club{}minnced").artifactId("opus-java").version("0").build()));
 
-        hooks.put(DiscordHook.class, new BaseDiscordHook());
+        BaseDiscordHook discordHook = new BaseDiscordHook();
+        hooks.put(DiscordHook.class, discordHook);
 
-        DiscordMessage.setDefaultApiProvider(DiscordApiProvider.of(getHook(DiscordHook.class).getJDA()));
+        discordHook.initialize(jdaBuilder -> jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS)).thenAccept(jda -> {
+            DiscordMessage.setDefaultApiProvider(DiscordApiProvider.of(jda));
 
-        new DiscordCommandRegistry();
+            new DiscordCommandRegistry();
+        });
     }
 
     private void migrateConfig() throws IOException, URISyntaxException {
