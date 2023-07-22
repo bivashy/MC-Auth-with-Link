@@ -19,6 +19,9 @@ public class BaseConfirmationSettings implements ConfigurationHolder, LinkConfir
     @ConfigField("code-characters")
     private String codeCharacters = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    public BaseConfirmationSettings() {
+    }
+
     public BaseConfirmationSettings(ConfigurationSectionHolder sectionHolder) {
         AuthPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
     }

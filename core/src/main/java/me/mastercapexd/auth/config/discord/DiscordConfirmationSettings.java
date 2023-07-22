@@ -1,24 +1,16 @@
 package me.mastercapexd.auth.config.discord;
 
+import java.util.Collections;
+import java.util.Map;
+
 import com.bivashy.auth.api.AuthPlugin;
-import com.bivashy.auth.api.config.duration.ConfigurationDuration;
-import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
-import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory.ConfigurationHolderMap;
-import me.mastercapexd.auth.util.RandomCodeFactory;
+import me.mastercapexd.auth.config.link.BaseConfirmationSettings;
 
-public class DiscordConfirmationSettings implements ConfigurationHolder, LinkConfirmationSettings {
-    @ConfigField("remove-delay")
-    private ConfigurationDuration removeDelay = new ConfigurationDuration(120 * 1000);
-    @ConfigField("code-length")
-    private int codeLength = 6;
-    @ConfigField("can-toggle")
-    private boolean canToggleConfirmation = false;
-    @ConfigField("code-characters")
-    private String codeCharacters = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+public class DiscordConfirmationSettings extends BaseConfirmationSettings {
     @ConfigField("guild-id")
     private long guildId;
     @ConfigField("role-modification")
@@ -32,32 +24,7 @@ public class DiscordConfirmationSettings implements ConfigurationHolder, LinkCon
         return guildId;
     }
 
-    public ConfigurationHolderMap<RoleModificationSettings> getRoleModificationSettings() {
-        return roleModificationSettings;
-    }
-
-    @Override
-    public ConfigurationDuration getRemoveDelay() {
-        return removeDelay;
-    }
-
-    @Override
-    public int getCodeLength() {
-        return codeLength;
-    }
-
-    @Override
-    public boolean canToggleConfirmation() {
-        return canToggleConfirmation;
-    }
-
-    @Override
-    public String getCodeCharacters() {
-        return codeCharacters;
-    }
-
-    @Override
-    public String generateCode() {
-        return RandomCodeFactory.generateCode(codeLength, codeCharacters);
+    public Map<String, RoleModificationSettings> getRoleModificationSettings() {
+        return Collections.unmodifiableMap(roleModificationSettings);
     }
 }
