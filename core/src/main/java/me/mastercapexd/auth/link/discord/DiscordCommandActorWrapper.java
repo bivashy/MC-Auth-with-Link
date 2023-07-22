@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import revxrsal.commands.command.ExecutableCommand;
 import revxrsal.commands.jda.JDAActor;
 import revxrsal.commands.jda.actor.MessageJDAActor;
@@ -30,8 +31,12 @@ public class DiscordCommandActorWrapper extends LinkCommandActorWrapperTemplate<
         if (!message.safeAs(DiscordMessage.class).isPresent())
             return;
         DiscordMessage discordMessage = message.as(DiscordMessage.class);
-        if (actor instanceof SlashCommandJDAActor)
-            discordMessage.send(builder -> actor.as(SlashCommandJDAActor.class).getSlashEvent().reply(builder.build()).queue());
+        if (actor instanceof SlashCommandJDAActor) {
+            SlashCommandJDAActor slashCommandJDAActor = actor.as(SlashCommandJDAActor.class);
+            SlashCommandInteractionEvent event = slashCommandJDAActor.getSlashEvent();
+            event.getHook().setEphemeral(true);
+            discordMessage.send(builder -> event.reply(builder.build()).queue());
+        }
         if (actor instanceof MessageJDAActor)
             discordMessage.send(getChannel());
     }
