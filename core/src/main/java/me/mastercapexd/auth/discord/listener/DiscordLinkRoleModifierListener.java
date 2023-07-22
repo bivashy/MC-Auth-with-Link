@@ -37,7 +37,7 @@ public class DiscordLinkRoleModifierListener {
         Guild guild = discordHook.getJDA().getGuildById(guildId);
         if (guild == null)
             throw new IllegalArgumentException("Cannot find guild by id '" + guildId + "', check if guild id is valid");
-        guild.retrieveMemberById(e.getIdentificator().asNumber()).map(foundMember -> {
+        guild.retrieveMemberById(e.getIdentificator().asNumber()).queue(foundMember -> {
             for (RoleModificationSettings roleModification : roleModificationSettings) {
                 boolean hasPermissionCheck = !roleModification.getHavePermission().isEmpty() || !roleModification.getAbsentPermission().isEmpty();
                 if (hasPermissionCheck && !playerOptional.isPresent()) {
@@ -63,7 +63,6 @@ public class DiscordLinkRoleModifierListener {
                 if (roleModification.getType() == Type.REMOVE_ROLE)
                     guild.removeRoleFromMember(foundMember, role).queue();
             }
-            return foundMember;
-        }).queue();
+        });
     }
 }
