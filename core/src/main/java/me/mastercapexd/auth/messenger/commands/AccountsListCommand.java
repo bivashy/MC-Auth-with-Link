@@ -13,9 +13,9 @@ import com.bivashy.auth.api.util.CollectionUtil.ArrayPairHashMapAdapter.Paginate
 import com.bivashy.messenger.common.button.ButtonColor;
 import com.bivashy.messenger.common.keyboard.Keyboard;
 
+import me.mastercapexd.auth.discord.command.annotation.RenameTo;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
-import me.mastercapexd.auth.discord.command.annotation.RenameTo;
 import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
@@ -74,6 +74,9 @@ public class AccountsListCommand implements OrphanCommand {
                     linkType.newButtonColorBuilder().green() : linkType.newButtonColorBuilder().red();
             placeholdersList.add(buttonColor.asJsonValue());
         }
+        // We are replacing all remaining button colors with any color for preventing 'parsing' error
+        placeholdersList.add("%account_._color%");
+        placeholdersList.add(linkType.newButtonColorBuilder().white().asJsonValue());
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts", placeholdersList.toArray(new String[0]));
 
         // Remove buttons that doesn't affected by placeholders (For example if player has linked accounts count is less than accounts.size())
