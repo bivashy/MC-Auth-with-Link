@@ -16,7 +16,7 @@
         <zxing.library.version>3.5.1</zxing.library.version>
         <configuration-library.version>4.0.2</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
-        <lamp.command-library.version>3.2.3</lamp.command-library.version>
+        <lamp.command-library.version>3.2.4</lamp.command-library.version>
         <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
         <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
         <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
