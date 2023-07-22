@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.discord;
+package me.mastercapexd.auth.discord.listener;
 
 import java.util.Collection;
 import java.util.Optional;

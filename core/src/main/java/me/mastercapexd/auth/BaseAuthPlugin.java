@@ -65,7 +65,7 @@ import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.crypto.belkaauth.UAuthCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
-import me.mastercapexd.auth.discord.DiscordLinkRoleModifierListener;
+import me.mastercapexd.auth.discord.listener.DiscordLinkRoleModifierListener;
 import me.mastercapexd.auth.discord.command.DiscordCommandRegistry;
 import me.mastercapexd.auth.hooks.BaseDiscordHook;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
