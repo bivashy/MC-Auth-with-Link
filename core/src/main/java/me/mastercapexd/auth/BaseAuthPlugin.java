@@ -65,6 +65,7 @@ import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.crypto.belkaauth.UAuthCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.discord.DiscordLinkRoleModifierListener;
 import me.mastercapexd.auth.discord.command.DiscordCommandRegistry;
 import me.mastercapexd.auth.hooks.BaseDiscordHook;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
@@ -210,6 +211,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         discordHook.initialize(jdaBuilder -> jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS)).thenAccept(jda -> {
             DiscordMessage.setDefaultApiProvider(DiscordApiProvider.of(jda));
 
+            eventBus.register(new DiscordLinkRoleModifierListener());
             new DiscordCommandRegistry();
         });
     }

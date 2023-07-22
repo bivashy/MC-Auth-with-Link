@@ -15,7 +15,6 @@ import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.link.BaseCommandPaths;
-import me.mastercapexd.auth.config.link.BaseConfirmationSettings;
 import me.mastercapexd.auth.config.link.BaseEnterSettings;
 import me.mastercapexd.auth.config.link.BaseMessengerCustomCommands;
 import me.mastercapexd.auth.config.link.BaseRestoreSettings;
@@ -27,7 +26,7 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     @ConfigField("token")
     private String token;
     @ConfigField("confirmation")
-    private BaseConfirmationSettings confirmationSettings;
+    private DiscordConfirmationSettings confirmationSettings;
     @ConfigField("restore")
     private BaseRestoreSettings restoreSettings;
     @ConfigField("enter")
