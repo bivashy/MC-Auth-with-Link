@@ -176,51 +176,56 @@ discord:
     confirmation: '{"inline_keyboard":[[{"text":"Принять","callback_data":"/принять %name%"},{"text":"Отклонить","callback_data":"/отклонить %name%"}]]}'
     accounts: >  # %account_{index}% - player name, %account_{index}_color% - color that represents is player offline or online
       {
-      	"type": 1,
-      	"components": [
-      		[{
-      			"type": 2,
-      			"label": "%account_1%",
-      			"style": "%account_1_color%",
-      			"custom_id": "/control %account_1%"
-      		}],
-      		[{
-      			"type": 2,
-      			"label": "%account_2%",
-      			"style": "%account_2_color%",
-      			"custom_id": "/control %account_2%"
-      		}],
-      		[{
-      			"type": 2,
-      			"label": "%account_3%",
-      			"style": "%account_3_color%",
-      			"custom_id": "/control %account_3%"
-      		}],
-      		[{
-      			"type": 2,
-      			"label": "%account_4%",
-      			"style": "%account_4_color%",
-      			"custom_id": "/control %account_4%"
-      		}],
-      		[{
-      			"type": 2,
-      			"label": "%account_5%",
-      			"style": "%account_5_color%",
-      			"custom_id": "/control %account_5%"
-      		}],
-      		[{
+      	"rows": [{
+      			"type": 1,
+      			"components": [{
+      				"type": 2,
+      				"label": "%account_1%",
+      				"style": "%account_1_color%",
+      				"custom_id": "/control %account_1%"
+      			}]
+      		},
+      		{
+      			"type": 1,
+      			"components": [{
+      				"type": 2,
+      				"label": "%account_2%",
+      				"style": "%account_2_color%",
+      				"custom_id": "/control %account_2%"
+      			}]
+      		},
+      		{
+      			"type": 1,
+      			"components": [{
+      				"type": 2,
+      				"label": "%account_3%",
+      				"style": "%account_3_color%",
+      				"custom_id": "/control %account_3%"
+      			}]
+      		},
+      		{
+      			"type": 1,
+      			"components": [{
+      				"type": 2,
+      				"label": "%account_4%",
+      				"style": "%account_4_color%",
+      				"custom_id": "/control %account_4%"
+      			}]
+      		},
+      		{
+      			"type": 1,
+      			"components": [{
       				"type": 2,
       				"label": "<-",
       				"style": "primary",
       				"custom_id": "/accounts -page %previous_page% -pageSize %pageSize% -type %type%"
-      			},
-      			{
+      			}, {
       				"type": 2,
       				"label": "->",
       				"style": "primary",
       				"custom_id": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
-      			}
-      		]
+      			}]
+      		}
       	]
       }
     account: >
