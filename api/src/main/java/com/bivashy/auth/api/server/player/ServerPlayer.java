@@ -25,6 +25,8 @@ public interface ServerPlayer extends Castable<ServerPlayer>, PlayerIdSupplier {
         sendMessage(AuthPlugin.instance().getConfig().getServerMessages().getDeserializer().deserialize(message));
     }
 
+    boolean hasPermission(String permission);
+
     void disconnect(ServerComponent component);
 
     void sendMessage(ServerComponent component);
