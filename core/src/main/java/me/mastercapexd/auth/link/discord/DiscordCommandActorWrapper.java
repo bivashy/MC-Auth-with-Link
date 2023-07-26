@@ -7,6 +7,7 @@ import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.messenger.common.message.Message;
 import com.bivashy.messenger.discord.message.DiscordMessage;
 
+import me.mastercapexd.auth.discord.command.actor.BaseJDAButtonActor;
 import me.mastercapexd.auth.link.LinkCommandActorWrapperTemplate;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,6 +15,9 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import revxrsal.commands.command.ExecutableCommand;
 import revxrsal.commands.jda.JDAActor;
 import revxrsal.commands.jda.actor.MessageJDAActor;
@@ -34,11 +38,57 @@ public class DiscordCommandActorWrapper extends LinkCommandActorWrapperTemplate<
         if (actor instanceof SlashCommandJDAActor) {
             SlashCommandJDAActor slashCommandJDAActor = actor.as(SlashCommandJDAActor.class);
             SlashCommandInteractionEvent event = slashCommandJDAActor.getSlashEvent();
-            event.getHook().setEphemeral(true);
-            discordMessage.send(builder -> event.reply(builder.build()).queue());
+            sendInteractionMessage(discordMessage, event, event.getHook());
+        }
+        if (actor instanceof BaseJDAButtonActor) {
+            BaseJDAButtonActor buttonActor = actor.as(BaseJDAButtonActor.class);
+            ButtonInteractionEvent event = buttonActor.getButtonEvent();
+            sendInteractionMessage(discordMessage, event, event.getHook());
         }
         if (actor instanceof MessageJDAActor)
             discordMessage.send(getChannel());
+    }
+
+    @Override
+    public void reply(String message) {
+        if (actor instanceof SlashCommandJDAActor) {
+            SlashCommandJDAActor slashCommandJDAActor = actor.as(SlashCommandJDAActor.class);
+            SlashCommandInteractionEvent event = slashCommandJDAActor.getSlashEvent();
+            sendInteractionMessage(message, event, event.getHook());
+            return;
+        }
+        if (actor instanceof BaseJDAButtonActor) {
+            BaseJDAButtonActor buttonActor = actor.as(BaseJDAButtonActor.class);
+            ButtonInteractionEvent event = buttonActor.getButtonEvent();
+            sendInteractionMessage(message, event, event.getHook());
+            return;
+        }
+        actor.reply(message);
+    }
+
+    @Override
+    public void error(String message) {
+        reply(message);
+    }
+
+    private void sendInteractionMessage(String message, IReplyCallback replyCallback, InteractionHook interactionHook) {
+        interactionHook.setEphemeral(true);
+        if (interactionHook.getInteraction().isAcknowledged()) {
+            interactionHook.editOriginal(message).queue();
+            return;
+        }
+        replyCallback.reply(message).queue();
+    }
+
+    private void sendInteractionMessage(DiscordMessage message, IReplyCallback replyCallback, InteractionHook interactionHook) {
+        interactionHook.setEphemeral(true);
+        message.send(builder -> {
+            if (interactionHook.getInteraction().isAcknowledged()) {
+                interactionHook.sendMessage(builder.build()).queue();
+                return;
+            }
+            replyCallback.reply(builder.build()).queue();
+        });
     }
 
     @Override
