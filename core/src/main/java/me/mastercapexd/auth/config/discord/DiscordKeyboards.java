@@ -31,11 +31,16 @@ public class DiscordKeyboards implements ConfigurationHolder, LinkKeyboards {
 
     @Override
     public Keyboard createKeyboardModel(String rawJson) {
-        DataObject dataObject = DataObject.fromJson(rawJson);
-        DataArray rowsDataArray = dataObject.getArray("rows");
-        List<ActionRow> actionRows = new ArrayList<>();
-        for (int i = 0; i < rowsDataArray.length(); i++)
-            actionRows.add(ActionRow.fromData(rowsDataArray.getObject(i)));
-        return new DiscordKeyboard(actionRows);
+        try {
+            DataObject dataObject = DataObject.fromJson(rawJson);
+            DataArray rowsDataArray = dataObject.getArray("rows");
+            List<ActionRow> actionRows = new ArrayList<>();
+            for (int i = 0; i < rowsDataArray.length(); i++)
+                actionRows.add(ActionRow.fromData(rowsDataArray.getObject(i)));
+            return new DiscordKeyboard(actionRows);
+        } catch(Throwable t) {
+            t.printStackTrace();
+            return new DiscordKeyboard();
+        }
     }
 }
