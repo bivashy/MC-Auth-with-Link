@@ -221,13 +221,13 @@ discord:
       			"type": 2,
       			"label": "Принять",
       			"style": 3,
-      			"custom_id": "/accept %name%"
+      			"custom_id": "accept %name%"
       		}, 
             {
       			"type": 2,
       			"label": "Отклонить",
       			"style": 4,
-      			"custom_id": "/decline %name%"
+      			"custom_id": "decline %name%"
       		}]
       	}]
       }
@@ -239,7 +239,7 @@ discord:
       				"type": 2,
       				"label": "%account_1%",
       				"style": "%account_1_color%",
-      				"custom_id": "/control %account_1%"
+      				"custom_id": "control %account_1%"
       			}]
       		},
       		{
@@ -248,7 +248,7 @@ discord:
       				"type": 2,
       				"label": "%account_2%",
       				"style": "%account_2_color%",
-      				"custom_id": "/control %account_2%"
+      				"custom_id": "control %account_2%"
       			}]
       		},
       		{
@@ -257,7 +257,7 @@ discord:
       				"type": 2,
       				"label": "%account_3%",
       				"style": "%account_3_color%",
-      				"custom_id": "/control %account_3%"
+      				"custom_id": "control %account_3%"
       			}]
       		},
       		{
@@ -266,7 +266,7 @@ discord:
       				"type": 2,
       				"label": "%account_4%",
       				"style": "%account_4_color%",
-      				"custom_id": "/control %account_4%"
+      				"custom_id": "control %account_4%"
       			}]
       		},
       		{
@@ -274,13 +274,13 @@ discord:
       			"components": [{
       				"type": 2,
       				"label": "<-",
-      				"style": "primary",
-      				"custom_id": "/accounts -page %previous_page% -pageSize %pageSize% -type %type%"
+      				"style": "1",
+      				"custom_id": "accounts -page %previous_page% -pageSize %pageSize% -type %type%"
       			}, {
       				"type": 2,
       				"label": "->",
-      				"style": "primary",
-      				"custom_id": "/accounts -page %next_page% -pageSize %pageSize% -type %type%"
+      				"style": "1",
+      				"custom_id": "accounts -page %next_page% -pageSize %pageSize% -type %type%"
       			}]
       		}
       	]
@@ -292,19 +292,19 @@ discord:
       		"components": [{
       				"type": 2,
       				"label": "Восстановить",
-      				"custom_id": "/restore %account_name%",
+      				"custom_id": "restore %account_name%",
                     "style": 1
       			},
       			{
       				"type": 2,
       				"label": "Кикнуть",
-      				"custom_id": "/kick %account_name%",
+      				"custom_id": "kick %account_name%",
                     "style": 1
       			},
       			{
       				"type": 2,
       				"label": "Отвязать",
-      				"custom_id": "/unlink %account_name%",
+      				"custom_id": "unlink %account_name%",
                     "style": 1
       			}
       		]
@@ -317,13 +317,13 @@ discord:
       			"components": [{
       					"type": 2,
       					"label": "Все аккаунты",
-      					"custom_id": "/accounts -type all",
+      					"custom_id": "accounts -type all",
                         "style": 1
       				},
       				{
       					"type": 2,
       					"label": "Все привязанные аккаунты",
-      					"custom_id": "/accounts -type linked",
+      					"custom_id": "accounts -type linked",
                         "style": 1
       				}
       			]
@@ -333,13 +333,13 @@ discord:
       			"components": [{
       					"type": 2,
       					"label": "Мои аккаунты",
-      					"custom_id": "/accounts",
+      					"custom_id": "accounts",
                         "style": 1
       				},
       				{
       					"type": 2,
       					"label": "Дискорд аккаунты",
-      					"custom_id": "/accounts -type local_linked",
+      					"custom_id": "accounts -type local_linked",
                         "style": 1
       				}
       			]
