@@ -27,13 +27,13 @@ public class ConfigurationHolderMapResolverFactory implements ConfigurationField
     }
 
     private Object newConfigurationHolder(Class<?> clazz, String key,
-            ConfigurationSectionHolder configurationSectionHolder) {
+                                          ConfigurationSectionHolder configurationSectionHolder) {
         try {
             for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-                if (ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[0]))
+                if (constructor.getParameterCount() > 0 && ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[0]))
                     return constructor.newInstance(configurationSectionHolder);
 
-                if (constructor.getParameterCount() == 2 && String.class == constructor.getParameterTypes()[0] &&
+                if (constructor.getParameterCount() >= 2 && String.class == constructor.getParameterTypes()[0] &&
                         ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[1]))
                     return constructor.newInstance(key, configurationSectionHolder);
             }

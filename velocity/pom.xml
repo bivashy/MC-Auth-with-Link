@@ -16,6 +16,7 @@
         <telegram.api.version>6.1.0</telegram.api.version>
         <lamp.command-library.version>3.1.6</lamp.command-library.version>
         <limbo.api.version>1.1.7</limbo.api.version>
+        <libby.version>1.1.5</libby.version>
 
         <java.version>11</java.version>
     </properties>
@@ -35,6 +36,12 @@
             <id>elytrium-repo</id>
             <url>https://maven.elytrium.net/repo/</url>
         </repository>
+
+        <!-- Libby (AlessioDP) Repository -->
+        <repository>
+            <id>AlessioDP</id>
+            <url>https://repo.alessiodp.com/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -43,6 +50,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Lamp Bungee Module -->
@@ -83,5 +96,29 @@
             <version>${limbo.api.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Libby -->
+        <dependency>
+            <groupId>net.byteflux</groupId>
+            <artifactId>libby-velocity</artifactId>
+            <version>${libby.version}</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <relocations combine.self="override">
+                        <relocation>
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>org.slf4j</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

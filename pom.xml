@@ -163,6 +163,14 @@
                             <pattern>ru.vyarus.yaml.updater</pattern>
                             <shadedPattern>${dependencies.relocation.package}.ru.vyarus.yaml.updater</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.byteflux.libby</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.net.byteflux.libby</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.dv8tion</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.net.dv8tion</shadedPattern>
+                        </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>

@@ -13,6 +13,7 @@ import com.bivashy.auth.api.util.CollectionUtil.ArrayPairHashMapAdapter.Paginate
 import com.bivashy.messenger.common.button.ButtonColor;
 import com.bivashy.messenger.common.keyboard.Keyboard;
 
+import me.mastercapexd.auth.discord.command.annotation.RenameTo;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import revxrsal.commands.annotation.Default;
@@ -31,7 +32,8 @@ public class AccountsListCommand implements OrphanCommand {
 
     @DefaultFor("~")
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page,
-                               @Flag("pageSize") @Default("5") Integer accountsPerPage, @Flag("type") @Default("my") AccountListType type) {
+                               @RenameTo(value = "size", type = "NUMBER") @Flag("pagesize") @Default("5") Integer accountsPerPage,
+                               @Flag("type") @Default("my") AccountListType type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && type.isAdministratorOnly) {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
             return;
@@ -58,12 +60,9 @@ public class AccountsListCommand implements OrphanCommand {
     private Keyboard createKeyboard(LinkType linkType, int currentPage, int accountsPerPage, String accountsType, List<Account> accounts) {
         int previousPage = currentPage - 1;
         int nextPage = currentPage + 1;
-        List<String> placeholdersList = new ArrayList<>(Arrays.asList(
-                "%next_page%", Integer.toString(nextPage),
-                "%previous_page%", Integer.toString(previousPage),
-                "%prev_page%", Integer.toString(currentPage - 1),
-                "%pageSize%", Integer.toString(accountsPerPage),
-                "%type%%", accountsType));
+        List<String> placeholdersList = new ArrayList<>(
+                Arrays.asList("%next_page%", Integer.toString(nextPage), "%previous_page%", Integer.toString(previousPage), "%prev_page%",
+                        Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage), "%type%%", accountsType));
 
         for (int i = 1; i <= accounts.size(); i++) { // Create placeholders array
             Account account = accounts.get(i - 1);
@@ -73,8 +72,11 @@ public class AccountsListCommand implements OrphanCommand {
             placeholdersList.add("%account_" + i + "_color%");
             ButtonColor buttonColor = account.getPlayer().isPresent() ?
                     linkType.newButtonColorBuilder().green() : linkType.newButtonColorBuilder().red();
-            placeholdersList.add(buttonColor.toString());
+            placeholdersList.add(buttonColor.asJsonValue());
         }
+        // We are replacing all remaining button colors with any color for preventing 'parsing' error
+        placeholdersList.add("%account_._color%");
+        placeholdersList.add(linkType.newButtonColorBuilder().white().asJsonValue());
         Keyboard keyboard = linkType.getSettings().getKeyboards().createKeyboard("accounts", placeholdersList.toArray(new String[0]));
 
         // Remove buttons that doesn't affected by placeholders (For example if player has linked accounts count is less than accounts.size())

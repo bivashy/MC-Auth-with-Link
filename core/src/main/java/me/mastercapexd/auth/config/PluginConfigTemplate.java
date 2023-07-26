@@ -11,21 +11,23 @@ import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.bossbar.BossBarSettings;
 import com.bivashy.auth.api.config.database.LegacyStorageDataSettings;
 import com.bivashy.auth.api.config.duration.ConfigurationDuration;
+import com.bivashy.auth.api.config.link.DiscordSettings;
 import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
+import com.bivashy.auth.api.crypto.CryptoProvider;
+import com.bivashy.auth.api.database.DatabaseConnectionProvider;
 import com.bivashy.auth.api.server.proxy.ProxyServer;
 import com.bivashy.auth.api.type.FillType;
-import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.type.IdentifierType;
-import com.bivashy.auth.api.database.DatabaseConnectionProvider;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.annotation.ImportantField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
 import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
+import me.mastercapexd.auth.config.discord.BaseDiscordSettings;
 import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.server.BaseServerMessages;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
@@ -82,6 +84,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private BaseTelegramSettings telegramSettings = new BaseTelegramSettings();
     @ConfigField("vk")
     private BaseVKSettings vkSettings = new BaseVKSettings();
+    @ConfigField("discord")
+    private BaseDiscordSettings discordSettings = new BaseDiscordSettings();
     @ConfigField("google-authenticator")
     private BaseGoogleAuthenticatorSettings googleAuthenticatorSettings = new BaseGoogleAuthenticatorSettings();
     @ImportantField
@@ -241,6 +245,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public VKSettings getVKSettings() {
         return vkSettings;
+    }
+
+    @Override
+    public DiscordSettings getDiscordSettings() {
+        return discordSettings;
     }
 
     @Override

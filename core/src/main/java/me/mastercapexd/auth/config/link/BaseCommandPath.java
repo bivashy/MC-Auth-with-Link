@@ -19,6 +19,9 @@ public class BaseCommandPath implements ConfigurationHolder, LinkCommandPathSett
     @ConfigField("aliases")
     private List<String> aliases = new ArrayList<>();
 
+    public BaseCommandPath() {
+    }
+
     public BaseCommandPath(ConfigurationSectionHolder sectionHolder) {
         AuthPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
     }

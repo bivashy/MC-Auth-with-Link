@@ -16,9 +16,11 @@ import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
@@ -26,6 +28,7 @@ import me.mastercapexd.auth.server.commands.exception.SendComponentException;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
+import me.mastercapexd.auth.shared.commands.DiscordLinkCommand;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
@@ -149,6 +152,13 @@ public abstract class ServerCommandsRegistry {
             if (!config.getTelegramSettings().isEnabled())
                 throw new SendComponentException(config.getServerMessages().getSubMessages("telegram").getMessage("disabled"));
         });
+
+        commandHandler.registerCondition((actor, command, arguments) -> {
+            if (!command.hasAnnotation(DiscordUse.class))
+                return;
+            if (!config.getDiscordSettings().isEnabled())
+                throw new SendComponentException(config.getServerMessages().getSubMessages("discord").getMessage("disabled"));
+        });
     }
 
     private void registerDependencies() {
@@ -172,6 +182,8 @@ public abstract class ServerCommandsRegistry {
             registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(VKLinkType.getInstance().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
             registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(TelegramLinkType.getInstance().getServerMessages()));
+        if (plugin.getConfig().getDiscordSettings().isEnabled())
+            registerLinkCommand(DiscordLinkType.getInstance(), new DiscordLinkCommand(DiscordLinkType.getInstance().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand) {
