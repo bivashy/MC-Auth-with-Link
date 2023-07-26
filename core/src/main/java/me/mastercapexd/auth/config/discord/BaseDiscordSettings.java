@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.config.discord;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     private DiscordKeyboards keyboards;
     @ConfigField("admin-accounts")
     private List<Number> adminAccounts;
+    @ConfigField("whitelist-channels")
+    private List<String> whiteListChannels = new ArrayList<>();
     @ConfigField("link-confirm-ways")
     private List<LinkConfirmationType> linkConfirmationTypes = Collections.singletonList(LinkConfirmationType.FROM_LINK);
 
@@ -87,6 +90,13 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
         if (identificator == null || !identificator.isNumber())
             return false;
         return adminAccounts.stream().anyMatch(number -> number.longValue() == identificator.asNumber());
+    }
+
+    @Override
+    public boolean isAllowedChannel(String channelId) {
+        if (whiteListChannels.isEmpty())
+            return true;
+        return whiteListChannels.contains(channelId);
     }
 
     public boolean isAdministrator(long userId) {

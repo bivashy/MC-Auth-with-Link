@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
-import com.bivashy.auth.api.config.link.LinkSettings;
+import com.bivashy.auth.api.config.link.DiscordSettings;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
@@ -40,7 +40,7 @@ public class DiscordLinkType implements LinkType, MessengerDiscord {
     }
 
     @Override
-    public LinkSettings getSettings() {
+    public DiscordSettings getSettings() {
         return PLUGIN.getConfig().getDiscordSettings();
     }
 

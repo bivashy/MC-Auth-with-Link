@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
+import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -36,12 +37,25 @@ import revxrsal.commands.jda.core.actor.BaseJDAMessageActor;
 import revxrsal.commands.jda.core.actor.BaseJDASlashCommandActor;
 
 public class JDACommandListener implements EventListener {
+    private static final DiscordLinkType DISCORD_LINK_TYPE = DiscordLinkType.getInstance();
     private final JDACommandHandler handler;
     private final Function<JDAActor, LinkCommandActorWrapper> wrapper;
 
     public JDACommandListener(JDACommandHandler handler, Function<JDAActor, LinkCommandActorWrapper> wrapper) {
         this.handler = handler;
         this.wrapper = wrapper;
+    }
+
+    private void dispatch(JDAActor actor, ArgumentStack arguments) {
+        try {
+            if (actor.isGuildEvent() && !DISCORD_LINK_TYPE.getSettings().isAllowedChannel(actor.getChannel().getId())) {
+                actor.reply(DISCORD_LINK_TYPE.getLinkMessages().getMessage("forbidden-channel"));
+                return;
+            }
+            handler.dispatch(wrapper.apply(actor), arguments);
+        } catch(Throwable t) {
+            handler.getExceptionHandler().handleException(t, actor);
+        }
     }
 
     @Override
@@ -87,11 +101,7 @@ public class JDACommandListener implements EventListener {
     private void onSlashCommandEvent(SlashCommandInteractionEvent event) {
         parseSlashCommandEvent(event).ifPresent(arguments -> {
             JDAActor actor = new BaseJDASlashCommandActor(event, handler);
-            try {
-                handler.dispatch(wrapper.apply(actor), arguments);
-            } catch(Throwable t) {
-                handler.getExceptionHandler().handleException(t, actor);
-            }
+            dispatch(actor, arguments);
         });
     }
 
@@ -105,7 +115,7 @@ public class JDACommandListener implements EventListener {
         JDAActor actor = new BaseJDAMessageActor(event, handler);
         try {
             ArgumentStack arguments = ArgumentStack.parse(content);
-            handler.dispatch(wrapper.apply(actor), arguments);
+            dispatch(actor, arguments);
         } catch(Throwable t) {
             handler.getExceptionHandler().handleException(t, actor);
         }
@@ -131,7 +141,6 @@ public class JDACommandListener implements EventListener {
         }
         return parameter.getName();
     }
-
 
     /**
      * Parses a SlashCommandInteractionEvent and converts event to an {@link ArgumentStack}.
