@@ -12,11 +12,13 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 
+import me.mastercapexd.auth.discord.command.actor.BaseJDAButtonActor;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.AutoCompleteQuery;
@@ -64,6 +66,8 @@ public class JDACommandListener implements EventListener {
             onMessageEvent((MessageReceivedEvent) genericEvent);
         if (genericEvent instanceof SlashCommandInteractionEvent)
             onSlashCommandEvent((SlashCommandInteractionEvent) genericEvent);
+        if (genericEvent instanceof ButtonInteractionEvent)
+            onButtonEvent((ButtonInteractionEvent) genericEvent);
         if (genericEvent instanceof CommandAutoCompleteInteractionEvent)
             onAutocompleteEvent((CommandAutoCompleteInteractionEvent) genericEvent);
     }
@@ -98,9 +102,25 @@ public class JDACommandListener implements EventListener {
         }
     }
 
+    private void onButtonEvent(ButtonInteractionEvent event) {
+        String content = event.getComponentId();
+        if (content.isEmpty())
+            return;
+
+        event.deferReply().queue();
+        JDAActor actor = new BaseJDAButtonActor(event, handler);
+        try {
+            ArgumentStack arguments = ArgumentStack.parse(content);
+            dispatch(actor, arguments);
+        } catch(Throwable t) {
+            handler.getExceptionHandler().handleException(t, actor);
+        }
+    }
+
     private void onSlashCommandEvent(SlashCommandInteractionEvent event) {
         parseSlashCommandEvent(event).ifPresent(arguments -> {
             JDAActor actor = new BaseJDASlashCommandActor(event, handler);
+            event.deferReply().queue();
             dispatch(actor, arguments);
         });
     }
