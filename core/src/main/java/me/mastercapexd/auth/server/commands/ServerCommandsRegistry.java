@@ -16,15 +16,17 @@ import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
-import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import io.github.revxrsal.eventbus.EventBus;
+import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.server.commands.annotations.Admin;
 import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
 import me.mastercapexd.auth.server.commands.exception.SendComponentException;
+import me.mastercapexd.auth.server.commands.parameters.ArgumentAccount;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
@@ -37,6 +39,8 @@ import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
+import revxrsal.commands.command.ExecutableCommand;
+import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
 
@@ -130,6 +134,18 @@ public abstract class ServerCommandsRegistry {
             if (registerPassword.length() > config.getPasswordMaxLength())
                 throw new SendComponentException(config.getServerMessages().getMessage("password-too-long"));
             return new RegisterPassword(registerPassword);
+        });
+
+        commandHandler.registerValueResolver(ArgumentAccount.class, context -> {
+            String parameter = context.popForParameter();
+            ExecutableCommand command = context.parameter().getDeclaringCommand();
+            if (!command.hasAnnotation(Admin.class))
+                throw new SendMessageException("Cannot resolve Account in non-admin class in '" + command.getPath().toRealString() + "'");
+            return new ArgumentAccount(plugin.getAccountDatabase().getAccountFromName(parameter).thenApply(account -> {
+                if (account == null || !account.isRegistered())
+                    throw new SendComponentException(config.getServerMessages().getMessage("account-not-found"));
+                return account;
+            }));
         });
 
         commandHandler.registerCondition((actor, command, arguments) -> {
