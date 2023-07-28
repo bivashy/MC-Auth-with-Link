@@ -65,7 +65,9 @@ public class BaseAuthPluginTest {
 
     @Test
     public void shouldHaveValidBucketSize() {
-        assertEquals(plugin.getAuthenticationStepFactoryBucket().getList().size(), 8);
+        int expectedAuthenticationStepCount = 9;
+        assertEquals(plugin.getAuthenticationStepFactoryBucket().getList().size(), expectedAuthenticationStepCount,
+                "Plugin should have only '" + expectedAuthenticationStepCount + "' authentication steps. Perhaps new authentication step was added?");
         assertEquals(plugin.getAuthenticationTaskBucket().getTasks().size(), 3);
     }
 
