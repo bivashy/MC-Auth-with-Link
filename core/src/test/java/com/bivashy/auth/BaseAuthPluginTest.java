@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.management.LibraryManagement;
 import com.bivashy.auth.api.server.ServerCore;
 
 import me.mastercapexd.auth.BaseAuthPlugin;
@@ -25,6 +26,8 @@ public class BaseAuthPluginTest {
     private AudienceProvider audienceProvider;
     @Mock
     private ServerCore serverCore;
+    @Mock
+    private LibraryManagement libraryManagement;
     @TempDir(cleanup = CleanupMode.NEVER)
     private File pluginFolder;
     private AuthPlugin plugin;
@@ -36,7 +39,7 @@ public class BaseAuthPluginTest {
 
     @Test
     public void shouldInitializeAuthPlugin() {
-        AuthPlugin plugin = new BaseAuthPlugin(audienceProvider, DUMMY_VERSION, pluginFolder, serverCore);
+        AuthPlugin plugin = new BaseAuthPlugin(audienceProvider, DUMMY_VERSION, pluginFolder, serverCore, libraryManagement);
 
         assertNotNull(plugin.getCore());
         assertNotNull(plugin.getAudienceProvider());
