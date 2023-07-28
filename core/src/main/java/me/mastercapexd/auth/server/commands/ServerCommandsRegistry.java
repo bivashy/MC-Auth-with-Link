@@ -3,6 +3,7 @@ package me.mastercapexd.auth.server.commands;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.link.LinkSettings;
@@ -15,15 +16,21 @@ import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import io.github.revxrsal.eventbus.EventBus;
+import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
+import me.mastercapexd.auth.server.commands.annotations.Admin;
+import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
 import me.mastercapexd.auth.server.commands.annotations.VkUse;
 import me.mastercapexd.auth.server.commands.exception.SendComponentException;
+import me.mastercapexd.auth.server.commands.parameters.ArgumentAccount;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.server.commands.parameters.RegisterPassword;
+import me.mastercapexd.auth.shared.commands.DiscordLinkCommand;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
@@ -32,6 +39,8 @@ import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
+import revxrsal.commands.command.ExecutableCommand;
+import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
 
@@ -127,6 +136,18 @@ public abstract class ServerCommandsRegistry {
             return new RegisterPassword(registerPassword);
         });
 
+        commandHandler.registerValueResolver(ArgumentAccount.class, context -> {
+            String parameter = context.popForParameter();
+            ExecutableCommand command = context.parameter().getDeclaringCommand();
+            if (!command.hasAnnotation(Admin.class))
+                throw new SendMessageException("Cannot resolve Account in non-admin class in '" + command.getPath().toRealString() + "'");
+            return new ArgumentAccount(plugin.getAccountDatabase().getAccountFromName(parameter).thenApply(account -> {
+                if (account == null || !account.isRegistered())
+                    throw new SendComponentException(config.getServerMessages().getMessage("account-not-found"));
+                return account;
+            }));
+        });
+
         commandHandler.registerCondition((actor, command, arguments) -> {
             if (!command.hasAnnotation(GoogleUse.class))
                 return;
@@ -147,10 +168,19 @@ public abstract class ServerCommandsRegistry {
             if (!config.getTelegramSettings().isEnabled())
                 throw new SendComponentException(config.getServerMessages().getSubMessages("telegram").getMessage("disabled"));
         });
+
+        commandHandler.registerCondition((actor, command, arguments) -> {
+            if (!command.hasAnnotation(DiscordUse.class))
+                return;
+            if (!config.getDiscordSettings().isEnabled())
+                throw new SendComponentException(config.getServerMessages().getSubMessages("discord").getMessage("disabled"));
+        });
     }
 
     private void registerDependencies() {
+        commandHandler.registerDependency(AuthenticatingAccountBucket.class, plugin.getAuthenticatingAccountBucket());
         commandHandler.registerDependency(LinkConfirmationBucket.class, plugin.getLinkConfirmationBucket());
+        commandHandler.registerDependency(EventBus.class, plugin.getEventBus());
         commandHandler.registerDependency(PluginConfig.class, plugin.getConfig());
         commandHandler.registerDependency(ServerMessages.class, plugin.getConfig().getServerMessages());
         commandHandler.registerDependency(AccountDatabase.class, plugin.getAccountDatabase());
@@ -168,6 +198,8 @@ public abstract class ServerCommandsRegistry {
             registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(VKLinkType.getInstance().getServerMessages()));
         if (plugin.getConfig().getTelegramSettings().isEnabled())
             registerLinkCommand(TelegramLinkType.getInstance(), new TelegramLinkCommand(TelegramLinkType.getInstance().getServerMessages()));
+        if (plugin.getConfig().getDiscordSettings().isEnabled())
+            registerLinkCommand(DiscordLinkType.getInstance(), new DiscordLinkCommand(DiscordLinkType.getInstance().getServerMessages()));
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand) {

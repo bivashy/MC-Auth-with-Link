@@ -6,7 +6,7 @@
     <parent>
         <groupId>me.mastercapexd.auth</groupId>
         <artifactId>main</artifactId>
-        <version>1.7.9</version>
+        <version>1.7.10</version>
     </parent>
     <artifactId>bungee</artifactId>
 
@@ -16,6 +16,7 @@
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
         <telegram.api.version>6.5.0</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
+        <libby.version>1.1.5</libby.version>
     </properties>
 
     <repositories>
@@ -27,6 +28,12 @@
         <repository>
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+
+        <!-- Libby (AlessioDP) Repository -->
+        <repository>
+            <id>AlessioDP</id>
+            <url>https://repo.alessiodp.com/releases/</url>
         </repository>
     </repositories>
 
@@ -84,6 +91,13 @@
             <artifactId>java-telegram-bot-api</artifactId>
             <version>${telegram.api.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Libby -->
+        <dependency>
+            <groupId>net.byteflux</groupId>
+            <artifactId>libby-bungee</artifactId>
+            <version>${libby.version}</version>
         </dependency>
     </dependencies>
 

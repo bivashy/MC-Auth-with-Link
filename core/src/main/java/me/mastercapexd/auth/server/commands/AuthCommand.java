@@ -15,7 +15,9 @@ import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 
+import me.mastercapexd.auth.server.commands.annotations.Admin;
 import me.mastercapexd.auth.server.commands.annotations.Permission;
+import me.mastercapexd.auth.server.commands.parameters.ArgumentAccount;
 import me.mastercapexd.auth.server.commands.parameters.ArgumentServerPlayer;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.step.context.BaseAuthenticationStepContext;
@@ -28,6 +30,7 @@ import ru.vyarus.yaml.updater.YamlUpdater;
 
 @Command({"authadmin", "adminauth", "auth"})
 @Permission("auth.admin")
+@Admin
 public class AuthCommand {
     @Dependency
     private AuthPlugin plugin;
@@ -65,27 +68,17 @@ public class AuthCommand {
     }
 
     @Subcommand({"changepassword", "changepass"})
-    public void changePassword(ServerCommandActor actor, ArgumentServerPlayer proxyPlayer, NewPassword newPlayerPassword) {
-        if (proxyPlayer == null)
-            return;
-        String id = config.getActiveIdentifierType().getId(proxyPlayer);
-        accountDatabase.getAccount(id).thenAccept(account -> {
-            if (account == null || !account.isRegistered()) {
-                actor.reply(config.getServerMessages().getMessage("account-not-found", MessageContext.of("%account_name%", proxyPlayer.getNickname())));
-                return;
-            }
-            account.setPasswordHash(account.getCryptoProvider().hash(HashInput.of(newPlayerPassword.getNewPassword())));
-            accountDatabase.saveOrUpdateAccount(account);
+    public void changePassword(ServerCommandActor actor, ArgumentAccount account, NewPassword newPlayerPassword) {
+        account.future().thenAccept(foundAccount -> {
+            foundAccount.setPasswordHash(foundAccount.getCryptoProvider().hash(HashInput.of(newPlayerPassword.getNewPassword())));
+            accountDatabase.saveOrUpdateAccount(foundAccount);
             actor.reply(config.getServerMessages().getMessage("auth-change-success"));
         });
     }
 
     @Subcommand({"reset", "resetaccount", "deleteaccount"})
-    public void resetAccount(ServerCommandActor actor, ArgumentServerPlayer proxyPlayer) {
-        if (proxyPlayer == null)
-            return;
-        String id = config.getActiveIdentifierType().getId(proxyPlayer);
-        accountDatabase.deleteAccount(id);
+    public void resetAccount(ServerCommandActor actor, ArgumentAccount account) {
+        account.future().thenAccept(foundAccount -> accountDatabase.deleteAccount(foundAccount.getPlayerId()));
         actor.reply(config.getServerMessages().getMessage("auth-delete-success"));
     }
 

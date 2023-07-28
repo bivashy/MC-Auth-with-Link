@@ -15,6 +15,7 @@ import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.exception.MessengerExceptionHandler;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
@@ -23,6 +24,7 @@ import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.CommandHandler;
+import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.SendMessageException;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
@@ -55,11 +57,11 @@ public abstract class MessengerCommandRegistry {
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("google-disabled"));
         });
 
-        commandHandler.registerContextResolver(MessageableCommandActor.class, context -> context.actor().as(LinkCommandActorWrapper.class));
+        commandHandler.registerContextResolver(MessageableCommandActor.class, context -> wrapActor(context.actor()));
 
         commandHandler.registerValueResolver(PlayerIdSupplier.class, context -> PlayerIdSupplier.of(context.pop()));
 
-        commandHandler.registerContextResolver(LinkUserIdentificator.class, context -> context.actor().as(LinkCommandActorWrapper.class).userId());
+        commandHandler.registerContextResolver(LinkUserIdentificator.class, context -> wrapActor(context.actor()).userId());
 
         commandHandler.registerValueResolver(NewPassword.class, context -> {
             String newRawPassword = context.pop();
@@ -97,23 +99,26 @@ public abstract class MessengerCommandRegistry {
 
         commandHandler.registerValueResolver(Account.class, (context) -> {
             String playerName = context.popForParameter();
-            LinkUserIdentificator userId = context.actor().as(LinkCommandActorWrapper.class).userId();
+            LinkUserIdentificator userId = wrapActor(context.actor()).userId();
             Account account = PLUGIN.getAccountDatabase().getAccountFromName(playerName).get();
             if (account == null || !account.isRegistered())
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
 
             Optional<LinkUser> linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
-            if (!linkUser.isPresent())
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account"));
+            if(!linkType.getSettings().isAdministrator(userId)) {
+                if (!linkUser.isPresent())
+                    throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
 
-            if (!linkUser.get().getLinkUserInfo().getIdentificator().equals(userId) && !linkType.getSettings().isAdministrator(userId))
-                throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
+                if (!linkUser.get().getLinkUserInfo().getIdentificator().equals(userId))
+                    throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
+            }
             return account;
         });
     }
 
     private void registerDependencies() {
         commandHandler.registerDependency(LinkConfirmationBucket.class, PLUGIN.getLinkConfirmationBucket());
+        commandHandler.registerDependency(EventBus.class, PLUGIN.getEventBus());
         commandHandler.registerDependency(AccountDatabase.class, PLUGIN.getAccountDatabase());
         commandHandler.registerDependency(PluginConfig.class, PLUGIN.getConfig());
         commandHandler.registerDependency(AuthPlugin.class, PLUGIN);
@@ -159,6 +164,10 @@ public abstract class MessengerCommandRegistry {
 
     public CommandHandler getCommandHandler() {
         return commandHandler;
+    }
+
+    protected LinkCommandActorWrapper wrapActor(CommandActor actor) {
+        return actor.as(LinkCommandActorWrapper.class);
     }
 
     protected abstract MessengerLinkCommandTemplate createLinkCommand();

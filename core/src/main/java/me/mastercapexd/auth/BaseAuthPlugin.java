@@ -3,6 +3,7 @@ package me.mastercapexd.auth;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -27,12 +28,15 @@ import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
+import com.bivashy.auth.api.management.LibraryManagement;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.configuration.ConfigurationProcessor;
 import com.bivashy.configuration.configurate.SpongeConfigurateProcessor;
+import com.bivashy.messenger.discord.message.DiscordMessage;
+import com.bivashy.messenger.discord.provider.DiscordApiProvider;
 import com.bivashy.messenger.telegram.message.TelegramMessage;
 import com.bivashy.messenger.telegram.providers.TelegramApiProvider;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
@@ -49,9 +53,9 @@ import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
 import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
 import me.mastercapexd.auth.config.BasePluginConfig;
 import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory;
-import me.mastercapexd.auth.config.resolver.ServerComponentFieldResolver;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
+import me.mastercapexd.auth.config.resolver.ServerComponentFieldResolver;
 import me.mastercapexd.auth.config.server.BaseConfigurationServer;
 import me.mastercapexd.auth.crypto.Argon2CryptoProvider;
 import me.mastercapexd.auth.crypto.BcryptCryptoProvider;
@@ -61,16 +65,22 @@ import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.crypto.belkaauth.UAuthCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.discord.listener.DiscordLinkRoleModifierListener;
+import me.mastercapexd.auth.discord.command.DiscordCommandRegistry;
+import me.mastercapexd.auth.hooks.BaseDiscordHook;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
+import me.mastercapexd.auth.hooks.DiscordHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.BaseLinkTypeProvider;
 import me.mastercapexd.auth.listener.AuthenticationAttemptListener;
+import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.management.BaseLoginManagement;
 import me.mastercapexd.auth.step.impl.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.EnterServerAuthenticationStep.EnterServerAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.LoginAuthenticationStep.LoginAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.NullAuthenticationStep.NullAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.RegisterAuthenticationStep.RegisterAuthenticationStepFactory;
+import me.mastercapexd.auth.step.impl.link.DiscordLinkAuthenticationStep.DiscordLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.GoogleCodeAuthenticationStep.GoogleLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.TelegramLinkAuthenticationStep.TelegramLinkAuthenticationStepFactory;
 import me.mastercapexd.auth.step.impl.link.VKLinkAuthenticationStep.VKLinkAuthenticationStepFactory;
@@ -80,6 +90,8 @@ import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
+import net.byteflux.libby.Library;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
@@ -95,6 +107,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final File pluginFolder;
     private AuthenticationStepContextFactoryBucket authenticationStepContextFactoryBucket;
     private AudienceProvider audienceProvider;
+    private LibraryManagement libraryManagement;
     private ServerCore core;
     private File dataFolder;
     private AuthenticatingAccountBucket accountBucket;
@@ -106,15 +119,20 @@ public class BaseAuthPlugin implements AuthPlugin {
     private AccountDatabase accountDatabase;
     private LoginManagement loginManagement;
 
-    public BaseAuthPlugin(AudienceProvider audienceProvider, String version, File pluginFolder, ServerCore core) {
+    public BaseAuthPlugin(AudienceProvider audienceProvider, String version, File pluginFolder, ServerCore core, LibraryManagement libraryManagement) {
         AuthPluginProvider.setPluginInstance(this);
         this.core = core;
         this.audienceProvider = audienceProvider;
         this.version = version;
         this.pluginFolder = pluginFolder;
+        this.libraryManagement = libraryManagement;
+
+        libraryManagement.loadLibraries();
         initializeBasic();
         if (config.getTelegramSettings().isEnabled())
             initializeTelegram();
+        if (config.getDiscordSettings().isEnabled())
+            initializeDiscord();
         if (config.getGoogleAuthenticatorSettings().isEnabled())
             googleAuthenticator = new GoogleAuthenticator();
     }
@@ -153,6 +171,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.authenticationStepFactoryBucket.add(new VKLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new GoogleLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new TelegramLinkAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.add(new DiscordLinkAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new EnterServerAuthenticationStepFactory());
         this.authenticationStepFactoryBucket.add(new EnterAuthServerAuthenticationStepFactory());
     }
@@ -180,6 +199,21 @@ public class BaseAuthPlugin implements AuthPlugin {
         TelegramMessage.setDefaultApiProvider(TelegramApiProvider.of(getHook(TelegramPluginHook.class).getTelegramBot()));
 
         new TelegramCommandRegistry();
+    }
+
+    private void initializeDiscord() {
+        libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY,
+                Collections.singletonList(Library.builder().groupId("club{}minnced").artifactId("opus-java").version("0").build()));
+
+        BaseDiscordHook discordHook = new BaseDiscordHook();
+        hooks.put(DiscordHook.class, discordHook);
+
+        discordHook.initialize(jdaBuilder -> jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS)).thenAccept(jda -> {
+            DiscordMessage.setDefaultApiProvider(DiscordApiProvider.of(jda));
+
+            eventBus.register(new DiscordLinkRoleModifierListener());
+            new DiscordCommandRegistry();
+        });
     }
 
     private void migrateConfig() throws IOException, URISyntaxException {
@@ -309,6 +343,11 @@ public class BaseAuthPlugin implements AuthPlugin {
     @Override
     public CryptoProviderBucket getCryptoProviderBucket() {
         return cryptoProviderBucket;
+    }
+
+    @Override
+    public LibraryManagement getLibraryManagement() {
+        return libraryManagement;
     }
 
     @Override

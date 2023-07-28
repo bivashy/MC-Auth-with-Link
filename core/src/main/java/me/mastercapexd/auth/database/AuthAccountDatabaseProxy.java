@@ -2,19 +2,17 @@ package me.mastercapexd.auth.database;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserStringIdentificator;
 
 import me.mastercapexd.auth.account.AuthAccountAdapter;
 
 public class AuthAccountDatabaseProxy implements AccountDatabase {
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     private final DatabaseHelper databaseHelper;
 
     public AuthAccountDatabaseProxy(DatabaseHelper databaseHelper) {
@@ -59,17 +57,29 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
     }
 
     @Override
-    public void saveOrUpdateAccount(Account account) {
-        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAuthAccountDao().createOrUpdateAccount(account));
+    public CompletableFuture<Collection<Account>> getAllLinkedAccounts(LinkType linkType) {
+        return CompletableFuture.supplyAsync(
+                () -> databaseHelper.getAuthAccountDao().queryAllLinkedAccounts(linkType).stream().map(AuthAccountAdapter::new).collect(Collectors.toList()));
     }
 
     @Override
-    public void updateAccountLinks(Account account) {
-        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAccountLinkDao().updateAccountLinks(account));
+    public CompletableFuture<Account> saveOrUpdateAccount(Account account) {
+        return CompletableFuture.supplyAsync(() -> new AuthAccountAdapter(databaseHelper.getAuthAccountDao().createOrUpdateAccount(account).get()));
     }
 
     @Override
-    public void deleteAccount(String id) {
-        EXECUTOR_SERVICE.execute(() -> databaseHelper.getAuthAccountDao().deleteAccountById(id));
+    public CompletableFuture<Void> updateAccountLinks(Account account) {
+        return CompletableFuture.supplyAsync(() -> {
+            databaseHelper.getAccountLinkDao().updateAccountLinks(account);
+            return null;
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAccount(String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            databaseHelper.getAuthAccountDao().deleteAccountById(id);
+            return null;
+        });
     }
 }

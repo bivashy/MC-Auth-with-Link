@@ -12,7 +12,9 @@ import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
 import me.mastercapexd.auth.bungee.listener.AuthenticationListener;
 import me.mastercapexd.auth.bungee.listener.VkDispatchListener;
 import me.mastercapexd.auth.hooks.VkPluginHook;
+import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
+import net.byteflux.libby.BungeeLibraryManager;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -32,7 +34,8 @@ public class BungeeAuthPluginBootstrap extends Plugin {
     public void onEnable() {
         instance = this;
         bungeeAudiences = BungeeAudiences.create(this);
-        authPlugin = new BaseAuthPlugin(bungeeAudiences, getDescription().getVersion(), getDataFolder(), BungeeProxyCore.INSTANCE);
+        authPlugin = new BaseAuthPlugin(bungeeAudiences, getDescription().getVersion(), getDataFolder(), BungeeProxyCore.INSTANCE,
+                new BaseLibraryManagement(new BungeeLibraryManager(this)));
         initializeListener();
         initializeCommand();
         if (authPlugin.getConfig().getVKSettings().isEnabled())

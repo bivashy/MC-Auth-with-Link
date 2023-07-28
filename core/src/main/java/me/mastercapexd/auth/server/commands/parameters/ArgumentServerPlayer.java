@@ -15,6 +15,11 @@ public class ArgumentServerPlayer implements ServerPlayer {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
+    @Override
     public void disconnect(String reason) {
         player.disconnect(reason);
     }

@@ -4,12 +4,15 @@ import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.database.AccountDatabase;
+import com.bivashy.auth.api.event.AccountLinkEvent;
 import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
+import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
@@ -24,6 +27,8 @@ public class LinkCodeCommand implements OrphanCommand {
     public static final String CONFIGURATION_KEY = "code";
     @Dependency
     private PluginConfig config;
+    @Dependency
+    private EventBus eventBus;
     @Dependency
     private AccountDatabase accountDatabase;
     @Dependency
@@ -46,14 +51,17 @@ public class LinkCodeCommand implements OrphanCommand {
                         actor.replyWithMessage(messages.getMessage("link-limit-reached"));
                         return;
                     }
-                    account.findFirstLinkUserOrNew(linkUser -> linkUser.getLinkType().equals(linkType), linkType)
-                            .getLinkUserInfo()
-                            .setIdentificator(identificator);
+                    LinkUser foundLinkUser = account.findFirstLinkUserOrNew(linkUser -> linkUser.getLinkType().equals(linkType), linkType);
+                    eventBus.publish(AccountLinkEvent.class, account, false, linkType, foundLinkUser, identificator, actor).thenAccept(result -> {
+                        if (result.getEvent().isCancelled())
+                            return;
+                        foundLinkUser.getLinkUserInfo().setIdentificator(identificator);
 
-                    accountDatabase.updateAccountLinks(account);
+                        accountDatabase.updateAccountLinks(account);
 
-                    actor.replyWithMessage(messages.getMessage("confirmation-success"));
-                    linkConfirmationBucket.removeLinkConfirmation(linkContext.getConfirmationUser());
+                        actor.replyWithMessage(messages.getMessage("confirmation-success"));
+                        linkConfirmationBucket.removeLinkConfirmation(linkContext.getConfirmationUser());
+                    });
                 }));
     }
 

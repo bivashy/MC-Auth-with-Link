@@ -283,6 +283,14 @@ vk:
                 "payload": "\"/accounts\""
               },
               "color": "primary"
+            },
+            {
+              "action": {
+                "type": "callback",
+                "label": "Все аккаунты ВК",
+                "payload": "\"/accounts -type local_linked\""
+              },
+              "color": "primary"
             }
           ]
         ],

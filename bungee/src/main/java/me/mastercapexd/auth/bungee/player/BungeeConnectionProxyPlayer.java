@@ -20,6 +20,11 @@ public class BungeeConnectionProxyPlayer implements ServerPlayer {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return false;
+    }
+
+    @Override
     public void disconnect(ServerComponent component) {
         if (component.safeAs(SelfHandledServerComponent.class).isPresent()) {
             disconnect(AuthPlugin.instance().getCore().componentJson(component.jsonText()));

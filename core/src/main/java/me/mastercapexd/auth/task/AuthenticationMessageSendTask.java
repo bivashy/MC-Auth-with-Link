@@ -7,6 +7,7 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.model.AuthenticationTask;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.scheduler.ServerScheduler;
+import com.bivashy.auth.api.step.AuthenticationStep;
 import com.bivashy.auth.api.step.MessageableAuthenticationStep;
 
 public class AuthenticationMessageSendTask implements AuthenticationTask {
@@ -16,9 +17,10 @@ public class AuthenticationMessageSendTask implements AuthenticationTask {
         this.proxyScheduler = plugin.getCore().schedule(() -> {
             for (String accountPlayerId : plugin.getAuthenticatingAccountBucket().getAccountIdEntries()) {
                 Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
-                if (!(account.getCurrentAuthenticationStep() instanceof MessageableAuthenticationStep))
+                AuthenticationStep authenticationStep = account.getCurrentAuthenticationStep();
+                if (!(authenticationStep instanceof MessageableAuthenticationStep))
                     continue;
-                account.getPlayer().ifPresent(player -> ((MessageableAuthenticationStep) account.getCurrentAuthenticationStep()).process(player));
+                account.getPlayer().ifPresent(player -> ((MessageableAuthenticationStep) authenticationStep).process(player));
             }
         }, 0, plugin.getConfig().getMessagesDelay(), TimeUnit.SECONDS);
     }

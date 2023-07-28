@@ -5,7 +5,7 @@
     <groupId>me.mastercapexd.auth</groupId>
     <artifactId>main</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.9</version>
+    <version>1.7.10</version>
     <modules>
         <module>api</module>
         <module>core</module>
@@ -163,6 +163,14 @@
                         <relocation>
                             <pattern>ru.vyarus.yaml.updater</pattern>
                             <shadedPattern>${dependencies.relocation.package}.ru.vyarus.yaml.updater</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.byteflux.libby</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.net.byteflux.libby</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.dv8tion</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.net.dv8tion</shadedPattern>
                         </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
