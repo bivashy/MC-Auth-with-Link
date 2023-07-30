@@ -83,7 +83,7 @@
                         </filter>
                     </filters>
 
-                    <relocations combine.children="append">
+                    <relocations>
                         <relocation>
                             <pattern>revxrsal.commands</pattern>
                             <shadedPattern>${dependencies.relocation.package}.revxrsal.commands</shadedPattern>
@@ -152,12 +152,16 @@
                             <shadedPattern>${dependencies.relocation.package}.com.google.errorprone</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.password4j</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.com.password4j</shadedPattern>
+                            <pattern>com.google.j2objc</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.google.j2objc</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.slf4j</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.slf4j</shadedPattern>
+                            <pattern>com.google.common</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.google.common</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.password4j</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.password4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>ru.vyarus.yaml.updater</pattern>
@@ -170,6 +174,26 @@
                         <relocation>
                             <pattern>net.dv8tion</pattern>
                             <shadedPattern>${dependencies.relocation.package}.net.dv8tion</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.squareup.okio</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.squareup.okio</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javax.annotation</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.javax.annotation</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.eclipse.aether</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.eclipse.aether</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.codehaus.plexus</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.codehaus.plexus</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.maven</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.apache.maven</shadedPattern>
                         </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>

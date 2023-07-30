@@ -65,8 +65,8 @@ import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.crypto.belkaauth.UAuthCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
-import me.mastercapexd.auth.discord.listener.DiscordLinkRoleModifierListener;
 import me.mastercapexd.auth.discord.command.DiscordCommandRegistry;
+import me.mastercapexd.auth.discord.listener.DiscordLinkRoleModifierListener;
 import me.mastercapexd.auth.hooks.BaseDiscordHook;
 import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
 import me.mastercapexd.auth.hooks.DiscordHook;
@@ -91,7 +91,6 @@ import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
 import net.byteflux.libby.Library;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
@@ -208,7 +207,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         BaseDiscordHook discordHook = new BaseDiscordHook();
         hooks.put(DiscordHook.class, discordHook);
 
-        discordHook.initialize(jdaBuilder -> jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS)).thenAccept(jda -> {
+        discordHook.initialize().thenAccept(jda -> {
             DiscordMessage.setDefaultApiProvider(DiscordApiProvider.of(jda));
 
             eventBus.register(new DiscordLinkRoleModifierListener());
