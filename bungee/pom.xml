@@ -108,10 +108,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <configuration>
-                    <relocations>
+                    <relocations combine.children="append">
                         <relocation>
                             <pattern>net.kyori</pattern>
-                            <shadedPattern>com.bivashy.auth.lib.net.kyori</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.net.kyori</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.slf4j</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

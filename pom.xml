@@ -83,7 +83,7 @@
                         </filter>
                     </filters>
 
-                    <relocations combine.children="append">
+                    <relocations>
                         <relocation>
                             <pattern>revxrsal.commands</pattern>
                             <shadedPattern>${dependencies.relocation.package}.revxrsal.commands</shadedPattern>
@@ -154,10 +154,6 @@
                         <relocation>
                             <pattern>com.password4j</pattern>
                             <shadedPattern>${dependencies.relocation.package}.com.password4j</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.slf4j</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.slf4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>ru.vyarus.yaml.updater</pattern>
