@@ -1,19 +1,21 @@
 package me.mastercapexd.auth.management;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactDescriptorException;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.DependencyResolutionException;
 
 import com.bivashy.auth.api.management.LibraryManagement;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
+import me.mastercapexd.auth.util.MavenArtifactUtil;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.Library.Builder;
 import net.byteflux.libby.LibraryManager;
@@ -33,6 +35,7 @@ public class BaseLibraryManagement implements LibraryManagement {
             .relocate("org{}slf4j", "com{}bivashy{}auth{}lib{}org{}slf4j")
             .relocate("gnu{}trove", "com{}bivashy{}auth{}gnu{}trove")
             .relocate("okhttp3", "com{}bivashy{}auth{}lib{}okhttp3")
+            .relocate("com{}squareup{}okio", "com{}bivashy{}auth{}lib{}com{}squareup{}okio")
             .build();
     private final List<String> customRepositories = new ArrayList<>();
     private final List<Library> customLibraries = new ArrayList<>();
@@ -70,7 +73,7 @@ public class BaseLibraryManagement implements LibraryManagement {
     public LibraryManagement loadLibrary(Library library, Collection<Library> exclusion, boolean loadDependencies) {
         libraryManager.loadLibrary(library);
         if (loadDependencies)
-            getLibraries(library, exclusion).forEach(dependency -> loadLibrary(dependency, exclusion, true));
+            getLibraries(library, exclusion).forEach(dependency -> loadLibrary(dependency, exclusion, false));
         return this;
     }
 
@@ -80,40 +83,31 @@ public class BaseLibraryManagement implements LibraryManagement {
     }
 
     private List<Library> getLibraries(Library library, Collection<Library> exclusion) {
-        List<Library> libraries = new ArrayList<>();
-        for (String libraryUrl : libraryManager.resolveLibrary(library)) {
-            try {
-                URL jsonUrl = new URL(libraryUrl.replace(".jar", ".module"));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(jsonUrl.openStream()));
-                JsonObject json = GSON.fromJson(reader, JsonObject.class);
-                JsonArray variants = json.getAsJsonArray("variants");
+        try {
+            RemoteRepository[] repositories = Stream.of(library.getRepositories(), libraryManager.getRepositories())
+                    .flatMap(Collection::stream)
+                    .map(repository -> MavenArtifactUtil.newDefaultRepository(repository, repository))
+                    .toArray(RemoteRepository[]::new);
 
-                for (JsonElement variantElement : variants) {
-                    JsonObject variant = variantElement.getAsJsonObject();
-                    if (!variant.get("name").getAsString().equals("runtimeElements"))
-                        continue;
-                    JsonArray dependencies = variant.getAsJsonArray("dependencies");
-                    for (JsonElement dependencyElement : dependencies) {
-                        JsonObject dependency = dependencyElement.getAsJsonObject();
-                        String groupId = dependency.get("group").getAsString();
-                        String artifactId = dependency.get("module").getAsString();
-                        String version = dependency.get("version").getAsJsonObject().get("requires").getAsString();
-                        if (exclusion.stream()
-                                .anyMatch(
-                                        excludedLibrary -> excludedLibrary.getGroupId().equals(groupId) && excludedLibrary.getArtifactId().equals(artifactId)))
-                            continue;
-                        // TODO: Find another way to resolve dependency type (pom, jar)
-                        if (dependency.has("attributes"))
-                            continue;
-                        Builder libraryDependencyBuilder = Library.builder().groupId(groupId).artifactId(artifactId).version(version);
+            return MavenArtifactUtil.findCompileDependencies(library.getGroupId(), library.getArtifactId(), library.getVersion(), repositories)
+                    .stream()
+                    .filter(ArtifactResult::isResolved)
+                    .map(ArtifactResult::getArtifact)
+                    .map(artifact -> {
+                        Builder libraryDependencyBuilder = Library.builder()
+                                .groupId(artifact.getGroupId())
+                                .artifactId(artifact.getArtifactId())
+                                .version(artifact.getVersion());
                         library.getRelocations().forEach(libraryDependencyBuilder::relocate);
-                        Library libraryDependency = libraryDependencyBuilder.build();
-                        libraries.add(libraryDependency);
-                    }
-                }
-            } catch(IOException ignored) {
-            }
+                        return libraryDependencyBuilder.build();
+                    })
+                    .filter(transitiveLibrary -> exclusion.stream()
+                            .noneMatch(excludedLibrary -> excludedLibrary.getGroupId().equals(transitiveLibrary.getGroupId()) &&
+                                    excludedLibrary.getArtifactId().equals(transitiveLibrary.getArtifactId())))
+                    .collect(Collectors.toList());
+        } catch(DependencyResolutionException | ArtifactDescriptorException e) {
+            e.printStackTrace();
         }
-        return libraries;
+        return Collections.emptyList();
     }
 }
