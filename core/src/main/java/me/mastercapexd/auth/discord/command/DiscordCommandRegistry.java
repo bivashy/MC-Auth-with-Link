@@ -16,6 +16,7 @@ import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import revxrsal.commands.annotation.dynamic.Annotations;
 import revxrsal.commands.command.CommandActor;
+import revxrsal.commands.exception.CommandErrorException;
 import revxrsal.commands.jda.JDAActor;
 import revxrsal.commands.jda.JDACommandHandler;
 import revxrsal.commands.jda.annotation.OptionData;
@@ -31,6 +32,12 @@ public class DiscordCommandRegistry extends MessengerCommandRegistry {
         COMMAND_HANDLER.registerContextResolver(LinkCommandActorWrapper.class, context -> new DiscordCommandActorWrapper(context.actor()));
         COMMAND_HANDLER.registerAnnotationReplacer(RenameTo.class, (element, parameter) -> Collections.singletonList(
                 Annotations.create(OptionData.class, "value", OptionType.valueOf(parameter.type()), "name", parameter.value())));
+
+        COMMAND_HANDLER.registerCondition((actor, command, arguments) -> {
+            DiscordCommandActorWrapper actorWrapper = actor.as(DiscordCommandActorWrapper.class);
+            if (actorWrapper.isGuildEvent() && !DiscordLinkType.getInstance().getSettings().isAllowedChannel(actorWrapper.getChannel().getId()))
+                throw new CommandErrorException(DiscordLinkType.getInstance().getLinkMessages().getMessage("forbidden-channel"));
+        });
 
         DiscordCommandParameterMapper parameterMapper = new DiscordCommandParameterMapper();
         COMMAND_HANDLER.registerSlashCommandMapper(parameterMapper);
