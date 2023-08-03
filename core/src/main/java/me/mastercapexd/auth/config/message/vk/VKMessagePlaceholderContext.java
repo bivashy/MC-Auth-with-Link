@@ -1,6 +1,8 @@
 package me.mastercapexd.auth.config.message.vk;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
@@ -22,19 +24,34 @@ public class VKMessagePlaceholderContext extends LinkPlaceholderContext {
 
     public VKMessagePlaceholderContext(Account account) {
         super(account, VKLinkType.getInstance(), "vk");
-        try {
+        getLinkUser().ifPresent(linkUser -> {
             if (linkUser.isIdentifierDefaultOrNull() || !linkUser.getLinkUserInfo().getIdentificator().isNumber())
                 return;
-            List<GetResponse> userInformationResponses =
-                    CLIENT.users().get(ACTOR).userIds(String.valueOf(linkUser.getLinkUserInfo().getIdentificator().asNumber())).execute();
-            if (userInformationResponses.isEmpty())
-                return;
-            GetResponse userInformationResponse = userInformationResponses.get(0);
-            registerPlaceholderProvider(PlaceholderProvider.of(userInformationResponse.getScreenName(), "%vk_screen_name%"));
-            registerPlaceholderProvider(PlaceholderProvider.of(userInformationResponse.getFirstName(), "%vk_first_name%"));
-            registerPlaceholderProvider(PlaceholderProvider.of(userInformationResponse.getLastName(), "%vk_last_name%"));
-        } catch(ApiException | ClientException e) {
-            e.printStackTrace();
-        }
+            findUser(linkUser.getLinkUserInfo().getIdentificator().asNumber()).thenAccept(userOptional -> {
+                if (!userOptional.isPresent())
+                    return;
+                GetResponse user = userOptional.get();
+                registerPlaceholderProvider(PlaceholderProvider.of(user.getScreenName(), "%vk_screen_name%"));
+                registerPlaceholderProvider(PlaceholderProvider.of(user.getFirstName(), "%vk_first_name%"));
+                registerPlaceholderProvider(PlaceholderProvider.of(user.getLastName(), "%vk_last_name%"));
+            });
+        });
+    }
+
+    private CompletableFuture<Optional<GetResponse>> findUser(long userId) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                List<GetResponse> userInformationResponses = CLIENT.users()
+                        .get(ACTOR)
+                        .userIds(String.valueOf(userId))
+                        .execute();
+                if (userInformationResponses.isEmpty())
+                    return Optional.empty();
+                return Optional.of(userInformationResponses.get(0));
+            } catch(ClientException | ApiException e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
+        });
     }
 }

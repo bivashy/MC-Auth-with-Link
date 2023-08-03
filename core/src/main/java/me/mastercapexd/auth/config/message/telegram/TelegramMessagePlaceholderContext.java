@@ -9,8 +9,10 @@ import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 public class TelegramMessagePlaceholderContext extends LinkPlaceholderContext {
     public TelegramMessagePlaceholderContext(Account account) {
         super(account, TelegramLinkType.getInstance(), "telegram");
-        if (linkUser.isIdentifierDefaultOrNull() || !linkUser.getLinkUserInfo().getIdentificator().isNumber())
-            return;
-        registerPlaceholderProvider(PlaceholderProvider.of(Long.toString(linkUser.getLinkUserInfo().getIdentificator().asNumber()), "%telegram_id%"));
+        getLinkUser().ifPresent(linkUser -> {
+            if (linkUser.isIdentifierDefaultOrNull() || !linkUser.getLinkUserInfo().getIdentificator().isNumber())
+                return;
+            registerPlaceholderProvider(PlaceholderProvider.of(Long.toString(linkUser.getLinkUserInfo().getIdentificator().asNumber()), "%telegram_id%"));
+        });
     }
 }
