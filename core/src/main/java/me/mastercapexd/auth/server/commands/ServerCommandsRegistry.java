@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.server.commands;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -191,8 +192,7 @@ public abstract class ServerCommandsRegistry {
         commandHandler.register(new AuthCommand(), new LoginCommand(), new RegisterCommand(), new ChangePasswordCommand(), new GoogleCodeCommand(),
                 new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
 
-        if (confirmationTypeEnabled(plugin.getConfig().getVKSettings(), LinkConfirmationType.FROM_GAME) ||
-                confirmationTypeEnabled(plugin.getConfig().getTelegramSettings(), LinkConfirmationType.FROM_GAME))
+        if (confirmationTypeEnabled(LinkConfirmationType.FROM_GAME))
             commandHandler.register(Orphans.path("code").handler(new LinkCodeCommand()));
         if (plugin.getConfig().getVKSettings().isEnabled())
             registerLinkCommand(VKLinkType.getInstance(), new VKLinkCommand(VKLinkType.getInstance().getServerMessages()));
@@ -203,13 +203,21 @@ public abstract class ServerCommandsRegistry {
     }
 
     private void registerLinkCommand(LinkType linkType, OrphanCommand linkCommand) {
-        if (!confirmationTypeEnabled(linkType.getSettings(), LinkConfirmationType.FROM_LINK))
+        if (!confirmationTypeEnabled(linkType, LinkConfirmationType.FROM_LINK))
             return;
         commandHandler.register(Orphans.path(makeServerCommandPaths(linkType, MessengerLinkCommandTemplate.CONFIGURATION_KEY)).handler(linkCommand));
     }
 
-    private boolean confirmationTypeEnabled(LinkSettings settings, LinkConfirmationType confirmationType) {
-        return settings.getLinkConfirmationTypes().contains(confirmationType);
+    private boolean confirmationTypeEnabled(LinkType linkType, LinkConfirmationType confirmationType) {
+        return linkType.findSettings()
+                .map(LinkSettings::getLinkConfirmationTypes)
+                .map(confirmationTypes -> confirmationTypes.contains(confirmationType))
+                .orElse(false);
+    }
+
+    private boolean confirmationTypeEnabled(LinkConfirmationType confirmationType) {
+        Collection<LinkType> linkTypes = plugin.getLinkTypeProvider().getLinkTypes();
+        return linkTypes.stream().anyMatch(linkType -> confirmationTypeEnabled(linkType, confirmationType));
     }
 
     private String[] makeServerCommandPaths(LinkType linkType, String commandPathKey) {
