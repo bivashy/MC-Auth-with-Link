@@ -1,5 +1,7 @@
 package com.bivashy.auth.api.link;
 
+import java.util.Optional;
+
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.link.LinkSettings;
 import com.bivashy.auth.api.config.message.MessageContext;
@@ -25,6 +27,14 @@ public interface LinkType extends Messenger {
     Messages<String> getLinkMessages();
 
     LinkSettings getSettings();
+
+    default Optional<LinkSettings> findSettings() {
+        try {
+            return Optional.ofNullable(getSettings());
+        } catch(UnsupportedOperationException ignored) {
+            return Optional.empty();
+        }
+    }
 
     LinkUserIdentificator getDefaultIdentificator();
 
