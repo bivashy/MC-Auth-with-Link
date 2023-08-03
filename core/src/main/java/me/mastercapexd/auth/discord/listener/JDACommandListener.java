@@ -19,7 +19,6 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.AutoCompleteQuery;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
@@ -35,7 +34,6 @@ import revxrsal.commands.core.CommandPath;
 import revxrsal.commands.jda.JDAActor;
 import revxrsal.commands.jda.JDACommandHandler;
 import revxrsal.commands.jda.annotation.OptionData;
-import revxrsal.commands.jda.core.actor.BaseJDAMessageActor;
 import revxrsal.commands.jda.core.actor.BaseJDASlashCommandActor;
 
 public class JDACommandListener implements EventListener {
@@ -62,8 +60,6 @@ public class JDACommandListener implements EventListener {
 
     @Override
     public void onEvent(@NotNull GenericEvent genericEvent) {
-        if (genericEvent instanceof MessageReceivedEvent)
-            onMessageEvent((MessageReceivedEvent) genericEvent);
         if (genericEvent instanceof SlashCommandInteractionEvent)
             onSlashCommandEvent((SlashCommandInteractionEvent) genericEvent);
         if (genericEvent instanceof ButtonInteractionEvent)
@@ -123,22 +119,6 @@ public class JDACommandListener implements EventListener {
             event.deferReply().queue();
             dispatch(actor, arguments);
         });
-    }
-
-    private void onMessageEvent(MessageReceivedEvent event) {
-        if (event.isWebhookMessage())
-            return;
-        String content = event.getMessage().getContentRaw();
-        if (content.isEmpty())
-            return;
-
-        JDAActor actor = new BaseJDAMessageActor(event, handler);
-        try {
-            ArgumentStack arguments = ArgumentStack.parse(content);
-            dispatch(actor, arguments);
-        } catch(Throwable t) {
-            handler.getExceptionHandler().handleException(t, actor);
-        }
     }
 
     private Optional<ExecutableCommand> findExecutableCommand(CommandInteractionPayload event) {
