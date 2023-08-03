@@ -32,6 +32,8 @@ public class DiscordLinkRoleModifierListener {
         LinkType linkType = e.getLinkType();
         if (linkType != DiscordLinkType.getInstance())
             return;
+        if (roleModificationSettings.isEmpty())
+            return;
         Optional<ServerPlayer> playerOptional = account.getPlayer();
 
         Guild guild = discordHook.getJDA().getGuildById(guildId);
