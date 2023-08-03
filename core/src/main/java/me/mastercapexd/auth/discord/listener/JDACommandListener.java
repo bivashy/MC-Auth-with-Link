@@ -47,14 +47,11 @@ public class JDACommandListener implements EventListener {
     }
 
     private void dispatch(JDAActor actor, ArgumentStack arguments) {
+        LinkCommandActorWrapper actorWrapper = wrapper.apply(actor);
         try {
-            if (actor.isGuildEvent() && !DISCORD_LINK_TYPE.getSettings().isAllowedChannel(actor.getChannel().getId())) {
-                actor.reply(DISCORD_LINK_TYPE.getLinkMessages().getMessage("forbidden-channel"));
-                return;
-            }
-            handler.dispatch(wrapper.apply(actor), arguments);
+            handler.dispatch(actorWrapper, arguments);
         } catch(Throwable t) {
-            handler.getExceptionHandler().handleException(t, actor);
+            handler.getExceptionHandler().handleException(t, actorWrapper);
         }
     }
 
@@ -116,7 +113,7 @@ public class JDACommandListener implements EventListener {
     private void onSlashCommandEvent(SlashCommandInteractionEvent event) {
         parseSlashCommandEvent(event).ifPresent(arguments -> {
             JDAActor actor = new BaseJDASlashCommandActor(event, handler);
-            event.deferReply().queue();
+            event.deferReply(true).queue();
             dispatch(actor, arguments);
         });
     }
