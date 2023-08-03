@@ -100,7 +100,7 @@ public class JDACommandListener implements EventListener {
         if (content.isEmpty())
             return;
 
-        event.deferReply().queue();
+        event.deferReply(true).queue();
         JDAActor actor = new BaseJDAButtonActor(event, handler);
         try {
             ArgumentStack arguments = ArgumentStack.parse(content);
