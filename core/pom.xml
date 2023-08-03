@@ -6,7 +6,7 @@
     <parent>
         <groupId>me.mastercapexd.auth</groupId>
         <artifactId>main</artifactId>
-        <version>1.7.10</version>
+        <version>1.7.11</version>
     </parent>
     <artifactId>core</artifactId>
 
@@ -26,6 +26,8 @@
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
         <jda.version>5.0.0-beta.11</jda.version>
+        <aether.version>1.1.0</aether.version>
+        <maven-aether-provider.version>3.3.9</maven-aether-provider.version>
 
         <!-- Test Dependencies -->
         <mockito.version>5.3.1</mockito.version>
@@ -165,6 +167,40 @@
             <artifactId>JDA</artifactId>
             <version>${jda.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Aether -->
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-api</artifactId>
+            <version>${aether.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-impl</artifactId>
+            <version>${aether.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-connector-basic</artifactId>
+            <version>${aether.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-transport-file</artifactId>
+            <version>${aether.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-transport-http</artifactId>
+            <version>${aether.version}</version>
+        </dependency>
+
+        <!-- Maven Aether Provider -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-aether-provider</artifactId>
+            <version>${maven-aether-provider.version}</version>
         </dependency>
 
 

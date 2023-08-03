@@ -6,7 +6,7 @@
     <parent>
         <groupId>me.mastercapexd.auth</groupId>
         <artifactId>main</artifactId>
-        <version>1.7.10</version>
+        <version>1.7.11</version>
     </parent>
     <artifactId>velocity</artifactId>
 
@@ -104,21 +104,4 @@
             <version>${libby.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <configuration>
-                    <relocations combine.self="override">
-                        <relocation>
-                            <pattern>org.slf4j</pattern>
-                            <shadedPattern>org.slf4j</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
