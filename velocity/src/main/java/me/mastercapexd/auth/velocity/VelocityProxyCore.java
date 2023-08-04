@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
-import com.bivashy.auth.api.server.message.AdventureServerComponent;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
@@ -81,7 +80,7 @@ public class VelocityProxyCore implements ServerCore {
 
     @Override
     public ServerBossbar createBossbar(ServerComponent component) {
-        return new VelocityServerBossbar(component.as(AdventureServerComponent.class).component());
+        return new VelocityServerBossbar(component);
     }
 
     @Override

@@ -147,7 +147,9 @@ boss-bar:
   # SEGMENTED_ЦИФРА - разделяет боссбар в сегменты
   bar-style: SOLID
   # Текст в боссбаре
-  bar-text: '&aВход в сервер'
+  bar-text: '&aВход в сервер [%duration%]'
+  # Подробнее о форматировании: https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+  bar-duration-placeholder-format: 'mm:ss'
 
 # Определяет количество онлайн твинков игроков используя IP. Поставьте 0 чтобы отключить лимит
 max-login-per-ip: 0

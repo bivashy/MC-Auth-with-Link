@@ -3,6 +3,7 @@ package me.mastercapexd.auth;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -234,6 +235,7 @@ public class BaseAuthPlugin implements AuthPlugin {
                         .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
                 .registerFieldResolver(ServerComponent.class, new ServerComponentFieldResolver())
                 .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
+                .registerFieldResolver(SimpleDateFormat.class, context -> new SimpleDateFormat(context.getString("mm:ss")))
                 .registerFieldResolver(File.class, (context) -> {
                     String path = context.getString("");
                     if (path.isEmpty())
