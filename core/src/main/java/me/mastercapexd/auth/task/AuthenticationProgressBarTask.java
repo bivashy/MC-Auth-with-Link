@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.task;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,11 +10,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.config.bossbar.BossBarSettings;
 import com.bivashy.auth.api.event.AccountJoinEvent;
 import com.bivashy.auth.api.event.PlayerLogoutEvent;
 import com.bivashy.auth.api.model.AuthenticationTask;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.server.scheduler.ServerScheduler;
 
@@ -21,11 +24,12 @@ import io.github.revxrsal.eventbus.SubscribeEvent;
 
 public class AuthenticationProgressBarTask implements AuthenticationTask {
     private final Map<String, ServerBossbar> progressBars = new HashMap<>();
-    private final AuthPlugin plugin;
+    private final BossBarSettings settings;
     private final ServerScheduler proxyScheduler;
 
     public AuthenticationProgressBarTask(AuthPlugin plugin) {
-        this.plugin = plugin;
+        this.settings = plugin.getConfig().getBossBarSettings();
+
         this.proxyScheduler = plugin.getCore().schedule(() -> {
             long now = System.currentTimeMillis();
             long timeoutMillis = plugin.getConfig().getAuthTime();
@@ -88,7 +92,7 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
     }
 
     private void registerBossbar(PlayerIdSupplier playerIdSupplier) {
-        ServerBossbar bossbar = plugin.getConfig().getBossBarSettings().createBossbar();
+        ServerBossbar bossbar = settings.createBossbar();
         if (bossbar == null)
             return;
         progressBars.put(playerIdSupplier.getPlayerId(), bossbar);
