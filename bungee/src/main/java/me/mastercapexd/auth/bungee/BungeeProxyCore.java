@@ -88,7 +88,7 @@ public enum BungeeProxyCore implements ServerCore {
 
     @Override
     public ServerBossbar createBossbar(ServerComponent component) {
-        return new BungeeServerBossbar(component.jsonText());
+        return new BungeeServerBossbar(component);
     }
 
     @Override
