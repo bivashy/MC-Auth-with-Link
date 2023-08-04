@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.google.common.collect.Sets;
 
@@ -16,8 +17,8 @@ public class BungeeServerBossbar extends ServerBossbar {
     private final Set<ServerPlayer> players = Sets.newHashSet();
     private final UUID uuid = UUID.randomUUID();
 
-    public BungeeServerBossbar(String title) {
-        this.title(title);
+    public BungeeServerBossbar(ServerComponent component) {
+        this.title(component);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class BungeeServerBossbar extends ServerBossbar {
     private BossBar getAddPacket() {
         BossBar packet = new BossBar(uuid, 0);
 
-        packet.setTitle(title); // We send title in json
+        packet.setTitle(title.jsonText());
         packet.setColor(this.color.ordinal());
         packet.setDivision(this.segmentStyle.ordinal());
         packet.setHealth(this.progress);
