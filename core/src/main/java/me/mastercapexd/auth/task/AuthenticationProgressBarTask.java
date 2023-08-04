@@ -69,6 +69,8 @@ public class AuthenticationProgressBarTask implements AuthenticationTask {
                     continue;
                 }
 
+                String formattedDuration = settings.getDurationPlaceholderFormat().format(new Date(timeoutMillis - accountTimeElapsedFromEntryMillis));
+                progressBar.title(ServerComponent.fromJson(settings.getTitle().jsonText().replace("%duration%", formattedDuration)));
                 progressBar.progress(progress);
                 progressBar.update();
             }
