@@ -53,8 +53,6 @@ public class AuthAccountTest {
         CryptoProviderBucket cryptoProviderBucket = AuthPlugin.instance().getCryptoProviderBucket();
         if (!cryptoProviderBucket.findCryptoProvider(cryptoProvider.getIdentifier()).isPresent())
             cryptoProviderBucket.addCryptoProvider(cryptoProvider);
-
-        AuthPlugin.instance().getAccountDatabase().deleteAccount(ACCOUNT_ID).join();
     }
 
     @Test
@@ -199,6 +197,7 @@ public class AuthAccountTest {
         assertTrue(currentAuthenticationStep.shouldSkip());
 
         plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
+        plugin.getAccountDatabase().deleteAccount(account.getPlayerId()).join();
     }
 
     @Test
@@ -226,5 +225,6 @@ public class AuthAccountTest {
         assertTrue(currentAuthenticationStep.shouldSkip());
 
         plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
+        plugin.getAccountDatabase().deleteAccount(account.getPlayerId()).join();
     }
 }
