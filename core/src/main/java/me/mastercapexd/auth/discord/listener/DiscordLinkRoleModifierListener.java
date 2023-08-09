@@ -6,7 +6,11 @@ import java.util.Optional;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.event.AccountLinkEvent;
+import com.bivashy.auth.api.event.AccountStepChangeEvent;
 import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import io.github.revxrsal.eventbus.SubscribeEvent;
@@ -15,6 +19,7 @@ import me.mastercapexd.auth.config.discord.RoleModificationSettings;
 import me.mastercapexd.auth.config.discord.RoleModificationSettings.Type;
 import me.mastercapexd.auth.hooks.DiscordHook;
 import me.mastercapexd.auth.link.discord.DiscordLinkType;
+import me.mastercapexd.auth.step.impl.link.DiscordLinkAuthenticationStep;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -27,11 +32,30 @@ public class DiscordLinkRoleModifierListener {
     private final long guildId = discordConfirmationSettings.getGuildId();
 
     @SubscribeEvent
+    public void onDiscordAuthenticationStep(AccountStepChangeEvent e) {
+        if (discordConfirmationSettings.shouldUpdateRoles())
+            return;
+        if (!e.getOldStep().getStepName().equals(DiscordLinkAuthenticationStep.STEP_NAME))
+            return;
+        Account account = e.getAccount();
+        account.findFirstLinkUser(DiscordLinkType.LINK_USER_FILTER)
+                .filter(linkUser -> !linkUser.isIdentifierDefaultOrNull())
+                .map(LinkUser::getLinkUserInfo)
+                .map(LinkUserInfo::getIdentificator)
+                .map(LinkUserIdentificator::asNumber)
+                .ifPresent(discordId -> updateAccountDiscordRoles(account, discordId));
+    }
+
+    @SubscribeEvent
     public void onDiscordLink(AccountLinkEvent e) {
         Account account = e.getAccount();
         LinkType linkType = e.getLinkType();
         if (linkType != DiscordLinkType.getInstance())
             return;
+        updateAccountDiscordRoles(account, e.getIdentificator().asNumber());
+    }
+
+    private void updateAccountDiscordRoles(Account account, long discordId) {
         if (roleModificationSettings.isEmpty())
             return;
         Optional<ServerPlayer> playerOptional = account.getPlayer();
@@ -39,13 +63,11 @@ public class DiscordLinkRoleModifierListener {
         Guild guild = discordHook.getJDA().getGuildById(guildId);
         if (guild == null)
             throw new IllegalArgumentException("Cannot find guild by id '" + guildId + "', check if guild id is valid");
-        guild.retrieveMemberById(e.getIdentificator().asNumber()).queue(foundMember -> {
+        guild.retrieveMemberById(discordId).queue(foundMember -> {
             for (RoleModificationSettings roleModification : roleModificationSettings) {
                 boolean hasPermissionCheck = !roleModification.getHavePermission().isEmpty() || !roleModification.getAbsentPermission().isEmpty();
-                if (hasPermissionCheck && !playerOptional.isPresent()) {
-                    e.getActor().replyWithMessage(DiscordLinkType.getInstance().getLinkMessages().getMessage("confirmation-role-modification-error"));
+                if (hasPermissionCheck && !playerOptional.isPresent())
                     continue;
-                }
 
                 if (playerOptional.isPresent()) {
                     ServerPlayer player = playerOptional.get();
