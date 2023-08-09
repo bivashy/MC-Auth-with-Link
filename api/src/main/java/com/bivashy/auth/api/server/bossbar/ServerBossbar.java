@@ -2,6 +2,7 @@ package com.bivashy.auth.api.server.bossbar;
 
 import java.util.Collection;
 
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.util.Castable;
 
@@ -9,7 +10,7 @@ public abstract class ServerBossbar implements Castable<ServerBossbar> {
     protected Style segmentStyle = Style.SOLID;
     protected Color color = Color.BLUE;
     protected float progress;
-    protected String title;
+    protected ServerComponent title;
 
     public ServerBossbar color(Color color) {
         this.color = color;
@@ -28,8 +29,14 @@ public abstract class ServerBossbar implements Castable<ServerBossbar> {
         return this;
     }
 
+    @Deprecated
     public ServerBossbar title(String title) {
-        this.title = title;
+        this.title = ServerComponent.fromPlain(title);
+        return this;
+    }
+
+    public ServerBossbar title(ServerComponent component) {
+        this.title = component;
         return this;
     }
 

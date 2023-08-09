@@ -13,6 +13,8 @@ import me.mastercapexd.auth.config.link.BaseConfirmationSettings;
 public class DiscordConfirmationSettings extends BaseConfirmationSettings {
     @ConfigField("guild-id")
     private long guildId;
+    @ConfigField("update-roles-on-each-enter")
+    private boolean updateRoles = false;
     @ConfigField("role-modification")
     private ConfigurationHolderMap<RoleModificationSettings> roleModificationSettings = new ConfigurationHolderMap<>();
 
@@ -22,6 +24,10 @@ public class DiscordConfirmationSettings extends BaseConfirmationSettings {
 
     public long getGuildId() {
         return guildId;
+    }
+
+    public boolean shouldUpdateRoles() {
+        return updateRoles;
     }
 
     public Map<String, RoleModificationSettings> getRoleModificationSettings() {
