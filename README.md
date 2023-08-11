@@ -6,7 +6,7 @@
 
 ## Basic features
 - Authentication flow control using authentication steps
-- MultiFactor authorization (VK, Telegram, GoogleAuthenticator)
+- MultiFactor authorization (VK, Telegram, Discord, TOTP)
 - Session system
 
 ## Platforms
@@ -81,7 +81,7 @@ public class ExampleClass {
 
 ---
 
-How to get `Account` from VK or Telegram id:
+How to get `Account` from VK, Telegram, Discord id:
 
 ```java
 public class ExampleClass {
