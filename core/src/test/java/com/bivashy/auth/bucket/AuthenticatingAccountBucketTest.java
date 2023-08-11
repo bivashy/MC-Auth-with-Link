@@ -32,7 +32,7 @@ public class AuthenticatingAccountBucketTest {
     public void shouldBeEmptyBucket() {
         when(account.getPlayerId()).thenReturn(ACCOUNT_ID);
 
-        assertEquals(0, bucket.getAccountIdEntries().size());
+        assertTrue(bucket.getAccountIdEntries().isEmpty());
         assertFalse(bucket.isAuthenticating(account));
         assertFalse(bucket.getAuthenticatingAccount(account).isPresent());
         assertNull(bucket.getAuthenticatingAccountNullable(account));

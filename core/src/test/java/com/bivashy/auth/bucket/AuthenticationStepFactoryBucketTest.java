@@ -30,7 +30,7 @@ public class AuthenticationStepFactoryBucketTest {
 
     @Test
     public void shouldBeEmpty() {
-        assertEquals(0, bucket.getList().size());
+        assertTrue(bucket.getList().isEmpty());
         assertFalse(bucket.findFirst(stepFactory -> stepFactory.getAuthenticationStepName().equals(STEP_NAME)).isPresent());
 
         Iterator<AuthenticationStepFactory> factoryIterator = bucket.iterator();
