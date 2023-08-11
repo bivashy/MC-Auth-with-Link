@@ -152,21 +152,16 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
                 .queryBuilder()).distinct().query(), Collections.emptyList());
     }
 
-    public Optional<AuthAccount> createOrUpdateAccount(Account account) {
+    public AuthAccount createOrUpdateAccount(Account account) {
         if (!(account instanceof AuthAccountProvider))
             throw new IllegalArgumentException("Cannot create or update not AuthAccountProvider: " + account.getClass().getName());
         AuthAccountProvider authAccountProvider = (AuthAccountProvider) account;
         AuthAccount authAccount = authAccountProvider.getAuthAccount();
 
-        DEFAULT_EXCEPTION_CATCHER.execute(() -> createIfNotExists(authAccount));
-        return updateAccount(authAccount);
-    }
-
-    public Optional<AuthAccount> updateAccount(AuthAccount authAccount) {
         return DEFAULT_EXCEPTION_CATCHER.execute(() -> {
-            update(authAccount);
-            return Optional.of(authAccount);
-        }, Optional.empty());
+            createOrUpdate(authAccount);
+            return authAccount;
+        });
     }
 
     public Collection<Void> deleteAccountById(String id) {

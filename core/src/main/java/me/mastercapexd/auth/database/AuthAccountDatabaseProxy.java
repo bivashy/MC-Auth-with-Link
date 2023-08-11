@@ -64,7 +64,7 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
 
     @Override
     public CompletableFuture<Account> saveOrUpdateAccount(Account account) {
-        return CompletableFuture.supplyAsync(() -> new AuthAccountAdapter(databaseHelper.getAuthAccountDao().createOrUpdateAccount(account).get()));
+        return CompletableFuture.supplyAsync(() -> new AuthAccountAdapter(databaseHelper.getAuthAccountDao().createOrUpdateAccount(account)));
     }
 
     @Override

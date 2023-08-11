@@ -1,12 +1,13 @@
 [![GitHub tag](https://img.shields.io/github/tag/bivashy/MC-Auth-with-Link?include_prereleases=&sort=semver&color=blue)](https://github.com/bivashy/MC-Auth-with-Link/releases/)
 [![License](https://img.shields.io/badge/License-_EPL--2.0_license-blue)](#license)
 [![issues - MC-Auth-with-Link](https://img.shields.io/github/issues/bivashy/MC-Auth-with-Link)](https://github.com/bivashy/MC-Auth-with-Link/issues)
+[![Spigot - MC-Auth with Social Link](https://img.shields.io/badge/Spigot-MC--Auth_with_Social_Link-ef8c1b)](https://www.spigotmc.org/resources/mc-auth-with-social-link.94870/)
 
 # MC-Auth-with-Link
 
 ## Basic features
 - Authentication flow control using authentication steps
-- MultiFactor authorization (VK, Telegram, GoogleAuthenticator)
+- MultiFactor authorization (VK, Telegram, Discord, TOTP)
 - Session system
 
 ## Platforms
@@ -81,7 +82,7 @@ public class ExampleClass {
 
 ---
 
-How to get `Account` from VK or Telegram id:
+How to get `Account` from VK, Telegram, Discord id:
 
 ```java
 public class ExampleClass {
