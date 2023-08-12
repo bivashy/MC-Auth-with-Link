@@ -77,9 +77,6 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
 
     @Override
     public AuthenticationStep getCurrentAuthenticationStep() {
-        if (currentAuthenticationStep.shouldPassToNextStep())
-            nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this));
-
         return currentAuthenticationStep;
     }
 }
