@@ -38,6 +38,7 @@ public class DatabaseHelper {
     public static final String ID_FIELD_KEY = "id";
     private final MigrationCoordinator<AuthAccount, Long> authAccountMigrationCoordinator = new MigrationCoordinator<>();
     private final MigrationCoordinator<AccountLink, Long> accountLinkMigrationCoordinator = new MigrationCoordinator<>();
+    private boolean enabled = false;
     private ConnectionSource connectionSource;
     private AuthAccountDao authAccountDao;
     private AccountLinkDao accountLinkDao;
@@ -82,6 +83,7 @@ public class DatabaseHelper {
                     authAccountMigrationCoordinator.migrate(connectionSource, authAccountDao);
                     accountLinkMigrationCoordinator.migrate(connectionSource, accountLinkDao);
                 }
+                enabled = true;
             } catch(SQLException | IOException e) {
                 e.printStackTrace();
             }
@@ -97,6 +99,10 @@ public class DatabaseHelper {
             field.setAccessible(false);
         } catch(NoSuchFieldException | IllegalAccessException ignored) {
         }
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public ConnectionSource getConnectionSource() {
