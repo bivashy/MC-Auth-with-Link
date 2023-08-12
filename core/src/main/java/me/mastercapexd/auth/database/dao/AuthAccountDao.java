@@ -159,17 +159,22 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         AuthAccount authAccount = authAccountProvider.getAuthAccount();
 
         return DEFAULT_EXCEPTION_CATCHER.execute(() -> {
-            createOrUpdate(authAccount);
+            Optional<AuthAccount> foundAccount = queryFirstAccountPlayerId(authAccount.getPlayerId());
+            if (foundAccount.isPresent()) {
+                authAccount.setId(foundAccount.get().getId());
+                update(authAccount);
+            } else
+                create(authAccount);
             return authAccount;
         });
     }
 
-    public Collection<Void> deleteAccountById(String id) {
-        return DEFAULT_EXCEPTION_CATCHER.execute(() -> {
+    public void deleteAccountById(String id) {
+        DEFAULT_EXCEPTION_CATCHER.execute(() -> {
             DeleteBuilder<AuthAccount, Long> deleteBuilder = deleteBuilder();
             deleteBuilder.where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, id);
             deleteBuilder.delete();
             return null;
-        }, Collections.emptyList());
+        });
     }
 }
