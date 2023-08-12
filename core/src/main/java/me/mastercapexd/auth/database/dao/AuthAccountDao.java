@@ -159,7 +159,12 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         AuthAccount authAccount = authAccountProvider.getAuthAccount();
 
         return DEFAULT_EXCEPTION_CATCHER.execute(() -> {
-            createOrUpdate(authAccount);
+            Optional<AuthAccount> foundAccount = queryFirstAccountPlayerId(authAccount.getPlayerId());
+            if (foundAccount.isPresent()) {
+                authAccount.setId(foundAccount.get().getId());
+                update(authAccount);
+            } else
+                create(authAccount);
             return authAccount;
         });
     }
