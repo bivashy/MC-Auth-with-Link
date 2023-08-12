@@ -40,6 +40,8 @@ public class CryptoProviderBucketTest {
         assertFalse(bucket.findCryptoProvider("").isPresent());
         assertFalse(bucket.findCryptoProvider("test").isPresent());
 
+        bucket.addCryptoProvider(cryptoProvider);
+
         assertTrue(bucket.findCryptoProvider(CRYPTO_NAME).isPresent());
         assertEquals(cryptoProvider, bucket.findCryptoProvider(CRYPTO_NAME).get());
     }
