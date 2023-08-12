@@ -1,9 +1,6 @@
 package com.bivashy.auth.bucket;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
@@ -16,8 +13,7 @@ import com.bivashy.auth.api.model.AuthenticationTask;
 import me.mastercapexd.auth.bucket.BaseAuthenticationTaskBucket;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationTaskBucketTest {
-    private final List<AuthenticationTask> tasks = new ArrayList<>();
+public class AuthenticationTaskBucketTest extends SimpleBucketTest<AuthenticationTask> {
     private AuthenticationTaskBucket bucket;
     @Mock
     private AuthenticationTask task;
@@ -27,22 +23,28 @@ public class AuthenticationTaskBucketTest {
         bucket = new BaseAuthenticationTaskBucket();
     }
 
-    @Test
-    public void shouldBeEmpty() {
-        assertTrue(bucket.getTasks().isEmpty());
+    @Override
+    BucketAdapter<AuthenticationTask> bucketAdapter() {
+        return new BucketAdapter<AuthenticationTask>() {
+            @Override
+            public Collection<AuthenticationTask> getCollection() {
+                return bucket.getTasks();
+            }
+
+            @Override
+            public void add(AuthenticationTask element) {
+                bucket.addTask(element);
+            }
+
+            @Override
+            public void remove(AuthenticationTask element) {
+                bucket.removeTask(element);
+            }
+        };
     }
 
-    @Test
-    public void shouldAddTask() {
-        bucket.addTask(task);
-        assertEquals(1, bucket.getTasks().size());
-        assertEquals(task, bucket.getTasks().get(0));
-    }
-
-    @Test
-    public void shouldRemoveTask() {
-        shouldAddTask();
-        bucket.removeTask(task);
-        shouldBeEmpty();
+    @Override
+    AuthenticationTask element() {
+        return task;
     }
 }
