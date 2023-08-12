@@ -7,8 +7,10 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Timeout.*;
 import org.junit.jupiter.api.extension.*;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,6 +20,7 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.bucket.CryptoProviderBucket;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
+import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
@@ -175,6 +178,7 @@ public class AuthAccountTest {
     }
 
     @Test
+    @Timeout(value = 10, threadMode = ThreadMode.SEPARATE_THREAD)
     public void shouldPassRegisterAuthenticationStep() {
         AuthPlugin plugin = AuthPlugin.instance();
         plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(account);
@@ -197,10 +201,11 @@ public class AuthAccountTest {
         assertTrue(currentAuthenticationStep.shouldSkip());
 
         plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
-        plugin.getAccountDatabase().deleteAccount(account.getPlayerId()).join();
+        deleteAccountFromDatabase(account).join();
     }
 
     @Test
+    @Timeout(value = 10, threadMode = ThreadMode.SEPARATE_THREAD)
     public void shouldPassLoginAuthenticationStep() {
         AuthPlugin plugin = AuthPlugin.instance();
         plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(account);
@@ -225,6 +230,18 @@ public class AuthAccountTest {
         assertTrue(currentAuthenticationStep.shouldSkip());
 
         plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
-        plugin.getAccountDatabase().deleteAccount(account.getPlayerId()).join();
+        deleteAccountFromDatabase(account).join();
+    }
+
+    private CompletableFuture<Void> deleteAccountFromDatabase(Account account) {
+        return accountDatabase().thenCompose(database -> database.deleteAccount(account.getPlayerId()));
+    }
+
+    private CompletableFuture<AccountDatabase> accountDatabase() {
+        return CompletableFuture.supplyAsync(() -> {
+            AuthPlugin plugin = AuthPlugin.instance();
+            while (!plugin.getAccountDatabase().isEnabled()) {}
+            return plugin.getAccountDatabase();
+        });
     }
 }
