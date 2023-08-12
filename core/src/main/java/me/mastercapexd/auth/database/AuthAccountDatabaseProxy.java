@@ -82,4 +82,9 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
             return null;
         });
     }
+
+    @Override
+    public boolean isEnabled() {
+        return databaseHelper.isEnabled();
+    }
 }

@@ -28,4 +28,6 @@ public interface AccountDatabase {
     CompletableFuture<Void> updateAccountLinks(Account account);
 
     CompletableFuture<Void> deleteAccount(String id);
+
+    boolean isEnabled();
 }
