@@ -177,9 +177,9 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void registerTasks() {
-        this.taskBucket.addTask(new AuthenticationTimeoutTask(this));
-        this.taskBucket.addTask(new AuthenticationProgressBarTask(this));
-        this.taskBucket.addTask(new AuthenticationMessageSendTask(this));
+        this.taskBucket.modifiable().add(new AuthenticationTimeoutTask(this));
+        this.taskBucket.modifiable().add(new AuthenticationProgressBarTask(this));
+        this.taskBucket.modifiable().add(new AuthenticationMessageSendTask(this));
     }
 
     private void registerCryptoProviders() {
