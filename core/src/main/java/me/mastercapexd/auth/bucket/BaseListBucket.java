@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.bucket;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,10 @@ public class BaseListBucket<T> implements Bucket<T> {
 
     public BaseListBucket(List<T> list) {
         this(list, new BaseModifiableListBucket<>(list));
+    }
+
+    public BaseListBucket(){
+        this(new ArrayList<>());
     }
 
     @Override
