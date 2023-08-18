@@ -96,6 +96,7 @@ import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
 public class BaseAuthPlugin implements AuthPlugin {
+
     private final ConfigurationProcessor configurationProcessor = new SpongeConfigurateProcessor();
     private final Map<Class<? extends PluginHook>, PluginHook> hooks = new HashMap<>();
     private final AuthenticationTaskBucket taskBucket = new BaseAuthenticationTaskBucket();
@@ -146,7 +147,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         if (config.isAutoMigrateConfigEnabled()) {
             try {
                 this.migrateConfig();
-            } catch(IOException | URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
             }
         }
@@ -183,14 +184,14 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void registerCryptoProviders() {
-        this.cryptoProviderBucket.addCryptoProvider(new BcryptCryptoProvider());
-        this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("SHA256", HashUtils.getSHA256()));
-        this.cryptoProviderBucket.addCryptoProvider(new MessageDigestCryptoProvider("MD5", HashUtils.getMD5()));
-        this.cryptoProviderBucket.addCryptoProvider(new Argon2CryptoProvider());
-        this.cryptoProviderBucket.addCryptoProvider(new ScryptCryptoProvider());
+        this.cryptoProviderBucket.modifiable().add(new BcryptCryptoProvider());
+        this.cryptoProviderBucket.modifiable().add(new MessageDigestCryptoProvider("SHA256", HashUtils.getSHA256()));
+        this.cryptoProviderBucket.modifiable().add(new MessageDigestCryptoProvider("MD5", HashUtils.getMD5()));
+        this.cryptoProviderBucket.modifiable().add(new Argon2CryptoProvider());
+        this.cryptoProviderBucket.modifiable().add(new ScryptCryptoProvider());
 
-        this.cryptoProviderBucket.addCryptoProvider(new AuthMeSha256CryptoProvider());
-        this.cryptoProviderBucket.addCryptoProvider(new UAuthCryptoProvider());
+        this.cryptoProviderBucket.modifiable().add(new AuthMeSha256CryptoProvider());
+        this.cryptoProviderBucket.modifiable().add(new UAuthCryptoProvider());
     }
 
     private void initializeTelegram() {
@@ -231,7 +232,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         configurationProcessor.registerFieldResolver(ConfigurationServer.class, (context) -> new BaseConfigurationServer(context.getString()))
                 .registerFieldResolver(ConfigurationDuration.class, (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
-                .registerFieldResolver(CryptoProvider.class, (context) -> cryptoProviderBucket.findCryptoProvider(context.getString())
+                .registerFieldResolver(CryptoProvider.class, (context) -> cryptoProviderBucket.findFirstByValue(CryptoProvider::getIdentifier, context.getString())
                         .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
                 .registerFieldResolver(ServerComponent.class, new ServerComponentFieldResolver())
                 .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
@@ -372,4 +373,5 @@ public class BaseAuthPlugin implements AuthPlugin {
     public <T extends PluginHook> void putHook(Class<? extends T> clazz, T instance) {
         hooks.put(clazz, instance);
     }
+
 }

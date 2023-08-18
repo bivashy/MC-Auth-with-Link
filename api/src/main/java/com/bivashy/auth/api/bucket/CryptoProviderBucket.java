@@ -4,8 +4,16 @@ import java.util.Optional;
 
 import com.bivashy.auth.api.crypto.CryptoProvider;
 
-public interface CryptoProviderBucket {
-    Optional<CryptoProvider> findCryptoProvider(String identifier);
+public interface CryptoProviderBucket extends Bucket<CryptoProvider> {
 
-    void addCryptoProvider(CryptoProvider cryptoProvider);
+    @Deprecated
+    default Optional<CryptoProvider> findCryptoProvider(String identifier) {
+        return findFirstByValue(CryptoProvider::getIdentifier, identifier);
+    }
+
+    @Deprecated
+    default void addCryptoProvider(CryptoProvider cryptoProvider) {
+        modifiable().add(cryptoProvider);
+    }
+
 }
