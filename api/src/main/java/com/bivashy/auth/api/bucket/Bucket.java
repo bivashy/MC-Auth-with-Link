@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface Bucket<T> {
+
     Collection<T> getUnmodifiableRaw();
 
     Stream<T> stream();
@@ -36,7 +37,16 @@ public interface Bucket<T> {
         return findFirst(predicate).isPresent();
     }
 
+    default <R> boolean hasBy(Function<T, R> function, Predicate<R> predicate) {
+        return findFirstBy(function, predicate).isPresent();
+    }
+
+    default <R> boolean hasByValue(Function<T, R> function, R value) {
+        return findFirstByValue(function, value).isPresent();
+    }
+
     default Stream<T> filter(Predicate<T> predicate) {
         return getUnmodifiableRaw().stream().filter(predicate);
     }
+
 }
