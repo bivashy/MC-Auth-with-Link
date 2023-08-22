@@ -27,7 +27,7 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
 
     @DefaultFor("~")
     public void onDecline(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String declinePlayerName) {
-        List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().getLinkUsers(entryUser -> {
+        List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().find(entryUser -> {
             if (!entryUser.getLinkType().equals(linkType))
                 return false;
 
@@ -51,7 +51,7 @@ public class AccountEnterDeclineCommand implements OrphanCommand {
                 actorWrapper).thenAccept(result -> {
             if (result.getEvent().isCancelled())
                 return;
-            plugin.getLinkEntryBucket().removeLinkUser(entryUser);
+            plugin.getLinkEntryBucket().modifiable().remove(entryUser);
             entryUser.getAccount()
                     .kick(linkType.getServerMessages().getStringMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-declined", linkType.newMessageContext(entryUser.getAccount())));

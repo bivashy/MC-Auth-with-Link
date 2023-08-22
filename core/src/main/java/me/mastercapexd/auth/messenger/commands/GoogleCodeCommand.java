@@ -38,7 +38,7 @@ public class GoogleCodeCommand implements OrphanCommand {
             return;
         }
 
-        if (!plugin.getLinkEntryBucket().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance())) {
+        if (!plugin.getLinkEntryBucket().find(account.getPlayerId(), GoogleLinkType.getInstance()).isPresent()) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-need-enter", linkType.newMessageContext(account)));
             return;
         }
