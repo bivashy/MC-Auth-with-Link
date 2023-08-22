@@ -166,15 +166,15 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void registerAuthenticationSteps() {
-        this.authenticationStepFactoryBucket.add(new NullAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new LoginAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new RegisterAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new VKLinkAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new GoogleLinkAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new TelegramLinkAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new DiscordLinkAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new EnterServerAuthenticationStepFactory());
-        this.authenticationStepFactoryBucket.add(new EnterAuthServerAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new NullAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new LoginAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new RegisterAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new VKLinkAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new GoogleLinkAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new TelegramLinkAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new DiscordLinkAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new EnterServerAuthenticationStepFactory());
+        this.authenticationStepFactoryBucket.modifiable().add(new EnterAuthServerAuthenticationStepFactory());
     }
 
     private void registerTasks() {
