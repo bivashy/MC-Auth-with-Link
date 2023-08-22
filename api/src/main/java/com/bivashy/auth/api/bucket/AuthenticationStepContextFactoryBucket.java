@@ -11,6 +11,7 @@ import com.bivashy.auth.api.factory.AuthenticationStepContextFactory;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 
 public interface AuthenticationStepContextFactoryBucket extends Bucket<AuthenticationStepContextFactoryWrapper> {
+
     @Deprecated
     default Map<String, AuthenticationStepContextFactory> getMap() {
         return stream().collect(Collectors.toMap(AuthenticationStepContextFactoryWrapper::getIdentifier, Function.identity()));
@@ -24,24 +25,24 @@ public interface AuthenticationStepContextFactoryBucket extends Bucket<Authentic
 
     @Deprecated
     default AuthenticationStepContextFactory remove(String key) {
-        Optional<AuthenticationStepContextFactoryWrapper> factoryOptional = findFirst(wrapper -> wrapper.getIdentifier().equals(key));
+        Optional<AuthenticationStepContextFactoryWrapper> factoryOptional = findFirstByValue(AuthenticationStepContextFactoryWrapper::getIdentifier, key);
         factoryOptional.ifPresent(factory -> modifiable().removeIf(wrapper -> factory.getIdentifier().equals(wrapper.getIdentifier())));
         return factoryOptional.orElse(null);
     }
 
     @Deprecated
     default AuthenticationStepContextFactory get(String key) {
-        return findFirst(wrapper -> wrapper.getIdentifier().equals(key)).orElse(null);
+        return findFirstByValue(AuthenticationStepContextFactoryWrapper::getIdentifier, key).orElse(null);
     }
 
     @Deprecated
     default AuthenticationStepContextFactory getOrDefault(String key, AuthenticationStepContextFactory def) {
-        return findFirst(wrapper -> wrapper.getIdentifier().equals(key)).map(wrapper -> (AuthenticationStepContextFactory) wrapper).orElse(def);
+        return findFirstByValue(AuthenticationStepContextFactoryWrapper::getIdentifier, key).map(wrapper -> (AuthenticationStepContextFactory) wrapper).orElse(def);
     }
 
     @Deprecated
     default boolean containsKey(String key) {
-        return has(wrapper -> wrapper.getIdentifier().equals(key));
+        return hasByValue(AuthenticationStepContextFactoryWrapper::getIdentifier, key);
     }
 
     AuthenticationStepContext createContext(Account account);
@@ -49,6 +50,7 @@ public interface AuthenticationStepContextFactoryBucket extends Bucket<Authentic
     AuthenticationStepContext createContext(String stepName, Account account);
 
     interface AuthenticationStepContextFactoryWrapper extends AuthenticationStepContextFactory {
+
         static AuthenticationStepContextFactoryWrapper of(String identifier, AuthenticationStepContextFactory factory) {
             return new AuthenticationStepContextFactoryWrapper() {
                 @Override
@@ -64,5 +66,7 @@ public interface AuthenticationStepContextFactoryBucket extends Bucket<Authentic
         }
 
         String getIdentifier();
+
     }
+
 }
