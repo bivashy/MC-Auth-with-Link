@@ -25,7 +25,7 @@ public class CryptoProviderPersister extends BaseDataType {
     }
 
     @Override
-    public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
+    public Object javaToSqlArg(FieldType fieldType, Object javaObject) {
         CryptoProvider cryptoProvider = (CryptoProvider) javaObject;
         return cryptoProvider.getIdentifier();
     }
@@ -38,7 +38,7 @@ public class CryptoProviderPersister extends BaseDataType {
             String identifier = (String) sqlArg;
             return AuthPlugin.instance()
                     .getCryptoProviderBucket()
-                    .findCryptoProvider(identifier)
+                    .findFirstByValue(CryptoProvider::getIdentifier, identifier)
                     .orElseThrow(() -> new SQLException("Cannot get crypto provider value of '" + identifier + "' for field " + fieldType));
         }
     }

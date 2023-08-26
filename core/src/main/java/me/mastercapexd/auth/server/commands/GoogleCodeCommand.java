@@ -42,7 +42,7 @@ public class GoogleCodeCommand {
             player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-exists"));
             return;
         }
-        if (!plugin.getLinkEntryBucket().hasLinkUser(playerId, GoogleLinkType.getInstance())) {
+        if (!plugin.getLinkEntryBucket().find(playerId, GoogleLinkType.getInstance()).isPresent()) {
             player.sendMessage(GOOGLE_MESSAGES.getMessage("code-not-need-enter"));
             return;
         }

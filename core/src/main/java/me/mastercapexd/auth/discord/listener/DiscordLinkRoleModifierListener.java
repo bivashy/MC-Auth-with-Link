@@ -33,7 +33,7 @@ public class DiscordLinkRoleModifierListener {
 
     @SubscribeEvent
     public void onDiscordAuthenticationStep(AccountStepChangeEvent e) {
-        if (discordConfirmationSettings.shouldUpdateRoles())
+        if (!discordConfirmationSettings.shouldUpdateRoles())
             return;
         if (!e.getOldStep().getStepName().equals(DiscordLinkAuthenticationStep.STEP_NAME))
             return;

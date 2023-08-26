@@ -60,7 +60,7 @@ public class LinkCodeCommand implements OrphanCommand {
                         accountDatabase.updateAccountLinks(account);
 
                         actor.replyWithMessage(messages.getMessage("confirmation-success"));
-                        linkConfirmationBucket.removeLinkConfirmation(linkContext.getConfirmationUser());
+                        linkConfirmationBucket.modifiable().remove(linkContext.getConfirmationUser());
                     });
                 }));
     }

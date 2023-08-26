@@ -28,7 +28,7 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
                 int accountEnterElapsedMillis = (int) (now -
                         plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
 
-                for (LinkEntryUser entryUser : plugin.getLinkEntryBucket().getLinkUsers(user -> user.getAccount().getPlayerId().equals(account.getPlayerId())))
+                for (LinkEntryUser entryUser : plugin.getLinkEntryBucket().find(user -> user.getAccount().getPlayerId().equals(account.getPlayerId())))
                     if (entryUser != null)
                         try {
                             authTimeoutMillis += entryUser.getLinkType().getSettings().getEnterSettings().getEnterDelay();

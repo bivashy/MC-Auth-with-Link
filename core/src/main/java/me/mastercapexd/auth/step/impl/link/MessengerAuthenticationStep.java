@@ -43,7 +43,7 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
         if (!linkType.getSettings().isEnabled())
             return true;
 
-        if (PLUGIN.getLinkEntryBucket().hasLinkUser(account.getPlayerId(), linkType))
+        if (PLUGIN.getLinkEntryBucket().find(account.getPlayerId(), linkType).isPresent())
             return true;
 
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
@@ -66,7 +66,7 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
         if (linkType.getSettings().getConfirmationSettings().canToggleConfirmation() && !linkUserInfo.isConfirmationEnabled())
             return true;
 
-        PLUGIN.getLinkEntryBucket().addLinkUser(linkEntryUser);
+        PLUGIN.getLinkEntryBucket().modifiable().add(linkEntryUser);
 
         sendConfirmationMessage(account, linkType, linkUserInfo);
         return false;
