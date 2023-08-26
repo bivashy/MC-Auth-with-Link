@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.server.commands;
 
+import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
@@ -36,6 +37,7 @@ public class LogoutCommand {
                 account.logout(config.getSessionDurability());
                 accountStorage.saveOrUpdateAccount(account);
                 authenticatingAccountBucket.addAuthenticatingAccount(account);
+                account.nextAuthenticationStep(AuthPlugin.instance().getAuthenticationContextFactoryBucket().createContext(account));
                 player.sendMessage(config.getServerMessages().getMessage("logout-success"));
                 config.findServerInfo(config.getAuthServers()).asProxyServer().sendPlayer(player);
             });
