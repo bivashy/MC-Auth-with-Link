@@ -28,7 +28,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
 
     @DefaultFor("~")
     public void onAccept(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Default("all") String acceptPlayerName) {
-        List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().getLinkUsers(entryUser -> {
+        List<LinkEntryUser> accounts = plugin.getLinkEntryBucket().find(entryUser -> {
             if (!entryUser.getLinkType().equals(linkType))
                 return false;
 
@@ -57,7 +57,7 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
             account.getPlayer().ifPresent(player -> player.sendMessage(linkType.getServerMessages().getStringMessage("enter-confirmed",
                     linkType.newMessageContext(account))));
             account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
-            plugin.getLinkEntryBucket().removeLinkUser(entryUser);
+            plugin.getLinkEntryBucket().modifiable().remove(entryUser);
 
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted", linkType.newMessageContext(account)));
         }));

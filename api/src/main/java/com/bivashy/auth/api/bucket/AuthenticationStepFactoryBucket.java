@@ -1,20 +1,25 @@
 package com.bivashy.auth.api.bucket;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 import com.bivashy.auth.api.factory.AuthenticationStepFactory;
 
-public interface AuthenticationStepFactoryBucket {
-    List<AuthenticationStepFactory> getList();
+public interface AuthenticationStepFactoryBucket extends Bucket<AuthenticationStepFactory> {
 
-    void add(AuthenticationStepFactory authenticationStepCreator);
+    @Deprecated
+    default List<AuthenticationStepFactory> getList() {
+        return new ArrayList<>(getUnmodifiableRaw());
+    }
 
-    void remove(AuthenticationStepFactory authenticationStepCreator);
+    @Deprecated
+    default void add(AuthenticationStepFactory authenticationStepCreator) {
+        modifiable().add(authenticationStepCreator);
+    }
 
-    Iterator<AuthenticationStepFactory> iterator();
+    @Deprecated
+    default void remove(AuthenticationStepFactory authenticationStepCreator) {
+        modifiable().remove(authenticationStepCreator);
+    }
 
-    Optional<AuthenticationStepFactory> findFirst(Predicate<AuthenticationStepFactory> filter);
 }

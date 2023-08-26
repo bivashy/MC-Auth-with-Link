@@ -2,12 +2,16 @@ package com.bivashy.auth.api.bucket;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket.AuthenticatingAccountState;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 
-public interface AuthenticatingAccountBucket {
-    Collection<String> getAccountIdEntries();
+public interface AuthenticatingAccountBucket extends Bucket<AuthenticatingAccountState> {
+    default Collection<String> getAccountIdEntries() {
+        return stream().map(AuthenticatingAccountState::getAccount).map(PlayerIdSupplier::getPlayerId).collect(Collectors.toList());
+    }
 
     /**
      * @deprecated Use {@link #isAuthenticating(PlayerIdSupplier)}
@@ -33,15 +37,21 @@ public interface AuthenticatingAccountBucket {
         return getAuthenticatingAccountNullable(playerIdSupplier);
     }
 
-    boolean isAuthenticating(PlayerIdSupplier playerIdSupplier);
+    default boolean isAuthenticating(PlayerIdSupplier playerIdSupplier) {
+        return hasByValue(AuthenticatingAccountState::getPlayerId, playerIdSupplier.getPlayerId());
+    }
 
-    Optional<Account> getAuthenticatingAccount(PlayerIdSupplier playerIdSupplier);
+    default Optional<Account> getAuthenticatingAccount(PlayerIdSupplier playerIdSupplier) {
+        return findFirstByValue(AuthenticatingAccountState::getPlayerId, playerIdSupplier.getPlayerId()).map(AuthenticatingAccountState::getAccount);
+    }
 
     default Account getAuthenticatingAccountNullable(PlayerIdSupplier playerIdSupplier) {
         return getAuthenticatingAccount(playerIdSupplier).orElse(null);
     }
 
-    Optional<Long> getEnterTimestamp(PlayerIdSupplier playerIdSupplier);
+    default Optional<Long> getEnterTimestamp(PlayerIdSupplier playerIdSupplier) {
+        return findFirstByValue(AuthenticatingAccountState::getPlayerId, playerIdSupplier.getPlayerId()).map(AuthenticatingAccountState::getEnterTimestamp);
+    }
 
     default long getEnterTimestampOrZero(PlayerIdSupplier playerIdSupplier) {
         return getEnterTimestamp(playerIdSupplier).orElse(0L);
@@ -66,4 +76,16 @@ public interface AuthenticatingAccountBucket {
     void addAuthenticatingAccount(Account account);
 
     void removeAuthenticatingAccount(PlayerIdSupplier playerIdSupplier);
+
+    interface AuthenticatingAccountState {
+        default String getPlayerId() {
+            return getAccount().getPlayerId();
+        }
+
+        Account getAccount();
+
+        long getEnterTimestamp();
+
+
+    }
 }

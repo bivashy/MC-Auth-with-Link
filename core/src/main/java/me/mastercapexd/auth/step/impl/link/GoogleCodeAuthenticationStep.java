@@ -42,7 +42,7 @@ public class GoogleCodeAuthenticationStep extends AuthenticationStepTemplate imp
         if (!PLUGIN.getConfig().getGoogleAuthenticatorSettings().isEnabled())
             return true;
 
-        if (PLUGIN.getLinkEntryBucket().hasLinkUser(account.getPlayerId(), GoogleLinkType.getInstance()))
+        if (PLUGIN.getLinkEntryBucket().find(account.getPlayerId(), GoogleLinkType.getInstance()).isPresent())
             return true;
 
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
@@ -57,7 +57,7 @@ public class GoogleCodeAuthenticationStep extends AuthenticationStepTemplate imp
             if (!linkUserInfo.isConfirmationEnabled() && GoogleLinkType.getInstance().getSettings().getConfirmationSettings().canToggleConfirmation())
                 return true;
 
-            PLUGIN.getLinkEntryBucket().addLinkUser(entryUser);
+            PLUGIN.getLinkEntryBucket().modifiable().add(entryUser);
             return false;
         }).orElse(true);
     }

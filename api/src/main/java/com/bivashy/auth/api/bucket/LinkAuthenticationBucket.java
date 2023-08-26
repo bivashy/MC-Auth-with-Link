@@ -7,22 +7,58 @@ import java.util.function.Predicate;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 
-public interface LinkAuthenticationBucket<T extends LinkUser> {
-    boolean hasLinkUser(Predicate<T> filter);
+public interface LinkAuthenticationBucket<T extends LinkUser> extends Bucket<T> {
 
-    boolean hasLinkUser(String id, LinkType linkType);
+    default Predicate<T> createFilter(String accountId, LinkType linkType) {
+        return linkUser -> linkUser.getAccount().getPlayerId().equals(accountId) && linkUser.getLinkType().equals(linkType);
+    }
 
-    void addLinkUser(T linkUser);
+    default Optional<T> find(String id, LinkType linkType) {
+        return findFirst(createFilter(id, linkType));
+    }
 
-    void removeLinkUsers(Predicate<T> filter);
+    @Deprecated
+    default boolean hasLinkUser(Predicate<T> filter) {
+        return has(filter);
+    }
 
-    void removeLinkUser(String id, LinkType linkType);
+    @Deprecated
+    default boolean hasLinkUser(String id, LinkType linkType) {
+        return has(createFilter(id, linkType));
+    }
 
-    void removeLinkUser(T linkUser);
+    @Deprecated
+    default void addLinkUser(T linkUser) {
+        modifiable().add(linkUser);
+    }
 
-    Optional<T> findFirstLinkUser(Predicate<T> filter);
+    default void removeLinkUsers(Predicate<T> filter) {
+        modifiable().removeIf(filter);
+    }
 
-    List<T> getLinkUsers(Predicate<T> filter);
+    @Deprecated
+    default void removeLinkUser(String id, LinkType linkType) {
+        modifiable().removeIf(createFilter(id, linkType));
+    }
 
-    T getLinkUser(String id, LinkType linkType);
+    @Deprecated
+    default void removeLinkUser(T linkUser) {
+        modifiable().remove(linkUser);
+    }
+
+    @Deprecated
+    default Optional<T> findFirstLinkUser(Predicate<T> filter) {
+        return findFirst(filter);
+    }
+
+    @Deprecated
+    default List<T> getLinkUsers(Predicate<T> filter) {
+        return find(filter);
+    }
+
+    @Deprecated
+    default T getLinkUser(String id, LinkType linkType) {
+        return findFirst(createFilter(id, linkType)).orElse(null);
+    }
+
 }
