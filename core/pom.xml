@@ -25,8 +25,8 @@
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
         <jda.version>5.0.0-beta.11</jda.version>
-        <aether.version>1.1.0</aether.version>
-        <maven-aether-provider.version>3.3.9</maven-aether-provider.version>
+        <maven-resolver.version>1.9.15</maven-resolver.version>
+        <maven-resolver-provider.version>3.9.4</maven-resolver-provider.version>
     </properties>
 
     <repositories>
@@ -163,38 +163,25 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Aether -->
+        <!-- Apache Maven Resolver API -->
         <dependency>
-            <groupId>org.eclipse.aether</groupId>
-            <artifactId>aether-api</artifactId>
-            <version>${aether.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.aether</groupId>
-            <artifactId>aether-impl</artifactId>
-            <version>${aether.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.aether</groupId>
-            <artifactId>aether-connector-basic</artifactId>
-            <version>${aether.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.aether</groupId>
-            <artifactId>aether-transport-file</artifactId>
-            <version>${aether.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.aether</groupId>
-            <artifactId>aether-transport-http</artifactId>
-            <version>${aether.version}</version>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-api</artifactId>
+            <version>${maven-resolver.version}</version>
         </dependency>
 
-        <!-- Maven Aether Provider -->
+        <!-- Apache Maven Resolver Supplier -->
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-supplier</artifactId>
+            <version>${maven-resolver.version}</version>
+        </dependency>
+
+        <!-- Apache Maven Resolver Provider -->
         <dependency>
             <groupId>org.apache.maven</groupId>
-            <artifactId>maven-aether-provider</artifactId>
-            <version>${maven-aether-provider.version}</version>
+            <artifactId>maven-resolver-provider</artifactId>
+            <version>${maven-resolver-provider.version}</version>
         </dependency>
     </dependencies>
 </project>
