@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.util;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -21,6 +22,8 @@ import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.resolution.DependencyResolutionException;
 import org.eclipse.aether.resolution.DependencyResult;
 import org.eclipse.aether.supplier.RepositorySystemSupplier;
+import org.eclipse.aether.util.artifact.JavaScopes;
+import org.eclipse.aether.util.filter.ScopeDependencyFilter;
 
 public class MavenArtifactUtil {
 
@@ -48,6 +51,7 @@ public class MavenArtifactUtil {
 
         DependencyRequest dependencyRequest = new DependencyRequest();
         dependencyRequest.setCollectRequest(collectRequest);
+        dependencyRequest.setFilter(new ScopeDependencyFilter(Collections.singleton(JavaScopes.COMPILE), null));
         DependencyResult dependencyResult = REPOSITORY_SYSTEM.resolveDependencies(REPOSITORY_SYSTEM_SESSION, dependencyRequest);
 
         return dependencyResult.getArtifactResults();
