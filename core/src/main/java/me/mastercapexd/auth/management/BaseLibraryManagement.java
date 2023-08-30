@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactDescriptorException;
 import org.eclipse.aether.resolution.ArtifactResult;
 import org.eclipse.aether.resolution.DependencyResolutionException;
 
@@ -21,6 +20,7 @@ import net.byteflux.libby.Library.Builder;
 import net.byteflux.libby.LibraryManager;
 
 public class BaseLibraryManagement implements LibraryManagement {
+
     private static final Gson GSON = new Gson();
     private static final String JDA_VERSION = "5.0.0-beta.11";
     public static final Library JDA_LIBRARY = Library.builder()
@@ -105,9 +105,10 @@ public class BaseLibraryManagement implements LibraryManagement {
                             .noneMatch(excludedLibrary -> excludedLibrary.getGroupId().equals(transitiveLibrary.getGroupId()) &&
                                     excludedLibrary.getArtifactId().equals(transitiveLibrary.getArtifactId())))
                     .collect(Collectors.toList());
-        } catch(DependencyResolutionException | ArtifactDescriptorException e) {
+        } catch (DependencyResolutionException e) {
             e.printStackTrace();
         }
         return Collections.emptyList();
     }
+
 }
