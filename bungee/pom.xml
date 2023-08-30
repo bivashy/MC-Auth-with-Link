@@ -16,7 +16,7 @@
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
         <telegram.api.version>6.5.0</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
-        <libby.version>1.1.5</libby.version>
+        <libby.version>1.3.1</libby.version>
     </properties>
 
     <repositories>
@@ -28,12 +28,6 @@
         <repository>
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-
-        <!-- Libby (AlessioDP) Repository -->
-        <repository>
-            <id>AlessioDP</id>
-            <url>https://repo.alessiodp.com/releases/</url>
         </repository>
     </repositories>
 
@@ -95,7 +89,7 @@
 
         <!-- Libby -->
         <dependency>
-            <groupId>net.byteflux</groupId>
+            <groupId>com.github.bivashy.libby</groupId>
             <artifactId>libby-bungee</artifactId>
             <version>${libby.version}</version>
         </dependency>
