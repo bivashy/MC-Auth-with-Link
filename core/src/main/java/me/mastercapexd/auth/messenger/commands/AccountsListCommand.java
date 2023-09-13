@@ -44,7 +44,7 @@ public class AccountsListCommand implements OrphanCommand {
 
         accountsCollection.thenAccept(accounts -> {
             if (accounts.isEmpty()) {
-                actorWrapper.reply(linkType.getLinkMessages().getMessage("no-accounts"));
+                actorWrapper.reply(linkType.getLinkMessages().getMessage(type.accountsNotFound));
                 return;
             }
 
@@ -54,9 +54,7 @@ public class AccountsListCommand implements OrphanCommand {
                 return;
             }
             Keyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type.name(), paginatedAccounts);
-            String message = type.isAdministratorOnly ? linkType.getLinkMessages().getMessage("admin-panel-accounts") :
-                    linkType.getLinkMessages().getMessage("accounts");
-            actorWrapper.send(linkType.newMessageBuilder(message).keyboard(keyboard).build());
+            actorWrapper.send(linkType.newMessageBuilder(type.accountsMessage).keyboard(keyboard).build());
         });
     }
 
@@ -88,31 +86,34 @@ public class AccountsListCommand implements OrphanCommand {
     }
 
     public enum AccountListType {
-        ALL(true) {
+        ALL(true, "admin-panel-no-accounts", "admin-panel-accounts") {
             @Override
             CompletableFuture<Collection<Account>> getAccounts(AccountDatabase database, LinkType linkType, LinkCommandActorWrapper actorWrapper) {
                 return database.getAllAccounts();
             }
-        }, LINKED(true) {
+        }, LINKED(true, "admin-panel-no-linked-accounts", "admin-panel-linked-accounts") {
             @Override
             CompletableFuture<Collection<Account>> getAccounts(AccountDatabase database, LinkType linkType, LinkCommandActorWrapper actorWrapper) {
                 return database.getAllLinkedAccounts();
             }
-        }, MY(false) {
+        }, MY(false, "no-accounts", "accounts") {
             @Override
             CompletableFuture<Collection<Account>> getAccounts(AccountDatabase database, LinkType linkType, LinkCommandActorWrapper actorWrapper) {
                 return database.getAccountsFromLinkIdentificator(actorWrapper.userId());
             }
-        }, LOCAL_LINKED(true) {
+        }, LOCAL_LINKED(true, "admin-panel-no-linked-accounts", "admin-panel-linked-accounts") {
             @Override
             CompletableFuture<Collection<Account>> getAccounts(AccountDatabase database, LinkType linkType, LinkCommandActorWrapper actorWrapper) {
                 return database.getAllLinkedAccounts(linkType);
             }
         };
         private final boolean isAdministratorOnly;
+        private final String accountsNotFound, accountsMessage;
 
-        AccountListType(boolean isAdministratorOnly) {
+        AccountListType(boolean isAdministratorOnly, String accountsNotFound, String accountsMessage) {
             this.isAdministratorOnly = isAdministratorOnly;
+            this.accountsNotFound = accountsNotFound;
+            this.accountsMessage = accountsMessage;
         }
 
         abstract CompletableFuture<Collection<Account>> getAccounts(AccountDatabase database, LinkType linkType, LinkCommandActorWrapper actorWrapper);
