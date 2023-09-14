@@ -41,7 +41,7 @@ data:
 #      table-name: 'mc_auth_accounts'
 #      columns:
 #        playerId: 'player_id'
-#        playerIdType: 'unique_id'
+#        playerIdType: 'player_id_type'
 #        cryptoProvider: 'hash_type'
 #        lastIp: 'last_ip'
 #        uniqueId: 'unique_id'

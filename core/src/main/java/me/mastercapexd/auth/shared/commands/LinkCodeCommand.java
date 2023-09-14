@@ -13,6 +13,7 @@ import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import io.github.revxrsal.eventbus.EventBus;
+import me.mastercapexd.auth.config.message.context.account.BaseAccountPlaceholderContext;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
@@ -59,7 +60,7 @@ public class LinkCodeCommand implements OrphanCommand {
 
                         accountDatabase.updateAccountLinks(account);
 
-                        actor.replyWithMessage(messages.getMessage("confirmation-success"));
+                        actor.replyWithMessage(messages.getMessage("confirmation-success", new BaseAccountPlaceholderContext(account)));
                         linkConfirmationBucket.modifiable().remove(linkContext.getConfirmationUser());
                     });
                 }));

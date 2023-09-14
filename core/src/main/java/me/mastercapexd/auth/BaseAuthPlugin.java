@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -91,7 +90,7 @@ import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
-import net.byteflux.libby.Library;
+import net.byteflux.libby.ExcludedLibrary;
 import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
@@ -203,8 +202,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void initializeDiscord() {
-        libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY,
-                Collections.singletonList(Library.builder().groupId("club{}minnced").artifactId("opus-java").version("0").build()));
+        libraryManagement.loadLibraryTransitively(BaseLibraryManagement.JDA_LIBRARY, ExcludedLibrary.of("club{}minnced", "opus-java"));
 
         BaseDiscordHook discordHook = new BaseDiscordHook();
         hooks.put(DiscordHook.class, discordHook);
@@ -232,8 +230,9 @@ public class BaseAuthPlugin implements AuthPlugin {
         configurationProcessor.registerFieldResolver(ConfigurationServer.class, (context) -> new BaseConfigurationServer(context.getString()))
                 .registerFieldResolver(ConfigurationDuration.class, (context) -> new ConfigurationDuration(TimeUtils.parseDuration(context.getString("1s"))))
                 .registerFieldResolverFactory(ConfigurationHolderMapResolverFactory.ConfigurationHolderMap.class, new ConfigurationHolderMapResolverFactory())
-                .registerFieldResolver(CryptoProvider.class, (context) -> cryptoProviderBucket.findFirstByValue(CryptoProvider::getIdentifier, context.getString())
-                        .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
+                .registerFieldResolver(CryptoProvider.class,
+                        (context) -> cryptoProviderBucket.findFirstByValue(CryptoProvider::getIdentifier, context.getString())
+                                .orElseThrow(() -> new IllegalArgumentException("Cannot find CryptoProvider with name " + context.getString())))
                 .registerFieldResolver(ServerComponent.class, new ServerComponentFieldResolver())
                 .registerFieldResolverFactory(RawURLProvider.class, new RawURLProviderFieldResolverFactory())
                 .registerFieldResolver(SimpleDateFormat.class, context -> new SimpleDateFormat(context.getString("mm:ss")))

@@ -23,7 +23,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn --batch-mode --update-snapshots verify
+      run: mvn --batch-mode verify
     - name: Move artifact  
       run: mkdir staging && mv bungee/target/*-shaded.jar staging/mcAuth-bungee.jar && mv velocity/target/*-shaded.jar staging/mcAuth-velocity.jar
     - name: Upload artifact

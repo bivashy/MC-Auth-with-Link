@@ -2,25 +2,18 @@ package me.mastercapexd.auth.management;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactDescriptorException;
-import org.eclipse.aether.resolution.ArtifactResult;
-import org.eclipse.aether.resolution.DependencyResolutionException;
 
 import com.bivashy.auth.api.management.LibraryManagement;
 import com.google.gson.Gson;
 
-import me.mastercapexd.auth.util.MavenArtifactUtil;
+import net.byteflux.libby.ExcludedLibrary;
 import net.byteflux.libby.Library;
-import net.byteflux.libby.Library.Builder;
 import net.byteflux.libby.LibraryManager;
+import net.byteflux.libby.TransitiveLibraryManager;
 
 public class BaseLibraryManagement implements LibraryManagement {
+
     private static final Gson GSON = new Gson();
     private static final String JDA_VERSION = "5.0.0-beta.11";
     public static final Library JDA_LIBRARY = Library.builder()
@@ -39,10 +32,10 @@ public class BaseLibraryManagement implements LibraryManagement {
             .build();
     private final List<String> customRepositories = new ArrayList<>();
     private final List<Library> customLibraries = new ArrayList<>();
-    private final LibraryManager libraryManager;
+    private final TransitiveLibraryManager libraryManager;
 
     public BaseLibraryManagement(LibraryManager libraryManager) {
-        this.libraryManager = libraryManager;
+        this.libraryManager = TransitiveLibraryManager.wrap(libraryManager);
     }
 
     @Override
@@ -54,7 +47,7 @@ public class BaseLibraryManagement implements LibraryManagement {
 
         Collection<Library> libraries = new ArrayList<>(customLibraries);
 
-        libraries.forEach(libraryManager::loadLibrary);
+        libraries.forEach(libraryManager::loadLibraryTransitively);
     }
 
     @Override
@@ -70,10 +63,8 @@ public class BaseLibraryManagement implements LibraryManagement {
     }
 
     @Override
-    public LibraryManagement loadLibrary(Library library, Collection<Library> exclusion, boolean loadDependencies) {
-        libraryManager.loadLibrary(library);
-        if (loadDependencies)
-            getLibraries(library, exclusion).forEach(dependency -> loadLibrary(dependency, exclusion, false));
+    public LibraryManagement loadLibraryTransitively(Library library, ExcludedLibrary... excludedLibraries) {
+        libraryManager.loadLibraryTransitively(library, excludedLibraries);
         return this;
     }
 
@@ -82,32 +73,4 @@ public class BaseLibraryManagement implements LibraryManagement {
         return libraryManager;
     }
 
-    private List<Library> getLibraries(Library library, Collection<Library> exclusion) {
-        try {
-            RemoteRepository[] repositories = Stream.of(library.getRepositories(), libraryManager.getRepositories())
-                    .flatMap(Collection::stream)
-                    .map(repository -> MavenArtifactUtil.newDefaultRepository(repository, repository))
-                    .toArray(RemoteRepository[]::new);
-
-            return MavenArtifactUtil.findCompileDependencies(library.getGroupId(), library.getArtifactId(), library.getVersion(), repositories)
-                    .stream()
-                    .filter(ArtifactResult::isResolved)
-                    .map(ArtifactResult::getArtifact)
-                    .map(artifact -> {
-                        Builder libraryDependencyBuilder = Library.builder()
-                                .groupId(artifact.getGroupId())
-                                .artifactId(artifact.getArtifactId())
-                                .version(artifact.getVersion());
-                        library.getRelocations().forEach(libraryDependencyBuilder::relocate);
-                        return libraryDependencyBuilder.build();
-                    })
-                    .filter(transitiveLibrary -> exclusion.stream()
-                            .noneMatch(excludedLibrary -> excludedLibrary.getGroupId().equals(transitiveLibrary.getGroupId()) &&
-                                    excludedLibrary.getArtifactId().equals(transitiveLibrary.getArtifactId())))
-                    .collect(Collectors.toList());
-        } catch(DependencyResolutionException | ArtifactDescriptorException e) {
-            e.printStackTrace();
-        }
-        return Collections.emptyList();
-    }
 }
