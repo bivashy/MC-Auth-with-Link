@@ -25,8 +25,6 @@
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
         <jda.version>5.0.0-beta.11</jda.version>
-        <maven-resolver.version>1.9.15</maven-resolver.version>
-        <maven-resolver-provider.version>3.9.4</maven-resolver-provider.version>
 
         <!-- Test Dependencies -->
         <mockito.version>5.3.1</mockito.version>
