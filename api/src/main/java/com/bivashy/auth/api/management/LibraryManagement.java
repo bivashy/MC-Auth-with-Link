@@ -1,11 +1,10 @@
 package com.bivashy.auth.api.management;
 
 import java.util.Collection;
-import java.util.Collections;
 
-import net.byteflux.libby.ExcludedLibrary;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.LibraryManager;
+import net.byteflux.libby.transitive.ExcludedDependency;
 
 public interface LibraryManagement {
 
@@ -15,9 +14,7 @@ public interface LibraryManagement {
 
     LibraryManagement addCustomLibrary(Library library);
 
-    default LibraryManagement loadLibrary(Library library) {
-        return loadLibrary(library, Collections.emptyList(), true);
-    }
+    LibraryManagement loadLibrary(Library library);
 
     @Deprecated
     default LibraryManagement loadLibrary(Library library, Collection<Library> exclusion) {
@@ -25,15 +22,23 @@ public interface LibraryManagement {
     }
 
     @Deprecated
-    default LibraryManagement loadLibrary(Library library, Collection<Library> exclusion, boolean loadDependencies) {
-        if (loadDependencies)
-            return loadLibraryTransitively(library,
-                    exclusion.stream().map(excluded -> ExcludedLibrary.of(excluded.getGroupId(), excluded.getArtifactId())).toArray(ExcludedLibrary[]::new));
+    default LibraryManagement loadLibrary(Library library, Collection<Library> exclusions, boolean loadDependencies) {
+        Library.Builder libraryBuilder = Library.builder()
+                .groupId(library.getGroupId())
+                .artifactId(library.getArtifactId())
+                .version(library.getVersion())
+                .checksum(library.getChecksum())
+                .isolatedLoad(library.isIsolatedLoad())
+                .classifier(library.getClassifier())
+                .resolveTransitiveDependencies(loadDependencies);
+        library.getRepositories().forEach(libraryBuilder::repository);
+        library.getRelocations().forEach(libraryBuilder::relocate);
+        exclusions.stream()
+                .map(exclusion -> new ExcludedDependency(exclusion.getGroupId(), exclusion.getArtifactId()))
+                .forEach(libraryBuilder::excludeTransitiveDependency);
         loadLibrary(library);
         return this;
     }
-
-    LibraryManagement loadLibraryTransitively(Library library, ExcludedLibrary... excludedLibrary);
 
     LibraryManager getLibraryManager();
 
