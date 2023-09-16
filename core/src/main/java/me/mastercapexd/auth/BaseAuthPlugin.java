@@ -90,7 +90,6 @@ import me.mastercapexd.auth.task.AuthenticationTimeoutTask;
 import me.mastercapexd.auth.telegram.command.TelegramCommandRegistry;
 import me.mastercapexd.auth.util.HashUtils;
 import me.mastercapexd.auth.util.TimeUtils;
-import net.byteflux.libby.ExcludedLibrary;
 import net.kyori.adventure.platform.AudienceProvider;
 import ru.vyarus.yaml.updater.YamlUpdater;
 
@@ -202,7 +201,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     private void initializeDiscord() {
-        libraryManagement.loadLibraryTransitively(BaseLibraryManagement.JDA_LIBRARY, ExcludedLibrary.of("club{}minnced", "opus-java"));
+        libraryManagement.loadLibrary(BaseLibraryManagement.JDA_LIBRARY);
 
         BaseDiscordHook discordHook = new BaseDiscordHook();
         hooks.put(DiscordHook.class, discordHook);

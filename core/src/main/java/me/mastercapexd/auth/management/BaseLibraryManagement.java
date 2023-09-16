@@ -5,16 +5,12 @@ import java.util.Collection;
 import java.util.List;
 
 import com.bivashy.auth.api.management.LibraryManagement;
-import com.google.gson.Gson;
 
-import net.byteflux.libby.ExcludedLibrary;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.LibraryManager;
-import net.byteflux.libby.TransitiveLibraryManager;
 
 public class BaseLibraryManagement implements LibraryManagement {
 
-    private static final Gson GSON = new Gson();
     private static final String JDA_VERSION = "5.0.0-beta.11";
     public static final Library JDA_LIBRARY = Library.builder()
             .groupId("net{}dv8tion")
@@ -29,13 +25,15 @@ public class BaseLibraryManagement implements LibraryManagement {
             .relocate("gnu{}trove", "com{}bivashy{}auth{}gnu{}trove")
             .relocate("okhttp3", "com{}bivashy{}auth{}lib{}okhttp3")
             .relocate("com{}squareup{}okio", "com{}bivashy{}auth{}lib{}com{}squareup{}okio")
+            .resolveTransitiveDependencies(true)
+            .excludeTransitiveDependency("club{}minnced", "opus-java")
             .build();
     private final List<String> customRepositories = new ArrayList<>();
     private final List<Library> customLibraries = new ArrayList<>();
-    private final TransitiveLibraryManager libraryManager;
+    private final LibraryManager libraryManager;
 
     public BaseLibraryManagement(LibraryManager libraryManager) {
-        this.libraryManager = TransitiveLibraryManager.wrap(libraryManager);
+        this.libraryManager = libraryManager;
     }
 
     @Override
@@ -47,7 +45,13 @@ public class BaseLibraryManagement implements LibraryManagement {
 
         Collection<Library> libraries = new ArrayList<>(customLibraries);
 
-        libraries.forEach(libraryManager::loadLibraryTransitively);
+        libraries.forEach(libraryManager::loadLibrary);
+    }
+
+    @Override
+    public LibraryManagement loadLibrary(Library library) {
+        libraryManager.loadLibrary(library);
+        return this;
     }
 
     @Override
@@ -59,12 +63,6 @@ public class BaseLibraryManagement implements LibraryManagement {
     @Override
     public LibraryManagement addCustomLibrary(Library library) {
         customLibraries.add(library);
-        return this;
-    }
-
-    @Override
-    public LibraryManagement loadLibraryTransitively(Library library, ExcludedLibrary... excludedLibraries) {
-        libraryManager.loadLibraryTransitively(library, excludedLibraries);
         return this;
     }
 
