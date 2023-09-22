@@ -9,7 +9,9 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface CommandCooldown {
+
     long value();
 
     TimeUnit unit() default TimeUnit.MILLISECONDS;
+
 }
