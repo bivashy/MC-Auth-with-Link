@@ -23,6 +23,7 @@ import me.mastercapexd.auth.server.commands.parameters.NewPassword;
 import me.mastercapexd.auth.shared.commands.LinkCodeCommand;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
+import me.mastercapexd.auth.shared.commands.validator.CommandCooldownCondition;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.SendMessageException;
@@ -30,6 +31,7 @@ import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
 
 public abstract class MessengerCommandRegistry {
+
     private static final AuthPlugin PLUGIN = AuthPlugin.instance();
     private final CommandHandler commandHandler;
     private final LinkType linkType;
@@ -50,6 +52,7 @@ public abstract class MessengerCommandRegistry {
 
         commandHandler.registerContextValue(LinkType.class, linkType);
 
+        commandHandler.registerCondition(new CommandCooldownCondition<>(linkType.getLinkMessages(), SendMessageException::new));
         commandHandler.registerCondition((actor, command, arguments) -> {
             if (!command.hasAnnotation(GoogleUse.class))
                 return;
@@ -105,7 +108,7 @@ public abstract class MessengerCommandRegistry {
                 throw new SendMessageException(linkType.getSettings().getMessages().getMessage("account-not-found"));
 
             Optional<LinkUser> linkUser = account.findFirstLinkUser(user -> user.getLinkType().equals(linkType));
-            if(!linkType.getSettings().isAdministrator(userId)) {
+            if (!linkType.getSettings().isAdministrator(userId)) {
                 if (!linkUser.isPresent())
                     throw new SendMessageException(linkType.getSettings().getMessages().getMessage("not-your-account", linkType.newMessageContext(account)));
 
@@ -171,4 +174,5 @@ public abstract class MessengerCommandRegistry {
     }
 
     protected abstract MessengerLinkCommandTemplate createLinkCommand();
+
 }
