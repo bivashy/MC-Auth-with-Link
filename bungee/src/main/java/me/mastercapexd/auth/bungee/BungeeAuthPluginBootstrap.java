@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.bungee;
 
+import com.alessiodp.libby.BungeeLibraryManager;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.management.LoginManagement;
 import com.bivashy.messenger.vk.message.VkMessage;
@@ -14,11 +15,11 @@ import me.mastercapexd.auth.bungee.listener.VkDispatchListener;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
-import net.byteflux.libby.BungeeLibraryManager;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeAuthPluginBootstrap extends Plugin {
+
     private static BungeeAuthPluginBootstrap instance;
     private BungeeAudiences bungeeAudiences;
     private LoginManagement loginManagement;
@@ -70,7 +71,4 @@ public class BungeeAuthPluginBootstrap extends Plugin {
         return bungeeAudiences;
     }
 
-    public AuthPlugin getAuthPlugin() {
-        return authPlugin;
-    }
 }

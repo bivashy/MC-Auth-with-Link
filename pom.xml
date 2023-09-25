@@ -81,6 +81,12 @@
                                 <exclude>META-INF/SPONGEPO.RSA</exclude>
                             </excludes>
                         </filter>
+                        <filter>
+                            <artifact>com.github.bivashy.libby:libby-core</artifact>
+                            <includes>
+                                <include>com/alessiodp/libby/**</include>
+                            </includes>
+                        </filter>
                     </filters>
 
                     <relocations>
@@ -184,16 +190,8 @@
                             <shadedPattern>${dependencies.relocation.package}.javax.annotation</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.eclipse.aether</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.eclipse.aether</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>org.codehaus.plexus</pattern>
                             <shadedPattern>${dependencies.relocation.package}.org.codehaus.plexus</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.maven</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.apache.maven</shadedPattern>
                         </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
