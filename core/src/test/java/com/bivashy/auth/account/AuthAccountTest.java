@@ -20,7 +20,6 @@ import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.bucket.CryptoProviderBucket;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
-import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
@@ -31,6 +30,7 @@ import me.mastercapexd.auth.account.factory.AuthAccountFactory;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthAccountTest {
+
     private static final String ACCOUNT_ID = "player";
     private static final IdentifierType ACCOUNT_ID_TYPE = IdentifierType.NAME;
     private static final String ACCOUNT_NAME = "Player";
@@ -54,8 +54,8 @@ public class AuthAccountTest {
         account = factory.createAccount(ACCOUNT_ID, ACCOUNT_ID_TYPE, ACCOUNT_UUID, ACCOUNT_NAME, cryptoProvider, null, null);
 
         CryptoProviderBucket cryptoProviderBucket = AuthPlugin.instance().getCryptoProviderBucket();
-        if (!cryptoProviderBucket.findCryptoProvider(cryptoProvider.getIdentifier()).isPresent())
-            cryptoProviderBucket.addCryptoProvider(cryptoProvider);
+        if (!cryptoProviderBucket.modifiable().hasByValue(CryptoProvider::getIdentifier, cryptoProvider.getIdentifier()))
+            cryptoProviderBucket.modifiable().remove(cryptoProvider);
     }
 
     @Test
@@ -201,7 +201,7 @@ public class AuthAccountTest {
         assertTrue(currentAuthenticationStep.shouldSkip());
 
         plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
-        deleteAccountFromDatabase(account).join();
+        deleteAccountFromDatabase(account);
     }
 
     @Test
@@ -230,18 +230,11 @@ public class AuthAccountTest {
         assertTrue(currentAuthenticationStep.shouldSkip());
 
         plugin.getAuthenticatingAccountBucket().removeAuthenticatingAccount(account);
-        deleteAccountFromDatabase(account).join();
+        deleteAccountFromDatabase(account);
     }
 
     private CompletableFuture<Void> deleteAccountFromDatabase(Account account) {
-        return accountDatabase().thenCompose(database -> database.deleteAccount(account.getPlayerId()));
+        return AuthPlugin.instance().getAccountDatabase().deleteAccount(account.getPlayerId());
     }
 
-    private CompletableFuture<AccountDatabase> accountDatabase() {
-        return CompletableFuture.supplyAsync(() -> {
-            AuthPlugin plugin = AuthPlugin.instance();
-            while (!plugin.getAccountDatabase().isEnabled()) {}
-            return plugin.getAccountDatabase();
-        });
-    }
 }
