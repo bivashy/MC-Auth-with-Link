@@ -27,6 +27,14 @@ public abstract class SimpleBucketTest<T> {
         shouldBeEmpty();
     }
 
+    @Test
+    public void shouldAddThenRemove() {
+        T element = element();
+        getBucket().modifiable().add(element);
+        getBucket().modifiable().remove(element);
+        shouldBeEmpty();
+    }
+
     abstract Bucket<T> getBucket();
 
     abstract T element();
