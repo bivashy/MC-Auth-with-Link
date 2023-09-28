@@ -17,6 +17,10 @@
     {
       "id": "limboapi",
       "optional": true
+    },
+    {
+      "id": "nanolimbovelocity",
+      "optional": true
     }
   ],
   "main": "me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap"
