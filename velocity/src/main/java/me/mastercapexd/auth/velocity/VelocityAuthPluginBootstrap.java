@@ -2,11 +2,14 @@ package me.mastercapexd.auth.velocity;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 
 import com.alessiodp.libby.VelocityLibraryManager;
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.hook.LimboPluginHook;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.messenger.vk.message.VkMessage;
 import com.bivashy.messenger.vk.provider.VkApiProvider;
@@ -21,12 +24,12 @@ import com.velocitypowered.api.proxy.ProxyServer;
 
 import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.hooks.VkPluginHook;
-import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
 import me.mastercapexd.auth.velocity.hooks.VelocityVkPluginHook;
 import me.mastercapexd.auth.velocity.hooks.limbo.LimboAPIHook;
+import me.mastercapexd.auth.velocity.hooks.nanolimbo.VelocityNanoLimboPluginHook;
 import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
@@ -86,10 +89,12 @@ public class VelocityAuthPluginBootstrap {
     }
 
     private void initializeLimbo() {
-        LimboAPIHook limboAPIHook = new LimboAPIHook();
-        if (!limboAPIHook.canHook())
-            return;
-        authPlugin.putHook(LimboHook.class, limboAPIHook);
+        Collection<LimboPluginHook> limboPluginHooks = Arrays.asList(
+                new VelocityNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange(), proxyServer),
+                new LimboAPIHook());
+        limboPluginHooks.stream()
+                .filter(LimboPluginHook::canHook)
+                .forEach(limboPluginHook -> authPlugin.putHook(LimboPluginHook.class, limboPluginHook));
     }
 
     public ProxyServer getProxyServer() {
