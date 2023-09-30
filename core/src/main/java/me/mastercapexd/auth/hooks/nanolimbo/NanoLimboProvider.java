@@ -9,14 +9,12 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import com.bivashy.auth.api.hook.LimboPluginHook;
-
 import ua.nanit.limbo.server.Command;
 import ua.nanit.limbo.server.CommandHandler;
 import ua.nanit.limbo.server.LimboServer;
 import ua.nanit.limbo.server.data.InfoForwarding;
 
-public interface NanoLimboPluginHook extends LimboPluginHook {
+public interface NanoLimboProvider {
 
     CommandHandler<Command> DUMMY_COMMAND_HANDLER = new CommandHandler<Command>() {
         @Override
@@ -39,8 +37,13 @@ public interface NanoLimboPluginHook extends LimboPluginHook {
 
     ClassLoader classLoader();
 
-    default LimboServer createLimboServer(SocketAddress address) {
-        return new LimboServer(new NanoLimboConfig(address, createForwarding()), DUMMY_COMMAND_HANDLER, classLoader());
+    default void createAndStartLimbo(SocketAddress address) {
+        LimboServer limboServer = new LimboServer(new NanoLimboConfig(address, createForwarding()), DUMMY_COMMAND_HANDLER, classLoader());
+        try {
+            limboServer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     default Optional<InetSocketAddress> findAvailableAddress(IntStream portRange) {
