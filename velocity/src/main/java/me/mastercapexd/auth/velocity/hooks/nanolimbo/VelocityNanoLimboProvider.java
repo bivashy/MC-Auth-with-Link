@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.velocity.hooks.nanolimbo;
 
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
@@ -8,6 +9,7 @@ import com.velocitypowered.proxy.config.PlayerInfoForwarding;
 import com.velocitypowered.proxy.config.VelocityConfiguration;
 
 import me.mastercapexd.auth.hooks.nanolimbo.NanoLimboProvider;
+import ua.nanit.limbo.NanoLimbo;
 import ua.nanit.limbo.server.data.InfoForwarding;
 
 public class VelocityNanoLimboProvider implements NanoLimboProvider {
@@ -15,9 +17,14 @@ public class VelocityNanoLimboProvider implements NanoLimboProvider {
     private final ClassLoader classLoader;
     private final ProxyServer proxyServer;
 
-    public VelocityNanoLimboProvider(ClassLoader classLoader, ProxyServer proxyServer) {
-        this.classLoader = classLoader;
+    public VelocityNanoLimboProvider(ProxyServer proxyServer) {
+        this.classLoader = NanoLimbo.class.getClassLoader();
         this.proxyServer = proxyServer;
+    }
+
+    @Override
+    public void createAndStartLimbo(SocketAddress address) {
+        NanoLimboProvider.super.createAndStartLimbo(address);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class BungeeAuthPluginBootstrap extends Plugin {
     }
 
     private void initializeLimbo() {
-        Collection<LimboPluginHook> limboPluginHooks = Collections.singleton(new BungeeNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange(), this));
+        Collection<LimboPluginHook> limboPluginHooks = Collections.singleton(new BungeeNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange()));
         limboPluginHooks.stream()
                 .filter(LimboPluginHook::canHook)
                 .forEach(limboPluginHook -> authPlugin.putHook(LimboPluginHook.class, limboPluginHook));

@@ -9,18 +9,17 @@ import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.hooks.nanolimbo.NanoLimboProvider;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeNanoLimboPluginHook implements LimboPluginHook {
 
     private final int[] limboPorts;
     private NanoLimboProvider provider;
 
-    public BungeeNanoLimboPluginHook(IntStream limboPortRange, Plugin plugin) {
+    public BungeeNanoLimboPluginHook(IntStream limboPortRange) {
         this.limboPorts = limboPortRange.toArray();
         if (!canHook())
             return;
-        this.provider = new BungeeNanoLimboProvider(plugin.getClass().getClassLoader());
+        this.provider = new BungeeNanoLimboProvider(ProxyServer.getInstance().getPluginManager().getPlugin("NanoLimboBungee").getClass().getClassLoader());
     }
 
     @Override
