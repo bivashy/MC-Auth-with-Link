@@ -19,12 +19,7 @@ public class LimboAPIHook implements LimboPluginHook {
 
     @Override
     public boolean canHook() {
-        try {
-            net.elytrium.limboapi.api.LimboFactory.class.getName();
-            return true;
-        } catch (NoClassDefFoundError e) {
-            return false;
-        }
+        return PLUGIN.getProxyServer().getPluginManager().isLoaded("limboapi");
     }
 
     @Override
