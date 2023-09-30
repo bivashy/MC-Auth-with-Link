@@ -2,8 +2,8 @@ package me.mastercapexd.auth.velocity;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 
@@ -28,7 +28,6 @@ import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
 import me.mastercapexd.auth.velocity.hooks.VelocityVkPluginHook;
-import me.mastercapexd.auth.velocity.hooks.limbo.LimboAPIHook;
 import me.mastercapexd.auth.velocity.hooks.nanolimbo.VelocityNanoLimboPluginHook;
 import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
@@ -89,9 +88,7 @@ public class VelocityAuthPluginBootstrap {
     }
 
     private void initializeLimbo() {
-        Collection<LimboPluginHook> limboPluginHooks = Arrays.asList(
-                new VelocityNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange(), proxyServer),
-                new LimboAPIHook());
+        Collection<LimboPluginHook> limboPluginHooks = Collections.singleton(new VelocityNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange(), proxyServer));
         limboPluginHooks.stream()
                 .filter(LimboPluginHook::canHook)
                 .forEach(limboPluginHook -> authPlugin.putHook(LimboPluginHook.class, limboPluginHook));

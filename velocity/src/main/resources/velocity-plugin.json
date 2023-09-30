@@ -15,10 +15,6 @@
       "optional": true
     },
     {
-      "id": "limboapi",
-      "optional": true
-    },
-    {
       "id": "nanolimbovelocity",
       "optional": true
     }
