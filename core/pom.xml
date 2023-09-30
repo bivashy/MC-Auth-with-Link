@@ -25,6 +25,7 @@
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
         <jda.version>5.0.0-beta.11</jda.version>
+        <nanolimbo.version>1.0.6</nanolimbo.version>
         <maven-resolver.version>1.9.15</maven-resolver.version>
         <maven-resolver-provider.version>3.9.4</maven-resolver-provider.version>
     </properties>
@@ -160,6 +161,14 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>${jda.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- NanoLimboPlugin API -->
+        <dependency>
+            <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
+            <artifactId>api</artifactId>
+            <version>${nanolimbo.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

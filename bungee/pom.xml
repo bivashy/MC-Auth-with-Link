@@ -17,6 +17,7 @@
         <telegram.api.version>6.5.0</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
         <libby.version>2.0.0</libby.version>
+        <nanolimbo.version>1.0.6</nanolimbo.version>
     </properties>
 
     <repositories>
@@ -84,6 +85,14 @@
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
             <version>${telegram.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- NanoLimboPlugin API -->
+        <dependency>
+            <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
+            <artifactId>api</artifactId>
+            <version>${nanolimbo.version}</version>
             <scope>provided</scope>
         </dependency>
 

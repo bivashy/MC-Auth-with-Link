@@ -2,6 +2,7 @@ package com.bivashy.auth.api.config;
 
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import com.bivashy.auth.api.config.bossbar.BossBarSettings;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
@@ -41,6 +42,8 @@ public interface PluginConfig {
     List<ConfigurationServer> getBlockedServers();
 
     List<Pattern> getAllowedCommands();
+
+    IntStream getLimboPortRange();
 
     List<String> getAuthenticationSteps();
 
