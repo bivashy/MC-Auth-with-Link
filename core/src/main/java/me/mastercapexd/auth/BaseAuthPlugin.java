@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.AuthPluginProvider;
@@ -240,6 +241,16 @@ public class BaseAuthPlugin implements AuthPlugin {
                     if (path.isEmpty())
                         return null;
                     return new File(path.replace("%plugin_folder%", getFolder().getAbsolutePath()));
+                })
+                .registerFieldResolver(IntStream.class, (context) -> {
+                    String number = context.getString("");
+                    if (number.isEmpty())
+                        return IntStream.of(0);
+                    if (number.contains("-")) {
+                        String[] range = number.split("-");
+                        return IntStream.range(Integer.parseInt(range[0]), Integer.parseInt(range[1]));
+                    }
+                    return IntStream.of(Integer.parseInt(number));
                 });
     }
 

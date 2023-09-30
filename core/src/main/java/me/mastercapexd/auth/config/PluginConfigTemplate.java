@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.PluginConfig;
@@ -37,6 +38,7 @@ import me.mastercapexd.auth.config.telegram.BaseTelegramSettings;
 import me.mastercapexd.auth.config.vk.BaseVKSettings;
 
 public abstract class PluginConfigTemplate implements PluginConfig {
+
     protected final AuthPlugin plugin;
     private final List<Pattern> allowedPatternCommands;
     protected ConfigurationSectionHolder configurationRoot;
@@ -101,6 +103,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private ConfigurationDuration joinDelay = new ConfigurationDuration(0);
     @ConfigField("block-chat")
     private boolean blockChat = true;
+    @ConfigField("limbo-port")
+    private IntStream limboPortRange = IntStream.range(49152, 65535);
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
 
@@ -287,5 +291,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
         return index >= 0 && index < authenticationSteps.size() ? authenticationSteps.get(index) : "NULL";
     }
 
+    @Override
+    public IntStream getLimboPortRange() {
+        return limboPortRange;
+    }
+
     protected abstract ConfigurationSectionHolder createConfiguration(AuthPlugin plugin);
+
 }
