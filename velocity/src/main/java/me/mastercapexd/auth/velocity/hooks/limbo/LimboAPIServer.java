@@ -7,13 +7,13 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.bivashy.auth.api.server.player.ServerPlayer;
-import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.Player;
 
 import net.elytrium.limboapi.api.Limbo;
 import net.elytrium.limboapi.api.LimboSessionHandler;
 
-public class LimboAPIServer implements LimboServerWrapper {
+public class LimboAPIServer implements ProxyServer {
     private final Set<UUID> onlinePlayers = new HashSet<>();
     private final String name;
     private final Limbo limbo;

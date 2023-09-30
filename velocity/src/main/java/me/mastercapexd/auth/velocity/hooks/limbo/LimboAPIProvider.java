@@ -1,47 +1,39 @@
 package me.mastercapexd.auth.velocity.hooks.limbo;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.PluginContainer;
 
 import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
-import me.mastercapexd.auth.velocity.hooks.limbo.config.LimboAPIConfig;
+import net.elytrium.limboapi.api.Limbo;
 import net.elytrium.limboapi.api.LimboFactory;
+import net.elytrium.limboapi.api.chunk.Dimension;
 import net.elytrium.limboapi.api.event.LoginLimboRegisterEvent;
 
 public class LimboAPIProvider {
+
     public static final String LIMBO_API_NAME = "limboapi";
     private static final VelocityAuthPluginBootstrap PLUGIN = VelocityAuthPluginBootstrap.getInstance();
-    private final LimboFactory limboFactory = (LimboFactory) PLUGIN
-            .getProxyServer()
-            .getPluginManager()
-            .getPlugin(LIMBO_API_NAME)
-            .flatMap(PluginContainer::getInstance)
-            .orElseThrow(NullPointerException::new);
-    private final LimboAPIConfig limboAPIConfig = new LimboAPIConfig();
-    private final List<LimboServerWrapper> wrappers;
+    private final ProxyServer proxyServerWrapper;
 
     public LimboAPIProvider() {
-        LimboAPIConfig limboConfig = new LimboAPIConfig();
-        wrappers = limboConfig.getLimboConfigs()
-                .stream()
-                .map(config -> new LimboAPIServer(config.getName(), config.createLimbo(limboFactory)))
-                .collect(Collectors.toList());
+        LimboFactory limboFactory = (LimboFactory) PLUGIN
+                .getProxyServer()
+                .getPluginManager()
+                .getPlugin(LIMBO_API_NAME)
+                .flatMap(PluginContainer::getInstance)
+                .orElseThrow(NullPointerException::new);
+        Limbo limbo = limboFactory.createLimbo(limboFactory.createVirtualWorld(Dimension.THE_END, 0, 0, 0, 0f, 0f));
+        this.proxyServerWrapper = new LimboAPIServer("limbo", limbo);
     }
 
-    public LimboServerWrapper createLimboWrapper(String serverName) {
-        return wrappers.stream().filter(server -> server.getServerName().equals(serverName)).findFirst().orElseThrow(IllegalArgumentException::new);
-    }
-
-    public boolean isLimbo(String serverName) {
-        return wrappers.stream().anyMatch(server -> server.getServerName().equals(serverName));
+    public ProxyServer getProxyServerWrapper() {
+        return proxyServerWrapper;
     }
 
     @Subscribe
     public void onLimboLogin(LoginLimboRegisterEvent e) {
         PLUGIN.getAuthPlugin().getCore().wrapPlayer(e.getPlayer()).ifPresent(PLUGIN.getAuthPlugin().getLoginManagement()::onLogin);
     }
+
 }

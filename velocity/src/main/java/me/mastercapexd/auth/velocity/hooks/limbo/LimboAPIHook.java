@@ -1,11 +1,12 @@
 package me.mastercapexd.auth.velocity.hooks.limbo;
 
-import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
+import com.bivashy.auth.api.hook.LimboPluginHook;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
 
-import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 
-public class LimboAPIHook implements LimboHook {
+public class LimboAPIHook implements LimboPluginHook {
+
     private static final VelocityAuthPluginBootstrap PLUGIN = VelocityAuthPluginBootstrap.getInstance();
     private LimboAPIProvider provider;
 
@@ -17,26 +18,18 @@ public class LimboAPIHook implements LimboHook {
     }
 
     @Override
-    public boolean isLimbo(String serverName) {
-        if (provider == null)
-            return false;
-        return provider.isLimbo(serverName);
-    }
-
-    @Override
-    public LimboServerWrapper createLimboWrapper(String serverName) {
-        if (provider == null)
-            return null;
-        return provider.createLimboWrapper(serverName);
-    }
-
-    @Override
     public boolean canHook() {
         try {
             net.elytrium.limboapi.api.LimboFactory.class.getName();
             return true;
-        } catch(NoClassDefFoundError e) {
+        } catch (NoClassDefFoundError e) {
             return false;
         }
     }
+
+    @Override
+    public ProxyServer createServer(String serverName) {
+        return provider.getProxyServerWrapper();
+    }
+
 }
