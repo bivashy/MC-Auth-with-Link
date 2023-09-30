@@ -11,7 +11,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 
 import me.mastercapexd.auth.hooks.nanolimbo.NanoLimboProvider;
-import me.mastercapexd.auth.velocity.VelocityAuthPluginBootstrap;
 import me.mastercapexd.auth.velocity.server.VelocityProxyServer;
 
 public class VelocityNanoLimboPluginHook implements LimboPluginHook {
