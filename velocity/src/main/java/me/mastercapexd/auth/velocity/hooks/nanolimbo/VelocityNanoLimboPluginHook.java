@@ -61,4 +61,9 @@ public class VelocityNanoLimboPluginHook implements NanoLimboPluginHook {
         return classLoader;
     }
 
+    @Override
+    public boolean canHook() {
+        return proxyServer.getPluginManager().isLoaded("nanolimbovelocity");
+    }
+
 }
