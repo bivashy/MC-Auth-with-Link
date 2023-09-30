@@ -8,18 +8,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.hook.LimboPluginHook;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
-import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
 import com.bivashy.auth.api.server.scheduler.ServerScheduler;
 import com.bivashy.auth.api.server.title.ServerTitle;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
-import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.velocity.api.bossbar.VelocityServerBossbar;
 import me.mastercapexd.auth.velocity.api.title.VelocityServerTitle;
 import me.mastercapexd.auth.velocity.component.VelocityComponent;
@@ -31,6 +30,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class VelocityProxyCore implements ServerCore {
+
     private final ProxyServer server;
 
     public VelocityProxyCore(ProxyServer server) {
@@ -101,15 +101,9 @@ public class VelocityProxyCore implements ServerCore {
     @Override
     public Optional<com.bivashy.auth.api.server.proxy.ProxyServer> serverFromName(String serverName) {
         Optional<RegisteredServer> serverOptional = server.getServer(serverName);
-        LimboHook limboHook = AuthPlugin.instance().getHook(LimboHook.class);
-        if (!serverOptional.isPresent() && limboHook != null) {
-            if (!limboHook.isLimbo(serverName))
-                return Optional.empty();
-            LimboServerWrapper server = limboHook.createLimboWrapper(serverName);
-            if (!server.isExists())
-                return Optional.empty();
-            return Optional.of(server);
-        }
+        LimboPluginHook limboHook = AuthPlugin.instance().getHook(LimboPluginHook.class);
+        if (!serverOptional.isPresent() && limboHook != null)
+            return Optional.of(limboHook.createServer(serverName));
 
         return serverOptional.map(VelocityProxyServer::new);
     }
@@ -139,4 +133,5 @@ public class VelocityProxyCore implements ServerCore {
     public String colorize(String text) {
         return text;
     }
+
 }
