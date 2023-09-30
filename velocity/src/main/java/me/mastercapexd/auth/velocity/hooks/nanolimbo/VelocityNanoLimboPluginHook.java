@@ -36,6 +36,15 @@ public class VelocityNanoLimboPluginHook implements LimboPluginHook {
         return new VelocityProxyServer(proxyServer.registerServer(new ServerInfo(serverName, address)));
     }
 
+    @Subscribe
+    public void onServerChoose(PlayerChooseInitialServerEvent event) {
+        if (event.getInitialServer().isEmpty())
+            AuthPlugin.instance()
+                    .getCore()
+                    .serverFromName("limbo")
+                    .ifPresent(server -> event.setInitialServer(server.as(VelocityProxyServer.class).getServer()));
+    }
+
     @Override
     public boolean canHook() {
         return proxyServer.getPluginManager().isLoaded("nanolimbovelocity");
