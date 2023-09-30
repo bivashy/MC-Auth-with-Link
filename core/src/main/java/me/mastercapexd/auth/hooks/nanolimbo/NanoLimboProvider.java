@@ -46,8 +46,8 @@ public interface NanoLimboProvider {
         }
     }
 
-    default Optional<InetSocketAddress> findAvailableAddress(IntStream portRange) {
-        return portRange.filter(port -> {
+    default Optional<InetSocketAddress> findAvailableAddress(int[] ports) {
+        return IntStream.of(ports).filter(port -> {
             try (ServerSocket ignored = new ServerSocket(port)) {
                 return true;
             } catch (IOException ignored) {

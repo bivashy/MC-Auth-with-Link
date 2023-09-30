@@ -12,12 +12,12 @@ import me.mastercapexd.auth.velocity.server.VelocityProxyServer;
 
 public class VelocityNanoLimboPluginHook implements LimboPluginHook {
 
-    private final IntStream limboPortRange;
+    private final int[] limboPorts;
     private final ProxyServer proxyServer;
     private NanoLimboProvider provider;
 
-    public VelocityNanoLimboPluginHook(IntStream limboPortRange, ProxyServer proxyServer) {
-        this.limboPortRange = limboPortRange;
+    public VelocityNanoLimboPluginHook(IntStream limboPorts, ProxyServer proxyServer) {
+        this.limboPorts = limboPorts.toArray();
         this.proxyServer = proxyServer;
         if (!canHook())
             return;
@@ -26,7 +26,7 @@ public class VelocityNanoLimboPluginHook implements LimboPluginHook {
 
     @Override
     public com.bivashy.auth.api.server.proxy.ProxyServer createServer(String serverName) {
-        InetSocketAddress address = provider.findAvailableAddress(limboPortRange).orElseThrow(
+        InetSocketAddress address = provider.findAvailableAddress(limboPorts).orElseThrow(
                 () -> new IllegalStateException("Cannot find available port for limbo server!"));
         provider.createAndStartLimbo(address);
         return new VelocityProxyServer(proxyServer.registerServer(new ServerInfo(serverName, address)));
