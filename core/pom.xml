@@ -87,7 +87,7 @@
 
         <!-- Lamp Core Command Library -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>common</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
@@ -114,7 +114,7 @@
 
         <!-- Lamp discord module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>jda</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>

@@ -55,7 +55,7 @@
 
         <!-- Lamp Velocity Module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>velocity</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>

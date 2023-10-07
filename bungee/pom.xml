@@ -60,7 +60,7 @@
 
         <!-- Lamp Bungee Module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>bungee</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
