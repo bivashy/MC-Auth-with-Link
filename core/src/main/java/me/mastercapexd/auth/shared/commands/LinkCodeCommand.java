@@ -25,6 +25,7 @@ import revxrsal.commands.orphan.OrphanCommand;
 
 @CommandKey(LinkCodeCommand.CONFIGURATION_KEY)
 public class LinkCodeCommand implements OrphanCommand {
+
     public static final String CONFIGURATION_KEY = "code";
     @Dependency
     private PluginConfig config;
@@ -48,7 +49,7 @@ public class LinkCodeCommand implements OrphanCommand {
 
         accountDatabase.getAccount(linkContext.getConfirmationUser().getLinkTarget().getPlayerId())
                 .thenAccept(account -> accountDatabase.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
-                    if (linkType.getSettings().getMaxLinkCount() > 0 && accounts.size() >= linkType.getSettings().getMaxLinkCount()) {
+                    if (!validateLinkCount(linkType, identificator, accounts.size())) {
                         actor.replyWithMessage(messages.getMessage("link-limit-reached"));
                         return;
                     }
@@ -66,6 +67,13 @@ public class LinkCodeCommand implements OrphanCommand {
                 }));
     }
 
+    private boolean validateLinkCount(LinkType linkType, LinkUserIdentificator identificator, int linkedAccountAmount) {
+        int maxLinkCount = linkType.getSettings().getMaxLinkCount();
+        if (maxLinkCount > 0)
+            return true;
+        return !linkType.getSettings().isAdministrator(identificator) && maxLinkCount >= linkedAccountAmount;
+    }
+
     private LinkConfirmationType getLinkConfirmationType(MessageableCommandActor actor) {
         if (actor instanceof ServerCommandActor)
             return LinkConfirmationType.FROM_GAME;
@@ -73,4 +81,5 @@ public class LinkCodeCommand implements OrphanCommand {
             return LinkConfirmationType.FROM_LINK;
         throw new IllegalArgumentException("Cannot resolve confirmation type for actor: " + actor);
     }
+
 }
