@@ -15,7 +15,7 @@
         <velocity-proxy.version>3.0.1</velocity-proxy.version>
         <vk.api.version>0.4.2</vk.api.version>
         <telegram.api.version>6.1.0</telegram.api.version>
-        <lamp.command-library.version>3.2.5</lamp.command-library.version>
+        <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <libby.version>2.0.0</libby.version>
         <nanolimbo.version>1.0.6</nanolimbo.version>
 
@@ -55,7 +55,7 @@
 
         <!-- Lamp Velocity Module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>velocity</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
