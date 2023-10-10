@@ -366,7 +366,7 @@ messages:
   auth-reloaded: '&aПлагин успешно перезагрузил конфигурацию'
   config-migrated: '&aКонфигурация успешно мигрирована'
   # Ошибки в командах
-  player-offline: '&cИгрок с ником %account_name% оффлайн!'
+  player-offline: '&cИгрок с ником %player_name% оффлайн!'
   command-cooldown: '&cВы слишком часто используете данную команду! Попробуйте позже.'
   # Название аргумента указывается в виде arg1, arg2, arg3...
   unresolved-argument: '&cВы не указали аргумент: %argument_name%'

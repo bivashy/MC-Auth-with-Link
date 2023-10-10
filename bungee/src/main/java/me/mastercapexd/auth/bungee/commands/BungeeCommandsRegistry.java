@@ -5,6 +5,7 @@ import java.util.Collections;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.server.player.ServerPlayer;
@@ -42,7 +43,7 @@ public class BungeeCommandsRegistry extends ServerCommandsRegistry {
             String value = context.pop();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(value);
             if (player == null) {
-                throw new SendComponentException(config.getServerMessages().getMessage("player-offline"));
+                throw new SendComponentException(config.getServerMessages().getMessage("player-offline", MessageContext.of("%player_name%", value)));
             }
             return new ArgumentServerPlayer(new BungeeServerPlayer(player));
         });

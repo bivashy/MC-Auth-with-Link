@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.PluginConfig;
+import com.bivashy.auth.api.config.message.MessageContext;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
 import com.bivashy.auth.api.server.player.ServerPlayer;
@@ -42,7 +43,7 @@ public class VelocityCommandRegistry extends ServerCommandsRegistry {
             String value = context.pop();
             Optional<ServerPlayer> player = authPlugin.getCore().getPlayer(value);
             if (!player.isPresent())
-                throw new SendComponentException(config.getServerMessages().getMessage("player-offline"));
+                throw new SendComponentException(config.getServerMessages().getMessage("player-offline", MessageContext.of("%player_name%")));
             return new ArgumentServerPlayer(player.get());
         });
         commandHandler.registerCondition((actor, command, arguments) -> {
