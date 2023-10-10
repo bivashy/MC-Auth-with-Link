@@ -16,7 +16,7 @@
         <zxing.library.version>3.5.1</zxing.library.version>
         <configuration-library.version>4.0.2</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
-        <lamp.command-library.version>3.2.5</lamp.command-library.version>
+        <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
         <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
         <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
@@ -87,7 +87,7 @@
 
         <!-- Lamp Core Command Library -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>common</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
@@ -114,7 +114,7 @@
 
         <!-- Lamp discord module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>jda</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
