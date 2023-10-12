@@ -25,7 +25,7 @@ public class ChangePasswordCommand {
     private AccountDatabase accountStorage;
 
     @DefaultFor({"passchange", "changepass", "changepassword"})
-    @CommandCooldown(5000)
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void changePlayerPassword(ServerPlayer sender, DoublePassword password) {
         String id = config.getActiveIdentifierType().getId(sender);
         accountStorage.getAccount(id).thenAcceptAsync(account -> {

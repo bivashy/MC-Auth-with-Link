@@ -13,6 +13,7 @@ import com.bivashy.auth.api.shared.commands.MessageableCommandActor;
 import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
@@ -29,6 +30,7 @@ public class GoogleUnlinkCommand {
 
     @GoogleUse
     @DefaultFor({"googleunlink", "google unlink", "gunlink"})
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void unlink(MessageableCommandActor actor, ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {

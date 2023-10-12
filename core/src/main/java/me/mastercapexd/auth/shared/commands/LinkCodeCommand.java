@@ -17,6 +17,7 @@ import me.mastercapexd.auth.config.message.context.account.BaseAccountPlaceholde
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
@@ -37,6 +38,7 @@ public class LinkCodeCommand implements OrphanCommand {
 
     @ConfigurationArgumentError("confirmation-not-enough-arguments")
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void onLink(MessageableCommandActor actor, MessengerLinkContext linkContext, @Optional LinkUserIdentificator possibleIdentificator) {
         LinkConfirmationType linkConfirmationType = getLinkConfirmationType(actor);
         Messages<?> messages = linkConfirmationType.getConfirmationMessages(linkContext.getConfirmationUser());

@@ -13,6 +13,7 @@ import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
@@ -30,6 +31,7 @@ public class GoogleUnlinkCommand implements OrphanCommand {
     @GoogleUse
     @ConfigurationArgumentError("google-unlink-not-enough-arguments")
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void unlink(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         LinkUser linkUser = account.findFirstLinkUserOrNew(GoogleLinkType.LINK_USER_FILTER, GoogleLinkType.getInstance());
 

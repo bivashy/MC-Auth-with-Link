@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 @Target(ElementType.METHOD)
 public @interface CommandCooldown {
 
+    int DEFAULT_VALUE = 3000;
+
+
     long value();
 
     TimeUnit unit() default TimeUnit.MILLISECONDS;

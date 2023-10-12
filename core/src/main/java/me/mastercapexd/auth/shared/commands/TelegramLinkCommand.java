@@ -13,6 +13,7 @@ import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.TelegramUse;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Optional;
@@ -34,6 +35,7 @@ public class TelegramLinkCommand extends MessengerLinkCommandTemplate implements
 
     @TelegramUse
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void telegramLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 

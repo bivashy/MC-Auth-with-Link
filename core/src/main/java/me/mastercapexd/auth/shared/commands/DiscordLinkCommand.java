@@ -13,6 +13,7 @@ import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.link.user.confirmation.BaseLinkConfirmationUser;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.server.commands.annotations.DiscordUse;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Optional;
@@ -33,6 +34,7 @@ public class DiscordLinkCommand extends MessengerLinkCommandTemplate implements 
 
     @DiscordUse
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void discordLink(MessageableCommandActor commandActor, PlayerIdSupplier idSupplier, @Optional LinkUserIdentificator linkUserIdentificator) {
         String accountId = idSupplier.getPlayerId();
 
