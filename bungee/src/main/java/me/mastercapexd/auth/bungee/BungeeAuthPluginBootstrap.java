@@ -1,7 +1,10 @@
 package me.mastercapexd.auth.bungee;
 
-import com.bivashy.auth.api.AuthPlugin;
-import com.bivashy.auth.api.management.LoginManagement;
+import java.util.Collection;
+import java.util.Collections;
+
+import com.alessiodp.libby.BungeeLibraryManager;
+import com.bivashy.auth.api.hook.LimboPluginHook;
 import com.bivashy.messenger.vk.message.VkMessage;
 import com.bivashy.messenger.vk.provider.VkApiProvider;
 import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
@@ -9,19 +12,19 @@ import com.ubivashka.vk.bungee.BungeeVkApiPlugin;
 import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.bungee.commands.BungeeCommandsRegistry;
 import me.mastercapexd.auth.bungee.hooks.BungeeVkPluginHook;
+import me.mastercapexd.auth.bungee.hooks.nanolimbo.BungeeNanoLimboPluginHook;
 import me.mastercapexd.auth.bungee.listener.AuthenticationListener;
 import me.mastercapexd.auth.bungee.listener.VkDispatchListener;
 import me.mastercapexd.auth.hooks.VkPluginHook;
 import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
-import net.byteflux.libby.BungeeLibraryManager;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeAuthPluginBootstrap extends Plugin {
+
     private static BungeeAuthPluginBootstrap instance;
     private BungeeAudiences bungeeAudiences;
-    private LoginManagement loginManagement;
     private BaseAuthPlugin authPlugin;
 
     public static BungeeAuthPluginBootstrap getInstance() {
@@ -38,6 +41,7 @@ public class BungeeAuthPluginBootstrap extends Plugin {
                 new BaseLibraryManagement(new BungeeLibraryManager(this)));
         initializeListener();
         initializeCommand();
+        initializeLimbo();
         if (authPlugin.getConfig().getVKSettings().isEnabled())
             initializeVk();
     }
@@ -56,6 +60,13 @@ public class BungeeAuthPluginBootstrap extends Plugin {
         new BungeeCommandsRegistry(this, authPlugin);
     }
 
+    private void initializeLimbo() {
+        Collection<LimboPluginHook> limboPluginHooks = Collections.singleton(new BungeeNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange()));
+        limboPluginHooks.stream()
+                .filter(LimboPluginHook::canHook)
+                .forEach(limboPluginHook -> authPlugin.putHook(LimboPluginHook.class, limboPluginHook));
+    }
+
     private void initializeVk() {
         authPlugin.putHook(VkPluginHook.class, new BungeeVkPluginHook());
 
@@ -70,7 +81,4 @@ public class BungeeAuthPluginBootstrap extends Plugin {
         return bungeeAudiences;
     }
 
-    public AuthPlugin getAuthPlugin() {
-        return authPlugin;
-    }
 }

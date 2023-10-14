@@ -24,6 +24,7 @@ import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import me.mastercapexd.auth.util.GoogleAuthenticatorQRGenerator;
 import me.mastercapexd.auth.util.RandomCodeFactory;
 import revxrsal.commands.annotation.DefaultFor;
@@ -43,6 +44,7 @@ public class GoogleCommand implements OrphanCommand {
     @GoogleUse
     @ConfigurationArgumentError("google-not-enough-arguments")
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void linkGoogle(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         String rawKey = plugin.getGoogleAuthenticator().createCredentials().getKey();
         String nickname = account.getName();

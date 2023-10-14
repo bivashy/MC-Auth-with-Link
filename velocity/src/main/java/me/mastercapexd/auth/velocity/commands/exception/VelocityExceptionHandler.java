@@ -45,7 +45,7 @@ public class VelocityExceptionHandler extends VelocityExceptionAdapter {
 
     @Override
     public void invalidPlayer(@NotNull CommandActor actor, revxrsal.commands.velocity.exception.@NotNull InvalidPlayerException exception) {
-        sendComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player%", exception.getInput())));
+        sendComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player_name%", exception.getInput())));
     }
 
     @Override

@@ -12,11 +12,12 @@
 
     <properties>
         <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
-        <lamp.command-library.version>3.1.6</lamp.command-library.version>
+        <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
         <telegram.api.version>6.5.0</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
-        <libby.version>1.3.4</libby.version>
+        <libby.version>2.0.0</libby.version>
+        <nanolimbo.version>1.0.6</nanolimbo.version>
     </properties>
 
     <repositories>
@@ -59,7 +60,7 @@
 
         <!-- Lamp Bungee Module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>bungee</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
@@ -84,6 +85,14 @@
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
             <version>${telegram.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- NanoLimboPlugin API -->
+        <dependency>
+            <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
+            <artifactId>api</artifactId>
+            <version>${nanolimbo.version}</version>
             <scope>provided</scope>
         </dependency>
 

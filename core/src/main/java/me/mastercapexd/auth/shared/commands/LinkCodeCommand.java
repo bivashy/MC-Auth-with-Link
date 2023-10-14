@@ -17,6 +17,7 @@ import me.mastercapexd.auth.config.message.context.account.BaseAccountPlaceholde
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
@@ -25,6 +26,7 @@ import revxrsal.commands.orphan.OrphanCommand;
 
 @CommandKey(LinkCodeCommand.CONFIGURATION_KEY)
 public class LinkCodeCommand implements OrphanCommand {
+
     public static final String CONFIGURATION_KEY = "code";
     @Dependency
     private PluginConfig config;
@@ -37,6 +39,7 @@ public class LinkCodeCommand implements OrphanCommand {
 
     @ConfigurationArgumentError("confirmation-not-enough-arguments")
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void onLink(MessageableCommandActor actor, MessengerLinkContext linkContext, @Optional LinkUserIdentificator possibleIdentificator) {
         LinkConfirmationType linkConfirmationType = getLinkConfirmationType(actor);
         Messages<?> messages = linkConfirmationType.getConfirmationMessages(linkContext.getConfirmationUser());
@@ -48,7 +51,7 @@ public class LinkCodeCommand implements OrphanCommand {
 
         accountDatabase.getAccount(linkContext.getConfirmationUser().getLinkTarget().getPlayerId())
                 .thenAccept(account -> accountDatabase.getAccountsFromLinkIdentificator(identificator).thenAccept(accounts -> {
-                    if (linkType.getSettings().getMaxLinkCount() > 0 && accounts.size() >= linkType.getSettings().getMaxLinkCount()) {
+                    if (!validateLinkCount(linkType, identificator, accounts.size())) {
                         actor.replyWithMessage(messages.getMessage("link-limit-reached"));
                         return;
                     }
@@ -66,6 +69,13 @@ public class LinkCodeCommand implements OrphanCommand {
                 }));
     }
 
+    private boolean validateLinkCount(LinkType linkType, LinkUserIdentificator identificator, int linkedAccountAmount) {
+        int maxLinkCount = linkType.getSettings().getMaxLinkCount();
+        if (maxLinkCount > 0)
+            return true;
+        return !linkType.getSettings().isAdministrator(identificator) && maxLinkCount >= linkedAccountAmount;
+    }
+
     private LinkConfirmationType getLinkConfirmationType(MessageableCommandActor actor) {
         if (actor instanceof ServerCommandActor)
             return LinkConfirmationType.FROM_GAME;
@@ -73,4 +83,5 @@ public class LinkCodeCommand implements OrphanCommand {
             return LinkConfirmationType.FROM_LINK;
         throw new IllegalArgumentException("Cannot resolve confirmation type for actor: " + actor);
     }
+
 }

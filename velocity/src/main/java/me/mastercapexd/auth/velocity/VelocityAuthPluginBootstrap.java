@@ -2,10 +2,14 @@ package me.mastercapexd.auth.velocity;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 
+import com.alessiodp.libby.VelocityLibraryManager;
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.hook.LimboPluginHook;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.messenger.vk.message.VkMessage;
 import com.bivashy.messenger.vk.provider.VkApiProvider;
@@ -20,19 +24,18 @@ import com.velocitypowered.api.proxy.ProxyServer;
 
 import me.mastercapexd.auth.BaseAuthPlugin;
 import me.mastercapexd.auth.hooks.VkPluginHook;
-import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.velocity.adventure.VelocityAudienceProvider;
 import me.mastercapexd.auth.velocity.commands.VelocityCommandRegistry;
 import me.mastercapexd.auth.velocity.hooks.VelocityVkPluginHook;
-import me.mastercapexd.auth.velocity.hooks.limbo.LimboAPIHook;
+import me.mastercapexd.auth.velocity.hooks.nanolimbo.VelocityNanoLimboPluginHook;
 import me.mastercapexd.auth.velocity.listener.AuthenticationListener;
 import me.mastercapexd.auth.velocity.listener.VkDispatchListener;
 import me.mastercapexd.auth.vk.command.VKCommandRegistry;
-import net.byteflux.libby.VelocityLibraryManager;
 import net.kyori.adventure.platform.AudienceProvider;
 
 public class VelocityAuthPluginBootstrap {
+
     private static VelocityAuthPluginBootstrap instance;
     private final AudienceProvider audienceProvider;
     private final ServerCore core;
@@ -59,7 +62,7 @@ public class VelocityAuthPluginBootstrap {
     public void onProxyInitialize(ProxyInitializeEvent event) {
         this.authPlugin = new BaseAuthPlugin(audienceProvider,
                 proxyServer.getPluginManager().fromInstance(this).map(PluginContainer::getDescription).flatMap(PluginDescription::getVersion).orElse("unknown"),
-                dataFolder, core, new BaseLibraryManagement(new VelocityLibraryManager<>(logger, dataFolder.toPath(), proxyServer.getPluginManager(), this)));
+                dataFolder, core, new BaseLibraryManagement(new VelocityLibraryManager<>(this, logger, dataFolder.toPath(), proxyServer.getPluginManager())));
         initializeListener();
         initializeCommand();
         initializeLimbo();
@@ -85,10 +88,10 @@ public class VelocityAuthPluginBootstrap {
     }
 
     private void initializeLimbo() {
-        LimboAPIHook limboAPIHook = new LimboAPIHook();
-        if (!limboAPIHook.canHook())
-            return;
-        authPlugin.putHook(LimboHook.class, limboAPIHook);
+        Collection<LimboPluginHook> limboPluginHooks = Collections.singleton(new VelocityNanoLimboPluginHook(authPlugin.getConfig().getLimboPortRange(), proxyServer));
+        limboPluginHooks.stream()
+                .filter(LimboPluginHook::canHook)
+                .forEach(limboPluginHook -> authPlugin.putHook(LimboPluginHook.class, limboPluginHook));
     }
 
     public ProxyServer getProxyServer() {
@@ -98,4 +101,5 @@ public class VelocityAuthPluginBootstrap {
     public AuthPlugin getAuthPlugin() {
         return authPlugin;
     }
+
 }

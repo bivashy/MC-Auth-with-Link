@@ -2,19 +2,19 @@ package me.mastercapexd.auth.bungee.api.bossbar;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
-import com.google.common.collect.Sets;
 
 import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
 import net.md_5.bungee.protocol.packet.BossBar;
 
 public class BungeeServerBossbar extends ServerBossbar {
-    private final Set<ServerPlayer> players = Sets.newHashSet();
+    private final Set<ServerPlayer> players = new HashSet<>();
     private final UUID uuid = UUID.randomUUID();
 
     public BungeeServerBossbar(ServerComponent component) {

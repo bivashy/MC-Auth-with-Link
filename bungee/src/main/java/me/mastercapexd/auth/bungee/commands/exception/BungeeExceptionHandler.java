@@ -46,7 +46,7 @@ public class BungeeExceptionHandler extends BungeeExceptionAdapter {
 
     @Override
     public void invalidPlayer(CommandActor actor, InvalidPlayerException exception) {
-        sendComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player%", exception.getInput())));
+        sendComponent(actor, messages.getMessage("player-offline", MessageContext.of("%player_name%", exception.getInput())));
     }
 
     @Override

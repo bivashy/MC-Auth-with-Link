@@ -27,7 +27,7 @@
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.shade.plugin.version>3.4.1</maven.shade.plugin.version>
+        <maven.shade.plugin.version>3.5.1</maven.shade.plugin.version>
         <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
     </properties>
@@ -81,6 +81,12 @@
                             <excludes>
                                 <exclude>META-INF/SPONGEPO.RSA</exclude>
                             </excludes>
+                        </filter>
+                        <filter>
+                            <artifact>com.github.bivashy.libby:libby-core</artifact>
+                            <includes>
+                                <include>com/alessiodp/libby/**</include>
+                            </includes>
                         </filter>
                     </filters>
 
@@ -185,16 +191,8 @@
                             <shadedPattern>${dependencies.relocation.package}.javax.annotation</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.eclipse.aether</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.eclipse.aether</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>org.codehaus.plexus</pattern>
                             <shadedPattern>${dependencies.relocation.package}.org.codehaus.plexus</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.maven</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.apache.maven</shadedPattern>
                         </relocation>
                     </relocations>
                     <shadedArtifactAttached>true</shadedArtifactAttached>

@@ -13,10 +13,10 @@
     <properties>
         <auth.api.version>${project.version}</auth.api.version>
         <jbcrypt.version>0.4</jbcrypt.version>
-        <zxing.library.version>3.5.1</zxing.library.version>
+        <zxing.library.version>3.5.2</zxing.library.version>
         <configuration-library.version>4.0.2</configuration-library.version>
         <configurate.version>4.1.2</configurate.version>
-        <lamp.command-library.version>3.2.4</lamp.command-library.version>
+        <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
         <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
         <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
@@ -24,7 +24,8 @@
         <vk.api.version>0.4.2</vk.api.version>
         <password4j.version>1.7.0</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
-        <jda.version>5.0.0-beta.11</jda.version>
+        <jda.version>5.0.0-beta.15</jda.version>
+        <nanolimbo.version>1.0.6</nanolimbo.version>
 
         <!-- Test Dependencies -->
         <mockito.version>5.3.1</mockito.version>
@@ -89,7 +90,7 @@
 
         <!-- Lamp Core Command Library -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>common</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
@@ -116,7 +117,7 @@
 
         <!-- Lamp discord module -->
         <dependency>
-            <groupId>com.github.bivashy.Lamp</groupId>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>jda</artifactId>
             <version>${lamp.command-library.version}</version>
         </dependency>
@@ -163,6 +164,14 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>${jda.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- NanoLimboPlugin API -->
+        <dependency>
+            <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
+            <artifactId>api</artifactId>
+            <version>${nanolimbo.version}</version>
             <scope>provided</scope>
         </dependency>
 

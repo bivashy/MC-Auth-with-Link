@@ -15,6 +15,7 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import me.mastercapexd.auth.link.google.GoogleLinkType;
 import me.mastercapexd.auth.server.commands.annotations.GoogleUse;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
@@ -31,6 +32,7 @@ public class GoogleCommand {
 
     @GoogleUse
     @DefaultFor("google")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void linkGoogle(ServerPlayer player) {
         String id = config.getActiveIdentifierType().getId(player);
         accountStorage.getAccount(id).thenAccept(account -> {

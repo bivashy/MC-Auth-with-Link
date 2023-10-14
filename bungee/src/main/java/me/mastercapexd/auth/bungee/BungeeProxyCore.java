@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.hook.LimboPluginHook;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.server.bossbar.ServerBossbar;
 import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
-import com.bivashy.auth.api.server.proxy.limbo.LimboServerWrapper;
 import com.bivashy.auth.api.server.scheduler.ServerScheduler;
 import com.bivashy.auth.api.server.title.ServerTitle;
 
@@ -25,7 +25,6 @@ import me.mastercapexd.auth.bungee.message.BungeeServerComponent;
 import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
 import me.mastercapexd.auth.bungee.scheduler.BungeeSchedulerWrapper;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
-import me.mastercapexd.auth.hooks.limbo.LimboHook;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -109,15 +108,9 @@ public enum BungeeProxyCore implements ServerCore {
     @Override
     public Optional<com.bivashy.auth.api.server.proxy.ProxyServer> serverFromName(String serverName) {
         ServerInfo serverInfo = PROXY_SERVER.getServerInfo(serverName);
-        LimboHook limboHook = AuthPlugin.instance().getHook(LimboHook.class);
-        if (serverInfo == null && limboHook != null) {
-            if (!limboHook.isLimbo(serverName))
-                return Optional.empty();
-            LimboServerWrapper server = limboHook.createLimboWrapper(serverName);
-            if (!server.isExists())
-                return Optional.empty();
-            return Optional.of(server);
-        }
+        LimboPluginHook limboHook = AuthPlugin.instance().getHook(LimboPluginHook.class);
+        if (serverInfo == null && limboHook != null)
+            return Optional.of(limboHook.createServer(serverName));
         return Optional.of(new BungeeServer(serverInfo));
     }
 

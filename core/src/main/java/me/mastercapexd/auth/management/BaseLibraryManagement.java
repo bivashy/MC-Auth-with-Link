@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.alessiodp.libby.Library;
+import com.alessiodp.libby.LibraryManager;
 import com.bivashy.auth.api.management.LibraryManagement;
-
-import net.byteflux.libby.Library;
-import net.byteflux.libby.LibraryManager;
 
 public class BaseLibraryManagement implements LibraryManagement {
 

@@ -37,6 +37,7 @@ import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.TelegramLinkCommand;
 import me.mastercapexd.auth.shared.commands.VKLinkCommand;
 import me.mastercapexd.auth.shared.commands.parameter.MessengerLinkContext;
+import me.mastercapexd.auth.shared.commands.validator.CommandCooldownCondition;
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.command.ArgumentStack;
 import revxrsal.commands.command.CommandActor;
@@ -149,6 +150,7 @@ public abstract class ServerCommandsRegistry {
             }));
         });
 
+        commandHandler.registerCondition(new CommandCooldownCondition<>(config.getServerMessages(), SendComponentException::new));
         commandHandler.registerCondition((actor, command, arguments) -> {
             if (!command.hasAnnotation(GoogleUse.class))
                 return;

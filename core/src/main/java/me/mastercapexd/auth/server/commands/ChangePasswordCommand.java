@@ -9,12 +9,14 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import io.github.revxrsal.eventbus.PostResult;
 import me.mastercapexd.auth.server.commands.parameters.DoublePassword;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 
 @Command({"passchange", "changepass", "changepassword"})
 public class ChangePasswordCommand {
+
     @Dependency
     private AuthPlugin plugin;
     @Dependency
@@ -23,6 +25,7 @@ public class ChangePasswordCommand {
     private AccountDatabase accountStorage;
 
     @DefaultFor({"passchange", "changepass", "changepassword"})
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void changePlayerPassword(ServerPlayer sender, DoublePassword password) {
         String id = config.getActiveIdentifierType().getId(sender);
         accountStorage.getAccount(id).thenAcceptAsync(account -> {
@@ -49,4 +52,5 @@ public class ChangePasswordCommand {
             sender.sendMessage(config.getServerMessages().getMessage("change-success"));
         });
     }
+
 }

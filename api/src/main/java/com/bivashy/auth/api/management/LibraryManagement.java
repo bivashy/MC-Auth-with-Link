@@ -2,9 +2,9 @@ package com.bivashy.auth.api.management;
 
 import java.util.Collection;
 
-import net.byteflux.libby.Library;
-import net.byteflux.libby.LibraryManager;
-import net.byteflux.libby.transitive.ExcludedDependency;
+import com.alessiodp.libby.Library;
+import com.alessiodp.libby.LibraryManager;
+import com.alessiodp.libby.transitive.ExcludedDependency;
 
 public interface LibraryManagement {
 

@@ -11,12 +11,14 @@ import io.github.revxrsal.eventbus.EventBus;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.messenger.commands.annotation.ConfigurationArgumentError;
+import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.orphan.OrphanCommand;
 
 @CommandKey(ConfirmationToggleCommand.CONFIGURATION_KEY)
 public class ConfirmationToggleCommand implements OrphanCommand {
+
     public static final String CONFIGURATION_KEY = "confirmation-toggle";
     @Dependency
     private AccountDatabase accountDatabase;
@@ -25,6 +27,7 @@ public class ConfirmationToggleCommand implements OrphanCommand {
 
     @ConfigurationArgumentError("confirmation-no-player")
     @DefaultFor("~")
+    @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void onConfirmationToggle(LinkCommandActorWrapper actorWrapper, LinkType linkType, Account account) {
         if (!linkType.getSettings().getConfirmationSettings().canToggleConfirmation()) {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("confirmation-toggle-disabled", linkType.newMessageContext(account)));
@@ -40,4 +43,5 @@ public class ConfirmationToggleCommand implements OrphanCommand {
             accountDatabase.saveOrUpdateAccount(account);
         });
     }
+
 }
