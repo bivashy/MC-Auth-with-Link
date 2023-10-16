@@ -26,7 +26,7 @@
         <dependencies.relocation.package>com.bivashy.auth.lib</dependencies.relocation.package>
 
         <!-- Maven plugins -->
-        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.shade.plugin.version>3.5.1</maven.shade.plugin.version>
         <maven.source.plugin.version>3.3.0</maven.source.plugin.version>
     </properties>
