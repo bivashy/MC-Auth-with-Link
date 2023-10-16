@@ -17,7 +17,7 @@
         <telegram.api.version>6.5.0</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
         <libby.version>2.0.0</libby.version>
-        <nanolimbo.version>1.0.6</nanolimbo.version>
+        <nanolimbo.version>1.0.8</nanolimbo.version>
     </properties>
 
     <repositories>
