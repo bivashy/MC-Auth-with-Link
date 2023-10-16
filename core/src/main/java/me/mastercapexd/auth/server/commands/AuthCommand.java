@@ -100,4 +100,9 @@ public class AuthCommand {
         }
         actor.reply(config.getServerMessages().getMessage("config-migrated"));
     }
+
+    @Subcommand("import")
+    public void importFromPlugin(ServerCommandActor actor) {
+        // TODO: PluginSourceType argument, then convert that into ImportSource using ImportSourceProvider. Then define ImportSourceExecutor
+    }
 }
