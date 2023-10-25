@@ -20,7 +20,7 @@
         <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
         <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
         <java-telegram-bot-api.version>6.9.1</java-telegram-bot-api.version>
-        <minimessage.version>4.13.0</minimessage.version>
+        <minimessage.version>4.14.0</minimessage.version>
         <vk.api.version>0.4.2</vk.api.version>
         <password4j.version>1.7.3</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
