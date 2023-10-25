@@ -14,7 +14,7 @@
         <velocity.version>3.1.1</velocity.version>
         <velocity-proxy.version>3.2.0-SNAPSHOT</velocity-proxy.version>
         <vk.api.version>0.4.2</vk.api.version>
-        <telegram.api.version>6.1.0</telegram.api.version>
+        <telegram.api.version>6.9.1</telegram.api.version>
         <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <libby.version>2.0.0</libby.version>
         <nanolimbo.version>1.0.6</nanolimbo.version>
