@@ -1,16 +1,16 @@
-package me.mastercapexd.auth.config.migration;
+package me.mastercapexd.auth.config.importing;
 
 import com.bivashy.auth.api.AuthPlugin;
-import com.bivashy.auth.api.config.migration.MigrationSettings;
+import com.bivashy.auth.api.config.importing.ImportingSettings;
 import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
-public class BaseMigrationSettings implements ConfigurationHolder, MigrationSettings {
+public class BaseImportingSettings implements ConfigurationHolder, ImportingSettings {
     @ConfigField("retrieval-size")
     private int retrievalSize;
 
-    public BaseMigrationSettings(ConfigurationSectionHolder sectionHolder) {
+    public BaseImportingSettings(ConfigurationSectionHolder sectionHolder) {
         AuthPlugin.instance().getConfigurationProcessor().resolve(sectionHolder, this);
     }
 

@@ -17,7 +17,7 @@ import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
-import com.bivashy.auth.api.config.migration.MigrationSettings;
+import com.bivashy.auth.api.config.importing.ImportingSettings;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
@@ -109,7 +109,7 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
     @ConfigField("import")
-    private MigrationSettings migrationSettings;
+    private ImportingSettings importingSettings;
 
     public PluginConfigTemplate(AuthPlugin plugin) {
         this.plugin = plugin;
@@ -300,8 +300,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public MigrationSettings getMigrationSettings() {
-        return migrationSettings;
+    public ImportingSettings getImportingSettings() {
+        return importingSettings;
     }
 
     protected abstract ConfigurationSectionHolder createConfiguration(AuthPlugin plugin);
