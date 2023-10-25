@@ -35,7 +35,7 @@
 
         <repository>
             <id>bivashy</id>
-            <url>https://mvn.bivashy.dev/repository/snapshots/</url>
+            <url>https://mvn.bivashy.dev/snapshots/</url>
         </repository>
     </repositories>
 
