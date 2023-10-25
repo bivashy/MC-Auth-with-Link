@@ -12,12 +12,12 @@
 
     <properties>
         <velocity.version>3.1.1</velocity.version>
-        <velocity-proxy.version>3.0.1</velocity-proxy.version>
+        <velocity-proxy.version>3.2.0-SNAPSHOT</velocity-proxy.version>
         <vk.api.version>0.4.2</vk.api.version>
         <telegram.api.version>6.1.0</telegram.api.version>
         <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <libby.version>2.0.0</libby.version>
-        <nanolimbo.version>1.0.8</nanolimbo.version>
+        <nanolimbo.version>1.0.6</nanolimbo.version>
 
         <java.version>11</java.version>
     </properties>
@@ -34,8 +34,8 @@
         </repository>
 
         <repository>
-            <id>exceptionflug</id>
-            <url>https://mvn.exceptionflug.de/repository/exceptionflug-public/</url>
+            <id>bivashy</id>
+            <url>https://mvn.bivashy.dev/snapshots/</url>
         </repository>
     </repositories>
 
