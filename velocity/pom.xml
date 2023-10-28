@@ -17,7 +17,7 @@
         <telegram.api.version>6.9.1</telegram.api.version>
         <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <libby.version>2.0.0</libby.version>
-        <nanolimbo.version>1.0.6</nanolimbo.version>
+        <nanolimbo.version>1.0.8</nanolimbo.version>
 
         <java.version>11</java.version>
     </properties>
