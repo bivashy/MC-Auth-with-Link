@@ -15,10 +15,10 @@ import com.bivashy.auth.api.type.IdentifierType;
 
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
-import me.mastercapexd.auth.database.model.AuthAccountProvider;
 import me.mastercapexd.auth.link.user.AccountLinkAdapter;
 
-public class AuthAccountAdapter extends AccountTemplate implements AuthAccountProvider {
+public class AuthAccountAdapter extends AccountTemplate {
+
     private final List<LinkUser> linkUsers;
     private final AuthAccount authAccount;
 
@@ -47,8 +47,8 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     }
 
     @Override
-    public AuthAccount getAuthAccount() {
-        return authAccount;
+    public long getDatabaseId() {
+        return authAccount.getId();
     }
 
     @Override
@@ -144,4 +144,5 @@ public class AuthAccountAdapter extends AccountTemplate implements AuthAccountPr
     public int compareTo(AccountTemplate accountTemplate) {
         return accountTemplate.getName().compareTo(getName());
     }
+
 }

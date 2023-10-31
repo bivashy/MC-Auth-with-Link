@@ -70,6 +70,20 @@ public class AuthAccount {
         this.lastSessionStartTimestamp = lastSessionStartTimestamp;
     }
 
+    public AuthAccount(long id, String playerId, IdentifierType playerIdType, CryptoProvider cryptoProvider, String lastIp, UUID uniqueId, String playerName,
+                       String passwordHash, long lastQuitTimestamp, long lastSessionStartTimestamp) {
+        this.id = id;
+        this.playerId = playerId;
+        this.playerIdType = playerIdType;
+        this.cryptoProvider = cryptoProvider;
+        this.lastIp = lastIp;
+        this.uniqueId = uniqueId;
+        this.playerName = playerName;
+        this.passwordHash = passwordHash;
+        this.lastQuitTimestamp = lastQuitTimestamp;
+        this.lastSessionStartTimestamp = lastSessionStartTimestamp;
+    }
+
     public long getId() {
         return id;
     }
