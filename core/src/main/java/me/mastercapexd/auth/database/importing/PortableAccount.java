@@ -11,10 +11,10 @@ public class PortableAccount {
     private final UUID uniqueId;
     private final CryptoProvider cryptoProvider;
     private final String hashedPassword;
-    private final Collection<LinkAccount> linkAccounts;
+    private final Collection<PortableLinkAccount> linkAccounts;
     private final AccountDetails details;
 
-    public PortableAccount(String name, UUID uniqueId, CryptoProvider cryptoProvider, String hashedPassword, Collection<LinkAccount> linkAccounts,
+    public PortableAccount(String name, UUID uniqueId, CryptoProvider cryptoProvider, String hashedPassword, Collection<PortableLinkAccount> linkAccounts,
                            AccountDetails details) {
         this.name = name;
         this.uniqueId = uniqueId;
@@ -40,7 +40,7 @@ public class PortableAccount {
         return hashedPassword;
     }
 
-    public Collection<LinkAccount> getLinkAccounts() {
+    public Collection<PortableLinkAccount> getLinkAccounts() {
         return linkAccounts;
     }
 
@@ -76,12 +76,12 @@ public class PortableAccount {
         }
 
     }
-    public static final class LinkAccount {
+    public static final class PortableLinkAccount {
 
         private final LinkType linkType;
         private final String identificator;
 
-        public LinkAccount(LinkType linkType, String identificator) {
+        public PortableLinkAccount(LinkType linkType, String identificator) {
             this.linkType = linkType;
             this.identificator = identificator;
         }
