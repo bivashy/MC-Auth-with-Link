@@ -1,11 +1,14 @@
 package me.mastercapexd.auth.database.model;
 
+import java.util.Objects;
+
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "auth_links")
 public class AccountLink {
+
     public static final String LINK_TYPE_FIELD_KEY = "link_type";
     public static final String LINK_USER_ID_FIELD_KEY = "link_user_id";
     public static final String LINK_ENABLED_FIELD_KEY = "link_enabled";
@@ -43,6 +46,10 @@ public class AccountLink {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getLinkType() {
         return linkType;
     }
@@ -59,11 +66,20 @@ public class AccountLink {
         return account;
     }
 
-    public void setLinkUserId(String linkUserId) {
-        this.linkUserId = linkUserId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof AccountLink))
+            return false;
+        AccountLink that = (AccountLink) o;
+        return getId() == that.getId() && isLinkEnabled() == that.isLinkEnabled() && Objects.equals(getLinkType(), that.getLinkType()) &&
+                Objects.equals(getLinkUserId(), that.getLinkUserId()) && getAccount().getId() == that.getAccount().getId();
     }
 
-    public void setLinkEnabled(boolean linkEnabled) {
-        this.linkEnabled = linkEnabled;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getLinkType(), getLinkUserId(), isLinkEnabled(), getAccount().getId());
     }
+
 }

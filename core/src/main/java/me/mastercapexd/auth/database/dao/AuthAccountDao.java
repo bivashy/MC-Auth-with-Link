@@ -21,9 +21,9 @@ import com.j256.ormlite.table.DatabaseTableConfig;
 import com.j256.ormlite.table.TableUtils;
 
 import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.database.adapter.AccountAdapter;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
-import me.mastercapexd.auth.database.model.AuthAccountProvider;
 import me.mastercapexd.auth.database.persister.CryptoProviderPersister;
 
 public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
@@ -153,10 +153,7 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     }
 
     public AuthAccount createOrUpdateAccount(Account account) {
-        if (!(account instanceof AuthAccountProvider))
-            throw new IllegalArgumentException("Cannot create or update not AuthAccountProvider: " + account.getClass().getName());
-        AuthAccountProvider authAccountProvider = (AuthAccountProvider) account;
-        AuthAccount authAccount = authAccountProvider.getAuthAccount();
+        AuthAccount authAccount = new AccountAdapter(account);
 
         return DEFAULT_EXCEPTION_CATCHER.execute(() -> {
             Optional<AuthAccount> foundAccount = queryFirstAccountPlayerId(authAccount.getPlayerId());

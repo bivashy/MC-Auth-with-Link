@@ -19,11 +19,13 @@ import com.j256.ormlite.table.DatabaseTableConfig;
 import com.j256.ormlite.table.TableUtils;
 
 import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.database.adapter.AccountAdapter;
+import me.mastercapexd.auth.database.adapter.LinkUserAdapter;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
-import me.mastercapexd.auth.database.model.AuthAccountProvider;
 
 public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
+
     private static final String LINK_TYPE_CONFIGURATION_KEY = "linkType";
     private static final String LINK_USER_ID_CONFIGURATION_KEY = "linkUserId";
     private static final String LINK_ENABLED_CONFIGURATION_KEY = "linkEnabled";
@@ -72,33 +74,36 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
 
     public void updateAccountLinks(Account account) {
         DEFAULT_EXCEPTION_CATCHER.execute(() -> {
-            if (!(account instanceof AuthAccountProvider))
-                throw new IllegalArgumentException("Cannot create or update not AuthAccountProvider: " + account.getClass().getName());
-            AuthAccountProvider authAccountProvider = (AuthAccountProvider) account;
-            AuthAccount authAccount = databaseHelper.getAuthAccountDao().createIfNotExists(authAccountProvider.getAuthAccount());
-            List<AccountLink> existingAccountLinks = new ArrayList<>(authAccount.getLinks());
-            for (LinkUser linkUser : account.getLinkUsers()) {
-                String linkTypeName = linkUser.getLinkType().getName();
-                String linkUserId = Optional.ofNullable(linkUser.getLinkUserInfo())
-                        .map(LinkUserInfo::getIdentificator)
-                        .map(LinkUserIdentificator::asString)
-                        .orElse(linkUser.getLinkType().getDefaultIdentificator().asString());
-                boolean linkEnabled = linkUser.getLinkUserInfo().isConfirmationEnabled();
-                Optional<AccountLink> accountLinkOptional = existingAccountLinks.stream()
-                        .filter(accountLink -> accountLink.getLinkType().equals(linkTypeName))
-                        .findFirst();
+            AuthAccount accountAdapter = new AccountAdapter(account);
+            callBatchTasks(() -> {
+                for (LinkUser linkUser : account.getLinkUsers()) {
+                    String linkTypeName = linkUser.getLinkType().getName();
+                    String linkUserId = Optional.ofNullable(linkUser.getLinkUserInfo())
+                            .map(LinkUserInfo::getIdentificator)
+                            .map(LinkUserIdentificator::asString)
+                            .orElse(linkUser.getLinkType().getDefaultIdentificator().asString());
+                    boolean linkEnabled = linkUser.getLinkUserInfo().isConfirmationEnabled();
 
-                if (accountLinkOptional.isPresent()) {
-                    AccountLink accountLink = accountLinkOptional.get();
-                    accountLink.setLinkEnabled(linkEnabled);
-                    accountLink.setLinkUserId(linkUserId);
-                    update(accountLink);
-                    continue;
+                    AccountLink accountLink = new LinkUserAdapter(linkUser, accountAdapter);
+
+                    AccountLink updateId = queryBuilder()
+                            .where().eq(AccountLink.ACCOUNT_ID_FIELD_KEY, accountAdapter.getId())
+                            .and().eq(AccountLink.LINK_TYPE_FIELD_KEY, accountLink.getLinkType())
+                            .queryForFirst();
+
+                    if (updateId != null) {
+                        accountLink.setId(updateId.getId());
+                        if (accountLink.equals(updateId))
+                            continue;
+                        update(accountLink);
+                        continue;
+                    }
+
+                    AccountLink newAccountLink = new AccountLink(linkTypeName, linkUserId, linkEnabled, accountAdapter);
+                    create(newAccountLink);
                 }
-
-                AccountLink accountLink = new AccountLink(linkTypeName, linkUserId, linkEnabled, authAccount);
-                create(accountLink);
-            }
+                return null;
+            });
             return null;
         });
     }
@@ -118,4 +123,5 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
                 .eq(AccountLink.LINK_USER_ID_FIELD_KEY, linkUserIdentificator.asString())
                 .queryBuilder());
     }
+
 }
