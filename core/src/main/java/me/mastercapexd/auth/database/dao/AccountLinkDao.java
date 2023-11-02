@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.config.database.schema.TableSettings;
@@ -21,7 +20,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import me.mastercapexd.auth.database.DatabaseHelper;
 import me.mastercapexd.auth.database.adapter.AccountAdapter;
-import me.mastercapexd.auth.database.adapter.AccountLinkAdapter;
+import me.mastercapexd.auth.database.adapter.LinkUserAdapter;
 import me.mastercapexd.auth.database.model.AccountLink;
 import me.mastercapexd.auth.database.model.AuthAccount;
 
@@ -75,9 +74,8 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
 
     public void updateAccountLinks(Account account) {
         DEFAULT_EXCEPTION_CATCHER.execute(() -> {
-            List<AccountLink> existingAccountLinks = account.getLinkUsers().stream().map(AccountLinkAdapter::new).collect(Collectors.toList());
+            AuthAccount accountAdapter = new AccountAdapter(account);
             callBatchTasks(() -> {
-                AuthAccount adapter = new AccountAdapter(account);
                 for (LinkUser linkUser : account.getLinkUsers()) {
                     String linkTypeName = linkUser.getLinkType().getName();
                     String linkUserId = Optional.ofNullable(linkUser.getLinkUserInfo())
@@ -85,20 +83,24 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
                             .map(LinkUserIdentificator::asString)
                             .orElse(linkUser.getLinkType().getDefaultIdentificator().asString());
                     boolean linkEnabled = linkUser.getLinkUserInfo().isConfirmationEnabled();
-                    Optional<AccountLink> accountLinkOptional = existingAccountLinks.stream()
-                            .filter(accountLink -> accountLink.getLinkType().equals(linkTypeName))
-                            .findFirst();
 
-                    if (accountLinkOptional.isPresent()) {
-                        AccountLink accountLink = accountLinkOptional.get();
-                        accountLink.setLinkEnabled(linkEnabled);
-                        accountLink.setLinkUserId(linkUserId);
+                    AccountLink accountLink = new LinkUserAdapter(linkUser, accountAdapter);
+
+                    AccountLink updateId = queryBuilder()
+                            .where().eq(AccountLink.ACCOUNT_ID_FIELD_KEY, accountAdapter.getId())
+                            .and().eq(AccountLink.LINK_TYPE_FIELD_KEY, accountLink.getLinkType())
+                            .queryForFirst();
+
+                    if (updateId != null) {
+                        accountLink.setId(updateId.getId());
+                        if (accountLink.equals(updateId))
+                            continue;
                         update(accountLink);
                         continue;
                     }
 
-                    AccountLink accountLink = new AccountLink(linkTypeName, linkUserId, linkEnabled, adapter);
-                    create(accountLink);
+                    AccountLink newAccountLink = new AccountLink(linkTypeName, linkUserId, linkEnabled, accountAdapter);
+                    create(newAccountLink);
                 }
                 return null;
             });
