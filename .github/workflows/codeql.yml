@@ -58,11 +58,6 @@ jobs:
         # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
 
-    - name: Build Java
-      run: |
-        make bootstrap
-        make release
-
     - name: Build with Maven
       run: mvn --batch-mode verify
 
