@@ -13,7 +13,7 @@ public class BaseLinkEntryUser extends LinkUserTemplate implements LinkEntryUser
     protected boolean confirmed = false;
 
     public BaseLinkEntryUser(LinkType linkType, Account account, LinkUserInfo linkUserInfo) {
-        super(linkType, account);
+        super(linkType, account, linkUserInfo);
         this.linkUserInfo = linkUserInfo;
     }
 
