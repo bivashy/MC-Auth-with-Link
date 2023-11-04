@@ -14,10 +14,10 @@
         <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
         <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
-        <telegram.api.version>6.5.0</telegram.api.version>
+        <telegram.api.version>6.9.1</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
         <libby.version>2.0.0</libby.version>
-        <nanolimbo.version>1.0.6</nanolimbo.version>
+        <nanolimbo.version>1.0.8</nanolimbo.version>
     </properties>
 
     <repositories>

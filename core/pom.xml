@@ -19,13 +19,13 @@
         <lamp.command-library.version>3.1.7</lamp.command-library.version>
         <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
         <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
-        <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
-        <minimessage.version>4.13.0</minimessage.version>
+        <java-telegram-bot-api.version>6.9.1</java-telegram-bot-api.version>
+        <minimessage.version>4.14.0</minimessage.version>
         <vk.api.version>0.4.2</vk.api.version>
-        <password4j.version>1.7.0</password4j.version>
+        <password4j.version>1.7.3</password4j.version>
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
-        <jda.version>5.0.0-beta.15</jda.version>
-        <nanolimbo.version>1.0.6</nanolimbo.version>
+        <jda.version>5.0.0-beta.17</jda.version>
+        <nanolimbo.version>1.0.8</nanolimbo.version>
         <maven-resolver.version>1.9.15</maven-resolver.version>
         <maven-resolver-provider.version>3.9.4</maven-resolver-provider.version>
     </properties>

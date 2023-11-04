@@ -20,6 +20,9 @@ import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.type.KickResultType;
 
 public interface Account extends PlayerIdSupplier {
+
+    long getDatabaseId();
+
     @Deprecated
     default String getId() {
         return getPlayerId();
@@ -149,4 +152,5 @@ public interface Account extends PlayerIdSupplier {
     default boolean isRegistered() {
         return getPasswordHash().getHash() != null;
     }
+
 }
