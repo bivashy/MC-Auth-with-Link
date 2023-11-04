@@ -7,6 +7,26 @@ import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 
 public interface LinkUser {
+
+    static LinkUser of(LinkType linkType, Account account, LinkUserInfo userInfo) {
+        return new LinkUser() {
+            @Override
+            public LinkType getLinkType() {
+                return linkType;
+            }
+
+            @Override
+            public Account getAccount() {
+                return account;
+            }
+
+            @Override
+            public LinkUserInfo getLinkUserInfo() {
+                return userInfo;
+            }
+        };
+    }
+
     /**
      * @return link type, for example link type of VK, link type of DISCORD,link
      * type of TELEGRAM.
@@ -29,4 +49,5 @@ public interface LinkUser {
                 .map(identificator -> identificator.equals(getLinkType().getDefaultIdentificator()) || identificator.asString() == null)
                 .orElse(true);
     }
+
 }
