@@ -3,7 +3,14 @@ package me.mastercapexd.auth.database.importing;
 import java.util.Collection;
 import java.util.UUID;
 
+import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.crypto.CryptoProvider;
+import com.bivashy.auth.api.link.LinkType;
+import com.bivashy.auth.api.link.user.LinkUser;
+import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.link.user.info.LinkUserInfo;
+
+import me.mastercapexd.auth.database.importing.adapter.PortableAccountAdapter;
 
 public class PortableAccount {
 
@@ -48,9 +55,6 @@ public class PortableAccount {
         return details;
     }
 
-    public enum LinkType {
-        VK, DISCORD, TELEGRAM, TOTP
-    }
     public static final class AccountDetails {
 
         private final long lastQuitTimestamp;
@@ -76,22 +80,31 @@ public class PortableAccount {
         }
 
     }
-    public static final class PortableLinkAccount {
+    public static final class PortableLinkAccount implements LinkUser {
 
         private final LinkType linkType;
-        private final String identificator;
+        private final LinkUserInfo linkUserInfo;
+        private final Account account;
 
-        public PortableLinkAccount(LinkType linkType, String identificator) {
+        public PortableLinkAccount(LinkType linkType, String identificator, PortableAccount account) {
             this.linkType = linkType;
-            this.identificator = identificator;
+            this.linkUserInfo = LinkUserInfo.of(LinkUserIdentificator.ofParsed(identificator));
+            this.account = new PortableAccountAdapter(account);
         }
 
+        @Override
         public LinkType getLinkType() {
             return linkType;
         }
 
-        public String getIdentificator() {
-            return identificator;
+        @Override
+        public Account getAccount() {
+            return account;
+        }
+
+        @Override
+        public LinkUserInfo getLinkUserInfo() {
+            return linkUserInfo;
         }
 
     }
