@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.database.importing;
+package me.mastercapexd.auth.database.importing.model;
 
 import java.util.Objects;
 

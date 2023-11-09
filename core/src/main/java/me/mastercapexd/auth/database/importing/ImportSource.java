@@ -1,9 +1,11 @@
 package me.mastercapexd.auth.database.importing;
 
-import com.j256.ormlite.stmt.QueryBuilder;
+import java.util.stream.Stream;
+
+import me.mastercapexd.auth.database.importing.model.PortableAccount;
 
 public interface ImportSource {
 
-    QueryBuilder<PortableAccount, ?> sourceAccounts();
+    Stream<PortableAccount> sourceAccounts();
 
 }
