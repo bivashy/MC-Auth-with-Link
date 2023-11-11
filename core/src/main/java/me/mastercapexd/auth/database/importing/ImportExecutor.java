@@ -17,7 +17,7 @@ public class ImportExecutor {
         this.accountDao = accountDao;
     }
 
-    CompletableFuture<ImportStatistics> performImport(ImportSource source) {
+    public CompletableFuture<ImportStatistics> performImport(ImportSource source) {
         CompletableFuture<ImportStatistics> future = new CompletableFuture<>();
         new Thread(() -> {
             try {

@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.database.importing.model;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 import com.bivashy.auth.api.crypto.CryptoProvider;
@@ -41,7 +42,11 @@ public class PortableAccount {
     }
 
     public Collection<PortableAccountLink> getLinkAccounts() {
-        return linkAccounts;
+        return Collections.unmodifiableCollection(linkAccounts);
+    }
+
+    public void addLinkAccount(PortableAccountLink accountLink) {
+        this.linkAccounts.add(accountLink);
     }
 
     public AccountDetails getDetails() {
