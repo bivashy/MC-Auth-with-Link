@@ -116,6 +116,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private PluginConfig config;
     private AccountFactory accountFactory;
     private LinkTypeProvider linkTypeProvider;
+    private DatabaseHelper databaseHelper;
     private AccountDatabase accountDatabase;
     private LoginManagement loginManagement;
 
@@ -154,7 +155,8 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps());
         this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = BaseLinkTypeProvider.allLinks();
-        this.accountDatabase = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
+        this.databaseHelper = new DatabaseHelper(this);
+        this.accountDatabase = new AuthAccountDatabaseProxy(databaseHelper);
         this.loginManagement = new BaseLoginManagement(this);
 
         this.registerAuthenticationSteps();
@@ -252,6 +254,10 @@ public class BaseAuthPlugin implements AuthPlugin {
                     }
                     return IntStream.of(Integer.parseInt(number));
                 });
+    }
+
+    public DatabaseHelper getDatabaseHelper() {
+        return databaseHelper;
     }
 
     public BaseAuthPlugin eventBus(EventBus eventBus) {
