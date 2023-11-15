@@ -26,7 +26,6 @@ public class ImportExecutor {
                 future.completeExceptionally(ex);
             }
         }, "mcAuth-Import").start();
-
         return future;
     }
 

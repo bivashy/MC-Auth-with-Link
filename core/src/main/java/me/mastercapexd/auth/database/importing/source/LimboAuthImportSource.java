@@ -1,4 +1,4 @@
-package me.mastercapexd.auth.database.importing;
+package me.mastercapexd.auth.database.importing.source;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,8 @@ import com.bivashy.auth.api.config.importing.ImportingSourceSettings;
 import com.j256.ormlite.dao.RawRowMapper;
 
 import me.mastercapexd.auth.crypto.BcryptCryptoProvider;
+import me.mastercapexd.auth.database.importing.DatabaseStream;
+import me.mastercapexd.auth.database.importing.ImportSource;
 import me.mastercapexd.auth.database.importing.exception.ImportingException;
 import me.mastercapexd.auth.database.importing.model.PortableAccount;
 import me.mastercapexd.auth.database.importing.model.PortableAccount.AccountDetails;

@@ -18,6 +18,8 @@ import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
 import com.bivashy.auth.api.type.LinkConfirmationType;
 
 import io.github.revxrsal.eventbus.EventBus;
+import me.mastercapexd.auth.BaseAuthPlugin;
+import me.mastercapexd.auth.database.importing.ImportExecutor;
 import me.mastercapexd.auth.link.discord.DiscordLinkType;
 import me.mastercapexd.auth.link.telegram.TelegramLinkType;
 import me.mastercapexd.auth.link.vk.VKLinkType;
@@ -187,6 +189,7 @@ public abstract class ServerCommandsRegistry {
         commandHandler.registerDependency(PluginConfig.class, plugin.getConfig());
         commandHandler.registerDependency(ServerMessages.class, plugin.getConfig().getServerMessages());
         commandHandler.registerDependency(AccountDatabase.class, plugin.getAccountDatabase());
+        commandHandler.registerDependency(ImportExecutor.class, plugin.as(BaseAuthPlugin.class).getImportExecutor());
         commandHandler.registerDependency(AuthPlugin.class, plugin);
     }
 

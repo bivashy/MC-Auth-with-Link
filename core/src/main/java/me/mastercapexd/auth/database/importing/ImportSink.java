@@ -21,12 +21,14 @@ public class ImportSink {
 
     void addAccountAndLinks(PortableAccount account) {
         operationExecutor.execute(() -> {
-            // TODO: Handle statistics
             PortableAccountAdapter accountAdapter = new PortableAccountAdapter(account);
             accountDao.create(accountAdapter);
-            accountDao.assignEmptyForeignCollection(accountAdapter, "links"); // TODO: Replace "links" with value from dao
-            for (PortableAccountLink linkAccount : account.getLinkAccounts())
+            accountDao.assignEmptyForeignCollection(accountAdapter, "links");
+            statistics.accountAdded();
+            for (PortableAccountLink linkAccount : account.getLinkAccounts()) {
                 accountAdapter.addAccountLink(new PortableAccountLinkAdapter(linkAccount, accountAdapter));
+                statistics.linkAccountAdded();
+            }
             return null;
         });
     }

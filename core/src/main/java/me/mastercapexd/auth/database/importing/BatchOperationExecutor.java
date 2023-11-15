@@ -5,10 +5,16 @@ import java.util.concurrent.Callable;
 import com.j256.ormlite.dao.Dao;
 
 import me.mastercapexd.auth.database.dao.SupplierExceptionCatcher;
+import me.mastercapexd.auth.database.importing.exception.ImportingException;
 
 public class BatchOperationExecutor {
 
-    private final SupplierExceptionCatcher exceptionCatcher = new SupplierExceptionCatcher();
+    private final SupplierExceptionCatcher exceptionCatcher = new SupplierExceptionCatcher() {
+        @Override
+        public void processException(Throwable throwable) {
+            throw new ImportingException("Cannot execute batch operation", throwable);
+        }
+    };
     private final Dao<?, ?> dao;
 
     public BatchOperationExecutor(Dao<?, ?> dao) {

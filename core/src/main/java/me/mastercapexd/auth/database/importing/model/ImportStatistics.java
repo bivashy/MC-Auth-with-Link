@@ -23,19 +23,19 @@ public class ImportStatistics {
         return !failed;
     }
 
-    void fail() {
+    public void fail() {
         failed = true;
     }
 
-    void accountAdded() {
+    public void accountAdded() {
         accounts++;
     }
 
-    void linkAccountAdded() {
+    public void linkAccountAdded() {
         linkAccounts++;
     }
 
-    void invalidEntrySkipped() {
+    public void invalidEntrySkipped() {
         invalidEntries++;
     }
 

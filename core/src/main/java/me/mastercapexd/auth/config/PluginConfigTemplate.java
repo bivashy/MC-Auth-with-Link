@@ -31,6 +31,7 @@ import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
 import me.mastercapexd.auth.config.discord.BaseDiscordSettings;
 import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;
+import me.mastercapexd.auth.config.importing.BaseImportingSettings;
 import me.mastercapexd.auth.config.message.server.BaseServerMessages;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.storage.BaseDatabaseConfiguration;
@@ -109,7 +110,7 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
     @ConfigField("import")
-    private ImportingSettings importingSettings;
+    private BaseImportingSettings importingSettings;
 
     public PluginConfigTemplate(AuthPlugin plugin) {
         this.plugin = plugin;
