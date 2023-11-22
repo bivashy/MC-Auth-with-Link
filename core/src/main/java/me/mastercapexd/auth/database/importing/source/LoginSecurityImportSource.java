@@ -32,7 +32,7 @@ public class LoginSecurityImportSource implements ImportSource {
             String tableName = settings.getProperty("table-name").orElse("ls_players");
             return databaseStream.execute(String.format(QUERY_ALL_ACCOUNTS, tableName), new AccountRowMapper());
         } catch (Exception e) {
-            throw new ImportingException("Exception occurred during LimboAuth accounts resolution", e);
+            throw new ImportingException("Exception occurred during LoginSecurity accounts resolution", e);
         }
     }
 
