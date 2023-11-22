@@ -8,9 +8,17 @@ import:
   # является рекомендованным действием при выполнении передачи больших данных
   #
   sources:
-    # Миграция с LimboAuth и LimboSocial
+    # Миграция с LimboAuth и LimboSocial (Без поддержки лицензионных аккаунтов)
     limboauth:
       # Значение по умолчанию указано для базы данных H2
-        jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2/LIMBOAUTH-V2'
-        username: ''
-        password: ''
+      jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2/LIMBOAUTH-V2'
+      username: ''
+      password: ''
+    # Миграция с LoginSecurity (Без поддержки лицензионных аккаунтов)
+    loginsecurity:
+      # Значение по умолчанию указано для базы данных H2
+      jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2/LIMBOAUTH-V2'
+      username: ''
+      password: ''
+      # Значение по умолчанию ls_players
+      table-name: 'ls_players'

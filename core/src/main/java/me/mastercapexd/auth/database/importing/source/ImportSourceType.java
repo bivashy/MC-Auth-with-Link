@@ -8,7 +8,8 @@ import com.bivashy.auth.api.config.importing.ImportingSourceSettings;
 import me.mastercapexd.auth.database.importing.ImportSource;
 
 public enum ImportSourceType {
-    LIMBO_AUTH(config -> new LimboAuthImportSource(extract(config, "limboauth")));
+    LIMBO_AUTH(config -> new LimboAuthImportSource(extract(config, "limboauth"))),
+    LOGIN_SECURITY(config -> new LoginSecurityImportSource(extract(config, "loginsecurity")));
     private final Function<ImportingSettings, ImportSource> importSourceFunction;
 
     ImportSourceType(Function<ImportingSettings, ImportSource> importSourceFunction) {
