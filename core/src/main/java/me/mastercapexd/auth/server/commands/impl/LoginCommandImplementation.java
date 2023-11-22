@@ -12,9 +12,9 @@ public class LoginCommandImplementation {
     private final AuthPlugin plugin;
     private final PluginConfig config;
 
-    public LoginCommandImplementation(AuthPlugin plugin, PluginConfig config) {
+    public LoginCommandImplementation(AuthPlugin plugin) {
         this.plugin = plugin;
-        this.config = config;
+        this.config = plugin.getConfig();
     }
 
     public void performLogin(ServerPlayer player, Account account, String password) {

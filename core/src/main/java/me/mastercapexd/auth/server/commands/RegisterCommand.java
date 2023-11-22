@@ -27,7 +27,7 @@ public class RegisterCommand {
     @AuthenticationStepCommand(stepName = RegisterAuthenticationStep.STEP_NAME)
     @DefaultFor({"reg", "register"})
     public void register(ServerPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {
-        RegisterCommandImplementation impl = new RegisterCommandImplementation(plugin, config, accountStorage);
+        RegisterCommandImplementation impl = new RegisterCommandImplementation(plugin);
         impl.performRegister(player, account, password);
     }
 }

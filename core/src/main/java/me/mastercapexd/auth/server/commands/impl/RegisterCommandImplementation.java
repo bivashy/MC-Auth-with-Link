@@ -16,10 +16,10 @@ public class RegisterCommandImplementation {
     private final PluginConfig config;
     private final AccountDatabase accountStorage;
 
-    public RegisterCommandImplementation(AuthPlugin plugin, PluginConfig config, AccountDatabase accountStorage) {
+    public RegisterCommandImplementation(AuthPlugin plugin) {
         this.plugin = plugin;
-        this.config = config;
-        this.accountStorage = accountStorage;
+        this.config = plugin.getConfig();
+        this.accountStorage = plugin.getAccountDatabase();
     }
 
     public void performRegister(ServerPlayer player, @AuthenticationAccount Account account, RegisterPassword password) {

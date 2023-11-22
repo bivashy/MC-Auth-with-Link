@@ -25,7 +25,7 @@ public class LoginCommand {
     @AuthenticationStepCommand(stepName = LoginAuthenticationStep.STEP_NAME)
     @DefaultFor({"l", "login"})
     public void login(ServerPlayer player, Account account, String password) {
-        LoginCommandImplementation impl = new LoginCommandImplementation(plugin, config);
+        LoginCommandImplementation impl = new LoginCommandImplementation(plugin);
         impl.performLogin(player, account, password);
     }
 }

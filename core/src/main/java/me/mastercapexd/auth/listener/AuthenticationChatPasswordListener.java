@@ -20,10 +20,10 @@ public class AuthenticationChatPasswordListener {
         Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(e.getPlayer());
 
         if (!account.isRegistered()) {
-            RegisterCommandImplementation impl = new RegisterCommandImplementation(plugin, plugin.getConfig(), plugin.getAccountDatabase());
+            RegisterCommandImplementation impl = new RegisterCommandImplementation(plugin);
             impl.performRegister(e.getPlayer(), account, new RegisterPassword(e.getPassword()));
         } else {
-            LoginCommandImplementation impl = new LoginCommandImplementation(plugin, plugin.getConfig());
+            LoginCommandImplementation impl = new LoginCommandImplementation(plugin);
             impl.performLogin(e.getPlayer(), account, e.getPassword());
         }
     }
