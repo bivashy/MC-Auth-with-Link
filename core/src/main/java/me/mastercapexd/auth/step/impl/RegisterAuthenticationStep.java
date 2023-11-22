@@ -41,17 +41,11 @@ public class RegisterAuthenticationStep extends AuthenticationStepTemplate imple
     public void process(ServerPlayer player) {
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = AuthPlugin.instance().getConfig();
-
-        boolean passwordChat = config.isPasswordInChatEnabled();
-        String registerMessageKey = "register-" + (passwordChat ? "passwordchat-" : "") + "chat";
-        String registerTitleKey = "register-" + (passwordChat ? "passwordchat-" : "") + "title";
-        String registerSubtitleKey = "register-" + (passwordChat ? "passwordchat-" : "") + "subtitle";
-
-        player.sendMessage(config.getServerMessages().getMessage(registerMessageKey, new ServerMessageContext(account)));
+        player.sendMessage(config.getServerMessages().getMessage("register-chat", new ServerMessageContext(account)));
         AuthPlugin.instance()
                 .getCore()
-                .createTitle(config.getServerMessages().getMessage(registerTitleKey))
-                .subtitle(config.getServerMessages().getMessage(registerSubtitleKey))
+                .createTitle(config.getServerMessages().getMessage("register-title"))
+                .subtitle(config.getServerMessages().getMessage("register-subtitle"))
                 .stay(120)
                 .send(player);
     }
