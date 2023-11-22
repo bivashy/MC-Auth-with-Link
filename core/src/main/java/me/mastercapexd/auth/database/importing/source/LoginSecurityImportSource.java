@@ -47,6 +47,11 @@ public class LoginSecurityImportSource implements ImportSource {
             String name = requireColumn(columns, resultColumns, "last_name");
             UUID uniqueId = UUID.fromString(requireColumn(columns, resultColumns, "unique_user_id"));
             String passwordHash = requireColumn(columns, resultColumns, "password");
+            int hashingAlgorithm = Integer.parseInt(requireColumn(columns, resultColumns, "hashing_algorithm"));
+
+            if (hashingAlgorithm != 7)
+                throw new ImportingException(
+                        "Cannot import user '" + uniqueId + "', because his hashing algorithm is not BCRYPT, hashingAlgorithm: '" + hashingAlgorithm + "'.");
 
             return new PortableAccount(name, uniqueId, new BcryptCryptoProvider(), passwordHash, new ArrayList<>(),
                     new AccountDetails(0, null, 0));
