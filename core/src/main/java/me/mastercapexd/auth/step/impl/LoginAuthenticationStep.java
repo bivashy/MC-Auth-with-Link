@@ -34,11 +34,17 @@ public class LoginAuthenticationStep extends AuthenticationStepTemplate implemen
     public void process(ServerPlayer player) {
         Account account = authenticationStepContext.getAccount();
         PluginConfig config = PLUGIN.getConfig();
-        player.sendMessage(config.getServerMessages().getMessage("login-chat", new ServerMessageContext(account)));
+
+        boolean passwordChat = config.isPasswordInChatEnabled();
+        String loginMessageKey = "login-" + (passwordChat ? "passwordchat-" : "") + "chat";
+        String loginTitleKey = "login-" + (passwordChat ? "passwordchat-" : "") + "title";
+        String loginSubtitleKey = "login-" + (passwordChat ? "passwordchat-" : "") + "subtitle";
+
+        player.sendMessage(config.getServerMessages().getMessage(loginMessageKey, new ServerMessageContext(account)));
         AuthPlugin.instance()
                 .getCore()
-                .createTitle(config.getServerMessages().getMessage("login-title"))
-                .subtitle(config.getServerMessages().getMessage("login-subtitle"))
+                .createTitle(config.getServerMessages().getMessage(loginTitleKey))
+                .subtitle(config.getServerMessages().getMessage(loginSubtitleKey))
                 .stay(120)
                 .send(player);
     }

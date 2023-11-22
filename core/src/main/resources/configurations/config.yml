@@ -176,6 +176,8 @@ hash-type: BCRYPT
 
 # Должны ли писать подтверждать свои пароли при регистрации
 enable-password-confirm: true
+# Должен ли игрок писать пароль в чат вместо команд /login и /register
+enable-password-in-chat: false
 # Минимальная длина пароля
 password-min-length: 5
 # Максимальная длина пароля
@@ -242,10 +244,18 @@ messages:
   register-chat: '&fПожалуйста зарегистрируйтесь командой &e/register <пароль>'
   register-title: '&eРегистрация'
   register-subtitle: '&fПожалуйста введите &e/register <пароль>'
+  # Регистрация + пароль в чате
+  register-passwordchat-chat: '&fПожалуйста зарегистрируйтесь введя пароль в чат'
+  register-passwordchat-title: '&eРегистрация'
+  register-passwordchat-subtitle: '&fПожалуйста введите &eпароль &fв чат'
   # Логин
   login-chat: '&fПожалуйста войдите используя команду &e/login <password>'
   login-title: '&eАвторизация'
   login-subtitle: '&fПожалуйста введите &e/login <пароль>'
+  # Логин + пароль в чате
+  login-passwordchat-chat: '&fПожалуйста войдите, написав пароль в чат'
+  login-passwordchat-title: '&eАвторизация'
+  login-passwordchat-subtitle: '&fПожалуйста введите &eпароль &fв чат'
   # Ошибки
   time-left: '&cВремя вышло! Пожалуйста, попробуйте снова.'
   limit-ip-reached: '&cВы находитесь онлайн с большим количеством аккаунтов!'
