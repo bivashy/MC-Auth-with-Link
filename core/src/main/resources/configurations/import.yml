@@ -17,7 +17,7 @@ import:
     # Миграция с LoginSecurity (Без поддержки лицензионных аккаунтов)
     loginsecurity:
       # Значение по умолчанию указано для базы данных H2
-      jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2/LIMBOAUTH-V2'
+      jdbc-url: 'jdbc:sqlite:./plugins/mcauth/internal/sql/LoginSecurity.db'
       username: ''
       password: ''
       # Значение по умолчанию ls_players
