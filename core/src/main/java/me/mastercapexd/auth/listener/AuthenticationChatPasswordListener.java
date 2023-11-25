@@ -45,7 +45,7 @@ public class AuthenticationChatPasswordListener {
                 return true;
             }
             String confirmationPassword = messageParts[1];
-            if (confirmationPassword.equals(password)) {
+            if (!confirmationPassword.equals(password)) {
                 player.sendMessage(config.getServerMessages().getMessage("confirm-failed"));
                 return true;
             }
