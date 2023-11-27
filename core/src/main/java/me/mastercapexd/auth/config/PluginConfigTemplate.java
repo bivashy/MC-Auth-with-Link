@@ -3,6 +3,7 @@ package me.mastercapexd.auth.config;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -66,6 +67,10 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private int passwordAttempts = 3;
     @ConfigField("auth-time")
     private ConfigurationDuration authTime = new ConfigurationDuration(60);
+    @ConfigField("enable-license-support")
+    private boolean licenseSupportEnabled = true;
+    @ConfigField("license-verify-time")
+    private ConfigurationDuration licenseVerifyTime = new ConfigurationDuration(30);
     @ImportantField
     @ConfigField("auth-servers")
     private List<ConfigurationServer> authServers = Collections.emptyList();
@@ -109,6 +114,14 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private IntStream limboPortRange = IntStream.range(49152, 65535);
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
+    @ConfigField("day-plurals")
+    private List<String> dayPluralStringList = Arrays.asList("день", "дня", "дней");
+    @ConfigField("hour-plurals")
+    private List<String> hourPluralStringList = Arrays.asList("час", "часа", "часов");
+    @ConfigField("minute-plurals")
+    private List<String> minutePluralStringList = Arrays.asList("минута", "минуты", "минут");
+    @ConfigField("second-plurals")
+    private List<String> secondPluralStringList = Arrays.asList("секунда", "секунды", "секунд");
 
     public PluginConfigTemplate(AuthPlugin plugin) {
         this.plugin = plugin;
@@ -214,6 +227,16 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
+    public boolean isLicenseSupportEnabled() {
+        return licenseSupportEnabled;
+    }
+
+    @Override
+    public long getLicenseVerifyTimeMillis() {
+        return licenseVerifyTime.getMillis();
+    }
+
+    @Override
     public boolean shouldBlockChat() {
         return blockChat;
     }
@@ -291,6 +314,26 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public List<String> getAuthenticationSteps() {
         return Collections.unmodifiableList(authenticationSteps);
+    }
+
+    @Override
+    public List<String> getDayPluralsStringList() {
+        return Collections.unmodifiableList(dayPluralStringList);
+    }
+
+    @Override
+    public List<String> getHourPluralsStringList() {
+        return Collections.unmodifiableList(hourPluralStringList);
+    }
+
+    @Override
+    public List<String> getMinutePluralsStringList() {
+        return Collections.unmodifiableList(minutePluralStringList);
+    }
+
+    @Override
+    public List<String> getSecondPluralsStringList() {
+        return Collections.unmodifiableList(secondPluralStringList);
     }
 
     @Override

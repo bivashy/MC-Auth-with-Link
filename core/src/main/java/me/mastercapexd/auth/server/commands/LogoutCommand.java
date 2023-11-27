@@ -30,10 +30,15 @@ public class LogoutCommand {
             player.sendMessage(config.getServerMessages().getMessage("already-logged-out"));
             return;
         }
-        eventBus.publish(PlayerLogoutEvent.class, player, false).thenAccept(result -> {
-            if(result.getEvent().isCancelled())
+        accountStorage.getAccount(id).thenAccept(account -> {
+            if (account.isPremium()) {
+                player.sendMessage(config.getServerMessages().getMessage("premiums-cant-log-out"));
                 return;
-            accountStorage.getAccount(id).thenAccept(account -> {
+            }
+
+            eventBus.publish(PlayerLogoutEvent.class, player, false).thenAccept(result -> {
+                if (result.getEvent().isCancelled())
+                    return;
                 account.logout(config.getSessionDurability());
                 accountStorage.saveOrUpdateAccount(account);
                 authenticatingAccountBucket.addAuthenticatingAccount(account);

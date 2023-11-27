@@ -131,6 +131,11 @@ public class AuthAccountAdapter extends AccountTemplate {
     }
 
     @Override
+    public void setIsPremium(boolean newIsPremium) {
+        authAccount.setIsPremium(newIsPremium);
+    }
+
+    @Override
     public long getLastSessionStartTimestamp() {
         return authAccount.getLastSessionStartTimestamp();
     }
@@ -138,6 +143,11 @@ public class AuthAccountAdapter extends AccountTemplate {
     @Override
     public void setLastSessionStartTimestamp(long currentTimeMillis) {
         authAccount.setLastSessionStartTimestamp(currentTimeMillis);
+    }
+
+    @Override
+    public boolean isPremium() {
+        return authAccount.isPremium();
     }
 
     @Override

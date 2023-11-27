@@ -96,6 +96,8 @@ public interface Account extends PlayerIdSupplier {
 
     void setLastIpAddress(String hostString);
 
+    void setIsPremium(boolean newIsPremium);
+
     @Deprecated
     default long getLastSessionStart() {
         return getLastSessionStartTimestamp();
@@ -135,6 +137,8 @@ public interface Account extends PlayerIdSupplier {
     }
 
     boolean isSessionActive(long sessionDurability);
+
+    boolean isPremium();
 
     default KickResultType kick(String reason) {
         Optional<ServerPlayer> serverPlayer = getPlayer();

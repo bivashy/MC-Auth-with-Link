@@ -46,6 +46,9 @@ public class MessengerAuthenticationStep extends AuthenticationStepTemplate impl
         if (PLUGIN.getLinkEntryBucket().find(account.getPlayerId(), linkType).isPresent())
             return true;
 
+        if (PLUGIN.getPendingPremiumAccountBucket().isPendingPremium(account) || account.isPremium())
+            return true;
+
         if (account.isSessionActive(PLUGIN.getConfig().getSessionDurability()))
             return true;
 

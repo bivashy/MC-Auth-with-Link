@@ -1,5 +1,6 @@
 package com.bivashy.auth.api.config;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -47,6 +48,14 @@ public interface PluginConfig {
 
     List<String> getAuthenticationSteps();
 
+    List<String> getDayPluralsStringList();
+
+    List<String> getHourPluralsStringList();
+
+    List<String> getMinutePluralsStringList();
+
+    List<String> getSecondPluralsStringList();
+
     String getAuthenticationStepName(int index);
 
     boolean isPasswordConfirmationEnabled();
@@ -68,6 +77,10 @@ public interface PluginConfig {
     long getJoinDelay();
 
     long getAuthTime();
+
+    boolean isLicenseSupportEnabled();
+
+    long getLicenseVerifyTimeMillis();
 
     boolean shouldBlockChat();
 

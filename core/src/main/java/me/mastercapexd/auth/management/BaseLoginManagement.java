@@ -2,6 +2,7 @@ package me.mastercapexd.auth.management;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.account.Account;
@@ -18,6 +19,7 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 
 import io.github.revxrsal.eventbus.PostResult;
+import me.mastercapexd.auth.config.message.context.misc.TimePlaceholderContext;
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
 import me.mastercapexd.auth.step.impl.NullAuthenticationStep.NullAuthenticationStepFactory;
 
@@ -37,7 +39,40 @@ public class BaseLoginManagement implements LoginManagement {
     }
 
     @Override
+    public void onPreLogin(String username, Consumer<Boolean> continueConnection) {
+        plugin.getAccountDatabase().getAccount(username).thenAccept(account -> {
+            if (account == null) {
+                continueConnection.accept(false);
+                return;
+            }
+
+            if (account.isPremium()) {
+                if (plugin.getPendingPremiumAccountBucket().isPendingPremium(account)) {
+                    plugin.getPendingPremiumAccountBucket().removePendingPremiumAccount(account);
+                }
+                continueConnection.accept(true);
+                return;
+            }
+
+            if (!plugin.getPendingPremiumAccountBucket().isPendingPremium(account)) {
+                continueConnection.accept(false);
+                return;
+            }
+
+            long timestamp = plugin.getPendingPremiumAccountBucket().getEnterTimestampOrZero(account);
+            if (timestamp < System.currentTimeMillis() - plugin.getConfig().getLicenseVerifyTimeMillis()) {
+                plugin.getPendingPremiumAccountBucket().removePendingPremiumAccount(account);
+                continueConnection.accept(false);
+                return;
+            }
+
+            continueConnection.accept(true);
+        });
+    }
+
+    @Override
     public CompletableFuture<Account> onLogin(ServerPlayer player) {
+
         String nickname = player.getNickname();
         if (!config.getNamePattern().matcher(nickname).matches()) {
             player.disconnect(config.getServerMessages().getMessage("illegal-name-chars"));
@@ -78,6 +113,16 @@ public class BaseLoginManagement implements LoginManagement {
             return plugin.getEventBus().publish(AccountJoinEvent.class, account, false).thenApplyAsync(event -> {
                 if (event.getEvent().isCancelled())
                     return account;
+
+                if (plugin.getPendingPremiumAccountBucket().isPendingPremium(player) || account.isPremium()) {
+                    if (config.getJoinDelay() == 0) {
+                        account.nextAuthenticationStep(context);
+                    } else {
+                        core.schedule(() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
+                    }
+                    return account;
+                }
+
                 if (account.isSessionActive(config.getSessionDurability()) && account.getLastIpAddress().equals(player.getPlayerIp())) {
                     PostResult<AccountSessionEnterEvent> sessionEnterEventPostResult = plugin.getEventBus()
                             .publish(AccountSessionEnterEvent.class, account, false)
