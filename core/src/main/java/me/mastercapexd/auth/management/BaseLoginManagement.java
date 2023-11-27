@@ -40,6 +40,11 @@ public class BaseLoginManagement implements LoginManagement {
 
     @Override
     public void onPreLogin(String username, Consumer<Boolean> continueConnection) {
+        if (!config.isLicenseSupportEnabled()) {
+            continueConnection.accept(false);
+            return;
+        }
+
         plugin.getAccountDatabase().getAccount(username).thenAccept(account -> {
             if (account == null) {
                 continueConnection.accept(false);

@@ -32,6 +32,11 @@ public class LicenseCommand {
     @AutoComplete("* @onOff")
     @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void changePlayerPassword(ServerPlayer sender, @Named("пароль") String password, @Named("Вкл/Выкл") String onOff) {
+        if (!config.isLicenseSupportEnabled()) {
+            sender.sendMessage(config.getServerMessages().getMessage("license-command-disabled"));
+            return;
+        }
+
         String[] onVariants = new String[]{"on", "yes", "y", "enable"};
         String[] offVariants = new String[]{"off", "no", "n", "disable"};
 
