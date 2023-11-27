@@ -12,7 +12,7 @@
 
     <properties>
         <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
-        <lamp.command-library.version>3.1.7</lamp.command-library.version>
+        <lamp.command-library.version>3.1.8</lamp.command-library.version>
         <adventure.bungee.version>4.3.0</adventure.bungee.version>
         <telegram.api.version>6.9.1</telegram.api.version>
         <vk.api.version>0.4.2</vk.api.version>
