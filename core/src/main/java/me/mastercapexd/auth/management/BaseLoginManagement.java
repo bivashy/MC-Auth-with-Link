@@ -19,7 +19,6 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 
 import io.github.revxrsal.eventbus.PostResult;
-import me.mastercapexd.auth.config.message.context.misc.TimePlaceholderContext;
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
 import me.mastercapexd.auth.step.impl.NullAuthenticationStep.NullAuthenticationStepFactory;
 
@@ -72,7 +71,6 @@ public class BaseLoginManagement implements LoginManagement {
 
     @Override
     public CompletableFuture<Account> onLogin(ServerPlayer player) {
-
         String nickname = player.getNickname();
         if (!config.getNamePattern().matcher(nickname).matches()) {
             player.disconnect(config.getServerMessages().getMessage("illegal-name-chars"));
@@ -96,32 +94,30 @@ public class BaseLoginManagement implements LoginManagement {
                 Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(), player.getUniqueId(), nickname,
                         config.getActiveHashType(), null, player.getPlayerIp());
 
-                AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket().createContext(newAccount);
+                AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket(newAccount.isPremium()).createContext(newAccount);
                 plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(newAccount);
                 newAccount.nextAuthenticationStep(context);
                 return CompletableFuture.completedFuture(null);
             }
 
+            // We don't want to remove account from the bucket yet, we will do that in ServerConnected event,
+            // after sending message and title
+            if (plugin.getPendingPremiumAccountBucket().isPendingPremium(account)) {
+                account.setIsPremium(true);
+                accountDatabase.saveOrUpdateAccount(account);
+            }
+
             AuthenticationStepFactory authenticationStepCreator = plugin.getAuthenticationStepFactoryBucket()
                     .findFirst(stepCreator -> stepCreator.getAuthenticationStepName()
-                            .equals(plugin.getConfig().getAuthenticationSteps().stream().findFirst().orElse("NULL")))
+                            .equals(plugin.getConfig().getAuthenticationSteps(account.isPremium()).stream().findFirst().orElse("NULL")))
                     .orElse(new NullAuthenticationStepFactory());
 
-            AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket()
+            AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket(account.isPremium())
                     .createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
             return plugin.getEventBus().publish(AccountJoinEvent.class, account, false).thenApplyAsync(event -> {
                 if (event.getEvent().isCancelled())
                     return account;
-
-                if (plugin.getPendingPremiumAccountBucket().isPendingPremium(player) || account.isPremium()) {
-                    if (config.getJoinDelay() == 0) {
-                        account.nextAuthenticationStep(context);
-                    } else {
-                        core.schedule(() -> account.nextAuthenticationStep(context), config.getJoinDelay(), TimeUnit.MILLISECONDS);
-                    }
-                    return account;
-                }
 
                 if (account.isSessionActive(config.getSessionDurability()) && account.getLastIpAddress().equals(player.getPlayerIp())) {
                     PostResult<AccountSessionEnterEvent> sessionEnterEventPostResult = plugin.getEventBus()

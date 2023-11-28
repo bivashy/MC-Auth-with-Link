@@ -46,7 +46,7 @@ public interface PluginConfig {
 
     IntStream getLimboPortRange();
 
-    List<String> getAuthenticationSteps();
+    List<String> getAuthenticationSteps(boolean isPremium);
 
     List<String> getDayPluralsStringList();
 
@@ -56,7 +56,7 @@ public interface PluginConfig {
 
     List<String> getSecondPluralsStringList();
 
-    String getAuthenticationStepName(int index);
+    String getAuthenticationStepName(int index, boolean isPremium);
 
     boolean isPasswordConfirmationEnabled();
 

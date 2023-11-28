@@ -28,11 +28,12 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
                 return;
             if (currentAuthenticationStep != null && !currentAuthenticationStep.shouldPassToNextStep())
                 return;
-            if (PLUGIN.getConfig().getAuthenticationSteps().size() <= currentConfigurationAuthenticationStepCreatorIndex) {
+            if (PLUGIN.getConfig().getAuthenticationSteps(isPremium()).size() <= currentConfigurationAuthenticationStepCreatorIndex) {
                 currentConfigurationAuthenticationStepCreatorIndex = 0;
                 return;
             }
-            String stepCreatorName = PLUGIN.getConfig().getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
+            String stepCreatorName = PLUGIN.getConfig()
+                    .getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex, isPremium());
             AuthenticationStepFactory authenticationStepFactory = PLUGIN.getAuthenticationStepFactoryBucket()
                     .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName))
                     .orElse(new NullAuthenticationStepFactory());
@@ -46,7 +47,7 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
             currentConfigurationAuthenticationStepCreatorIndex += 1;
             if (currentAuthenticationStep.shouldSkip()) {
                 currentAuthenticationStep = new NullAuthenticationStep();
-                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this)).join();
+                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket(isPremium()).createContext(this)).join();
             }
         });
     }
@@ -64,13 +65,13 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
 
     @Override
     public void setCurrentAuthenticationStepCreatorIndex(int index) {
-        String stepName = PLUGIN.getConfig().getAuthenticationStepName(index);
+        String stepName = PLUGIN.getConfig().getAuthenticationStepName(index, isPremium());
 
         AuthenticationStepFactory authenticationStepFactory = PLUGIN.getAuthenticationStepFactoryBucket()
                 .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepName))
                 .orElse(new NullAuthenticationStepFactory());
 
-        AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryBucket().createContext(stepName, this);
+        AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryBucket(isPremium()).createContext(stepName, this);
         currentConfigurationAuthenticationStepCreatorIndex = index;
         currentAuthenticationStep = authenticationStepFactory.createNewAuthenticationStep(stepContext);
     }

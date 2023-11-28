@@ -114,6 +114,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private IntStream limboPortRange = IntStream.range(49152, 65535);
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
+    @ConfigField("premium-authentication-steps")
+    private List<String> premiumAuthenticationSteps = Arrays.asList("VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
     @ConfigField("day-plurals")
     private List<String> dayPluralStringList = Arrays.asList("день", "дня", "дней");
     @ConfigField("hour-plurals")
@@ -312,8 +314,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public List<String> getAuthenticationSteps() {
-        return Collections.unmodifiableList(authenticationSteps);
+    public List<String> getAuthenticationSteps(boolean isPremium) {
+        return Collections.unmodifiableList(isPremium ? premiumAuthenticationSteps : authenticationSteps);
     }
 
     @Override
@@ -337,8 +339,9 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public String getAuthenticationStepName(int index) {
-        return index >= 0 && index < authenticationSteps.size() ? authenticationSteps.get(index) : "NULL";
+    public String getAuthenticationStepName(int index, boolean isPremium) {
+        return index >= 0 && index < (isPremium ? premiumAuthenticationSteps : authenticationSteps).size()
+                ? (isPremium ? premiumAuthenticationSteps : authenticationSteps).get(index) : "NULL";
     }
 
     @Override

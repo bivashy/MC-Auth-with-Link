@@ -35,7 +35,7 @@ public class RegisterCommandImplementation {
 
             accountStorage.saveOrUpdateAccount(account);
 
-            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket(account.isPremium()).createContext(account));
 
             player.sendMessage(config.getServerMessages().getMessage("register-success"));
         });

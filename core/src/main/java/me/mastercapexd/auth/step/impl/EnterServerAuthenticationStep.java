@@ -36,11 +36,6 @@ public class EnterServerAuthenticationStep extends AuthenticationStepTemplate {
         Optional<ServerPlayer> playerOptional = account.getPlayer();
         account.setLastSessionStartTimestamp(System.currentTimeMillis());
         playerOptional.map(ServerPlayer::getPlayerIp).ifPresent(account::setLastIpAddress);
-
-        if (PLUGIN.getPendingPremiumAccountBucket().isPendingPremium(account)) {
-            account.setIsPremium(true);
-        }
-
         PLUGIN.getAccountDatabase().saveOrUpdateAccount(account);
         if (!playerOptional.isPresent())
             return;

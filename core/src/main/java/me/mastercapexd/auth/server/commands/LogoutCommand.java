@@ -31,18 +31,13 @@ public class LogoutCommand {
             return;
         }
         accountStorage.getAccount(id).thenAccept(account -> {
-            if (account.isPremium()) {
-                player.sendMessage(config.getServerMessages().getMessage("premiums-cant-log-out"));
-                return;
-            }
-
             eventBus.publish(PlayerLogoutEvent.class, player, false).thenAccept(result -> {
                 if (result.getEvent().isCancelled())
                     return;
                 account.logout(config.getSessionDurability());
                 accountStorage.saveOrUpdateAccount(account);
                 authenticatingAccountBucket.addAuthenticatingAccount(account);
-                account.nextAuthenticationStep(AuthPlugin.instance().getAuthenticationContextFactoryBucket().createContext(account));
+                account.nextAuthenticationStep(AuthPlugin.instance().getAuthenticationContextFactoryBucket(account.isPremium()).createContext(account));
                 player.sendMessage(config.getServerMessages().getMessage("logout-success"));
                 config.findServerInfo(config.getAuthServers()).asProxyServer().sendPlayer(player);
             });

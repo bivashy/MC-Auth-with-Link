@@ -27,6 +27,7 @@ public class AccountServerChangedListener {
                     .collect(Collectors.toList())
                     .contains(e.getServer().getServerName())) {
                 e.getAccount().getPlayer().ifPresent(player -> {
+                    plugin.getPendingPremiumAccountBucket().removePendingPremiumAccount(player);
                     player.sendMessage(config.getServerMessages().getMessage("license-verified-successfully-chat"));
                     plugin
                             .getCore()

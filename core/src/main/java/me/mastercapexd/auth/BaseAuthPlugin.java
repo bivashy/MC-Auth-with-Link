@@ -96,6 +96,7 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final String version;
     private final File pluginFolder;
     private AuthenticationStepContextFactoryBucket authenticationStepContextFactoryBucket;
+    private AuthenticationStepContextFactoryBucket premiumAuthenticationStepContextFactoryBucket;
     private AudienceProvider audienceProvider;
     private LibraryManagement libraryManagement;
     private ServerCore core;
@@ -143,7 +144,8 @@ public class BaseAuthPlugin implements AuthPlugin {
             }
         }
 
-        this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps());
+        this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps(false));
+        this.premiumAuthenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps(true));
         this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = BaseLinkTypeProvider.allLinks();
         this.accountDatabase = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
@@ -289,8 +291,8 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     @Override
-    public AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket() {
-        return authenticationStepContextFactoryBucket;
+    public AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket(boolean isPremium) {
+        return isPremium ? premiumAuthenticationStepContextFactoryBucket : authenticationStepContextFactoryBucket;
     }
 
     @Override
