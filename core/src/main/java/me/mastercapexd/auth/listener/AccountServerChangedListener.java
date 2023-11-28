@@ -20,6 +20,9 @@ public class AccountServerChangedListener {
 
     @SubscribeEvent
     public void onAccountServerConnected(AccountServerConnectedEvent e) {
+        if (!config.isLicenseSupportEnabled())
+            return;
+
         if (e.getAccount().isPremium() && plugin.getPendingPremiumAccountBucket().isPendingPremium(e.getAccount())) {
             if (config.getGameServers().stream()
                     .map(ConfigurationServer::asProxyServer)
