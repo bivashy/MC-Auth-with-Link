@@ -25,11 +25,310 @@
         <maven.compiler.useIncrementalCompilation>true</maven.compiler.useIncrementalCompilation>
         <dependencies.relocation.package>com.bivashy.auth.lib</dependencies.relocation.package>
 
+        <!-- Dependencies -->
+        <!-- Crypto -->
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <password4j.version>1.7.3</password4j.version>
+
+        <!-- TOTP -->
+        <totp-auth.version>1.5.0</totp-auth.version>
+        <zxing-qr-generator.version>3.5.2</zxing-qr-generator.version>
+
+        <!-- Adventure -->
+        <minimessage.version>4.14.0</minimessage.version>
+        <adventure-serializer.version>4.14.0</adventure-serializer.version>
+        <adventure-platform.version>4.3.1</adventure-platform.version>
+        <adventure-bungee.version>4.3.0</adventure-bungee.version>
+
+        <!-- Configuration -->
+        <configuration-library.version>4.0.2</configuration-library.version>
+        <configurate.version>4.1.2</configurate.version>
+        <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
+
+        <!-- Command -->
+        <lamp.version>3.1.8</lamp.version>
+        <lamp-vk.version>1.0.0</lamp-vk.version>
+        <lamp-telegram.version>1.0.0</lamp-telegram.version>
+
+        <telegram-api.version>6.9.1</telegram-api.version>
+        <jda.version>5.0.0-beta.18</jda.version>
+        <vk-api.version>0.4.2</vk-api.version>
+
+        <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
+
+        <velocity-api.version>3.1.1</velocity-api.version>
+        <velocity-proxy.version>3.2.0-SNAPSHOT</velocity-proxy.version>
+
+        <auth-api.version>${project.version}</auth-api.version>
+        <ormlite.version>6.1</ormlite.version>
+        <multimessenger.version>1.0.5</multimessenger.version>
+        <event-bus.version>1.3</event-bus.version>
+        <libby.version>2.0.0</libby.version>
+        <nanolimbo.version>1.0.8</nanolimbo.version>
+
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.shade.plugin.version>3.5.1</maven.shade.plugin.version>
         <maven.source.plugin.version>3.3.0</maven.source.plugin.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Internal modules -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bivashy.auth</groupId>
+                <artifactId>api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- BCrypt library -->
+            <dependency>
+                <groupId>org.mindrot</groupId>
+                <artifactId>jbcrypt</artifactId>
+                <version>${jbcrypt.version}</version>
+            </dependency>
+            <!-- Password4j -->
+            <dependency>
+                <groupId>com.password4j</groupId>
+                <artifactId>password4j</artifactId>
+                <version>${password4j.version}</version>
+            </dependency>
+            <!-- MultiMessenger library -->
+            <dependency>
+                <groupId>com.github.bivashy.MultiMessenger</groupId>
+                <artifactId>common</artifactId>
+                <version>${multimessenger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy.MultiMessenger</groupId>
+                <artifactId>vk</artifactId>
+                <version>${multimessenger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy.MultiMessenger</groupId>
+                <artifactId>telegram</artifactId>
+                <version>${multimessenger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.github.pengrad</groupId>
+                        <artifactId>java-telegram-bot-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy.MultiMessenger</groupId>
+                <artifactId>discord</artifactId>
+                <version>${multimessenger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>JDA</artifactId>
+                        <groupId>net.dv8tion</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Lamp -->
+            <dependency>
+                <groupId>com.github.Revxrsal.Lamp</groupId>
+                <artifactId>common</artifactId>
+                <version>${lamp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy</groupId>
+                <artifactId>VkLampModule</artifactId>
+                <version>${lamp-vk.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.vk.api</groupId>
+                        <artifactId>sdk</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy</groupId>
+                <artifactId>TelegramLampModule</artifactId>
+                <version>${lamp-telegram.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.Revxrsal.Lamp</groupId>
+                <artifactId>jda</artifactId>
+                <version>${lamp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.Revxrsal.Lamp</groupId>
+                <artifactId>bungee</artifactId>
+                <version>${lamp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.Revxrsal.Lamp</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${lamp.version}</version>
+            </dependency>
+
+            <!-- Adventure -->
+            <dependency>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-platform-api</artifactId>
+                <version>${adventure-platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-gson</artifactId>
+                <version>${adventure-serializer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-legacy</artifactId>
+                <version>${adventure-serializer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-plain</artifactId>
+                <version>${adventure-serializer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-platform-bungeecord</artifactId>
+                <version>${adventure-bungee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-minimessage</artifactId>
+                <version>${minimessage.version}</version>
+            </dependency>
+
+            <!-- ORMLite -->
+            <dependency>
+                <groupId>com.j256.ormlite</groupId>
+                <artifactId>ormlite-jdbc</artifactId>
+                <version>${ormlite.version}</version>
+            </dependency>
+
+            <!-- TOTP -->
+            <dependency>
+                <groupId>com.warrenstrange</groupId>
+                <artifactId>googleauth</artifactId>
+                <version>${totp-auth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${zxing-qr-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>${zxing-qr-generator.version}</version>
+            </dependency>
+
+            <!-- Event Bus -->
+            <dependency>
+                <groupId>com.github.Revxrsal</groupId>
+                <artifactId>EventBus</artifactId>
+                <version>${event-bus.version}</version>
+            </dependency>
+
+            <!-- ConfigurationLibrary -->
+            <dependency>
+                <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
+                <artifactId>core</artifactId>
+                <version>${configuration-library.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
+                <artifactId>configurate</artifactId>
+                <version>${configuration-library.version}</version>
+            </dependency>
+
+            <!-- Configurate -->
+            <dependency>
+                <groupId>org.spongepowered</groupId>
+                <artifactId>configurate-core</artifactId>
+                <version>${configurate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.spongepowered</groupId>
+                <artifactId>configurate-yaml</artifactId>
+                <version>${configurate.version}</version>
+            </dependency>
+
+            <!-- Yaml Config Updater -->
+            <dependency>
+                <groupId>ru.vyarus</groupId>
+                <artifactId>yaml-config-updater</artifactId>
+                <version>${yaml-config-updater.version}</version>
+            </dependency>
+
+            <!-- Libby -->
+            <dependency>
+                <groupId>com.github.bivashy.libby</groupId>
+                <artifactId>libby-core</artifactId>
+                <version>${libby.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy.libby</groupId>
+                <artifactId>libby-bungee</artifactId>
+                <version>${libby.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bivashy.libby</groupId>
+                <artifactId>libby-velocity</artifactId>
+                <version>${libby.version}</version>
+            </dependency>
+
+            <!-- BungeeCord API -->
+            <dependency>
+                <groupId>net.md-5</groupId>
+                <artifactId>bungeecord-api</artifactId>
+                <version>${bungeecord.version}</version>
+            </dependency>
+
+            <!-- Velocity -->
+            <dependency>
+                <groupId>com.velocitypowered</groupId>
+                <artifactId>velocity-api</artifactId>
+                <version>${velocity-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.velocitypowered</groupId>
+                <artifactId>velocity-proxy</artifactId>
+                <version>${velocity-proxy.version}</version>
+            </dependency>
+
+            <!-- VK API -->
+            <dependency>
+                <groupId>com.github.bivashy</groupId>
+                <artifactId>VK-API-PluginAdapter</artifactId>
+                <version>${vk-api.version}</version>
+            </dependency>
+
+            <!-- Telegram API -->
+            <dependency>
+                <groupId>com.github.pengrad</groupId>
+                <artifactId>java-telegram-bot-api</artifactId>
+                <version>${telegram-api.version}</version>
+            </dependency>
+
+            <!-- Java Discord API -->
+            <dependency>
+                <groupId>net.dv8tion</groupId>
+                <artifactId>JDA</artifactId>
+                <version>${jda.version}</version>
+            </dependency>
+
+            <!-- NanoLimbo -->
+            <dependency>
+                <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
+                <artifactId>api</artifactId>
+                <version>${nanolimbo.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <finalName>${project.name}</finalName>
