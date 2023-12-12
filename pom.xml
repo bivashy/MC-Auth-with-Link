@@ -346,8 +346,6 @@
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <compilerArgs>
-                        <arg>-Xlint:deprecation</arg>
-                        <arg>-Xlint:unchecked</arg>
                         <arg>-proc:none</arg>
                     </compilerArgs>
                     <source>${java.version}</source>
@@ -369,10 +367,7 @@
                 </executions>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"/>
-                    </transformers>
-
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
                     <filters>
                         <filter>
                             <artifact>org.spongepowered:*</artifact>
@@ -387,13 +382,11 @@
                             </includes>
                         </filter>
                     </filters>
-
                     <relocations>
                         <relocation>
                             <pattern>revxrsal.commands</pattern>
                             <shadedPattern>${dependencies.relocation.package}.revxrsal.commands</shadedPattern>
                         </relocation>
-
                         <relocation>
                             <pattern>org.objectweb.asm</pattern>
                             <shadedPattern>${dependencies.relocation.package}.org.objectweb.asm</shadedPattern>
@@ -408,7 +401,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org.mindrot.jbcrypt</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.spongepowered.configurate</shadedPattern>
+                            <shadedPattern>${dependencies.relocation.package}.org.mindrot.jbcrypt</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.intellij</pattern>
@@ -430,16 +423,14 @@
                             <pattern>org.apache.commons</pattern>
                             <shadedPattern>${dependencies.relocation.package}.org.apache.commons</shadedPattern>
                         </relocation>
-
                         <relocation>
                             <pattern>io.leangen.geantyref</pattern>
                             <shadedPattern>${dependencies.relocation.package}.io.leangen.geantyref</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>io.github.revxrsal</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.io.github.revxrsal</shadedPattern>
+                            <pattern>io.github.revxrsal.eventbus</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.io.github.revxrsal.eventbus</shadedPattern>
                         </relocation>
-
                         <relocation>
                             <pattern>com.warrenstrange.googleauth</pattern>
                             <shadedPattern>${dependencies.relocation.package}.com.warrenstrange.googleauth</shadedPattern>
@@ -457,14 +448,6 @@
                             <shadedPattern>${dependencies.relocation.package}.com.google.errorprone</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.google.j2objc</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.com.google.j2objc</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.google.common</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.com.google.common</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.password4j</pattern>
                             <shadedPattern>${dependencies.relocation.package}.com.password4j</shadedPattern>
                         </relocation>
@@ -473,27 +456,18 @@
                             <shadedPattern>${dependencies.relocation.package}.ru.vyarus.yaml.updater</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>net.byteflux.libby</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.net.byteflux.libby</shadedPattern>
+                            <pattern>com.alessiodp.libby</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.alessiodp.libby</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.dv8tion</pattern>
                             <shadedPattern>${dependencies.relocation.package}.net.dv8tion</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.squareup.okio</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.com.squareup.okio</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>javax.annotation</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.javax.annotation</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.codehaus.plexus</pattern>
-                            <shadedPattern>${dependencies.relocation.package}.org.codehaus.plexus</shadedPattern>
+                            <pattern>com.grack.nanojson</pattern>
+                            <shadedPattern>${dependencies.relocation.package}.com.grack.nanojson</shadedPattern>
                         </relocation>
                     </relocations>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
                 </configuration>
             </plugin>
             <!-- Maven source plugin -->
