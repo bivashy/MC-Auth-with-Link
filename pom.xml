@@ -35,7 +35,7 @@
         <zxing-qr-generator.version>3.5.2</zxing-qr-generator.version>
 
         <!-- Adventure -->
-        <minimessage.version>4.14.0</minimessage.version>
+        <minimessage.version>4.15.0</minimessage.version>
         <adventure-serializer.version>4.15.0</adventure-serializer.version>
         <adventure-platform.version>4.3.1</adventure-platform.version>
         <adventure-bungee.version>4.3.0</adventure-bungee.version>
