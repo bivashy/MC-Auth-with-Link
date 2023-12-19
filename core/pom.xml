@@ -10,26 +10,6 @@
     </parent>
     <artifactId>core</artifactId>
 
-    <properties>
-        <auth.api.version>${project.version}</auth.api.version>
-        <jbcrypt.version>0.4</jbcrypt.version>
-        <zxing.library.version>3.5.2</zxing.library.version>
-        <configuration-library.version>4.0.2</configuration-library.version>
-        <configurate.version>4.1.2</configurate.version>
-        <lamp.command-library.version>3.1.8</lamp.command-library.version>
-        <vk-lamp-module.version>1.0.0</vk-lamp-module.version>
-        <telegram-lamp-module.version>1.0.0</telegram-lamp-module.version>
-        <java-telegram-bot-api.version>6.9.1</java-telegram-bot-api.version>
-        <minimessage.version>4.14.0</minimessage.version>
-        <vk.api.version>0.4.2</vk.api.version>
-        <password4j.version>1.7.3</password4j.version>
-        <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
-        <jda.version>5.0.0-beta.18</jda.version>
-        <nanolimbo.version>1.0.8</nanolimbo.version>
-        <maven-resolver.version>1.9.15</maven-resolver.version>
-        <maven-resolver-provider.version>3.9.4</maven-resolver-provider.version>
-    </properties>
-
     <repositories>
         <repository>
             <id>jitpack.io</id>
@@ -38,100 +18,73 @@
     </repositories>
 
     <dependencies>
-        <!-- MC-Auth API -->
+        <!-- Internal API -->
         <dependency>
             <groupId>com.bivashy.auth</groupId>
             <artifactId>api</artifactId>
-            <version>${auth.api.version}</version>
         </dependency>
 
-        <!-- BCrypt library -->
+        <!-- BCrypt -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
-            <version>${jbcrypt.version}</version>
         </dependency>
 
-        <!-- Barcode, QR library -->
+        <!-- QR library -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>${zxing.library.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>${zxing.library.version}</version>
         </dependency>
 
         <!-- Configuration library for Configurate -->
         <dependency>
             <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
             <artifactId>configurate</artifactId>
-            <version>${configuration-library.version}</version>
         </dependency>
 
-        <!-- SpongePowered Configurate core library -->
+        <!-- Configurate -->
         <dependency>
             <groupId>org.spongepowered</groupId>
             <artifactId>configurate-core</artifactId>
-            <version>${configurate.version}</version>
         </dependency>
-
-        <!-- SpongePowered Configurate YAML library -->
         <dependency>
             <groupId>org.spongepowered</groupId>
             <artifactId>configurate-yaml</artifactId>
-            <version>${configurate.version}</version>
         </dependency>
 
-        <!-- Lamp Core Command Library -->
+        <!-- Lamp -->
         <dependency>
             <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>common</artifactId>
-            <version>${lamp.command-library.version}</version>
         </dependency>
-
-        <!-- Lamp Vk Module -->
         <dependency>
             <groupId>com.github.bivashy</groupId>
             <artifactId>VkLampModule</artifactId>
-            <version>${vk-lamp-module.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.vk.api</groupId>
-                    <artifactId>sdk</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
-        <!-- Lamp telegram module -->
         <dependency>
             <groupId>com.github.bivashy</groupId>
             <artifactId>TelegramLampModule</artifactId>
-            <version>${telegram-lamp-module.version}</version>
         </dependency>
-
-        <!-- Lamp discord module -->
         <dependency>
             <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>jda</artifactId>
-            <version>${lamp.command-library.version}</version>
         </dependency>
 
         <!-- VK API -->
         <dependency>
             <groupId>com.github.bivashy</groupId>
             <artifactId>VK-API-PluginAdapter</artifactId>
-            <version>${vk.api.version}</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Java telegram bot api -->
+        <!-- Telegram API -->
         <dependency>
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
-            <version>${java-telegram-bot-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -139,28 +92,24 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>${minimessage.version}</version>
         </dependency>
 
         <!-- Password4j -->
         <dependency>
             <groupId>com.password4j</groupId>
             <artifactId>password4j</artifactId>
-            <version>${password4j.version}</version>
         </dependency>
 
         <!-- Yaml Config Updater -->
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>yaml-config-updater</artifactId>
-            <version>${yaml-config-updater.version}</version>
         </dependency>
 
         <!-- Java Discord API -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>${jda.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -168,7 +117,6 @@
         <dependency>
             <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
             <artifactId>api</artifactId>
-            <version>${nanolimbo.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
