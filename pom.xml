@@ -54,7 +54,7 @@
         <jda.version>5.0.0-beta.18</jda.version>
         <vk-api.version>0.4.2</vk-api.version>
 
-        <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
+        <bungeecord.version>1.20-R0.1</bungeecord.version>
 
         <velocity-api.version>3.1.1</velocity-api.version>
         <velocity-proxy.version>3.2.0-SNAPSHOT</velocity-proxy.version>
