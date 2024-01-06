@@ -56,7 +56,7 @@ public class AccountsListCommand implements OrphanCommand {
                 return;
             }
             Keyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type.name(), paginatedAccounts);
-            actorWrapper.send(linkType.newMessageBuilder(type.accountsMessage).keyboard(keyboard).build());
+            actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage(type.accountsMessage)).keyboard(keyboard).build());
         });
     }
 

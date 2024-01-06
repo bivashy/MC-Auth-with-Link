@@ -6,22 +6,10 @@
     <parent>
         <groupId>me.mastercapexd.auth</groupId>
         <artifactId>main</artifactId>
-        <version>1.7.12</version>
+        <version>1.8.0-beta.1</version>
     </parent>
     <groupId>com.bivashy.auth</groupId>
     <artifactId>api</artifactId>
-
-    <properties>
-        <jbcrypt.version>0.4</jbcrypt.version>
-        <multimessenger.version>1.0.5</multimessenger.version>
-        <adventure.serializer.version>4.14.0</adventure.serializer.version>
-        <adventure.platform.version>4.3.0</adventure.platform.version>
-        <ormlite.version>6.1</ormlite.version>
-        <google.authenticator.version>1.5.0</google.authenticator.version>
-        <event-bus.version>1.3</event-bus.version>
-        <configuration-library.version>4.0.2</configuration-library.version>
-        <libby.version>2.0.0</libby.version>
-    </properties>
 
     <repositories>
         <repository>
@@ -35,101 +23,74 @@
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
-            <version>${jbcrypt.version}</version>
         </dependency>
 
         <!-- MultiMessenger library -->
         <dependency>
             <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>common</artifactId>
-            <version>${multimessenger.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>vk</artifactId>
-            <version>${multimessenger.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>telegram</artifactId>
-            <version>${multimessenger.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.github.pengrad</groupId>
-                    <artifactId>java-telegram-bot-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.bivashy.MultiMessenger</groupId>
             <artifactId>discord</artifactId>
-            <version>${multimessenger.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>JDA</artifactId>
-                    <groupId>net.dv8tion</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
 
         <!-- Adventure platform -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-api</artifactId>
-            <version>${adventure.platform.version}</version>
         </dependency>
 
         <!-- Adventure serializers -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>${adventure.serializer.version}</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>${adventure.serializer.version}</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>${adventure.serializer.version}</version>
         </dependency>
 
         <!-- ORMLite -->
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
-            <version>${ormlite.version}</version>
         </dependency>
 
         <!-- GoogleAuthenticator library -->
         <dependency>
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
-            <version>${google.authenticator.version}</version>
         </dependency>
 
         <!-- Event Bus -->
         <dependency>
             <groupId>com.github.Revxrsal</groupId>
             <artifactId>EventBus</artifactId>
-            <version>${event-bus.version}</version>
         </dependency>
 
         <!-- Configuration library core -->
         <dependency>
             <groupId>com.github.bivashy.ConfigurationLibrary</groupId>
             <artifactId>core</artifactId>
-            <version>${configuration-library.version}</version>
         </dependency>
 
         <!-- Libby runtime dependency management -->
         <dependency>
             <groupId>com.github.bivashy.libby</groupId>
             <artifactId>libby-core</artifactId>
-            <version>${libby.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -6,19 +6,9 @@
     <parent>
         <groupId>me.mastercapexd.auth</groupId>
         <artifactId>main</artifactId>
-        <version>1.7.12</version>
+        <version>1.8.0-beta.1</version>
     </parent>
     <artifactId>bungee</artifactId>
-
-    <properties>
-        <bungeecord.version>1.19-R0.1-SNAPSHOT</bungeecord.version>
-        <lamp.command-library.version>3.1.7</lamp.command-library.version>
-        <adventure.bungee.version>4.3.0</adventure.bungee.version>
-        <telegram.api.version>6.5.0</telegram.api.version>
-        <vk.api.version>0.4.2</vk.api.version>
-        <libby.version>2.0.0</libby.version>
-        <nanolimbo.version>1.0.6</nanolimbo.version>
-    </properties>
 
     <repositories>
         <repository>
@@ -37,46 +27,31 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- BungeeCord API -->
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>${bungeecord.version}</version>
-            <type>jar</type>
             <scope>provided</scope>
         </dependency>
 
-        <!-- BungeeCord Javadoc API -->
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>${bungeecord.version}</version>
-            <type>javadoc</type>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Lamp Bungee Module -->
+        <!-- Lamp -->
         <dependency>
             <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>bungee</artifactId>
-            <version>${lamp.command-library.version}</version>
         </dependency>
 
         <!-- Adventure BungeeCord platform -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bungeecord</artifactId>
-            <version>${adventure.bungee.version}</version>
         </dependency>
 
         <!-- VK API -->
         <dependency>
             <groupId>com.github.bivashy</groupId>
             <artifactId>VK-API-PluginAdapter</artifactId>
-            <version>${vk.api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -84,7 +59,6 @@
         <dependency>
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
-            <version>${telegram.api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -92,7 +66,6 @@
         <dependency>
             <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
             <artifactId>api</artifactId>
-            <version>${nanolimbo.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -100,10 +73,8 @@
         <dependency>
             <groupId>com.github.bivashy.libby</groupId>
             <artifactId>libby-bungee</artifactId>
-            <version>${libby.version}</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <plugins>

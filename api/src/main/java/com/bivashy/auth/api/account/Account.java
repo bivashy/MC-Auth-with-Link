@@ -10,7 +10,6 @@ import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.crypto.HashedPassword;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.LinkUser;
-import com.bivashy.auth.api.link.user.LinkUserTemplate;
 import com.bivashy.auth.api.link.user.info.LinkUserInfo;
 import com.bivashy.auth.api.model.PlayerIdSupplier;
 import com.bivashy.auth.api.server.player.ServerPlayer;
@@ -20,6 +19,9 @@ import com.bivashy.auth.api.type.IdentifierType;
 import com.bivashy.auth.api.type.KickResultType;
 
 public interface Account extends PlayerIdSupplier {
+
+    long getDatabaseId();
+
     @Deprecated
     default String getId() {
         return getPlayerId();
@@ -73,7 +75,7 @@ public interface Account extends PlayerIdSupplier {
     }
 
     default LinkUser findFirstLinkUserOrNew(Predicate<LinkUser> filter, LinkType linkType) {
-        return findFirstLinkUserOrCreate(filter, LinkUserTemplate.of(linkType, this, LinkUserInfo.of(linkType.getDefaultIdentificator())));
+        return findFirstLinkUserOrCreate(filter, LinkUser.of(linkType, this, LinkUserInfo.of(linkType.getDefaultIdentificator())));
     }
 
     @Deprecated
