@@ -42,7 +42,7 @@ public class ConfiguratePluginConfigTest extends PluginConfigTemplate {
     }
 
     @Test
-    public void testExampleConfigurationValues() {
+    void testExampleConfigurationValues() {
         assertFalse(isAutoMigrateConfigEnabled());
 
         assertNotNull(getStorageType());
@@ -64,7 +64,7 @@ public class ConfiguratePluginConfigTest extends PluginConfigTemplate {
     }
 
     @Test
-    public void testExampleConfigurationMessages() {
+    void testExampleConfigurationMessages() {
         ServerMessages messages = getServerMessages();
         assertNotNull(messages);
 
@@ -83,11 +83,10 @@ public class ConfiguratePluginConfigTest extends PluginConfigTemplate {
         assertNull(submessages.getStringMessage("null-message", (String) null));
         assertEquals("hi", submessages.getStringMessage("message"));
 
-        assertEquals("{\"extra\":[{\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/test\"},\"text\":\"Clickable\"},{\"text\":\" and \"}," +
-                "{\"hoverEvent\":{\"action\":\"show_text\",\"contents\":{\"text\":\"Hi\"}},\"extra\":[{\"color\":\"#FF0000\",\"text\":\"r\"}," +
-                "{\"color\":\"#FFDA00\",\"text\":\"a\"},{\"color\":\"#48FF00\",\"text\":\"i\"},{\"color\":\"#00FF91\",\"text\":\"n\"}," +
-                "{\"color\":\"#0091FF\",\"text\":\"b\"},{\"color\":\"#4800FF\",\"text\":\"o\"},{\"color\":\"#FF00DA\",\"text\":\"w\"}]," +
-                "\"text\":\"Hoverable with \"}],\"text\":\"\"}", messages.getMessage("complex-minimessage").jsonText());
+        String jsonMessage = "{\"extra\":[{\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/test\"},\"text\":\"Clickable\"},\" and \",{\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"Hi\"}," +
+                "\"extra\":[{\"color\":\"#FF0000\",\"text\":\"r\"},{\"color\":\"#FFDA00\",\"text\":\"a\"},{\"color\":\"#48FF00\",\"text\":\"i\"},{\"color\":\"#00FF91\",\"text\":\"n\"},{\"color\":\"#0091FF\",\"text\":\"b\"}" +
+                ",{\"color\":\"#4800FF\",\"text\":\"o\"},{\"color\":\"#FF00DA\",\"text\":\"w\"}],\"text\":\"Hoverable with \"}],\"text\":\"\"}";
+        assertEquals(jsonMessage, messages.getMessage("complex-minimessage").jsonText());
         assertEquals("Clickable and Hoverable with rainbow", messages.getMessage("complex-minimessage").plainText());
     }
 }

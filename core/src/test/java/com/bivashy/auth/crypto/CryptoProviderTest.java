@@ -13,6 +13,7 @@ import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.crypto.HashedPassword;
 
 public abstract class CryptoProviderTest {
+
     private static final String[] PASSWORDS = {"password", "PassWord1", "&%^$&#te$t)_@", "âË_3(íù*"};
     private static final String[] RUNTIME_PASSWORDS = {"test", "TesT1", "%&#@%Y@#+Wp)_#", "Ûïé1&?+A"};
     private static final String FAKE_PASSWORD = "123";
@@ -27,14 +28,16 @@ public abstract class CryptoProviderTest {
     }
 
     @Test
-    public void testHashes() {
-        for (String password : hashes.keySet())
-            assertTrue(doesPasswordMatch(password, hashes.get(password)),
-                    "Password " + password + " doesn't match with CryptoProvider: " + cryptoProvider.getIdentifier());
+    void testHashes() {
+        for (String password : hashes.keySet()) {
+            HashedPassword expectedHash = hashes.get(password);
+            assertTrue(doesPasswordMatch(password, expectedHash),
+                    "Password " + password + " doesn't match with CryptoProvider: '" + cryptoProvider.getIdentifier() + "'");
+        }
     }
 
     @Test
-    public void testRuntimePasswords() {
+    void testRuntimePasswords() {
         HashedPassword fakePassword = cryptoProvider.hash(HashInput.of(FAKE_PASSWORD));
         for (String password : RUNTIME_PASSWORDS) {
             HashedPassword hashedPassword = cryptoProvider.hash(HashInput.of(password));
@@ -48,4 +51,5 @@ public abstract class CryptoProviderTest {
     private boolean doesPasswordMatch(String password, HashedPassword hashedPassword) {
         return cryptoProvider.matches(HashInput.of(password), hashedPassword);
     }
+
 }

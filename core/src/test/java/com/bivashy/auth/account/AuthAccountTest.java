@@ -55,7 +55,7 @@ public class AuthAccountTest {
 
         CryptoProviderBucket cryptoProviderBucket = AuthPlugin.instance().getCryptoProviderBucket();
         if (!cryptoProviderBucket.modifiable().hasByValue(CryptoProvider::getIdentifier, cryptoProvider.getIdentifier()))
-            cryptoProviderBucket.modifiable().remove(cryptoProvider);
+            cryptoProviderBucket.modifiable().add(cryptoProvider);
     }
 
     @Test
