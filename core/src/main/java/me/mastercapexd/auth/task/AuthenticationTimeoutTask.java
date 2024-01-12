@@ -1,6 +1,6 @@
 package me.mastercapexd.auth.task;
 
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -20,13 +20,11 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
             long now = System.currentTimeMillis();
             long authTimeoutMillis = plugin.getConfig().getAuthTime();
 
-            // Iterator for preventing ConcurrentModificationException, because we are removing element on specific condition
-            Iterator<String> accountIdIterator = plugin.getAuthenticatingAccountBucket().getAccountIdEntries().iterator();
-            while (accountIdIterator.hasNext()) {
-                String accountPlayerId = accountIdIterator.next();
-                Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(PlayerIdSupplier.of(accountPlayerId));
-                int accountEnterElapsedMillis = (int) (now -
-                        plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(PlayerIdSupplier.of(accountPlayerId)));
+            Collection<String> playerIds = plugin.getAuthenticatingAccountBucket().getAccountIdEntries();
+            for (String playerId : playerIds) {
+                PlayerIdSupplier playerIdSupplier = PlayerIdSupplier.of(playerId);
+                Account account = plugin.getAuthenticatingAccountBucket().getAuthenticatingAccountNullable(playerIdSupplier);
+                int accountEnterElapsedMillis = (int) (now - plugin.getAuthenticatingAccountBucket().getEnterTimestampOrZero(playerIdSupplier));
 
                 for (LinkEntryUser entryUser : plugin.getLinkEntryBucket().find(user -> user.getAccount().getPlayerId().equals(account.getPlayerId())))
                     if (entryUser != null)
@@ -35,12 +33,14 @@ public class AuthenticationTimeoutTask implements AuthenticationTask {
                         } catch(UnsupportedOperationException ignored) { // If link type has no settings support
                         }
 
+                if(!account.getPlayer().isPresent())
+                    plugin.getAuthenticatingAccountBucket().modifiable().removeIf(state -> state.getPlayerId().equals(playerId));
+
                 if (accountEnterElapsedMillis < authTimeoutMillis)
                     continue;
                 account.getPlayer()
                         .ifPresent(
                                 player -> player.disconnect(plugin.getConfig().getServerMessages().getMessage("time-left", new ServerMessageContext(account))));
-                accountIdIterator.remove();
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
