@@ -65,7 +65,7 @@ public class AccountsListCommand implements OrphanCommand {
         int nextPage = currentPage + 1;
         List<String> placeholdersList = new ArrayList<>(
                 Arrays.asList("%next_page%", Integer.toString(nextPage), "%previous_page%", Integer.toString(previousPage), "%prev_page%",
-                        Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage), "%type%%", accountsType));
+                        Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage), "%type%", accountsType));
 
         for (int i = 1; i <= accounts.size(); i++) { // Create placeholders array
             Account account = accounts.get(i - 1);
