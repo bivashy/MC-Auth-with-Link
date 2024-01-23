@@ -35,7 +35,7 @@ public class AccountsListCommand implements OrphanCommand {
     @DefaultFor("~")
     @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page,
-                               @RenameTo(value = "size", type = "NUMBER") @Flag("pagesize") @Default("5") Integer accountsPerPage,
+                               @RenameTo(value = "size", type = "NUMBER") @Flag("pageSize") @Default("5") Integer accountsPerPage,
                                @Flag("type") @Default("my") AccountListType type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && type.isAdministratorOnly) {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
