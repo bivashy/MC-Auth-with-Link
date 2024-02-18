@@ -52,6 +52,8 @@ public interface PluginConfig {
 
     boolean isPasswordConfirmationEnabled();
 
+    boolean isPasswordInChatEnabled();
+
     int getPasswordMinLength();
 
     int getPasswordMaxLength();

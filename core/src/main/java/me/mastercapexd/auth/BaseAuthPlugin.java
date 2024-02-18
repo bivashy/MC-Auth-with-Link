@@ -75,6 +75,7 @@ import me.mastercapexd.auth.hooks.DiscordHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.BaseLinkTypeProvider;
 import me.mastercapexd.auth.listener.AuthenticationAttemptListener;
+import me.mastercapexd.auth.listener.AuthenticationChatPasswordListener;
 import me.mastercapexd.auth.management.BaseLibraryManagement;
 import me.mastercapexd.auth.management.BaseLoginManagement;
 import me.mastercapexd.auth.step.impl.EnterAuthServerAuthenticationStep.EnterAuthServerAuthenticationStepFactory;
@@ -166,6 +167,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.registerTasks();
 
         this.eventBus.register(new AuthenticationAttemptListener(this));
+        this.eventBus.register(new AuthenticationChatPasswordListener(this));
     }
 
     private void registerAuthenticationSteps() {

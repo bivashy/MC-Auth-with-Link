@@ -154,6 +154,8 @@ hash-type: BCRYPT
 
 # Должны ли писать подтверждать свои пароли при регистрации
 enable-password-confirm: true
+# Должен ли игрок писать пароль в чат вместо команд /login и /register
+enable-password-in-chat: false
 # Минимальная длина пароля
 password-min-length: 5
 # Максимальная длина пароля

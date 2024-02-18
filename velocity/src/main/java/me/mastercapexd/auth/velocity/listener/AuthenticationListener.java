@@ -3,6 +3,7 @@ package me.mastercapexd.auth.velocity.listener;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.event.PlayerChatPasswordEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
@@ -39,6 +40,13 @@ public class AuthenticationListener {
         plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
             if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
                 return;
+
+            if (plugin.getConfig().isPasswordInChatEnabled()) {
+                plugin.getEventBus().publish(PlayerChatPasswordEvent.class, player, event.getMessage());
+                event.setResult(PlayerChatEvent.ChatResult.denied());
+                return;
+            }
+
             if (!plugin.getConfig().shouldBlockChat() || event.getResult().getMessage().orElse("").startsWith("/"))
                 return;
             player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-chat"));

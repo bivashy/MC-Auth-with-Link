@@ -35,7 +35,7 @@ public class AccountsListCommand implements OrphanCommand {
     @DefaultFor("~")
     @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page,
-                               @RenameTo(value = "size", type = "NUMBER") @Flag("pagesize") @Default("5") Integer accountsPerPage,
+                               @RenameTo(value = "size", type = "NUMBER") @Flag("pageSize") @Default("5") Integer accountsPerPage,
                                @Flag("type") @Default("my") AccountListType type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && type.isAdministratorOnly) {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
@@ -56,7 +56,7 @@ public class AccountsListCommand implements OrphanCommand {
                 return;
             }
             Keyboard keyboard = createKeyboard(linkType, page, accountsPerPage, type.name(), paginatedAccounts);
-            actorWrapper.send(linkType.newMessageBuilder(type.accountsMessage).keyboard(keyboard).build());
+            actorWrapper.send(linkType.newMessageBuilder(linkType.getLinkMessages().getMessage(type.accountsMessage)).keyboard(keyboard).build());
         });
     }
 
@@ -65,7 +65,7 @@ public class AccountsListCommand implements OrphanCommand {
         int nextPage = currentPage + 1;
         List<String> placeholdersList = new ArrayList<>(
                 Arrays.asList("%next_page%", Integer.toString(nextPage), "%previous_page%", Integer.toString(previousPage), "%prev_page%",
-                        Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage), "%type%%", accountsType));
+                        Integer.toString(currentPage - 1), "%pageSize%", Integer.toString(accountsPerPage), "%type%", accountsType));
 
         for (int i = 1; i <= accounts.size(); i++) { // Create placeholders array
             Account account = accounts.get(i - 1);

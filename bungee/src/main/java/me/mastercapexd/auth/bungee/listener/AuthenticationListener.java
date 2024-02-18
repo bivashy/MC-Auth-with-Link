@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.event.PlayerChatPasswordEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap;
@@ -68,11 +69,19 @@ public class AuthenticationListener implements Listener {
         ServerPlayer player = playerOptional.get();
         if (!plugin.getAuthenticatingAccountBucket().isAuthenticating(player))
             return;
+
+        if (plugin.getConfig().isPasswordInChatEnabled() && !event.isCommand()) {
+            plugin.getEventBus().publish(PlayerChatPasswordEvent.class, player, event.getMessage());
+            event.setCancelled(true);
+            return;
+        }
+
         if (plugin.getConfig().shouldBlockChat() && !event.isCommand()) {
             player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-chat"));
             event.setCancelled(true);
             return;
         }
+
         if (plugin.getConfig().getAllowedCommands().stream().anyMatch(pattern -> pattern.matcher(event.getMessage()).find()))
             return;
         player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-command"));

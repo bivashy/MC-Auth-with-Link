@@ -10,7 +10,7 @@ import com.bivashy.auth.api.management.LibraryManagement;
 
 public class BaseLibraryManagement implements LibraryManagement {
 
-    private static final String JDA_VERSION = "5.0.0-beta.11";
+    private static final String JDA_VERSION = "5.0.0-beta.18";
     public static final Library JDA_LIBRARY = Library.builder()
             .groupId("net{}dv8tion")
             .artifactId("JDA")

@@ -52,6 +52,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private boolean nameCaseCheckEnabled = true;
     @ConfigField("enable-password-confirm")
     private boolean passwordConfirmationEnabled = false;
+    @ConfigField("enable-password-in-chat")
+    private boolean passwordInChatEnabled = false;
     @ConfigField("hash-type")
     private CryptoProvider activeCryptoProvider;
     @ConfigField("storage-type")
@@ -164,6 +166,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public boolean isPasswordConfirmationEnabled() {
         return passwordConfirmationEnabled;
+    }
+
+    @Override
+    public boolean isPasswordInChatEnabled() {
+        return passwordInChatEnabled;
     }
 
     @Override
