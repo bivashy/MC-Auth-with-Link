@@ -1,9 +1,9 @@
 package me.mastercapexd.auth.database.importing;
 
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
-import com.j256.ormlite.dao.Dao;
-
+import me.mastercapexd.auth.database.dao.AuthAccountDao;
 import me.mastercapexd.auth.database.dao.SupplierExceptionCatcher;
 import me.mastercapexd.auth.database.importing.exception.ImportingException;
 
@@ -15,14 +15,14 @@ public class BatchOperationExecutor {
             throw new ImportingException("Cannot execute batch operation", throwable);
         }
     };
-    private final Dao<?, ?> dao;
+    private final Supplier<AuthAccountDao> dao;
 
-    public BatchOperationExecutor(Dao<?, ?> dao) {
+    public BatchOperationExecutor(Supplier<AuthAccountDao> dao) {
         this.dao = dao;
     }
 
     public <T> T execute(Callable<T> callable) {
-        return exceptionCatcher.execute(() -> dao.callBatchTasks(callable));
+        return exceptionCatcher.execute(() -> dao.get().callBatchTasks(callable));
     }
 
 }

@@ -159,7 +159,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.databaseHelper = new DatabaseHelper(this);
         this.accountDatabase = new AuthAccountDatabaseProxy(databaseHelper);
         this.loginManagement = new BaseLoginManagement(this);
-        this.importExecutor = new ImportExecutor(databaseHelper.getAuthAccountDao());
+        this.importExecutor = new ImportExecutor(() -> databaseHelper.getAuthAccountDao());
 
         this.registerAuthenticationSteps();
 
