@@ -12,14 +12,14 @@ import:
     limboauth:
       driver-url: 'https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.1.214.jar'
       # Значение по умолчанию указано для базы данных H2
-      jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2/LIMBOAUTH-V2'
+      jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2'
       username: ''
       password: ''
     # Миграция с LoginSecurity (Без поддержки лицензионных аккаунтов)
     loginsecurity:
       type: SQLITE
       # Значение по умолчанию указано для базы данных H2
-      jdbc-url: 'jdbc:sqlite:./plugins/mcauth/internal/sql/LoginSecurity.db'
+      jdbc-url: 'jdbc:sqlite:./plugins/loginsecurity/LoginSecurity.db'
       username: ''
       password: ''
       # Значение по умолчанию ls_players
