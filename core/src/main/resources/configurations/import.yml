@@ -24,3 +24,9 @@ import:
       password: ''
       # Значение по умолчанию ls_players
       table-name: 'ls_players'
+    authme:
+      type: SQLITE
+      jdbc-url: 'jdbc:sqlite:./plugins/authme/authme.db'
+      username: ''
+      password: ''
+      table-name: 'authme'

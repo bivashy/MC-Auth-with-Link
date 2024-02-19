@@ -9,7 +9,8 @@ import me.mastercapexd.auth.database.importing.ImportSource;
 
 public enum ImportSourceType {
     LIMBO_AUTH(config -> new LimboAuthImportSource(extract(config, "limboauth"))),
-    LOGIN_SECURITY(config -> new LoginSecurityImportSource(extract(config, "loginsecurity")));
+    LOGIN_SECURITY(config -> new LoginSecurityImportSource(extract(config, "loginsecurity"))),
+    AUTH_ME(config -> new AuthMeImportSource(extract(config, "authme")));
     private final Function<ImportingSettings, ImportSource> importSourceFunction;
 
     ImportSourceType(Function<ImportingSettings, ImportSource> importSourceFunction) {
