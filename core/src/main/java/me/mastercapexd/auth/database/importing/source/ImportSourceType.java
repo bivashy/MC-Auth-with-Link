@@ -18,7 +18,7 @@ public enum ImportSourceType {
     }
 
     private static ImportingSourceSettings extract(ImportingSettings settings, String key) {
-        return settings.sourceSettings(key).orElseThrow(() -> new NullPointerException("Cannot find importing source settings from key '" + key + "'"));
+        return settings.sourceSettings(key).orElseThrow(() -> new IllegalArgumentException("Cannot find importing source settings from key '" + key + "'"));
     }
 
     public ImportSource create(ImportingSettings settings) {
