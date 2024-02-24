@@ -78,6 +78,8 @@ public class LimboAuthImportSource implements ImportSource {
 
         private PortableAccount singleAccountWithLink(List<String> columns, String[] resultColumns) {
             PortableAccount account = singleAccount(columns, resultColumns);
+            if (account == null)
+                return null; // TODO: Log about invalid entry
             column(columns, resultColumns, "VK_ID").ifPresent(
                     vkId -> account.addLinkAccount(new PortableAccountLink(VKLinkType.getInstance(), vkId, account)));
             column(columns, resultColumns, "TELEGRAM_ID").ifPresent(
