@@ -54,8 +54,14 @@ public class LimboAuthImportSource implements ImportSource {
         }
 
         private PortableAccount singleAccount(List<String> columns, String[] resultColumns) {
+            Optional<String> uniqueIdOptional = column(columns, resultColumns, "UUID");
+            if (!uniqueIdOptional.isPresent())
+                return null; // TODO: Log about invalid entry
+            String rawUniqueId = uniqueIdOptional.get();
+            if (rawUniqueId.isEmpty())
+                return null; // TODO: Log about invalid entry
             String name = requireColumn(columns, resultColumns, "NICKNAME");
-            UUID uniqueId = UUID.fromString(requireColumn(columns, resultColumns, "UUID"));
+            UUID uniqueId = UUID.fromString(rawUniqueId);
             String passwordHash = requireColumn(columns, resultColumns, "HASH");
             String lastIp = column(columns, resultColumns, "LOGINIP").orElse(null);
 

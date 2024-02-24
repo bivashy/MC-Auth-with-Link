@@ -20,6 +20,10 @@ public class ImportSink {
     }
 
     void addAccountAndLinks(PortableAccount account) {
+        if (account == null) {
+            statistics.invalidEntrySkipped();
+            return;
+        }
         operationExecutor.execute(() -> {
             PortableAccountAdapter accountAdapter = new PortableAccountAdapter(account);
             accountDao.create(accountAdapter);
