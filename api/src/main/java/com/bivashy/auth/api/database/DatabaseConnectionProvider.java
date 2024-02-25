@@ -11,7 +11,7 @@ public enum DatabaseConnectionProvider {
         public String getConnectionUrl(LegacyStorageDataSettings settings) {
             return "jdbc:mysql://" + settings.getHost() + ":" + settings.getPort() + "/" + settings.getDatabase();
         }
-    }, SQLITE("https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar") {
+    }, SQLITE("https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.45.1.0/sqlite-jdbc-3.45.1.0.jar") {
         @Override
         public String getConnectionUrl(LegacyStorageDataSettings settings) {
             return "jdbc:sqlite:" + AuthPlugin.instance().getFolder().getAbsolutePath() + File.separator + "auth.db";
