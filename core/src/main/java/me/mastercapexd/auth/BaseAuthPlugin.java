@@ -155,7 +155,8 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps());
         this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = BaseLinkTypeProvider.allLinks();
-        this.accountDatabase = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
+        // TODO: Replace this with IsolatedDatabaseHelperFactory
+        this.accountDatabase = new AuthAccountDatabaseProxy(new DatabaseHelper(this, null));
         this.loginManagement = new BaseLoginManagement(this);
 
         this.registerAuthenticationSteps();

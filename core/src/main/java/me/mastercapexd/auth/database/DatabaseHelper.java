@@ -43,7 +43,7 @@ public class DatabaseHelper {
     private AuthAccountDao authAccountDao;
     private AccountLinkDao accountLinkDao;
 
-    public DatabaseHelper(AuthPlugin plugin) {
+    public DatabaseHelper(AuthPlugin plugin, ClassLoader classLoader) {
         DatabaseSettings databaseConfiguration = plugin.getConfig().getDatabaseConfiguration();
         SchemaSettings schemaSettings = databaseConfiguration.getSchemaSettings();
 
@@ -62,7 +62,7 @@ public class DatabaseHelper {
                 String cacheDriverCheckSum = HashUtils.getFileCheckSum(cacheDriverFile, HashUtils.getMD5());
                 if (!cacheDriverFile.exists() || cacheDriverCheckSum != null && !DownloadUtil.checkSum(HashUtils.mapToMd5URL(downloadUrl), cacheDriverCheckSum))
                     DownloadUtil.downloadFile(downloadUrl, cacheDriverFile);
-                DriverUtil.loadDriver(cacheDriverFile, plugin.getClass().getClassLoader());
+                DriverUtil.loadDriver(cacheDriverFile, classLoader);
 
                 DataPersisterManager.registerDataPersisters(new CryptoProviderPersister());
 
