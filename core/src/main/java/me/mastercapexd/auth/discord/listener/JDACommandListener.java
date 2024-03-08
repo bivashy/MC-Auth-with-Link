@@ -37,6 +37,7 @@ import revxrsal.commands.jda.annotation.OptionData;
 import revxrsal.commands.jda.core.actor.BaseJDASlashCommandActor;
 
 public class JDACommandListener implements EventListener {
+
     private static final DiscordLinkType DISCORD_LINK_TYPE = DiscordLinkType.getInstance();
     private final JDACommandHandler handler;
     private final Function<JDAActor, LinkCommandActorWrapper> wrapper;
@@ -50,7 +51,7 @@ public class JDACommandListener implements EventListener {
         LinkCommandActorWrapper actorWrapper = wrapper.apply(actor);
         try {
             handler.dispatch(actorWrapper, arguments);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             handler.getExceptionHandler().handleException(t, actorWrapper);
         }
     }
@@ -90,7 +91,7 @@ public class JDACommandListener implements EventListener {
                     return new Choice(suggestion, Long.parseLong(suggestion));
                 return new Choice(suggestion, suggestion);
             }).collect(Collectors.toList())).queue();
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -105,7 +106,7 @@ public class JDACommandListener implements EventListener {
         try {
             ArgumentStack arguments = ArgumentStack.parse(content);
             dispatch(actor, arguments);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             handler.getExceptionHandler().handleException(t, actor);
         }
     }
@@ -113,7 +114,8 @@ public class JDACommandListener implements EventListener {
     private void onSlashCommandEvent(SlashCommandInteractionEvent event) {
         parseSlashCommandEvent(event).ifPresent(arguments -> {
             JDAActor actor = new BaseJDASlashCommandActor(event, handler);
-            event.deferReply(true).queue();
+            if (!event.getInteraction().isAcknowledged() && !event.getHook().isExpired())
+                event.deferReply(true).queue();
             dispatch(actor, arguments);
         });
     }
@@ -190,5 +192,6 @@ public class JDACommandListener implements EventListener {
                 arguments.add(optionMapping.getAsString());
         }
     }
+
 }
 
