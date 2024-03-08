@@ -37,7 +37,11 @@ public class LogoutCommand {
                 account.logout(config.getSessionDurability());
                 accountStorage.saveOrUpdateAccount(account);
                 authenticatingAccountBucket.addAuthenticatingAccount(account);
-                account.nextAuthenticationStep(AuthPlugin.instance().getAuthenticationContextFactoryBucket(account.isPremium()).createContext(account));
+                if (account.isPremium()) {
+                    account.nextAuthenticationStep(AuthPlugin.instance().getPremiumAuthenticationContextFactoryBucket().createContext(account));
+                } else {
+                    account.nextAuthenticationStep(AuthPlugin.instance().getAuthenticationContextFactoryBucket().createContext(account));
+                }
                 player.sendMessage(config.getServerMessages().getMessage("logout-success"));
                 config.findServerInfo(config.getAuthServers()).asProxyServer().sendPlayer(player);
             });

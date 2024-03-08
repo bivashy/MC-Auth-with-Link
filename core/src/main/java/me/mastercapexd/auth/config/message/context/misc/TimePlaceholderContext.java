@@ -5,72 +5,55 @@ import java.util.List;
 import com.bivashy.auth.api.config.PluginConfig;
 import me.mastercapexd.auth.config.message.context.placeholder.MessagePlaceholderContext;
 import me.mastercapexd.auth.config.message.context.placeholder.PlaceholderProvider;
+import me.mastercapexd.auth.util.PluralizeUtil;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 public class TimePlaceholderContext extends MessagePlaceholderContext {
     protected final PluginConfig config;
-    protected final Long time;
+//    protected final Long duration;
 
-    public TimePlaceholderContext(PluginConfig config, Long time) {
+    public TimePlaceholderContext(PluginConfig config, Long durationInSeconds) {
         this.config = config;
-        this.time = time;
-        registerPlaceholderProvider(PlaceholderProvider.of(getHumanReadableTime(), "%time%"));
-    }
+//        this.duration = duration;
 
-    private String getHumanReadableTime() {
-        String res = "";
-        long days = time / 86400;
-        long hours = time % 86400 / 3600;
-        long minutes = time % 86400 % 3600 / 60;
-        long seconds = time % 86400 % 3600 % 60;
+        DateTime end = new DateTime();
+        end.getMillis();
 
-        List<String> dayPlurals = processPluralsList(config.getDayPluralsStringList(), "день");
-        List<String> hourPlurals = processPluralsList(config.getHourPluralsStringList(), "час");
-        List<String> minutePlurals = processPluralsList(config.getMinutePluralsStringList(), "минута");
-        List<String> secondPlurals = processPluralsList(config.getSecondPluralsStringList(), "секунда");
+        Duration duration = new Duration(durationInSeconds * 1000);
 
-        if (days != 0)
-            res += pluralize(days, dayPlurals) + ((hours != 0) ? (minutes != 0 ? ", " : " и ") : "");
-        if (hours != 0)
-            res += pluralize(hours, hourPlurals) + ((minutes != 0) ? (seconds != 0 ? ", " : " и ") : "");
-        if (minutes != 0)
-            res += pluralize(minutes, minutePlurals) + ((seconds != 0) ? " и " : "");
-        if (seconds != 0)
-            res += pluralize(seconds, secondPlurals);
+        long d = duration.getStandardDays();
+        long h = duration.getStandardHours();
+        long m = duration.getStandardMinutes();
+        long s = duration.getStandardSeconds();
 
-        return res;
-    }
+        String daysPluralized = PluralizeUtil.pluralize(d, processPluralsList(config.getDayPluralsStringList(), "день"));
+        String hoursPluralized = PluralizeUtil.pluralize(h - d * 24, processPluralsList(config.getHourPluralsStringList(), "час"));
+        String minutesPluralized = PluralizeUtil.pluralize(m - h * 60 - d * 24, processPluralsList(config.getMinutePluralsStringList(), "минута"));
+        String secondsPluralized = PluralizeUtil.pluralize(s - m * 60 - h * 60 - d * 24, processPluralsList(config.getSecondPluralsStringList(), "секунда"));
 
-    private String pluralize(long num, List<String> variants) {
-        if (variants.size() < 2)
-            return "";
-        if (variants.size() < 3)
-            variants.add(variants.get(1));
-        return pluralize(num, variants.get(0), variants.get(1), variants.get(2));
-    }
+        PeriodFormatter formatter = new PeriodFormatterBuilder()
+                .appendDays()
+                .appendSuffix(" " + daysPluralized)
+                .appendSeparator(", ", " и ")
+                .appendHours()
+                .appendSuffix(" " + hoursPluralized)
+                .appendSeparator(", ", " и ")
+                .appendMinutes()
+                .appendSuffix(" " + minutesPluralized)
+                .appendSeparator(", ", " и ")
+                .appendSeconds()
+                .appendSuffix(" " + secondsPluralized)
+                .appendSeparator(", ", " и ")
+                .toFormatter();
 
-    private String pluralize(long num, String firstVariant, String secondVariant) {
-        return pluralize(num, firstVariant, secondVariant, secondVariant);
-    }
-
-    private String pluralize(long num, String firstVariant, String secondVariant, String thirdVariant) {
-
-        long preLastDigit = num % 100 / 10;
-
-        if (preLastDigit == 1) {
-            return num + " " + thirdVariant;
-        }
-
-        switch ((int) (num % 10)) {
-            case 1:
-                return num + " " + firstVariant;
-            case 2:
-            case 3:
-            case 4:
-                return num + " " + secondVariant;
-            default:
-                return num + " " + thirdVariant;
-        }
-
+        Period period = duration.toPeriod();
+        Period dayTimePeriod = period.normalizedStandard(PeriodType.dayTime());
+        registerPlaceholderProvider(PlaceholderProvider.of(formatter.print(dayTimePeriod), "%time%"));
     }
 
     private List<String> processPluralsList(List<String> plurals, String defaultValue) {

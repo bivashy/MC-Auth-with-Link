@@ -46,7 +46,11 @@ public class GoogleCodeCommand implements OrphanCommand {
         if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
             actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-valid", linkType.newMessageContext(account)));
             account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
-            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket(account.isPremium()).createContext(account));
+            if (account.isPremium()) {
+                account.nextAuthenticationStep(plugin.getPremiumAuthenticationContextFactoryBucket().createContext(account));
+            } else {
+                account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            }
             return;
         }
         actorWrapper.reply(linkType.getLinkMessages().getStringMessage("google-code-not-valid", linkType.newMessageContext(account)));

@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.management;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -99,7 +100,9 @@ public class BaseLoginManagement implements LoginManagement {
                 Account newAccount = accountFactory.createAccount(id, config.getActiveIdentifierType(), player.getUniqueId(), nickname,
                         config.getActiveHashType(), null, player.getPlayerIp());
 
-                AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket(newAccount.isPremium()).createContext(newAccount);
+                AuthenticationStepContext context =
+                        (newAccount.isPremium() ? plugin.getPremiumAuthenticationContextFactoryBucket() : plugin.getAuthenticationContextFactoryBucket())
+                                .createContext(newAccount);
                 plugin.getAuthenticatingAccountBucket().addAuthenticatingAccount(newAccount);
                 newAccount.nextAuthenticationStep(context);
                 return CompletableFuture.completedFuture(null);
@@ -112,12 +115,16 @@ public class BaseLoginManagement implements LoginManagement {
                 accountDatabase.saveOrUpdateAccount(account);
             }
 
+            List<String> authenticationSteps = account.isPremium() ?
+                    plugin.getConfig().getPremiumAuthenticationSteps() :
+                    plugin.getConfig().getAuthenticationSteps();
+
             AuthenticationStepFactory authenticationStepCreator = plugin.getAuthenticationStepFactoryBucket()
                     .findFirst(stepCreator -> stepCreator.getAuthenticationStepName()
-                            .equals(plugin.getConfig().getAuthenticationSteps(account.isPremium()).stream().findFirst().orElse("NULL")))
+                            .equals(authenticationSteps.stream().findFirst().orElse("NULL")))
                     .orElse(new NullAuthenticationStepFactory());
 
-            AuthenticationStepContext context = plugin.getAuthenticationContextFactoryBucket(account.isPremium())
+            AuthenticationStepContext context = (account.isPremium() ? plugin.getPremiumAuthenticationContextFactoryBucket() : plugin.getAuthenticationContextFactoryBucket())
                     .createContext(authenticationStepCreator.getAuthenticationStepName(), account);
 
             return plugin.getEventBus().publish(AccountJoinEvent.class, account, false).thenApplyAsync(event -> {

@@ -38,7 +38,9 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
 
     AuthenticationStepFactoryBucket getAuthenticationStepFactoryBucket();
 
-    AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket(boolean isPremium);
+    AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket();
+
+    AuthenticationStepContextFactoryBucket getPremiumAuthenticationContextFactoryBucket();
 
     ConfigurationProcessor getConfigurationProcessor();
 

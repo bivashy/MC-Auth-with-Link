@@ -314,8 +314,13 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public List<String> getAuthenticationSteps(boolean isPremium) {
-        return Collections.unmodifiableList(isPremium ? premiumAuthenticationSteps : authenticationSteps);
+    public List<String> getAuthenticationSteps() {
+        return Collections.unmodifiableList(authenticationSteps);
+    }
+
+    @Override
+    public List<String> getPremiumAuthenticationSteps() {
+        return Collections.unmodifiableList(premiumAuthenticationSteps);
     }
 
     @Override
@@ -339,9 +344,15 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
-    public String getAuthenticationStepName(int index, boolean isPremium) {
-        return index >= 0 && index < (isPremium ? premiumAuthenticationSteps : authenticationSteps).size()
-                ? (isPremium ? premiumAuthenticationSteps : authenticationSteps).get(index) : "NULL";
+    public String getAuthenticationStepName(int index) {
+        return index >= 0 && index < authenticationSteps.size()
+                ? authenticationSteps.get(index) : "NULL";
+    }
+
+    @Override
+    public String getPremiumAuthenticationStepName(int index) {
+        return index >= 0 && index < premiumAuthenticationSteps.size()
+                ? premiumAuthenticationSteps.get(index) : "NULL";
     }
 
     @Override

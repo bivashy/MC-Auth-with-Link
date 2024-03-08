@@ -1,5 +1,6 @@
 package me.mastercapexd.auth.account;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.bivashy.auth.api.AuthPlugin;
@@ -28,12 +29,16 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
                 return;
             if (currentAuthenticationStep != null && !currentAuthenticationStep.shouldPassToNextStep())
                 return;
-            if (PLUGIN.getConfig().getAuthenticationSteps(isPremium()).size() <= currentConfigurationAuthenticationStepCreatorIndex) {
+            List<String> authenticationSteps = isPremium() ?
+                    PLUGIN.getConfig().getPremiumAuthenticationSteps() :
+                    PLUGIN.getConfig().getAuthenticationSteps();
+            if (authenticationSteps.size() <= currentConfigurationAuthenticationStepCreatorIndex) {
                 currentConfigurationAuthenticationStepCreatorIndex = 0;
                 return;
             }
-            String stepCreatorName = PLUGIN.getConfig()
-                    .getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex, isPremium());
+            String stepCreatorName = isPremium() ?
+                    PLUGIN.getConfig().getPremiumAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex) :
+                    PLUGIN.getConfig().getAuthenticationStepName(currentConfigurationAuthenticationStepCreatorIndex);
             AuthenticationStepFactory authenticationStepFactory = PLUGIN.getAuthenticationStepFactoryBucket()
                     .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepCreatorName))
                     .orElse(new NullAuthenticationStepFactory());
@@ -47,7 +52,11 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
             currentConfigurationAuthenticationStepCreatorIndex += 1;
             if (currentAuthenticationStep.shouldSkip()) {
                 currentAuthenticationStep = new NullAuthenticationStep();
-                nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket(isPremium()).createContext(this)).join();
+                if (isPremium()) {
+                    nextAuthenticationStep(PLUGIN.getPremiumAuthenticationContextFactoryBucket().createContext(this)).join();
+                } else {
+                    nextAuthenticationStep(PLUGIN.getAuthenticationContextFactoryBucket().createContext(this)).join();
+                }
             }
         });
     }
@@ -65,13 +74,17 @@ public abstract class AccountTemplate implements Account, Comparable<AccountTemp
 
     @Override
     public void setCurrentAuthenticationStepCreatorIndex(int index) {
-        String stepName = PLUGIN.getConfig().getAuthenticationStepName(index, isPremium());
+        String stepName = isPremium() ?
+                PLUGIN.getConfig().getPremiumAuthenticationStepName(index) :
+                PLUGIN.getConfig().getAuthenticationStepName(index);
 
         AuthenticationStepFactory authenticationStepFactory = PLUGIN.getAuthenticationStepFactoryBucket()
                 .findFirst(stepCreator -> stepCreator.getAuthenticationStepName().equals(stepName))
                 .orElse(new NullAuthenticationStepFactory());
 
-        AuthenticationStepContext stepContext = PLUGIN.getAuthenticationContextFactoryBucket(isPremium()).createContext(stepName, this);
+        AuthenticationStepContext stepContext =
+                (isPremium() ? PLUGIN.getPremiumAuthenticationContextFactoryBucket() : PLUGIN.getAuthenticationContextFactoryBucket())
+                        .createContext(stepName, this);
         currentConfigurationAuthenticationStepCreatorIndex = index;
         currentAuthenticationStep = authenticationStepFactory.createNewAuthenticationStep(stepContext);
     }

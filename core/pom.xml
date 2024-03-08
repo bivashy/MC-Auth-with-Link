@@ -35,6 +35,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -170,6 +174,13 @@
             <artifactId>api</artifactId>
             <version>${nanolimbo.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Joda-Time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.12.6</version>
         </dependency>
     </dependencies>
 </project>
