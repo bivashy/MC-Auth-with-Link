@@ -9,7 +9,7 @@ import com.bivashy.auth.api.util.Castable;
 public abstract class ServerBossbar implements Castable<ServerBossbar> {
     protected Style segmentStyle = Style.SOLID;
     protected Color color = Color.BLUE;
-    protected float progress;
+    protected float progress = 0;
     protected ServerComponent title;
 
     public ServerBossbar color(Color color) {
