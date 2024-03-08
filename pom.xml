@@ -32,7 +32,7 @@
 
         <!-- TOTP -->
         <totp-auth.version>1.5.0</totp-auth.version>
-        <zxing-qr-generator.version>3.5.2</zxing-qr-generator.version>
+        <zxing-qr-generator.version>3.5.3</zxing-qr-generator.version>
 
         <!-- Adventure -->
         <minimessage.version>4.15.0</minimessage.version>
