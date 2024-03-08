@@ -19,10 +19,10 @@ public abstract class AdventureServerBossbar extends ServerBossbar {
     private final BossBar bossBar;
 
     public AdventureServerBossbar(ServerComponent component) {
-        title(component);
+        this.title = component;
         BossBar.Color bossBarColor = BossBar.Color.values()[color.ordinal()];
         BossBar.Overlay bossBarOverlay = BossBar.Overlay.values()[segmentStyle.ordinal()];
-        bossBar = BossBar.bossBar(GSON_COMPONENT_SERIALIZER.deserialize(component.jsonText()), progress, bossBarColor, bossBarOverlay).progress(progress);
+        bossBar = BossBar.bossBar(GSON_COMPONENT_SERIALIZER.deserialize(component.jsonText()), progress, bossBarColor, bossBarOverlay);
     }
 
     public abstract void showBossBar(ServerPlayer player, BossBar bossBar);
@@ -58,6 +58,36 @@ public abstract class AdventureServerBossbar extends ServerBossbar {
             bossBar.name(GSON_COMPONENT_SERIALIZER.deserialize(title.jsonText()));
         }
         bossBar.color(bossBarColor).overlay(bossBarOverlay).progress(progress);
+        return this;
+    }
+
+    @Override
+    public ServerBossbar title(ServerComponent component) {
+        super.title(component);
+        bossBar.name(GSON_COMPONENT_SERIALIZER.deserialize(component.jsonText()));
+        return this;
+    }
+
+    @Override
+    public ServerBossbar color(Color color) {
+        BossBar.Color bossBarColor = BossBar.Color.values()[color.ordinal()];
+        super.color(color);
+        bossBar.color(bossBarColor);
+        return this;
+    }
+
+    @Override
+    public ServerBossbar style(Style segmentStyle) {
+        BossBar.Overlay bossBarOverlay = BossBar.Overlay.values()[segmentStyle.ordinal()];
+        super.style(segmentStyle);
+        bossBar.overlay(bossBarOverlay);
+        return this;
+    }
+
+    @Override
+    public ServerBossbar progress(float progress) {
+        super.progress(progress);
+        bossBar.progress(progress);
         return this;
     }
 
