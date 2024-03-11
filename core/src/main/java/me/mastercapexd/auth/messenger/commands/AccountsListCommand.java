@@ -13,7 +13,6 @@ import com.bivashy.auth.api.util.CollectionUtil.ArrayPairHashMapAdapter.Paginate
 import com.bivashy.messenger.common.button.ButtonColor;
 import com.bivashy.messenger.common.keyboard.Keyboard;
 
-import me.mastercapexd.auth.discord.command.annotation.RenameTo;
 import me.mastercapexd.auth.link.LinkCommandActorWrapper;
 import me.mastercapexd.auth.messenger.commands.annotation.CommandKey;
 import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
@@ -21,6 +20,7 @@ import revxrsal.commands.annotation.Default;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
 import revxrsal.commands.annotation.Flag;
+import revxrsal.commands.annotation.Named;
 import revxrsal.commands.orphan.OrphanCommand;
 
 @CommandKey(AccountsListCommand.CONFIGURATION_KEY)
@@ -35,7 +35,7 @@ public class AccountsListCommand implements OrphanCommand {
     @DefaultFor("~")
     @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
     public void onAccountsMenu(LinkCommandActorWrapper actorWrapper, LinkType linkType, @Flag("page") @Default("1") Integer page,
-                               @RenameTo(value = "size", type = "NUMBER") @Flag("pageSize") @Default("5") Integer accountsPerPage,
+                               @Flag("pageSize") @Named("size") @Default("5") Integer accountsPerPage,
                                @Flag("type") @Default("my") AccountListType type) {
         if (!linkType.getSettings().isAdministrator(actorWrapper.userId()) && type.isAdministratorOnly) {
             actorWrapper.reply(linkType.getLinkMessages().getMessage("not-enough-permission"));
