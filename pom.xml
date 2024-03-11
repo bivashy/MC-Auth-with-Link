@@ -28,7 +28,7 @@
         <!-- Dependencies -->
         <!-- Crypto -->
         <jbcrypt.version>0.4</jbcrypt.version>
-        <password4j.version>1.7.3</password4j.version>
+        <password4j.version>1.8.1</password4j.version>
 
         <!-- TOTP -->
         <totp-auth.version>1.5.0</totp-auth.version>
