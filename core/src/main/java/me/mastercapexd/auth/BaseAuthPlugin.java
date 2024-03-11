@@ -15,13 +15,7 @@ import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.asset.resource.Resource;
 import com.bivashy.auth.api.asset.resource.impl.FolderResource;
 import com.bivashy.auth.api.asset.resource.impl.FolderResourceReader;
-import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
-import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
-import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
-import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
-import com.bivashy.auth.api.bucket.CryptoProviderBucket;
-import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
-import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
+import com.bivashy.auth.api.bucket.*;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.duration.ConfigurationDuration;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
@@ -45,13 +39,7 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.github.revxrsal.eventbus.EventBus;
 import io.github.revxrsal.eventbus.EventBusBuilder;
 import me.mastercapexd.auth.account.factory.AuthAccountFactory;
-import me.mastercapexd.auth.bucket.BaseAuthenticatingAccountBucket;
-import me.mastercapexd.auth.bucket.BaseAuthenticationStepContextFactoryBucket;
-import me.mastercapexd.auth.bucket.BaseAuthenticationStepFactoryBucket;
-import me.mastercapexd.auth.bucket.BaseAuthenticationTaskBucket;
-import me.mastercapexd.auth.bucket.BaseCryptoProviderBucket;
-import me.mastercapexd.auth.bucket.BaseLinkAuthenticationBucket;
-import me.mastercapexd.auth.bucket.BaseLinkConfirmationBucket;
+import me.mastercapexd.auth.bucket.*;
 import me.mastercapexd.auth.config.BasePluginConfig;
 import me.mastercapexd.auth.config.factory.ConfigurationHolderMapResolverFactory;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory;
@@ -73,6 +61,7 @@ import me.mastercapexd.auth.hooks.BaseTelegramPluginHook;
 import me.mastercapexd.auth.hooks.DiscordHook;
 import me.mastercapexd.auth.hooks.TelegramPluginHook;
 import me.mastercapexd.auth.link.BaseLinkTypeProvider;
+import me.mastercapexd.auth.listener.AccountServerChangedListener;
 import me.mastercapexd.auth.listener.AuthenticationAttemptListener;
 import me.mastercapexd.auth.listener.AuthenticationChatPasswordListener;
 import me.mastercapexd.auth.management.BaseLibraryManagement;
@@ -107,11 +96,13 @@ public class BaseAuthPlugin implements AuthPlugin {
     private final String version;
     private final File pluginFolder;
     private AuthenticationStepContextFactoryBucket authenticationStepContextFactoryBucket;
+    private AuthenticationStepContextFactoryBucket premiumAuthenticationStepContextFactoryBucket;
     private AudienceProvider audienceProvider;
     private LibraryManagement libraryManagement;
     private ServerCore core;
     private File dataFolder;
     private AuthenticatingAccountBucket accountBucket;
+    private PendingPremiumAccountBucket pendingPremiumBucket;
     private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
@@ -140,6 +131,7 @@ public class BaseAuthPlugin implements AuthPlugin {
 
     private void initializeBasic() {
         this.accountBucket = new BaseAuthenticatingAccountBucket(this);
+        this.pendingPremiumBucket = new BasePendingPremiumAccountBucket(this);
 
         this.registerCryptoProviders();
         this.registerConfigurationProcessor();
@@ -153,6 +145,7 @@ public class BaseAuthPlugin implements AuthPlugin {
         }
 
         this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps());
+        this.premiumAuthenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getPremiumAuthenticationSteps());
         this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = BaseLinkTypeProvider.allLinks();
         this.accountDatabase = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
@@ -164,6 +157,7 @@ public class BaseAuthPlugin implements AuthPlugin {
 
         this.eventBus.register(new AuthenticationAttemptListener(this));
         this.eventBus.register(new AuthenticationChatPasswordListener(this));
+        this.eventBus.register(new AccountServerChangedListener(this));
     }
 
     private void registerAuthenticationSteps() {
@@ -306,6 +300,11 @@ public class BaseAuthPlugin implements AuthPlugin {
     }
 
     @Override
+    public AuthenticationStepContextFactoryBucket getPremiumAuthenticationContextFactoryBucket() {
+        return premiumAuthenticationStepContextFactoryBucket;
+    }
+
+    @Override
     public ConfigurationProcessor getConfigurationProcessor() {
         return configurationProcessor;
     }
@@ -345,6 +344,11 @@ public class BaseAuthPlugin implements AuthPlugin {
     @Override
     public AuthenticatingAccountBucket getAuthenticatingAccountBucket() {
         return accountBucket;
+    }
+
+    @Override
+    public PendingPremiumAccountBucket getPendingPremiumAccountBucket() {
+        return pendingPremiumBucket;
     }
 
     @Override
