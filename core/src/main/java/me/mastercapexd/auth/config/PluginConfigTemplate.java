@@ -17,6 +17,7 @@ import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
+import com.bivashy.auth.api.config.importing.ImportingSettings;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
@@ -30,6 +31,7 @@ import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
 import me.mastercapexd.auth.config.discord.BaseDiscordSettings;
 import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;
+import me.mastercapexd.auth.config.importing.BaseImportingSettings;
 import me.mastercapexd.auth.config.message.server.BaseServerMessages;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.storage.BaseDatabaseConfiguration;
@@ -109,6 +111,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private IntStream limboPortRange = IntStream.range(49152, 65535);
     @ConfigField("authentication-steps")
     private List<String> authenticationSteps = Arrays.asList("REGISTER", "LOGIN", "VK_LINK", "TELEGRAM_LINK", "GOOGLE_LINK", "ENTER_SERVER");
+    @ConfigField("import")
+    private BaseImportingSettings importingSettings;
 
     public PluginConfigTemplate(AuthPlugin plugin) {
         this.plugin = plugin;
@@ -301,6 +305,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public IntStream getLimboPortRange() {
         return limboPortRange;
+    }
+
+    @Override
+    public ImportingSettings getImportingSettings() {
+        return importingSettings;
     }
 
     protected abstract ConfigurationSectionHolder createConfiguration(AuthPlugin plugin);

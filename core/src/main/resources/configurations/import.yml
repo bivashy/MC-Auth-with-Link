@@ -1,0 +1,32 @@
+import:
+  # Настройки для миграции из других плагинов.
+  # Большинство пользователей могут не трогать это.
+  #
+  # -- ВАЖНО --
+  # Вы ДОЛЖНЫ сделать бекап вашей базы данных перед миграцией.
+  # mcAuth НИКОГДА не будет удалять ваши данные, но делать бекап
+  # является рекомендованным действием при выполнении передачи больших данных
+  #
+  sources:
+    # Миграция с LimboAuth и LimboSocial (Без поддержки лицензионных аккаунтов)
+    limboauth:
+      driver-url: 'https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.1.214.jar'
+      # Значение по умолчанию указано для базы данных H2
+      jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2'
+      username: ''
+      password: ''
+    # Миграция с LoginSecurity (Без поддержки лицензионных аккаунтов)
+    loginsecurity:
+      type: SQLITE
+      # Значение по умолчанию указано для базы данных H2
+      jdbc-url: 'jdbc:sqlite:./plugins/loginsecurity/LoginSecurity.db'
+      username: ''
+      password: ''
+      # Значение по умолчанию ls_players
+      table-name: 'ls_players'
+    authme:
+      type: SQLITE
+      jdbc-url: 'jdbc:sqlite:./plugins/authme/authme.db'
+      username: ''
+      password: ''
+      table-name: 'authme'

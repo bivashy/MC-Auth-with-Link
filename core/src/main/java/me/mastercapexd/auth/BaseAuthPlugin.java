@@ -66,6 +66,7 @@ import me.mastercapexd.auth.crypto.authme.AuthMeSha256CryptoProvider;
 import me.mastercapexd.auth.crypto.belkaauth.UAuthCryptoProvider;
 import me.mastercapexd.auth.database.AuthAccountDatabaseProxy;
 import me.mastercapexd.auth.database.DatabaseHelper;
+import me.mastercapexd.auth.database.importing.ImportExecutor;
 import me.mastercapexd.auth.discord.command.DiscordCommandRegistry;
 import me.mastercapexd.auth.discord.listener.DiscordLinkRoleModifierListener;
 import me.mastercapexd.auth.hooks.BaseDiscordHook;
@@ -110,15 +111,16 @@ public class BaseAuthPlugin implements AuthPlugin {
     private AudienceProvider audienceProvider;
     private LibraryManagement libraryManagement;
     private ServerCore core;
-    private File dataFolder;
     private AuthenticatingAccountBucket accountBucket;
     private EventBus eventBus = EventBusBuilder.asm().executor(Executors.newFixedThreadPool(4)).build();
     private GoogleAuthenticator googleAuthenticator;
     private PluginConfig config;
     private AccountFactory accountFactory;
     private LinkTypeProvider linkTypeProvider;
+    private DatabaseHelper databaseHelper;
     private AccountDatabase accountDatabase;
     private LoginManagement loginManagement;
+    private ImportExecutor importExecutor;
 
     public BaseAuthPlugin(AudienceProvider audienceProvider, String version, File pluginFolder, ServerCore core, LibraryManagement libraryManagement) {
         AuthPluginProvider.setPluginInstance(this);
@@ -155,8 +157,10 @@ public class BaseAuthPlugin implements AuthPlugin {
         this.authenticationStepContextFactoryBucket = new BaseAuthenticationStepContextFactoryBucket(config.getAuthenticationSteps());
         this.accountFactory = new AuthAccountFactory();
         this.linkTypeProvider = BaseLinkTypeProvider.allLinks();
-        this.accountDatabase = new AuthAccountDatabaseProxy(new DatabaseHelper(this));
+        this.databaseHelper = new DatabaseHelper(this);
+        this.accountDatabase = new AuthAccountDatabaseProxy(databaseHelper);
         this.loginManagement = new BaseLoginManagement(this);
+        this.importExecutor = new ImportExecutor(() -> databaseHelper.getAuthAccountDao());
 
         this.registerAuthenticationSteps();
 
@@ -258,6 +262,10 @@ public class BaseAuthPlugin implements AuthPlugin {
                     }
                     return IntStream.of(Integer.parseInt(number));
                 });
+    }
+
+    public DatabaseHelper getDatabaseHelper() {
+        return databaseHelper;
     }
 
     public BaseAuthPlugin eventBus(EventBus eventBus) {
@@ -383,6 +391,10 @@ public class BaseAuthPlugin implements AuthPlugin {
     @Override
     public File getFolder() {
         return pluginFolder;
+    }
+
+    public ImportExecutor getImportExecutor() {
+        return importExecutor;
     }
 
     public <T extends PluginHook> void putHook(Class<? extends T> clazz, T instance) {

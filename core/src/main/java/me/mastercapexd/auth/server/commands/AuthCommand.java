@@ -3,6 +3,7 @@ package me.mastercapexd.auth.server.commands;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.asset.resource.Resource;
@@ -10,13 +11,19 @@ import com.bivashy.auth.api.asset.resource.impl.FolderResource;
 import com.bivashy.auth.api.asset.resource.impl.FolderResourceReader;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.config.message.MessageContext;
+import com.bivashy.auth.api.config.message.Messages;
 import com.bivashy.auth.api.crypto.HashInput;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.server.command.ServerCommandActor;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.step.AuthenticationStepContext;
 
+import me.mastercapexd.auth.database.importing.ImportExecutor;
+import me.mastercapexd.auth.database.importing.ImportSource;
+import me.mastercapexd.auth.database.importing.source.ImportSourceType;
 import me.mastercapexd.auth.server.commands.annotations.Admin;
 import me.mastercapexd.auth.server.commands.annotations.Permission;
+import me.mastercapexd.auth.server.commands.exception.SendComponentException;
 import me.mastercapexd.auth.server.commands.parameters.ArgumentAccount;
 import me.mastercapexd.auth.server.commands.parameters.ArgumentServerPlayer;
 import me.mastercapexd.auth.server.commands.parameters.NewPassword;
@@ -32,12 +39,16 @@ import ru.vyarus.yaml.updater.YamlUpdater;
 @Permission("auth.admin")
 @Admin
 public class AuthCommand {
+
+    private final AtomicBoolean importing = new AtomicBoolean(false);
     @Dependency
     private AuthPlugin plugin;
     @Dependency
     private PluginConfig config;
     @Dependency
     private AccountDatabase accountDatabase;
+    @Dependency
+    private ImportExecutor importExecutor;
 
     @DefaultFor({"authadmin", "adminauth", "auth"})
     public void accountInfos(ServerCommandActor commandActor) {
@@ -100,4 +111,24 @@ public class AuthCommand {
         }
         actor.reply(config.getServerMessages().getMessage("config-migrated"));
     }
+
+    @Subcommand("import")
+    public void importFromPlugin(ServerCommandActor actor, ImportSourceType sourceType) {
+        Messages<ServerComponent> messages = config.getServerMessages().getSubMessages("importing");
+        if (importing.get())
+            throw new SendComponentException(messages.getMessage("already-performing"));
+
+        actor.reply(messages.getMessage("started"));
+        importing.set(true);
+        ImportSource importSource = sourceType.create(config.getImportingSettings());
+        importExecutor.performImport(importSource).whenComplete((statistic, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                statistic.fail();
+            }
+            actor.reply(ServerComponent.fromPlain(statistic.toString()));
+            importing.set(false);
+        });
+    }
+
 }

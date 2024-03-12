@@ -12,6 +12,7 @@ import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
+import com.bivashy.auth.api.config.importing.ImportingSettings;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
@@ -80,6 +81,8 @@ public interface PluginConfig {
     void reload();
 
     GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
+
+    ImportingSettings getImportingSettings();
 
     TelegramSettings getTelegramSettings();
 
