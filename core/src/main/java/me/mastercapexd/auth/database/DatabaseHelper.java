@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import com.alessiodp.libby.classloader.IsolatedClassLoader;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.schema.SchemaSettings;
@@ -62,7 +63,7 @@ public class DatabaseHelper {
                 String cacheDriverCheckSum = HashUtils.getFileCheckSum(cacheDriverFile, HashUtils.getMD5());
                 if (!cacheDriverFile.exists() || cacheDriverCheckSum != null && !DownloadUtil.checkSum(HashUtils.mapToMd5URL(downloadUrl), cacheDriverCheckSum))
                     DownloadUtil.downloadFile(downloadUrl, cacheDriverFile);
-                DriverUtil.loadDriver(cacheDriverFile, classLoader);
+                DriverUtil.loadDriver(cacheDriverFile, new IsolatedClassLoader());
 
                 DataPersisterManager.registerDataPersisters(new CryptoProviderPersister());
 
@@ -84,7 +85,7 @@ public class DatabaseHelper {
                     accountLinkMigrationCoordinator.migrate(connectionSource, accountLinkDao);
                 }
                 enabled = true;
-            } catch(SQLException | IOException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         });
@@ -97,7 +98,7 @@ public class DatabaseHelper {
             List<DatabaseType> databaseTypes = (List<DatabaseType>) field.get(null);
             consumer.accept(databaseTypes);
             field.setAccessible(false);
-        } catch(NoSuchFieldException | IllegalAccessException ignored) {
+        } catch (NoSuchFieldException | IllegalAccessException ignored) {
         }
     }
 
@@ -124,4 +125,5 @@ public class DatabaseHelper {
     public AccountLinkDao getAccountLinkDao() {
         return accountLinkDao;
     }
+
 }
