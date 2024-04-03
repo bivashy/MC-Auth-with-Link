@@ -216,6 +216,10 @@ public class BaseAuthPlugin implements AuthPlugin {
 
             eventBus.register(new DiscordLinkRoleModifierListener());
             new DiscordCommandRegistry();
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            // TODO: Replace with proper logging
+            return null;
         });
     }
 

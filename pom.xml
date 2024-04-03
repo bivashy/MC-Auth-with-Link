@@ -32,10 +32,10 @@
 
         <!-- TOTP -->
         <totp-auth.version>1.5.0</totp-auth.version>
-        <zxing-qr-generator.version>3.5.2</zxing-qr-generator.version>
+        <zxing-qr-generator.version>3.5.3</zxing-qr-generator.version>
 
         <!-- Adventure -->
-        <minimessage.version>4.15.0</minimessage.version>
+        <minimessage.version>4.16.0</minimessage.version>
         <adventure-serializer.version>4.15.0</adventure-serializer.version>
         <adventure-platform.version>4.3.2</adventure-platform.version>
         <adventure-bungee.version>4.3.2</adventure-bungee.version>
@@ -51,7 +51,7 @@
         <lamp-telegram.version>1.0.0</lamp-telegram.version>
 
         <telegram-api.version>6.9.1</telegram-api.version>
-        <jda.version>5.0.0-beta.19</jda.version>
+        <jda.version>5.0.0-beta.20</jda.version>
         <vk-api.version>0.4.2</vk-api.version>
 
         <bungeecord.version>1.20-R0.1</bungeecord.version>
