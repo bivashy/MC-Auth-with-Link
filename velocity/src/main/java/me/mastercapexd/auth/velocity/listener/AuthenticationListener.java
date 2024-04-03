@@ -3,13 +3,18 @@ package me.mastercapexd.auth.velocity.listener;
 import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.event.AccountServerConnectedEvent;
 import com.bivashy.auth.api.event.PlayerChatPasswordEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.bivashy.auth.api.server.proxy.ProxyServer;
+import com.velocitypowered.api.event.Continuation;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.connection.PreLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent.ServerResult;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -21,6 +26,15 @@ public class AuthenticationListener {
 
     public AuthenticationListener(AuthPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @Subscribe
+    public void onPreLoginEvent(PreLoginEvent event, Continuation continuation) {
+        plugin.getLoginManagement().onPreLogin(event.getUsername(), enforceOnlineMode -> {
+            if (enforceOnlineMode)
+                event.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
+            continuation.resume();
+        });
     }
 
     @Subscribe
@@ -93,6 +107,16 @@ public class AuthenticationListener {
 
             player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-server"));
             event.setResult(ServerPreConnectEvent.ServerResult.denied());
+        });
+    }
+
+    @Subscribe
+    public void onServerConnected(ServerConnectedEvent event) {
+        plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
+            plugin.getAccountDatabase().getAccount(player.getPlayerId()).thenAccept(account -> {
+                plugin.getEventBus().publish(AccountServerConnectedEvent.class, account,
+                        new VelocityProxyServer(event.getServer()));
+            });
         });
     }
 }

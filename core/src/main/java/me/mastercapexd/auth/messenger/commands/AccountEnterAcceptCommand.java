@@ -56,7 +56,11 @@ public class AccountEnterAcceptCommand implements OrphanCommand {
             Account account = entryUser.getAccount();
             account.getPlayer().ifPresent(player -> player.sendMessage(linkType.getServerMessages().getStringMessage("enter-confirmed",
                     linkType.newMessageContext(account))));
-            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            if (account.isPremium()) {
+                account.nextAuthenticationStep(plugin.getPremiumAuthenticationContextFactoryBucket().createContext(account));
+            } else {
+                account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            }
             plugin.getLinkEntryBucket().modifiable().remove(entryUser);
 
             actorWrapper.reply(linkType.getLinkMessages().getMessage("enter-accepted", linkType.newMessageContext(account)));

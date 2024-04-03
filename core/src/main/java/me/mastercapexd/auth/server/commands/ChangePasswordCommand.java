@@ -13,6 +13,7 @@ import me.mastercapexd.auth.shared.commands.annotation.CommandCooldown;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Dependency;
+import revxrsal.commands.annotation.Named;
 
 @Command({"passchange", "changepass", "changepassword"})
 public class ChangePasswordCommand {
@@ -26,7 +27,7 @@ public class ChangePasswordCommand {
 
     @DefaultFor({"passchange", "changepass", "changepassword"})
     @CommandCooldown(CommandCooldown.DEFAULT_VALUE)
-    public void changePlayerPassword(ServerPlayer sender, DoublePassword password) {
+    public void changePlayerPassword(ServerPlayer sender, @Named("пароль") DoublePassword password) {
         String id = config.getActiveIdentifierType().getId(sender);
         accountStorage.getAccount(id).thenAcceptAsync(account -> {
             if (account == null || !account.isRegistered()) {

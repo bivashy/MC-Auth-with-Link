@@ -1,5 +1,7 @@
 package me.mastercapexd.auth.server.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -178,6 +180,8 @@ public abstract class ServerCommandsRegistry {
             if (!config.getDiscordSettings().isEnabled())
                 throw new SendComponentException(config.getServerMessages().getSubMessages("discord").getMessage("disabled"));
         });
+
+        commandHandler.getAutoCompleter().registerSuggestion("onOff", (args, sender, command) -> Arrays.asList("on", "off"));
     }
 
     private void registerDependencies() {
@@ -192,7 +196,7 @@ public abstract class ServerCommandsRegistry {
 
     protected void registerCommands() {
         commandHandler.register(new AuthCommand(), new LoginCommand(), new RegisterCommand(), new ChangePasswordCommand(), new GoogleCodeCommand(),
-                new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand());
+                new GoogleCommand(), new GoogleUnlinkCommand(), new LogoutCommand(), new LicenseCommand());
 
         if (confirmationTypeEnabled(LinkConfirmationType.FROM_GAME))
             commandHandler.register(Orphans.path("code").handler(new LinkCodeCommand()));
