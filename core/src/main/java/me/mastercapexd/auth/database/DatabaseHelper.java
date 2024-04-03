@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import com.alessiodp.libby.classloader.IsolatedClassLoader;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.database.DatabaseSettings;
 import com.bivashy.auth.api.config.database.schema.SchemaSettings;
@@ -63,7 +62,7 @@ public class DatabaseHelper {
                 String cacheDriverCheckSum = HashUtils.getFileCheckSum(cacheDriverFile, HashUtils.getMD5());
                 if (!cacheDriverFile.exists() || cacheDriverCheckSum != null && !DownloadUtil.checkSum(HashUtils.mapToMd5URL(downloadUrl), cacheDriverCheckSum))
                     DownloadUtil.downloadFile(downloadUrl, cacheDriverFile);
-                DriverUtil.loadDriver(cacheDriverFile, new IsolatedClassLoader());
+                DriverUtil.loadDriver(cacheDriverFile, classLoader);
 
                 DataPersisterManager.registerDataPersisters(new CryptoProviderPersister());
 
