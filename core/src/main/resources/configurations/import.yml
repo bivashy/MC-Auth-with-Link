@@ -10,7 +10,7 @@ import:
   sources:
     # Миграция с LimboAuth и LimboSocial (Без поддержки лицензионных аккаунтов)
     limboauth:
-      driver-url: 'https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.1.214.jar'
+      driver-url: 'https://repo1.maven.org/maven2/com/h2database/h2/2.1.212/h2-2.1.212.jar'
       # Значение по умолчанию указано для базы данных H2
       jdbc-url: 'jdbc:h2:./plugins/limboauth/limboauth-v2'
       username: ''
