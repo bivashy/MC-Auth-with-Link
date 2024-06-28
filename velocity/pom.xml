@@ -11,10 +11,15 @@
     <artifactId>velocity</artifactId>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <repositories>
+        <repository>
+            <id>maven-snapshots</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -23,11 +28,6 @@
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
-        </repository>
-
-        <repository>
-            <id>bivashy</id>
-            <url>https://mvn.bivashy.dev/snapshots/</url>
         </repository>
     </repositories>
 
@@ -73,7 +73,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.velocitypowered</groupId>
+            <groupId>io.github.bivashy</groupId>
             <artifactId>velocity-proxy</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -87,7 +87,7 @@
 
         <!-- Libby -->
         <dependency>
-            <groupId>com.github.bivashy.libby</groupId>
+            <groupId>com.alessiodp.libby</groupId>
             <artifactId>libby-velocity</artifactId>
         </dependency>
 
