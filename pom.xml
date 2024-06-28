@@ -57,13 +57,13 @@
         <bungeecord.version>1.20-R0.1</bungeecord.version>
 
         <velocity-api.version>3.1.1</velocity-api.version>
-        <velocity-proxy.version>3.2.0-SNAPSHOT</velocity-proxy.version>
+        <velocity-proxy.version>3.3.0-3554abc</velocity-proxy.version>
 
         <auth-api.version>${project.version}</auth-api.version>
         <ormlite.version>6.1</ormlite.version>
         <multimessenger.version>1.0.5</multimessenger.version>
         <event-bus.version>1.3</event-bus.version>
-        <libby.version>2.0.0</libby.version>
+        <libby.version>2.0.0-SNAPSHOT</libby.version>
         <nanolimbo.version>1.0.8</nanolimbo.version>
 
         <!-- Maven plugins -->
@@ -266,17 +266,17 @@
 
             <!-- Libby -->
             <dependency>
-                <groupId>com.github.bivashy.libby</groupId>
+                <groupId>com.alessiodp.libby</groupId>
                 <artifactId>libby-core</artifactId>
                 <version>${libby.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.bivashy.libby</groupId>
+                <groupId>com.alessiodp.libby</groupId>
                 <artifactId>libby-bungee</artifactId>
                 <version>${libby.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.bivashy.libby</groupId>
+                <groupId>com.alessiodp.libby</groupId>
                 <artifactId>libby-velocity</artifactId>
                 <version>${libby.version}</version>
             </dependency>
@@ -295,7 +295,7 @@
                 <version>${velocity-api.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.velocitypowered</groupId>
+                <groupId>io.github.bivashy</groupId>
                 <artifactId>velocity-proxy</artifactId>
                 <version>${velocity-proxy.version}</version>
             </dependency>
@@ -376,7 +376,7 @@
                             </excludes>
                         </filter>
                         <filter>
-                            <artifact>com.github.bivashy.libby:libby-core</artifact>
+                            <artifact>com.alessiodp.libby:libby-core</artifact>
                             <includes>
                                 <include>com/alessiodp/libby/**</include>
                             </includes>

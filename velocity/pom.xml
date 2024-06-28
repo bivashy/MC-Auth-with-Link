@@ -24,11 +24,6 @@
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-
-        <repository>
-            <id>bivashy</id>
-            <url>https://mvn.bivashy.dev/snapshots/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -73,7 +68,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.velocitypowered</groupId>
+            <groupId>io.github.bivashy</groupId>
             <artifactId>velocity-proxy</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -87,7 +82,7 @@
 
         <!-- Libby -->
         <dependency>
-            <groupId>com.github.bivashy.libby</groupId>
+            <groupId>com.alessiodp.libby</groupId>
             <artifactId>libby-velocity</artifactId>
         </dependency>
 

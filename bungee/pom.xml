@@ -71,7 +71,7 @@
 
         <!-- Libby -->
         <dependency>
-            <groupId>com.github.bivashy.libby</groupId>
+            <groupId>com.alessiodp.libby</groupId>
             <artifactId>libby-bungee</artifactId>
         </dependency>
     </dependencies>
