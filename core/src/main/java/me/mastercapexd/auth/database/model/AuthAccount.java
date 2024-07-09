@@ -23,6 +23,7 @@ public class AuthAccount {
     public static final String LAST_SESSION_TIMESTAMP_START_FIELD_KEY = "last_session_start";
     public static final String PLAYER_ID_TYPE_FIELD_KEY = "player_id_type";
     public static final String HASH_TYPE_FIELD_KEY = "hash_type";
+    public static final String IS_PREMIUM_FIELD_KEY = "is_premium";
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField(columnName = PLAYER_ID_FIELD_KEY, unique = true, canBeNull = false)
@@ -41,6 +42,8 @@ public class AuthAccount {
     private String passwordHash;
     @DatabaseField(columnName = LAST_QUIT_TIMESTAMP_FIELD_KEY, dataType = DataType.LONG)
     private long lastQuitTimestamp;
+    @DatabaseField(columnName = IS_PREMIUM_FIELD_KEY, defaultValue = "false")
+    private boolean isPremium;
     @DatabaseField(columnName = LAST_SESSION_TIMESTAMP_START_FIELD_KEY, dataType = DataType.LONG)
     private long lastSessionStartTimestamp;
     @ForeignCollectionField
@@ -58,7 +61,7 @@ public class AuthAccount {
 
     public AuthAccount(String playerId, IdentifierType playerIdType, CryptoProvider cryptoProvider, String lastIp, UUID uniqueId, String playerName,
                        String passwordHash,
-                       long lastQuitTimestamp, long lastSessionStartTimestamp) {
+                       long lastQuitTimestamp, long lastSessionStartTimestamp, boolean isPremium) {
         this.playerId = playerId;
         this.playerIdType = playerIdType;
         this.cryptoProvider = cryptoProvider;
@@ -68,10 +71,11 @@ public class AuthAccount {
         this.passwordHash = passwordHash;
         this.lastQuitTimestamp = lastQuitTimestamp;
         this.lastSessionStartTimestamp = lastSessionStartTimestamp;
+        this.isPremium = isPremium;
     }
 
     public AuthAccount(long id, String playerId, IdentifierType playerIdType, CryptoProvider cryptoProvider, String lastIp, UUID uniqueId, String playerName,
-                       String passwordHash, long lastQuitTimestamp, long lastSessionStartTimestamp) {
+                       String passwordHash, long lastQuitTimestamp, long lastSessionStartTimestamp, boolean isPremium) {
         this.id = id;
         this.playerId = playerId;
         this.playerIdType = playerIdType;
@@ -82,6 +86,7 @@ public class AuthAccount {
         this.passwordHash = passwordHash;
         this.lastQuitTimestamp = lastQuitTimestamp;
         this.lastSessionStartTimestamp = lastSessionStartTimestamp;
+        this.isPremium = isPremium;
     }
 
     public long getId() {
@@ -116,6 +121,10 @@ public class AuthAccount {
         this.lastIp = lastIp;
     }
 
+    public void setIsPremium(boolean newIsPremium) {
+        this.isPremium = newIsPremium;
+    }
+
     public UUID getUniqueId() {
         return uniqueId;
     }
@@ -146,6 +155,10 @@ public class AuthAccount {
 
     public void setLastSessionStartTimestamp(long lastSessionStartTimestamp) {
         this.lastSessionStartTimestamp = lastSessionStartTimestamp;
+    }
+
+    public boolean isPremium() {
+        return isPremium;
     }
 
     public ForeignCollection<AccountLink> getLinks() {

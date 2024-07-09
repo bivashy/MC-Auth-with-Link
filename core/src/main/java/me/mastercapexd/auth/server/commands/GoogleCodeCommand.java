@@ -49,7 +49,11 @@ public class GoogleCodeCommand {
         if (plugin.getGoogleAuthenticator().authorize(linkUser.getLinkUserInfo().getIdentificator().asString(), code)) {
             player.sendMessage(GOOGLE_MESSAGES.getMessage("code-entered"));
             account.getCurrentAuthenticationStep().getAuthenticationStepContext().setCanPassToNextStep(true);
-            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            if (account.isPremium()) {
+                account.nextAuthenticationStep(plugin.getPremiumAuthenticationContextFactoryBucket().createContext(account));
+            } else {
+                account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            }
             return;
         }
         player.sendMessage(GOOGLE_MESSAGES.getMessage("code-wrong-code"));

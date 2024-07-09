@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.bivashy.auth.api.AuthPlugin;
+import com.bivashy.auth.api.event.AccountServerConnectedEvent;
 import com.bivashy.auth.api.event.PlayerChatPasswordEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
@@ -15,10 +16,7 @@ import me.mastercapexd.auth.bungee.player.BungeeConnectionProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
-import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -29,6 +27,16 @@ public class AuthenticationListener implements Listener {
 
     public AuthenticationListener(AuthPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onPreLogin(PreLoginEvent event) {
+        event.registerIntent(bungeePlugin);
+        plugin.getLoginManagement().onPreLogin(event.getConnection().getName(), enforceOnlineMode -> {
+            if (enforceOnlineMode)
+                event.getConnection().setOnlineMode(true);
+            event.completeIntent(bungeePlugin);
+        });
     }
 
     @EventHandler
@@ -99,5 +107,15 @@ public class AuthenticationListener implements Listener {
         }
         player.sendMessage(plugin.getConfig().getServerMessages().getMessage("disabled-server"));
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onServerConnected(ServerConnectedEvent event) {
+        plugin.getCore().wrapPlayer(event.getPlayer()).ifPresent(player -> {
+            plugin.getAccountDatabase().getAccount(player.getPlayerId()).thenAccept(account -> {
+                plugin.getEventBus().publish(AccountServerConnectedEvent.class, account,
+                        new BungeeServer(event.getServer().getInfo()));
+            });
+        });
     }
 }

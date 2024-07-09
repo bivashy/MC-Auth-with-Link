@@ -36,6 +36,7 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     private static final String PASSWORD_HASH_CONFIGURATION_KEY = "passwordHash";
     private static final String LAST_QUIT_TIMESTAMP_CONFIGURATION_KEY = "lastQuitTimestamp";
     private static final String LAST_SESSION_TIMESTAMP_START_CONFIGURATION_KEY = "lastSessionStartTimestamp";
+    private static final String IS_PREMIUM_CONFIGURATION_KEY = "isPremium";
     private static final String LINKS_CONFIGURATION_KEY = "links";
     private static final SupplierExceptionCatcher DEFAULT_EXCEPTION_CATCHER = new SupplierExceptionCatcher();
     private final DatabaseHelper databaseHelper;
@@ -91,6 +92,11 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         lastSessionStartTimestampFieldConfig.setDataType(DataType.LONG);
         fields.add(lastSessionStartTimestampFieldConfig);
 
+        DatabaseFieldConfig isPremiumFieldConfig = createFieldConfig(settings, IS_PREMIUM_CONFIGURATION_KEY,
+                AuthAccount.IS_PREMIUM_FIELD_KEY);
+        isPremiumFieldConfig.setDataType(DataType.BOOLEAN);
+        fields.add(isPremiumFieldConfig);
+
         DatabaseFieldConfig linksFieldConfig = new DatabaseFieldConfig(LINKS_CONFIGURATION_KEY);
         linksFieldConfig.setForeignCollection(true);
         fields.add(linksFieldConfig);
@@ -138,6 +144,13 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
                 .and()
                 .notIn(AccountLink.LINK_USER_ID_FIELD_KEY, AccountFactory.DEFAULT_TELEGRAM_ID, AccountFactory.DEFAULT_VK_ID)
                 .queryBuilder()).distinct().query(), Collections.emptyList());
+    }
+
+    public Collection<AuthAccount> queryAllPremiumAccounts() {
+        return DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder()
+                .where()
+                .eq(AuthAccount.IS_PREMIUM_FIELD_KEY, true)
+                .query(), Collections.emptyList());
     }
 
     public Collection<AuthAccount> queryAllLinkedAccounts(LinkType linkType) {

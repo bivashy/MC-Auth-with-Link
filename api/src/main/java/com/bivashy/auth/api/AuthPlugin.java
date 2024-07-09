@@ -3,13 +3,7 @@ package com.bivashy.auth.api;
 import java.io.File;
 
 import com.bivashy.auth.api.account.AccountFactory;
-import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
-import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
-import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
-import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
-import com.bivashy.auth.api.bucket.CryptoProviderBucket;
-import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
-import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
+import com.bivashy.auth.api.bucket.*;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
@@ -46,6 +40,8 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
 
     AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket();
 
+    AuthenticationStepContextFactoryBucket getPremiumAuthenticationContextFactoryBucket();
+
     ConfigurationProcessor getConfigurationProcessor();
 
     LoginManagement getLoginManagement();
@@ -61,6 +57,8 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
     AuthenticationTaskBucket getAuthenticationTaskBucket();
 
     AuthenticatingAccountBucket getAuthenticatingAccountBucket();
+
+    PendingPremiumAccountBucket getPendingPremiumAccountBucket();
 
     LinkConfirmationBucket getLinkConfirmationBucket();
 
