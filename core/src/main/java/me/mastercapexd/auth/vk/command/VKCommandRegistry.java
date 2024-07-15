@@ -12,6 +12,7 @@ import me.mastercapexd.auth.link.vk.VKLinkType;
 import me.mastercapexd.auth.messenger.commands.MessengerCommandRegistry;
 import me.mastercapexd.auth.shared.commands.MessengerLinkCommandTemplate;
 import me.mastercapexd.auth.shared.commands.VKLinkCommand;
+import me.mastercapexd.auth.vk.command.exception.VKExceptionHandler;
 import revxrsal.commands.CommandHandler;
 
 public class VKCommandRegistry extends MessengerCommandRegistry {
@@ -21,6 +22,7 @@ public class VKCommandRegistry extends MessengerCommandRegistry {
     public VKCommandRegistry() {
         super(COMMAND_HANDLER, VKLinkType.getInstance());
         COMMAND_HANDLER.registerContextResolver(LinkCommandActorWrapper.class, context -> new VKCommandActorWrapper(context.actor()));
+        COMMAND_HANDLER.setExceptionHandler(new VKExceptionHandler(VKLinkType.getInstance()));
         registerCommands();
 
         try {
