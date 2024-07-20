@@ -9,5 +9,5 @@ public interface AccountFactory {
     long DEFAULT_TELEGRAM_ID = -1;
     int DEFAULT_VK_ID = -1;
 
-    Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String lastIp);
+    Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String lastIp, boolean isPremium);
 }
