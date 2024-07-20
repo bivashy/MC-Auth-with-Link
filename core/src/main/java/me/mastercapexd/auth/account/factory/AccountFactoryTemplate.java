@@ -16,6 +16,11 @@ import me.mastercapexd.auth.link.user.LinkUserTemplate;
 
 public abstract class AccountFactoryTemplate implements AccountFactory {
     @Override
+    public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String lastIp) {
+        return createAccount(id, identifierType, uuid, name, cryptoProvider, passwordHash, lastIp, false);
+    }
+
+    @Override
     public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash,
                                  String lastIp, boolean isPremium) {
         Account account = newAccount(identifierType.fromRawString(id), identifierType, uuid, name);
