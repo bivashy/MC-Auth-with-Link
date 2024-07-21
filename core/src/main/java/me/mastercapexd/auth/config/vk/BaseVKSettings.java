@@ -8,6 +8,7 @@ import com.bivashy.auth.api.config.link.LinkKeyboards;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.link.command.LinkCommandPaths;
 import com.bivashy.auth.api.config.link.command.LinkCustomCommands;
+import com.bivashy.auth.api.config.link.command.LinkDispatchCommandsSettings;
 import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
 import com.bivashy.auth.api.config.link.stage.LinkEnterSettings;
 import com.bivashy.auth.api.config.link.stage.LinkRestoreSettings;
@@ -18,11 +19,7 @@ import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.link.BaseCommandPaths;
-import me.mastercapexd.auth.config.link.BaseConfirmationSettings;
-import me.mastercapexd.auth.config.link.BaseEnterSettings;
-import me.mastercapexd.auth.config.link.BaseMessengerCustomCommands;
-import me.mastercapexd.auth.config.link.BaseRestoreSettings;
+import me.mastercapexd.auth.config.link.*;
 import me.mastercapexd.auth.config.message.link.LinkMessages;
 import me.mastercapexd.auth.config.message.vk.VKMessages;
 
@@ -39,6 +36,8 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     private BaseCommandPaths commandPaths;
     @ConfigField("proxy-commands")
     private BaseCommandPaths proxyCommandPaths;
+    @ConfigField("dispatch-commands-after-link")
+    private BaseDispatchCommandsSettings dispatchCommandsSettings = new BaseDispatchCommandsSettings();
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-vk-link")
@@ -111,6 +110,11 @@ public class BaseVKSettings implements ConfigurationHolder, VKSettings {
     @Override
     public LinkCommandPaths getProxyCommandPaths() {
         return proxyCommandPaths;
+    }
+
+    @Override
+    public LinkDispatchCommandsSettings getDispatchCommandsSettings() {
+        return dispatchCommandsSettings;
     }
 
     @Override

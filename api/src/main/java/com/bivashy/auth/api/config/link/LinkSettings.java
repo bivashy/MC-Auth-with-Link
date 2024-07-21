@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bivashy.auth.api.config.link.command.LinkCommandPaths;
 import com.bivashy.auth.api.config.link.command.LinkCustomCommands;
+import com.bivashy.auth.api.config.link.command.LinkDispatchCommandsSettings;
 import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
 import com.bivashy.auth.api.config.link.stage.LinkEnterSettings;
 import com.bivashy.auth.api.config.link.stage.LinkRestoreSettings;
@@ -29,6 +30,8 @@ public interface LinkSettings {
     LinkCommandPaths getCommandPaths();
 
     LinkCommandPaths getProxyCommandPaths();
+
+    LinkDispatchCommandsSettings getDispatchCommandsSettings();
 
     LinkKeyboards getKeyboards();
 

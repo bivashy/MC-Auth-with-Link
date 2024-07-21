@@ -6,6 +6,7 @@ import java.util.List;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.command.LinkCustomCommands;
+import com.bivashy.auth.api.config.link.command.LinkDispatchCommandsSettings;
 import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
@@ -14,11 +15,7 @@ import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.link.BaseCommandPaths;
-import me.mastercapexd.auth.config.link.BaseConfirmationSettings;
-import me.mastercapexd.auth.config.link.BaseEnterSettings;
-import me.mastercapexd.auth.config.link.BaseMessengerCustomCommands;
-import me.mastercapexd.auth.config.link.BaseRestoreSettings;
+import me.mastercapexd.auth.config.link.*;
 import me.mastercapexd.auth.config.message.telegram.TelegramMessages;
 
 public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettings {
@@ -36,6 +33,8 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     private BaseCommandPaths commandPaths;
     @ConfigField("proxy-commands")
     private BaseCommandPaths proxyCommandPaths;
+    @ConfigField("dispatch-commands-after-link")
+    private BaseDispatchCommandsSettings dispatchCommandsSettings = new BaseDispatchCommandsSettings();
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-telegram-link")
@@ -107,6 +106,11 @@ public class BaseTelegramSettings implements ConfigurationHolder, TelegramSettin
     @Override
     public BaseCommandPaths getProxyCommandPaths() {
         return proxyCommandPaths;
+    }
+
+    @Override
+    public LinkDispatchCommandsSettings getDispatchCommandsSettings() {
+        return dispatchCommandsSettings;
     }
 
     @Override

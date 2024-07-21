@@ -7,6 +7,7 @@ import java.util.List;
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.config.link.DiscordSettings;
 import com.bivashy.auth.api.config.link.command.LinkCustomCommands;
+import com.bivashy.auth.api.config.link.command.LinkDispatchCommandsSettings;
 import com.bivashy.auth.api.config.link.stage.LinkConfirmationSettings;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
 import com.bivashy.auth.api.link.user.info.impl.UserNumberIdentificator;
@@ -15,10 +16,7 @@ import com.bivashy.configuration.ConfigurationHolder;
 import com.bivashy.configuration.annotation.ConfigField;
 import com.bivashy.configuration.holder.ConfigurationSectionHolder;
 
-import me.mastercapexd.auth.config.link.BaseCommandPaths;
-import me.mastercapexd.auth.config.link.BaseEnterSettings;
-import me.mastercapexd.auth.config.link.BaseMessengerCustomCommands;
-import me.mastercapexd.auth.config.link.BaseRestoreSettings;
+import me.mastercapexd.auth.config.link.*;
 import me.mastercapexd.auth.config.message.discord.DiscordMessages;
 
 public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings {
@@ -36,6 +34,8 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     private DiscordCommandPaths commandPaths;
     @ConfigField("proxy-commands")
     private BaseCommandPaths proxyCommandPaths;
+    @ConfigField("dispatch-commands-after-link")
+    private BaseDispatchCommandsSettings dispatchCommandsSettings = new BaseDispatchCommandsSettings();
     @ConfigField("custom-commands")
     private BaseMessengerCustomCommands commands;
     @ConfigField("max-discord-link")
@@ -116,6 +116,11 @@ public class BaseDiscordSettings implements ConfigurationHolder, DiscordSettings
     @Override
     public BaseCommandPaths getProxyCommandPaths() {
         return proxyCommandPaths;
+    }
+
+    @Override
+    public LinkDispatchCommandsSettings getDispatchCommandsSettings() {
+        return dispatchCommandsSettings;
     }
 
     @Override
