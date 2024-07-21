@@ -138,4 +138,9 @@ public enum BungeeProxyCore implements ServerCore {
     public String colorize(String text) {
         return BungeeComponent.colorText(text);
     }
+
+    @Override
+    public void dispatchConsoleCommand(String command) {
+        PROXY_SERVER.getPluginManager().dispatchCommand(PROXY_SERVER.getConsole(), command);
+    }
 }

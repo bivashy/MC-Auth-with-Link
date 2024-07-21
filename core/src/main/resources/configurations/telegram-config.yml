@@ -64,6 +64,18 @@ telegram:
     link-game: # Указывайте команды БЕЗ знака '/'
       main-command: 'addtg'
 
+  # Команды, которые будут выполняться сразу после того,
+  # как игрок успешно привязал/отвязал свой аккаунт к Telegram
+  dispatch-commands-after-link:
+    # Включить?
+    enabled: false
+    # Команды, которые будут выполняться от имени консоли с прокси после привязки
+    commands-on-link:
+      - lpb user %player_name% permission set telegram.linked true
+    # Команды, которые будут выполняться от имени консоли с прокси после отвязки
+    commands-on-unlink:
+      - lpb user %player_name% permission unset telegram.linked
+
   # Команды в телеграме
   telegram-commands: # Основные команды
     link-game:

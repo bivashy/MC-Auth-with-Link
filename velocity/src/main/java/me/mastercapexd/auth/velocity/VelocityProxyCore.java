@@ -134,4 +134,9 @@ public class VelocityProxyCore implements ServerCore {
         return text;
     }
 
+    @Override
+    public void dispatchConsoleCommand(String command) {
+        server.getCommandManager().executeAsync(server.getConsoleCommandSource(), command);
+    }
+
 }

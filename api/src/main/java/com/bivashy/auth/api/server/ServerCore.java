@@ -55,4 +55,6 @@ public interface ServerCore extends Castable<ServerCore> {
     }
 
     String colorize(String text);
+
+    void dispatchConsoleCommand(String command);
 }

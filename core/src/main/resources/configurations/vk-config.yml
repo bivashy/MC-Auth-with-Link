@@ -65,6 +65,18 @@ vk:
     link-game: # Указывайте команды БЕЗ знака '/'
       main-command: 'addvk'
 
+  # Команды, которые будут выполняться сразу после того,
+  # как игрок успешно привязал/отвязал свой аккаунт к ВК
+  dispatch-commands-after-link:
+    # Включить?
+    enabled: false
+    # Команды, которые будут выполняться от имени консоли с прокси после привязки
+    commands-on-link:
+      - lpb user %player_name% permission set vk.linked true
+    # Команды, которые будут выполняться от имени консоли с прокси после отвязки
+    commands-on-unlink:
+      - lpb user %player_name% permission unset vk.linked
+
   # Команды которые в ВК
   vk-commands: # Основные команды
     link-game:
