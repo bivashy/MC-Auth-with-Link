@@ -66,10 +66,16 @@
         <libby.version>2.0.0-SNAPSHOT</libby.version>
         <nanolimbo.version>1.0.8</nanolimbo.version>
 
+        <!-- Testing -->
+        <mockito.version>5.3.1</mockito.version>
+        <junit-jupiter.version>5.9.2</junit-jupiter.version>
+        <sqlite-driver.version>3.42.0.0</sqlite-driver.version>
+
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
         <maven.shade.plugin.version>3.6.0</maven.shade.plugin.version>
         <maven.source.plugin.version>3.3.0</maven.source.plugin.version>
+        <maven.surefire.version>2.22.2</maven.surefire.version>
     </properties>
 
     <dependencyManagement>
@@ -327,6 +333,35 @@
                 <artifactId>api</artifactId>
                 <version>${nanolimbo.version}</version>
             </dependency>
+
+            <!-- Testing -->
+            <!-- JUnit Jupiter API-->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit-jupiter.version}</version>
+            </dependency>
+
+            <!-- Mockito -->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
+            <!-- Mockito JUnit5 Extension -->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
+            <!-- SQLite driver -->
+            <dependency>
+                <groupId>org.xerial</groupId>
+                <artifactId>sqlite-jdbc</artifactId>
+                <version>${sqlite-driver.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -483,6 +518,12 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Maven surefire plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
             </plugin>
         </plugins>
     </build>

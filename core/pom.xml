@@ -119,5 +119,33 @@
             <artifactId>api</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!-- JUnit Jupiter API-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+             <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+             <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito JUnit5 Extension -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+             <scope>test</scope>
+        </dependency>
+
+        <!-- SQLite driver -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
