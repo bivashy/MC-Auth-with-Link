@@ -1,8 +1,10 @@
 package com.bivashy.auth.api.management;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import com.bivashy.auth.api.account.Account;
+import com.bivashy.auth.api.event.result.PreLoginResult;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
 /**
@@ -10,6 +12,12 @@ import com.bivashy.auth.api.server.player.ServerPlayer;
  * same ip. Or remove
  */
 public interface LoginManagement {
+    /**
+     * Handle player pre login. Check for premium UUID and
+     * force online/offline mode.
+     */
+    void onPreLogin(String ip, String username, Consumer<PreLoginResult> continuation);
+
     /**
      * Handle player join. Start authentication/registration/session process.
      * On BungeeCord this will use LoginEvent and player from "connection".

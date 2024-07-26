@@ -12,6 +12,7 @@ import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
+import com.bivashy.auth.api.config.premium.PremiumSettings;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
@@ -33,6 +34,10 @@ public interface PluginConfig {
 
     DatabaseConnectionProvider getStorageType();
 
+    int getNameMinLength();
+
+    int getNameMaxLength();
+
     Pattern getNamePattern();
 
     List<ConfigurationServer> getAuthServers();
@@ -48,6 +53,8 @@ public interface PluginConfig {
     List<String> getAuthenticationSteps();
 
     String getAuthenticationStepName(int index);
+
+    String getPremiumAuthenticationStepName(int index);
 
     boolean isPasswordConfirmationEnabled();
 
@@ -80,6 +87,8 @@ public interface PluginConfig {
     void reload();
 
     GoogleAuthenticatorSettings getGoogleAuthenticatorSettings();
+
+    PremiumSettings getPremiumSettings();
 
     TelegramSettings getTelegramSettings();
 

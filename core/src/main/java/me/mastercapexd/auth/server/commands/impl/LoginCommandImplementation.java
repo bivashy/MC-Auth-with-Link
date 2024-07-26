@@ -32,7 +32,10 @@ public class LoginCommandImplementation {
             }
 
             currentAuthenticationStep.getAuthenticationStepContext().setCanPassToNextStep(true);
-            account.nextAuthenticationStep(plugin.getAuthenticationContextFactoryBucket().createContext(account));
+            account.nextAuthenticationStep(account.isPremium() ?
+                    plugin.getPremiumAuthenticationContextFactoryBucket().createContext(account) :
+                    plugin.getAuthenticationContextFactoryBucket().createContext(account)
+            );
             player.sendMessage(config.getServerMessages().getMessage("login-success"));
         });
     }

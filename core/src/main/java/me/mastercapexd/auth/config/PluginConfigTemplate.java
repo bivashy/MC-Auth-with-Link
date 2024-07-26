@@ -17,6 +17,7 @@ import com.bivashy.auth.api.config.link.GoogleAuthenticatorSettings;
 import com.bivashy.auth.api.config.link.TelegramSettings;
 import com.bivashy.auth.api.config.link.VKSettings;
 import com.bivashy.auth.api.config.message.server.ServerMessages;
+import com.bivashy.auth.api.config.premium.PremiumSettings;
 import com.bivashy.auth.api.config.server.ConfigurationServer;
 import com.bivashy.auth.api.crypto.CryptoProvider;
 import com.bivashy.auth.api.database.DatabaseConnectionProvider;
@@ -31,6 +32,7 @@ import me.mastercapexd.auth.config.bossbar.BaseBossBarSettings;
 import me.mastercapexd.auth.config.discord.BaseDiscordSettings;
 import me.mastercapexd.auth.config.google.BaseGoogleAuthenticatorSettings;
 import me.mastercapexd.auth.config.message.server.BaseServerMessages;
+import me.mastercapexd.auth.config.premium.BasePremiumSettings;
 import me.mastercapexd.auth.config.resolver.RawURLProviderFieldResolverFactory.RawURLProvider;
 import me.mastercapexd.auth.config.storage.BaseDatabaseConfiguration;
 import me.mastercapexd.auth.config.storage.BaseLegacyStorageDataSettings;
@@ -56,6 +58,10 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private CryptoProvider activeCryptoProvider;
     @ConfigField("storage-type")
     private DatabaseConnectionProvider databaseConnectionProvider = DatabaseConnectionProvider.SQLITE;
+    @ConfigField("name-min-length")
+    private int nameMinLength = 3;
+    @ConfigField("name-max-length")
+    private int nameMaxLength = 16;
     @ConfigField("name-regex-pattern")
     private Pattern namePattern = Pattern.compile("[a-zA-Z0-9_]*");
     @ConfigField("password-min-length")
@@ -92,6 +98,8 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     private BaseDiscordSettings discordSettings = new BaseDiscordSettings();
     @ConfigField("google-authenticator")
     private BaseGoogleAuthenticatorSettings googleAuthenticatorSettings = new BaseGoogleAuthenticatorSettings();
+    @ConfigField("premium-support")
+    private BasePremiumSettings premiumSettings = new BasePremiumSettings();
     @ImportantField
     @ConfigField("messages")
     private BaseServerMessages serverMessages = null;
@@ -180,10 +188,21 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     }
 
     @Override
+    public int getNameMinLength() {
+        return nameMinLength;
+    }
+
+    @Override
+    public int getNameMaxLength() {
+        return nameMaxLength;
+    }
+
+    @Override
     public Pattern getNamePattern() {
         return namePattern;
     }
 
+    @Override
     public int getPasswordMinLength() {
         return passwordMinLength;
     }
@@ -236,6 +255,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public LegacyStorageDataSettings getStorageDataSettings() {
         return legacyStorageDataSettings;
+    }
+
+    @Override
+    public PremiumSettings getPremiumSettings() {
+        return premiumSettings;
     }
 
     @Override
@@ -296,6 +320,11 @@ public abstract class PluginConfigTemplate implements PluginConfig {
     @Override
     public String getAuthenticationStepName(int index) {
         return index >= 0 && index < authenticationSteps.size() ? authenticationSteps.get(index) : "NULL";
+    }
+
+    @Override
+    public String getPremiumAuthenticationStepName(int index) {
+        return index >= 0 && index < premiumSettings.getAuthenticationSteps().size() ? premiumSettings.getAuthenticationSteps().get(index) : "NULL";
     }
 
     @Override

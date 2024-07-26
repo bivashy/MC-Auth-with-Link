@@ -82,6 +82,11 @@ public class AuthAccountAdapter extends AccountTemplate {
     }
 
     @Override
+    public void setName(String newName) {
+        authAccount.setPlayerName(newName);
+    }
+
+    @Override
     public HashedPassword getPasswordHash() {
         return HashedPassword.of(authAccount.getPasswordHash(), null, authAccount.getHashType());
     }
@@ -138,6 +143,16 @@ public class AuthAccountAdapter extends AccountTemplate {
     @Override
     public void setLastSessionStartTimestamp(long currentTimeMillis) {
         authAccount.setLastSessionStartTimestamp(currentTimeMillis);
+    }
+
+    @Override
+    public boolean isPremium() {
+        return authAccount.isPremium();
+    }
+
+    @Override
+    public void setPremium(boolean newPremium) {
+        authAccount.setPremium(newPremium);
     }
 
     @Override

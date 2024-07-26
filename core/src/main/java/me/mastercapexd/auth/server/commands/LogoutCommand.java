@@ -31,13 +31,16 @@ public class LogoutCommand {
             return;
         }
         eventBus.publish(PlayerLogoutEvent.class, player, false).thenAccept(result -> {
-            if(result.getEvent().isCancelled())
+            if (result.getEvent().isCancelled())
                 return;
             accountStorage.getAccount(id).thenAccept(account -> {
                 account.logout(config.getSessionDurability());
                 accountStorage.saveOrUpdateAccount(account);
                 authenticatingAccountBucket.addAuthenticatingAccount(account);
-                account.nextAuthenticationStep(AuthPlugin.instance().getAuthenticationContextFactoryBucket().createContext(account));
+                account.nextAuthenticationStep(account.isPremium() ?
+                        AuthPlugin.instance().getPremiumAuthenticationContextFactoryBucket().createContext(account) :
+                        AuthPlugin.instance().getAuthenticationContextFactoryBucket().createContext(account)
+                );
                 player.sendMessage(config.getServerMessages().getMessage("logout-success"));
                 config.findServerInfo(config.getAuthServers()).asProxyServer().sendPlayer(player);
             });

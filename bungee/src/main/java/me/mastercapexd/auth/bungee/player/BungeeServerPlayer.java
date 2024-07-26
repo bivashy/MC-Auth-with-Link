@@ -65,6 +65,11 @@ public class BungeeServerPlayer implements ServerPlayer {
         return Optional.of(new BungeeServer(player.getServer().getInfo()));
     }
 
+    @Override
+    public boolean isOnlineMode() {
+        return player.getPendingConnection().isOnlineMode();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getRealPlayer() {

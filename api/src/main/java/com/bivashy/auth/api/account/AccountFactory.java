@@ -9,5 +9,11 @@ public interface AccountFactory {
     long DEFAULT_TELEGRAM_ID = -1;
     int DEFAULT_VK_ID = -1;
 
+    /**
+     * @deprecated use {@link #createAccount(String, IdentifierType, UUID, String, CryptoProvider, String, String, boolean)} instead.
+     */
+    @Deprecated
     Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String lastIp);
+
+    Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String lastIp, boolean isPremium);
 }

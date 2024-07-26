@@ -73,6 +73,11 @@ public class VelocityServerPlayer implements ServerPlayer {
     }
 
     @Override
+    public boolean isOnlineMode() {
+        return player.isOnlineMode();
+    }
+
+    @Override
     public <T> T getRealPlayer() {
         return (T) getPlayer();
     }

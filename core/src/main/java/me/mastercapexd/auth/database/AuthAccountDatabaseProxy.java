@@ -1,6 +1,7 @@
 package me.mastercapexd.auth.database;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,12 @@ public class AuthAccountDatabaseProxy implements AccountDatabase {
     public CompletableFuture<Account> getAccountFromName(String playerName) {
         return CompletableFuture.supplyAsync(
                 () -> databaseHelper.getAuthAccountDao().queryFirstAccountPlayerName(playerName).map(AuthAccountAdapter::new).orElse(null));
+    }
+
+    @Override
+    public CompletableFuture<Account> getAccountFromUUID(UUID uuid) {
+        return CompletableFuture.supplyAsync(
+                () -> databaseHelper.getAuthAccountDao().queryFirstAccountPlayerUUID(uuid).map(AuthAccountAdapter::new).orElse(null));
     }
 
     @Override

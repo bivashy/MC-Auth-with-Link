@@ -1,6 +1,7 @@
 package com.bivashy.auth.api.database;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.bivashy.auth.api.account.Account;
@@ -11,6 +12,8 @@ public interface AccountDatabase {
     CompletableFuture<Account> getAccount(String id);
 
     CompletableFuture<Account> getAccountFromName(String playerName);
+
+    CompletableFuture<Account> getAccountFromUUID(UUID uuid);
 
     @Deprecated
     CompletableFuture<Collection<Account>> getAccountsByVKID(Integer id);

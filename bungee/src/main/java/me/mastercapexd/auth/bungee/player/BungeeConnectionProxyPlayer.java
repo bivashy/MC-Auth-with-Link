@@ -58,6 +58,11 @@ public class BungeeConnectionProxyPlayer implements ServerPlayer {
     }
 
     @Override
+    public boolean isOnlineMode() {
+        return pendingConnection.isOnlineMode();
+    }
+
+    @Override
     public <T> T getRealPlayer() {
         return (T) pendingConnection;
     }

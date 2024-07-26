@@ -1,17 +1,14 @@
 package me.mastercapexd.auth.database.dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.bivashy.auth.api.account.Account;
 import com.bivashy.auth.api.account.AccountFactory;
 import com.bivashy.auth.api.config.database.schema.TableSettings;
 import com.bivashy.auth.api.link.LinkType;
 import com.bivashy.auth.api.link.user.info.LinkUserIdentificator;
+import com.bivashy.auth.api.type.IdentifierType;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseFieldConfig;
@@ -36,6 +33,7 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     private static final String PASSWORD_HASH_CONFIGURATION_KEY = "passwordHash";
     private static final String LAST_QUIT_TIMESTAMP_CONFIGURATION_KEY = "lastQuitTimestamp";
     private static final String LAST_SESSION_TIMESTAMP_START_CONFIGURATION_KEY = "lastSessionStartTimestamp";
+    private static final String IS_PREMIUM_CONFIGURATION_KEY = "isPremium";
     private static final String LINKS_CONFIGURATION_KEY = "links";
     private static final SupplierExceptionCatcher DEFAULT_EXCEPTION_CATCHER = new SupplierExceptionCatcher();
     private final DatabaseHelper databaseHelper;
@@ -91,6 +89,10 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
         lastSessionStartTimestampFieldConfig.setDataType(DataType.LONG);
         fields.add(lastSessionStartTimestampFieldConfig);
 
+        DatabaseFieldConfig isPremiumFieldConfig = createFieldConfig(settings, IS_PREMIUM_CONFIGURATION_KEY,
+                AuthAccount.IS_PREMIUM_FIELD_KEY);
+        fields.add(isPremiumFieldConfig);
+
         DatabaseFieldConfig linksFieldConfig = new DatabaseFieldConfig(LINKS_CONFIGURATION_KEY);
         linksFieldConfig.setForeignCollection(true);
         fields.add(linksFieldConfig);
@@ -111,6 +113,11 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     public Optional<AuthAccount> queryFirstAccountPlayerName(String playerName) {
         return Optional.ofNullable(
                 DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where().eq(AuthAccount.PLAYER_NAME_FIELD_KEY, playerName).queryForFirst()));
+    }
+
+    public Optional<AuthAccount> queryFirstAccountPlayerUUID(UUID uuid) {
+        return Optional.ofNullable(
+                DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where().eq(AuthAccount.UNIQUE_ID_FIELD_KEY, uuid).queryForFirst()));
     }
 
     public Collection<AuthAccount> queryAccounts(LinkUserIdentificator linkUserIdentificator, String linkType) {
@@ -159,6 +166,8 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
             Optional<AuthAccount> foundAccount = queryFirstAccountPlayerId(authAccount.getPlayerId());
             if (foundAccount.isPresent()) {
                 authAccount.setId(foundAccount.get().getId());
+                if (authAccount.getPlayerIdType() == IdentifierType.NAME && !authAccount.getPlayerId().equals(authAccount.getPlayerName()))
+                    authAccount.setPlayerId(authAccount.getPlayerName());
                 update(authAccount);
             } else
                 create(authAccount);
