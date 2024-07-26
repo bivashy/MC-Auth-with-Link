@@ -6,5 +6,3 @@ softDepends:
   - JavaTelegramBotApi
   - NanoLimboBungee
 author: bivashy, MasterCapeXD
-libraries:
-  - com.github.ben-manes.caffeine:caffeine:3.1.7
