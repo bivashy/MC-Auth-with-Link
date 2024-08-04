@@ -67,7 +67,7 @@
         <nanolimbo.version>1.0.8</nanolimbo.version>
 
         <!-- Maven plugins -->
-        <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
         <maven.shade.plugin.version>3.6.0</maven.shade.plugin.version>
         <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
     </properties>
