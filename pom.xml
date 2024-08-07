@@ -38,7 +38,7 @@
         <minimessage.version>4.16.0</minimessage.version>
         <adventure-serializer.version>4.17.0</adventure-serializer.version>
         <adventure-platform.version>4.3.2</adventure-platform.version>
-        <adventure-bungee.version>4.3.3</adventure-bungee.version>
+        <adventure-bungee.version>4.3.4</adventure-bungee.version>
 
         <!-- Configuration -->
         <configuration-library.version>4.0.2</configuration-library.version>
