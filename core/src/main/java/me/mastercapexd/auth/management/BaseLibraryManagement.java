@@ -1,7 +1,7 @@
 package me.mastercapexd.auth.management;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.alessiodp.libby.Library;
@@ -11,6 +11,7 @@ import com.bivashy.auth.api.management.LibraryManagement;
 public class BaseLibraryManagement implements LibraryManagement {
 
     private static final String JDA_VERSION = "5.0.0-beta.20";
+    private static final String CAFFEINE_VERSION = "3.1.8";
     public static final Library JDA_LIBRARY = Library.builder()
             .groupId("net{}dv8tion")
             .artifactId("JDA")
@@ -27,8 +28,17 @@ public class BaseLibraryManagement implements LibraryManagement {
             .resolveTransitiveDependencies(true)
             .excludeTransitiveDependency("club{}minnced", "opus-java")
             .build();
+    public static final Library CAFFEINE_LIBRARY = Library.builder()
+            .groupId("com{}github{}ben-manes{}caffeine")
+            .artifactId("caffeine")
+            .relocate("com{}github{}benmanes{}caffeine", "com{}bivashy{}auth{}lib{}com{}github{}benmanes{}caffeine")
+            .version(CAFFEINE_VERSION)
+            .resolveTransitiveDependencies(true)
+            .build();
     private final List<String> customRepositories = new ArrayList<>();
-    private final List<Library> customLibraries = new ArrayList<>();
+    private final List<Library> customLibraries = new ArrayList<>(Collections.singletonList(
+            CAFFEINE_LIBRARY
+    ));
     private final LibraryManager libraryManager;
 
     public BaseLibraryManagement(LibraryManager libraryManager) {
@@ -42,9 +52,7 @@ public class BaseLibraryManagement implements LibraryManagement {
         libraryManager.addMavenCentral();
         libraryManager.addJitPack();
 
-        Collection<Library> libraries = new ArrayList<>(customLibraries);
-
-        libraries.forEach(libraryManager::loadLibrary);
+        customLibraries.forEach(libraryManager::loadLibrary);
     }
 
     @Override

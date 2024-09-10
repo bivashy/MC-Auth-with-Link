@@ -60,6 +60,11 @@ public class ArgumentServerPlayer implements ServerPlayer {
     }
 
     @Override
+    public boolean isOnlineMode() {
+        return player.isOnlineMode();
+    }
+
+    @Override
     public <T> T getRealPlayer() {
         return player.getRealPlayer();
     }

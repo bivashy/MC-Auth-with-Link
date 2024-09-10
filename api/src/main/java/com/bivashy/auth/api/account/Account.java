@@ -47,6 +47,8 @@ public interface Account extends PlayerIdSupplier {
 
     String getName();
 
+    void setName(String newName);
+
     HashedPassword getPasswordHash();
 
     void setPasswordHash(HashedPassword passwordHash);
@@ -135,6 +137,10 @@ public interface Account extends PlayerIdSupplier {
     }
 
     boolean isSessionActive(long sessionDurability);
+
+    boolean isPremium();
+
+    void setPremium(boolean newPremium);
 
     default KickResultType kick(String reason) {
         Optional<ServerPlayer> serverPlayer = getPlayer();

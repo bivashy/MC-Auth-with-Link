@@ -16,13 +16,19 @@ import me.mastercapexd.auth.link.user.LinkUserTemplate;
 
 public abstract class AccountFactoryTemplate implements AccountFactory {
     @Override
+    public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash, String lastIp) {
+        return createAccount(id, identifierType, uuid, name, cryptoProvider, passwordHash, lastIp, false);
+    }
+
+    @Override
     public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, CryptoProvider cryptoProvider, String passwordHash,
-                                 String lastIp) {
+                                 String lastIp, boolean isPremium) {
         Account account = newAccount(identifierType.fromRawString(id), identifierType, uuid, name);
 
         account.setCryptoProvider(cryptoProvider);
         account.setPasswordHash(HashedPassword.of(passwordHash, cryptoProvider));
         account.setLastIpAddress(lastIp);
+        account.setPremium(isPremium);
 
         for (LinkType linkType : AuthPlugin.instance().getLinkTypeProvider().getLinkTypes())
             account.addLinkUser(createUser(linkType, account));

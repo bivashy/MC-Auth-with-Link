@@ -39,5 +39,7 @@ public interface ServerPlayer extends Castable<ServerPlayer>, PlayerIdSupplier {
 
     Optional<ProxyServer> getCurrentServer();
 
+    boolean isOnlineMode();
+
     <T> T getRealPlayer();
 }

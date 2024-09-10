@@ -3,23 +3,19 @@ package com.bivashy.auth.api;
 import java.io.File;
 
 import com.bivashy.auth.api.account.AccountFactory;
-import com.bivashy.auth.api.bucket.AuthenticatingAccountBucket;
-import com.bivashy.auth.api.bucket.AuthenticationStepContextFactoryBucket;
-import com.bivashy.auth.api.bucket.AuthenticationStepFactoryBucket;
-import com.bivashy.auth.api.bucket.AuthenticationTaskBucket;
-import com.bivashy.auth.api.bucket.CryptoProviderBucket;
-import com.bivashy.auth.api.bucket.LinkAuthenticationBucket;
-import com.bivashy.auth.api.bucket.LinkConfirmationBucket;
+import com.bivashy.auth.api.bucket.*;
 import com.bivashy.auth.api.config.PluginConfig;
 import com.bivashy.auth.api.database.AccountDatabase;
 import com.bivashy.auth.api.hook.PluginHook;
 import com.bivashy.auth.api.link.user.entry.LinkEntryUser;
 import com.bivashy.auth.api.management.LibraryManagement;
 import com.bivashy.auth.api.management.LoginManagement;
+import com.bivashy.auth.api.premium.PremiumProvider;
 import com.bivashy.auth.api.provider.LinkTypeProvider;
 import com.bivashy.auth.api.server.ServerCore;
 import com.bivashy.auth.api.util.Castable;
 import com.bivashy.configuration.ConfigurationProcessor;
+import com.google.gson.Gson;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import io.github.revxrsal.eventbus.EventBus;
@@ -46,9 +42,13 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
 
     AuthenticationStepContextFactoryBucket getAuthenticationContextFactoryBucket();
 
+    AuthenticationStepContextFactoryBucket getPremiumAuthenticationContextFactoryBucket();
+
     ConfigurationProcessor getConfigurationProcessor();
 
     LoginManagement getLoginManagement();
+
+    PremiumProvider getPremiumProvider();
 
     AuthPlugin setLoginManagement(LoginManagement loginManagement);
 
@@ -58,9 +58,13 @@ public interface AuthPlugin extends Castable<AuthPlugin> {
 
     AuthPlugin setEventBus(EventBus eventBus);
 
+    Gson getGson();
+
     AuthenticationTaskBucket getAuthenticationTaskBucket();
 
     AuthenticatingAccountBucket getAuthenticatingAccountBucket();
+
+    PendingLoginBucket getPendingLoginBucket();
 
     LinkConfirmationBucket getLinkConfirmationBucket();
 

@@ -11,14 +11,14 @@ import com.bivashy.auth.api.event.PlayerChatPasswordEvent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
 
 import me.mastercapexd.auth.bungee.BungeeAuthPluginBootstrap;
+import me.mastercapexd.auth.bungee.message.BungeeComponent;
 import me.mastercapexd.auth.bungee.player.BungeeConnectionProxyPlayer;
 import me.mastercapexd.auth.bungee.player.BungeeServerPlayer;
 import me.mastercapexd.auth.bungee.server.BungeeServer;
 import me.mastercapexd.auth.config.message.server.ServerMessageContext;
-import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -29,6 +29,28 @@ public class AuthenticationListener implements Listener {
 
     public AuthenticationListener(AuthPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onPreLogin(PreLoginEvent event) {
+        event.registerIntent(bungeePlugin);
+        plugin.getLoginManagement().onPreLogin(event.getConnection().getAddress().getAddress().getHostAddress(), event.getConnection().getName(), result -> {
+            switch (result.getState()) {
+                case DENIED:
+                    ServerPlayer p = new BungeeConnectionProxyPlayer(event.getConnection());
+                    p.disconnect(result.getDisconnectMessage());
+                    event.setCancelled(true);
+                    break;
+                case FORCE_OFFLINE:
+                    event.getConnection().setOnlineMode(false);
+                    break;
+                case FORCE_ONLINE:
+                    event.getConnection().setOnlineMode(true);
+                    break;
+            }
+
+            event.completeIntent(bungeePlugin);
+        });
     }
 
     @EventHandler

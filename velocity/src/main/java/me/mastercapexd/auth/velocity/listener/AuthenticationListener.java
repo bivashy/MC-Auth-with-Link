@@ -4,23 +4,49 @@ import java.util.Optional;
 
 import com.bivashy.auth.api.AuthPlugin;
 import com.bivashy.auth.api.event.PlayerChatPasswordEvent;
+import com.bivashy.auth.api.server.message.AdventureServerComponent;
+import com.bivashy.auth.api.server.message.SelfHandledServerComponent;
+import com.bivashy.auth.api.server.message.ServerComponent;
 import com.bivashy.auth.api.server.player.ServerPlayer;
+import com.velocitypowered.api.event.Continuation;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.connection.PreLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent.ServerResult;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import me.mastercapexd.auth.velocity.server.VelocityProxyServer;
+import net.kyori.adventure.text.Component;
 
 public class AuthenticationListener {
     private final AuthPlugin plugin;
 
     public AuthenticationListener(AuthPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @Subscribe
+    public void onPreLoginEvent(PreLoginEvent event, Continuation continuation) {
+        plugin.getLoginManagement().onPreLogin(event.getConnection().getRemoteAddress().getAddress().getHostAddress(), event.getUsername(), result -> {
+            PreLoginEvent.PreLoginComponentResult preLoginResult = switch (result.getState()) {
+                case DENIED -> {
+                    ServerComponent component = result.getDisconnectMessage();
+                    Optional<Component> optionalComponent = component.safeAs(AdventureServerComponent.class).map(AdventureServerComponent::component);
+                    if (optionalComponent.isEmpty())
+                        throw new UnsupportedOperationException("Cannot retrieve kyori Component from: " + component.getClass().getSimpleName() + ", " + component);
+                    yield PreLoginEvent.PreLoginComponentResult.denied(optionalComponent.get());
+                }
+                case FORCE_OFFLINE -> PreLoginEvent.PreLoginComponentResult.forceOfflineMode();
+                case FORCE_ONLINE -> PreLoginEvent.PreLoginComponentResult.forceOnlineMode();
+            };
+
+            event.setResult(preLoginResult);
+            continuation.resume();
+        });
     }
 
     @Subscribe
