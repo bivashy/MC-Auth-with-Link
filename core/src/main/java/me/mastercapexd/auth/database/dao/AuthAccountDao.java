@@ -16,6 +16,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseFieldConfig;
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
 import com.j256.ormlite.table.TableUtils;
@@ -105,12 +106,12 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
 
     public Optional<AuthAccount> queryFirstAccountPlayerId(String playerId) {
         return Optional.ofNullable(
-                DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, playerId).queryForFirst()));
+                DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, new SelectArg(playerId)).queryForFirst()));
     }
 
     public Optional<AuthAccount> queryFirstAccountPlayerName(String playerName) {
         return Optional.ofNullable(
-                DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where().eq(AuthAccount.PLAYER_NAME_FIELD_KEY, playerName).queryForFirst()));
+                DEFAULT_EXCEPTION_CATCHER.execute(() -> queryBuilder().where().eq(AuthAccount.PLAYER_NAME_FIELD_KEY, new SelectArg(playerName)).queryForFirst()));
     }
 
     public Collection<AuthAccount> queryAccounts(LinkUserIdentificator linkUserIdentificator, String linkType) {
@@ -169,7 +170,7 @@ public class AuthAccountDao extends BaseDaoImpl<AuthAccount, Long> {
     public void deleteAccountById(String id) {
         DEFAULT_EXCEPTION_CATCHER.execute(() -> {
             DeleteBuilder<AuthAccount, Long> deleteBuilder = deleteBuilder();
-            deleteBuilder.where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, id);
+            deleteBuilder.where().eq(AuthAccount.PLAYER_ID_FIELD_KEY, new SelectArg(id));
             deleteBuilder.delete();
             return null;
         });
