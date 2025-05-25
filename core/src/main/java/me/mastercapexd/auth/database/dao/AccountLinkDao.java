@@ -14,6 +14,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseFieldConfig;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
 import com.j256.ormlite.table.TableUtils;
@@ -87,7 +88,7 @@ public class AccountLinkDao extends BaseDaoImpl<AccountLink, Long> {
                     AccountLink accountLink = new LinkUserAdapter(linkUser, accountAdapter);
 
                     AccountLink updateId = queryBuilder()
-                            .where().eq(AccountLink.ACCOUNT_ID_FIELD_KEY, accountAdapter.getId())
+                            .where().eq(AccountLink.ACCOUNT_ID_FIELD_KEY, new SelectArg(accountAdapter.getId()))
                             .and().eq(AccountLink.LINK_TYPE_FIELD_KEY, accountLink.getLinkType())
                             .queryForFirst();
 
