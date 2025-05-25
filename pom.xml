@@ -46,7 +46,7 @@
         <yaml-config-updater.version>1.4.2</yaml-config-updater.version>
 
         <!-- Command -->
-        <lamp.version>3.1.8</lamp.version>
+        <lamp.version>3.3.6</lamp.version>
         <lamp-vk.version>1.0.0</lamp-vk.version>
         <lamp-telegram.version>1.0.0</lamp-telegram.version>
 
